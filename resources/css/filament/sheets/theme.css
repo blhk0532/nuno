@@ -1,0 +1,9 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+@import '../../../../vendor/adultdate/filament-wirechat/resources/css/filament-wirechat.css';
+@source '../../../../vendor/adultdate/filament-wirechat/resources/**/*.blade.php';
+@source '../../../../vendor/wallacemartinss/filament-icon-picker/resources/views/**/*';
+@import '../../../../vendor/bezhansalleh/filament-panel-switch/resources/css/panel-switch.css';
+@source '../../../../vendor/bezhansalleh/filament-panel-switch/resources/views/**/*.blade.php';
+
+@source '../../../../app/Filament/Sheets/**/*';
+@source '../../../../resources/views/filament/sheets/**/*';

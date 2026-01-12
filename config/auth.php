@@ -2,6 +2,12 @@
 
 declare(strict_types=1);
 
+use App\Models\Admin;
+use App\Models\User;
+use App\Models\Service;
+use App\Models\Partner;
+use App\Models\Super;
+
 return [
 
     /*
@@ -42,6 +48,22 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admin' => [
+            'driver' => 'session',
+            'provider' => 'admins',
+        ],
+        'service' => [
+            'driver' => 'session',
+            'provider' => 'services',
+        ],
+        'partner' => [
+            'driver' => 'session',
+            'provider' => 'partners',
+        ],
+        'super' => [
+            'driver' => 'session',
+            'provider' => 'supers',
+        ],
     ],
 
     /*
@@ -64,12 +86,52 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', App\Models\User::class),
+            'model' => User::class,
         ],
 
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
+        // ],
+
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => Admin::class,
+        ],
+
+        // 'admins' => [
+        //     'driver' => 'database',
+        //     'table' => 'admins',
+        // ],
+
+        'services' => [
+            'driver' => 'eloquent',
+            'model' => Service::class,
+        ],
+
+        // 'services' => [
+        //     'driver' => 'database',
+        //     'table' => 'services',
+        // ],
+
+        'partners' => [
+            'driver' => 'eloquent',
+            'model' => Partner::class,
+        ],
+
+        // 'partners' => [
+        //     'driver' => 'database',
+        //     'table' => 'partners',
+        // ],
+
+        'supers' => [
+            'driver' => 'eloquent',
+            'model' => Super::class,
+        ],
+
+        // 'supers' => [
+        //     'driver' => 'database',
+        //     'table' => 'supers',
         // ],
     ],
 
@@ -95,6 +157,30 @@ return [
     'passwords' => [
         'users' => [
             'provider' => 'users',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'admins' => [
+            'provider' => 'admins',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'services' => [
+            'provider' => 'services',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'partners' => [
+            'provider' => 'partners',
+            'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'supers' => [
+            'provider' => 'supers',
             'table' => env('AUTH_PASSWORD_RESET_TOKEN_TABLE', 'password_reset_tokens'),
             'expire' => 60,
             'throttle' => 60,

@@ -1,64 +1,313 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Models;
 
-use Carbon\CarbonInterface;
-use Database\Factories\UserFactory;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Adultdate\Wirechat\Contracts\WirechatUser;
+use Adultdate\Wirechat\Panel as WirechatStandalonePanel;
+use Adultdate\Wirechat\Traits\InteractsWithWirechat;
+use App\Observers\UserObserver;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Models\Contracts\HasAvatar;
+use Filament\Models\Contracts\HasDefaultTenant;
+use Filament\Models\Contracts\HasTenants;
+use Filament\Panel;
+use Illuminate\Auth\Authenticatable;
+use Illuminate\Auth\MustVerifyEmail;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
+use Zap\Models\Concerns\HasSchedules;
 
 /**
- * @property-read int $id
- * @property-read string $name
- * @property-read string $email
- * @property-read CarbonInterface|null $email_verified_at
- * @property-read string $password
- * @property-read string|null $remember_token
- * @property-read string|null $two_factor_secret
- * @property-read string|null $two_factor_recovery_codes
- * @property-read CarbonInterface|null $two_factor_confirmed_at
- * @property-read CarbonInterface $created_at
- * @property-read CarbonInterface $updated_at
+ * @property int $id
+ * @property string $ulid
+ * @property bool $status
+ * @property string $name
+ * @property string $email
+ * @property \Illuminate\Support\Carbon|null $email_verified_at
+ * @property string $password
+ * @property string|null $remember_token
+ * @property string|null $avatar_url
+ * @property array<array-key, mixed>|null $custom_fields
+ * @property string|null $locale
+ * @property string|null $theme_color
+ * @property int|null $current_team_id
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Team|null $currentTeam
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
+ * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Team> $ownedTeams
+ * @property-read int|null $owned_teams_count
+ * @property-read \App\Models\Membership|null $membership
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Team> $teams
+ * @property-read int|null $teams_count
+ *
+ * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUlid($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereAvatarUrl($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCurrentTeamId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereCustomFields($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereEmailVerifiedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereLocale($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereRememberToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereStatus($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereThemeColor($value)
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|User whereUpdatedAt($value)
+ *
+ * @mixin \Eloquent
  */
-final class User extends Authenticatable implements MustVerifyEmail
+#[ObservedBy(UserObserver::class)]
+class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, FilamentUser, HasAvatar, HasDefaultTenant, HasTenants, MustVerifyEmailContract, WirechatUser
 {
-    /**
-     * @use HasFactory<UserFactory>
-     */
-    use HasFactory, Notifiable, TwoFactorAuthenticatable;
+    use Authenticatable;
+    use Authorizable;
+    use CanResetPassword;
+    use HasFactory;
+    use HasSchedules;
+    use InteractsWithWirechat;
+    use MustVerifyEmail;
+    use Notifiable;
 
-    /**
-     * @var list<string>
-     */
+    protected $fillable = [
+        'status',
+        'ulid',
+        'name',
+        'email',
+        'password',
+        'avatar_url',
+        'custom_fields',
+        'locale',
+        'theme_color',
+        'current_team_id',
+    ];
+
     protected $hidden = [
         'password',
         'remember_token',
-        'two_factor_secret',
-        'two_factor_recovery_codes',
     ];
 
     /**
-     * @return array<string, string>
+     * @throws \Exception
      */
-    public function casts(): array
+    public function canAccessPanel(Panel $panel): bool
+    {
+        if ($panel->getId() === 'admin') {
+            return false;
+        }
+
+        return true;
+    }
+
+    protected function casts(): array
     {
         return [
-            'id' => 'integer',
-            'name' => 'string',
-            'email' => 'string',
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'remember_token' => 'string',
-            'two_factor_secret' => 'string',
-            'two_factor_recovery_codes' => 'string',
-            'two_factor_confirmed_at' => 'datetime',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
+            'status' => 'boolean',
+            'custom_fields' => 'array',
         ];
+    }
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        static::creating(function ($model) {
+            if (empty($model->ulid)) {
+                $model->ulid = (string) \Illuminate\Support\Str::ulid();
+            }
+        });
+    }
+
+    public function canImpersonate(): bool
+    {
+        return false;
+    }
+
+    protected function canManageTeam(): bool
+    {
+        return false;
+    }
+
+    protected function canRegisterTeam(): bool
+    {
+        return false;
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        $avatarColumn = config('filament-edit-profile.avatar_column', 'avatar_url');
+
+        return $this->$avatarColumn ? Storage::url($this->$avatarColumn) : null;
+    }
+
+    public function currentTeam(): BelongsTo
+    {
+        if (is_null($this->current_team_id) && $this->id) {
+            $this->switchTeam($this->personalTeam());
+        }
+
+        return $this->belongsTo(Team::class, 'current_team_id');
+    }
+
+    public function switchTeam($team): bool
+    {
+        if (! $this->belongsToTeam($team)) {
+            return false;
+        }
+
+        $this->forceFill([
+            'current_team_id' => $team->id,
+        ])->save();
+
+        $this->setRelation('currentTeam', $team);
+
+        return true;
+    }
+
+    public function belongsToTeam($team): bool
+    {
+        return $this->ownsTeam($team) || $this->teams->contains(fn ($t) => $t->id === $team->id);
+    }
+
+    public function ownsTeam($team): bool
+    {
+        if (is_null($team)) {
+            return false;
+        }
+
+        return $this->id == $team->user_id;
+    }
+
+    public function personalTeam(): ?Team
+    {
+        return $this->ownedTeams->where('personal_team', true)->first();
+    }
+
+    public function canAccessTenant(Model $tenant): bool
+    {
+        return $this->belongsToTeam($tenant);
+    }
+
+    public function getTenants(Panel $panel): array|Collection
+    {
+        return $this->ownedTeams->merge($this->teams)->sortBy('name');
+    }
+
+    public function ownedTeams(): HasMany
+    {
+        return $this->hasMany(Team::class);
+    }
+
+    public function teams(): BelongsToMany
+    {
+        return $this->belongsToMany(Team::class, Membership::class)
+            ->withTimestamps()
+            ->as('membership');
+    }
+
+    public function getDefaultTenant(Panel $panel): ?Model
+    {
+        return $this->currentTeam;
+    }
+
+    /**
+     * Determine if the user can create new groups.
+     */
+    public function canCreateGroups(): bool
+    {
+        // By default, allow all authenticated users to create groups
+        // You can customize this logic based on your requirements
+        return true;
+    }
+
+    /**
+     * Determine if the user can create new chats with other users.
+     */
+    public function canCreateChats(): bool
+    {
+        // By default, allow all authenticated users to create chats
+        // You can customize this logic based on your requirements
+        return true;
+    }
+
+    /**
+     * Return the user's role.
+     */
+    public function hasRole(): ?string
+    {
+        return $this->role ?? null;
+    }
+
+    public function isAdmin(): bool
+    {
+        $role = $this->role ?? null;
+
+        return in_array($role, ['admin', 'super', 'super_admin', 'superadmin'], true);
+    }
+
+    /**
+     * Determine if the user can access wirechat panel.
+     * Accepts both Filament Panel (for Filament routes) and Wirechat Panel (for standalone routes).
+     */
+    public function canAccessWirechatPanel(Panel|WirechatStandalonePanel $panel): bool
+    {
+        // By default, allow all authenticated users to access the panel
+        // You can customize this logic based on your requirements
+        return true;
+    }
+
+    /**
+     * Override belongsToConversation to accept both Filament and standalone Conversation types.
+     * This method works with both Filament wirechat routes and standalone wirechat routes.
+     */
+    public function belongsToConversation(\AdultDate\FilamentWirechat\Models\Conversation $conversation, bool $withoutGlobalScopes = false): bool
+    {
+        // Check if participants are already loaded
+        if ($conversation->relationLoaded('participants')) {
+            // If loaded, simply check the existing collection
+            $participants = $conversation->participants;
+
+            if ($withoutGlobalScopes) {
+                $participants->withoutGlobalScopes();
+            }
+
+            return $participants->contains(function ($participant) {
+                return $participant->participantable_id == $this->getKey() &&
+                    $participant->participantable_type == $this->getMorphClass();
+            });
+        }
+
+        $participants = $conversation->participants();
+
+        if ($withoutGlobalScopes) {
+            $participants->withoutGlobalScopes();
+        }
+
+        // Perform the query to check if user is a participant
+        return $participants->where('participantable_id', $this->getKey())
+            ->where('participantable_type', $this->getMorphClass())
+            ->exists();
     }
 }

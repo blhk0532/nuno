@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2729655376acc1c6eafb57d3a8a0fc58",
+    "content-hash": "ea4a36c4411ebee24b2b089ae4df8eb5",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -86,84 +86,6 @@
                 }
             ],
             "time": "2025-12-02T16:40:14+00:00"
-        },
-        {
-            "name": "adultdate/filament-auth",
-            "version": "dev-master",
-            "dist": {
-                "type": "path",
-                "url": "plugins/adultdate/filament-auth",
-                "reference": "bbced56f647407fe4433960a6d73779d486fcf39"
-            },
-            "require": {
-                "filament/filament": "^4.0",
-                "php": "^8.4"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Adultdate\\FilamentAuth\\FilamentAuthServiceProvider"
-                    ],
-                    "aliases": {
-                        "FilamentAuth": "Adultdate\\FilamentAuth\\Facades\\FilamentAuth"
-                    }
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Adultdate\\FilamentAuth\\": "src/",
-                    "Adultdate\\FilamentAuth\\Database\\Factories\\": "database/factories/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Adultdate\\FilamentAuth\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "post-autoload-dump": [
-                    "@php ./vendor/bin/testbench package:discover --ansi"
-                ],
-                "analyse": [
-                    "vendor/bin/phpstan analyse"
-                ],
-                "test": [
-                    "vendor/bin/pest"
-                ],
-                "test-coverage": [
-                    "vendor/bin/pest --coverage"
-                ],
-                "format": [
-                    "vendor/bin/pint"
-                ]
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "adultdate",
-                    "email": "adultdate@example.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "adultdate filament-auth",
-            "homepage": "https://github.com/adultdate/filament-auth",
-            "keywords": [
-                "adultdate",
-                "filament",
-                "filament-auth",
-                "laravel"
-            ],
-            "support": {
-                "issues": "https://github.com/adultdate/filament-auth/issues",
-                "source": "https://github.com/adultdate/filament-auth"
-            },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
         },
         {
             "name": "adultdate/filament-booking",
@@ -24853,7 +24775,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "achyutn/filament-log-viewer": 20,
-        "adultdate/filament-auth": 20,
         "adultdate/filament-booking": 20,
         "adultdate/filament-dialer": 20,
         "adultdate/filament-queueable-bulk-actions": 20,
