@@ -19,6 +19,10 @@ Route::middleware(['auth', 'verified'])->group(function (): void {
     Route::get('dashboard', fn () => Inertia::render('dashboard'))->name('dashboard');
 });
 
+Route::middleware(['auth', 'verified'])->group(function (): void {
+    Route::get('calendar', fn () => Inertia::render('calendar'))->name('calendar');
+});
+
 Route::middleware('auth')->group(function (): void {
     // User...
     Route::delete('user', [UserController::class, 'destroy'])->name('user.destroy');

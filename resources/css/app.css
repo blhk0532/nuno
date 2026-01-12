@@ -141,3 +141,7 @@
         @apply bg-background text-foreground;
     }
 }
+
+div.flex.flex-col.bg-background.rounded-lg.overflow-hidden.border-x.border-t.border-b.max-w-300.my-10.mx-auto{
+    margin: 0px!important;
+}

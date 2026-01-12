@@ -3,19 +3,77 @@
     "name": "nunomaduro/laravel-starter-kit-inertia-react",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": [
-        "laravel",
-        "framework"
-    ],
+    "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
         "php": "^8.4.0",
+        "achyutn/filament-log-viewer": "@dev",
+        "adultdate/filament-auth": "@dev",
+        "adultdate/filament-booking": "@dev",
+        "adultdate/filament-dialer": "@dev",
+        "adultdate/filament-queueable-bulk-actions": "@dev",
+        "adultdate/filament-tab-layout-plugin": "@dev",
+        "adultdate/filament-wirechat": "@dev",
+        "andreiio/blade-remix-icon": "^3.8",
+        "asmit/resized-column": "^1.1",
+        "awcodes/filament-badgeable-column": "^3.0.1",
+        "awcodes/overlook": "^3.0.3",
+        "bezhansalleh/filament-exceptions": "^4.0",
+        "bezhansalleh/filament-panel-switch": "@dev",
+        "bezhansalleh/filament-plugin-essentials": "@dev",
+        "bezhansalleh/filament-shield": "@dev",
+        "binarybuilds/filament-cache-manager": "@dev",
+        "binarybuilds/filament-command-runner": "@dev",
+        "binarybuilds/filament-failed-jobs": "@dev",
+        "blade-ui-kit/blade-heroicons": "^2.6",
+        "caresome/filament-auth-designer": "@dev",
+        "cmsmaxinc/filament-error-pages": "@dev",
+        "codeat3/blade-google-material-design-icons": "^1.20",
+        "codeat3/blade-phosphor-icons": "^2.3",
+        "dashed/filament-numpad-field": "@dev",
+        "davidhsianturi/blade-bootstrap-icons": "^2.1",
+        "devonab/filament-easy-footer": "^2.1.1",
+        "eightynine/filament-excel-import": "^4.0",
+        "fahiem/filament-pinpoint": "@dev",
+        "filament/filament": "^4.5.2",
+        "hydrat/filament-table-layout-toggle": "^3.0",
         "inertiajs/inertia-laravel": "^2.0.18",
+        "internachi/modular": "^2.3",
+        "jeffersongoncalves/filament-logo": "@dev",
+        "joaopaulolndev/filament-edit-profile": "@dev",
+        "kirschbaum-development/commentions": "^0.7.5",
+        "laravel/folio": "^1.1.12",
         "laravel/fortify": "^1.33.0",
         "laravel/framework": "^12.46",
+        "laravel/reverb": "^1.7",
         "laravel/tinker": "^2.11.0",
         "laravel/wayfinder": "^0.1.12",
-        "nunomaduro/essentials": "^1.0.1"
+        "laraveljutsu/zap": "@dev",
+        "leandrocfe/filament-apex-charts": "@dev",
+        "livewire/blaze": "^1.0@beta",
+        "livewire/flux": "^2.10.2",
+        "livewire/livewire": "^3.7.3",
+        "livewire/volt": "^1.10.1",
+        "mallardduck/blade-lucide-icons": "^1.26",
+        "marjose123/filament-lockscreen": ">=3.3",
+        "mwguerra/filemanager": "@dev",
+        "nunomaduro/essentials": "^1.0.1",
+        "openplain/filament-shadcn-theme": "@dev",
+        "owenvoke/blade-fontawesome": "^3.0",
+        "pxlrbt/filament-excel": "@dev",
+        "pxlrbt/filament-spotlight": "@dev",
+        "relaticle/flowforge": "@dev",
+        "secondnetwork/blade-tabler-icons": "^3.36.1",
+        "shreejan/actionable-column": "^1.0",
+        "shreejan/dash-arrange": "@dev",
+        "shuvroroy/filament-spatie-laravel-backup": "^3.2",
+        "spatie/laravel-google-calendar": "@dev",
+        "stechstudio/filament-impersonate": "^4.0.2",
+        "tapp/filament-maillog": "^2.0.1",
+        "usamamuneerchaudhary/filament-notifier": "^1.2",
+        "wallacemartinss/filament-icon-picker": "@dev",
+        "wallacemartinss/filament-whatsapp-conector": "@dev",
+        "ysfkaya/filament-phone-input": "@dev"
     },
     "require-dev": {
         "driftingly/rector-laravel": "^2.1.9",
@@ -33,6 +91,218 @@
         "rector/rector": "^2.3.0",
         "roave/security-advisories": "dev-latest"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "plugins/filament/filament",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/binarybuilds/filament-cache-manager",
+            "options": {
+                "symlink": true
+            }
+        },
+                {
+            "type": "path",
+            "url": "plugins/cmsmaxinc/filament-error-pages",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/binarybuilds/filament-command-runner",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/binarybuilds/filament-failed-jobs",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/mwguerra/filemanager",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/pxlrbt/filament-excel",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/pxlrbt/filament-spotlight",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/relaticle/flowforge",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/leandrocfe/filament-apex-charts",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/bezhansalleh/filament-plugin-essentials",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/bezhansalleh/filament-shield",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/caresome/filament-auth-designer",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/dashed/filament-numpad-field",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/fahiem/filament-pinpoint",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/jeffersongoncalves/filament-logo",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/joaopaulolndev/filament-edit-profile",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/openplain/filament-shadcn-theme",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/shreejan/dash-arrange",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/spatie/laravel-google-calendar",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/wallacemartinss/filament-icon-picker",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/wallacemartinss/filament-whatsapp-conector",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/ysfkaya/filament-phone-input",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/adultdate/filament-auth",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/adultdate/filament-dialer",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/adultdate/filament-wirechat",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/adultdate/filament-tab-plugin",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/caresome/filament-auth-designer",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/bezhansalleh/filament-panel-switch",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/adultdate/filament-booking",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
     "autoload": {
         "psr-4": {
             "App\\": "app/",
@@ -60,7 +330,8 @@
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
-            "@php artisan package:discover --ansi"
+            "@php artisan package:discover --ansi",
+            "@php artisan filament:upgrade"
         ],
         "post-update-cmd": [
             "@php artisan vendor:publish --tag=laravel-assets --ansi --force",
