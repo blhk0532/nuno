@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('booking_calendars', function (Blueprint $table) {
-            $table->text('public_url')->nullable();
-            $table->text('embed_code')->nullable();
-            $table->text('public_address_ical')->nullable();
-            $table->text('secret_address_ical')->nullable();
+        //    $table->text('public_url')->nullable();
+        //    $table->text('embed_code')->nullable();
+        //    $table->text('public_address_ical')->nullable();
+        //    $table->text('secret_address_ical')->nullable();
         });
     }
 

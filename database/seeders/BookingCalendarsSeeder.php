@@ -17,7 +17,7 @@ class BookingCalendarsSeeder extends Seeder
             [
                 'name' => 'Tekniker 1',
                 'google_calendar_id' => '274c238f47b20623ea8d9a160e9fb4ec0e48568fa1e9556659a1ca414b83baac@group.calendar.google.com',
-                'whatsapp_id' => '019bb5a1-ca44-70e8-b15a-4d1229d95cca',
+                'whatsapp_id' => null,
                 'creator_id' => 1,
                 'owner_id' => 16,
                 'brand_id' => 1,
@@ -38,7 +38,7 @@ class BookingCalendarsSeeder extends Seeder
             [
                 'name' => 'Tekniker 2',
                 'google_calendar_id' => '26823e687633703bb2d35cf812c2ba84757d8265115883e3e1c193bbea9b0011@group.calendar.google.com',
-                'whatsapp_id' => '019bb5a1-ca44-70e8-b15a-4d1229d95cca',
+                'whatsapp_id' => null,
                 'creator_id' => 1,
                 'owner_id' => 17,
                 'brand_id' => 1,
@@ -59,7 +59,7 @@ class BookingCalendarsSeeder extends Seeder
             [
                 'name' => 'Tekniker 3',
                 'google_calendar_id' => '658e512f720f12b3eec6906205932eac87a67f53b20196f03b32dad1f646041f@group.calendar.google.com',
-                'whatsapp_id' => '019bb5a1-ca44-70e8-b15a-4d1229d95cca',
+                'whatsapp_id' => null,
                 'creator_id' => 1,
                 'owner_id' => 18,
                 'brand_id' => null,

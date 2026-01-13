@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('booking_calendars', function (Blueprint $table) {
-            $table->json('whatsapp_numbers')->nullable()->after('secret_address_ical');
-            $table->string('shareable_link')->nullable()->after('whatsapp_numbers');
+        //    $table->json('whatsapp_numbers')->nullable()->after('secret_address_ical');
+        //    $table->string('shareable_link')->nullable()->after('whatsapp_numbers');
         });
     }
 
