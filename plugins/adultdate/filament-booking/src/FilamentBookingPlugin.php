@@ -35,7 +35,7 @@ class FilamentBookingPlugin implements Plugin
 {
     use EvaluatesClosures;
 
-    protected array $plugins = ['dayGrid', 'timeGrid', 'interaction', 'list'];
+    protected array $plugins = ['dayGrid', 'timeGrid', 'interaction', 'list', 'resourceTimeGrid', 'resourceTimeline'];
 
     protected ?string $schedulerLicenseKey = 'CC-Attribution-NonCommercial-NoDerivatives';
 
@@ -119,6 +119,12 @@ class FilamentBookingPlugin implements Plugin
         return $this;
     }
 
+
+        public function getDayCount(): int
+    {
+        return data_get($this->config, 'dayCount', 5);
+    }
+
     public function getPlugins(): array
     {
         return $this->plugins;
@@ -133,7 +139,7 @@ class FilamentBookingPlugin implements Plugin
 
     public function getSchedulerLicenseKey(): ?string
     {
-        return $this->schedulerLicenseKey;
+        return 'CC-Attribution-NonCommercial-NoDerivatives';
     }
 
     public function config(array $config): static
@@ -146,6 +152,11 @@ class FilamentBookingPlugin implements Plugin
     public function getConfig(): array
     {
         return $this->config;
+    }
+
+        public function getWeekends(): bool
+    {
+        return $this->weekends ?? data_get($this->config, 'weekends', false);
     }
 
     public function timezone(string | Closure $timezone): static

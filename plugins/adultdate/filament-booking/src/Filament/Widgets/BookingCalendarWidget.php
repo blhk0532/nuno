@@ -20,6 +20,7 @@ use Adultdate\FilamentBooking\Models\Booking\BookingLocation;
 use Adultdate\FilamentBooking\Models\Booking\Client;
 use Adultdate\FilamentBooking\Models\Booking\DailyLocation;
 use Adultdate\FilamentBooking\Models\Booking\Service;
+use Adultdate\FilamentBooking\Models\CalendarSettings;
 use Adultdate\FilamentBooking\ValueObjects\FetchInfo;
 use Adultdate\FilamentBooking\ValueObjects\DateClickInfo;
 use Adultdate\FilamentBooking\ValueObjects\DateSelectInfo;
@@ -107,9 +108,11 @@ class BookingCalendarWidget extends FullCalendarWidget implements HasCalendar
 
     public function config(): array
     {
+        $settings = CalendarSettings::where('user_id', Auth::id())->first();
+
         return [
             'initialView' => 'timeGridWeek',
-            'timeZone' => config('app.timezone'), 
+            'timeZone' => $settings?->calendar_timezone ?? config('app.timezone'), 
             'headerToolbar' => [
                 'left' => 'prev,next today',
                 'center' => 'title',
@@ -123,6 +126,8 @@ class BookingCalendarWidget extends FullCalendarWidget implements HasCalendar
             'slotDuration' => '00:30:00',
             'allDayText' => '🗓️',
             'allDaySlot' => true,
+            'weekends' => $settings?->calendar_weekends ?? true,
+            'themeSystem' => $settings?->calendar_theme?->value ?? 'standard',
             'views' => [
                 'timeGridDay' => [
                     'slotMinTime' => '00:00:00',

@@ -50,8 +50,8 @@
     icon-size="lg"
     @click="$dispatch('open-modal', { id: 'panel-switch' })"
     :label="$heading"
-   class="shrink-0 grow-0 text-gray-500 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-400"
-/> 
+   class="shrink-0 grow-0 text-gray-500 hover:text-gray-700 dark:text-gray-200 dark:hover:text-gray-400"
+/>
 
 <x-filament::modal
     id="panel-switch"

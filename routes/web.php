@@ -21,11 +21,11 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function (): void {
+Route::middleware(['web', 'inertia', 'auth', 'verified'])->group(function (): void {
     Route::get('dashboard', fn () => Inertia::render('dashboard'))->name('dashboard');
 });
 
-Route::middleware(['auth', 'verified'])->group(function (): void {
+Route::middleware(['web', 'inertia', 'auth', 'verified'])->group(function (): void {
     Route::get('calendar', fn () => Inertia::render('calendar'))->name('calendar');
 });
 
@@ -45,7 +45,7 @@ Route::middleware('auth')->group(function (): void {
         ->name('password.update');
 
     // Appearance...
-    Route::get('settings/appearance', fn () => Inertia::render('appearance/update'))->name('appearance.edit');
+    Route::get('settings/appearance', fn () => Inertia::render('appearance/update'))->middleware(['web', 'inertia'])->name('appearance.edit');
 
     // User Two-Factor Authentication...
     Route::get('settings/two-factor', [UserTwoFactorAuthenticationController::class, 'show'])

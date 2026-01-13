@@ -18,6 +18,12 @@ return new class extends Migration
             $table->unsignedBigInteger('owner_id');
             $table->json('access')->nullable(); // Array of user IDs that can access
             $table->boolean('is_active')->default(true);
+            $table->string('public_url')->nullable();
+            $table->text('embed_code')->nullable();
+            $table->string('public_address_ical')->nullable();
+            $table->string('secret_address_ical')->nullable();
+            $table->string('shareable_link')->nullable();
+            $table->json('whatsapp_numbers')->nullable(); // Array of whatsapp instance numbers
             $table->timestamps();
 
             $table->foreign('creator_id')->references('id')->on('users');

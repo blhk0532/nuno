@@ -104,7 +104,7 @@ public Model|int|string|null $record;
     public function getHeading(): string|Htmlable
     {
         $technician = $this->selectedTechnician ? \App\Models\BookingCalendar::with('owner')->find($this->selectedTechnician)?->owner?->name : 'All Tekniker';
-        return 'Calendar 2 - ' . $technician;
+        return '#2 ◴ ' . $technician;
     }
 
     public function getFooterActions(): array
@@ -253,13 +253,15 @@ public Model|int|string|null $record;
             'initialView' => 'timeGridWeek',
             // Start week on Monday (0 = Sunday, 1 = Monday)
             'firstDay' => 1,
+            'dayCount' => 5,
+            'weekends' => false,
             'dayHeaderFormat' => [
                 'weekday' => 'short',
                 'day' => 'numeric',
             ],
             'headerToolbar' => [
                 'start' => 'prev,next',
-                'center' => '',
+                'center' => 'title',
                 'end' => 'timeGridWeek,timeGridDay',
             ],
             'nowIndicator' => true,
@@ -273,16 +275,16 @@ public Model|int|string|null $record;
             'eventDrop' => 'onEventDrop',
             'timeZone' => 'Europe/Stockholm',
             'now' => now()->setTimezone('Europe/Stockholm')->addHour()->toISOString(),
-            'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
-            'slotMaxTime' => $openingEnd ? $openingEnd : '18:00:00',
+            'slotMinTime' => '07:00:00',
+            'slotMaxTime' => '17:00:00',
             'views' => [
                 'timeGridDay' => [
                     'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
                     'slotMaxTime' => $openingEnd ? $openingEnd : '18:00:00',
                 ],
                 'timeGridWeek' => [
-                    'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
-                    'slotMaxTime' => $openingEnd ? $openingEnd : '18:00:00',
+                    'slotMinTime' => '07:00:00',
+                    'slotMaxTime' => '17:00:00',
                 ],
                 'timeGridMonth' => [
                     'slotMinTime' => $openingStart ? $openingStart : '08:00:00',

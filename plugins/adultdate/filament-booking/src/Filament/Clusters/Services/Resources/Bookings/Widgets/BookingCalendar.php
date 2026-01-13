@@ -275,7 +275,14 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
                     'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
                     'slotMaxTime' => $openingEnd ? $openingEnd : '18:00:00',
                 ],
+                'resourceTimelineFourDays' => [
+                    'type' => 'resourceTimeline',
+                    'duration' => ['days' => 4],
+                    'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
+                    'slotMaxTime' => $openingEnd ? $openingEnd : '18:00:00',
+                ],
             ],
+            'resources' => $this->getResources(),
         ];
     }
 
@@ -1865,5 +1872,38 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
         $this->eventDragEnabled = true;
         $this->eventResizeEnabled = true;
         $this->dateSelectEnabled = true;
+    }
+
+    protected function getResources(): array
+    {
+        $filters = $this->pageFilters ?? [];
+        $resources = [];
+
+        // Check for selected calendars in filters (e.g., booking_calendars_1, booking_calendars_2, etc.)
+        for ($i = 1; $i <= 10; $i++) { // Assuming up to 10 possible filters
+            $key = "booking_calendars_{$i}";
+            if (isset($filters[$key]) && $filters[$key]) {
+                $calendar = \App\Models\BookingCalendar::find($filters[$key]);
+                if ($calendar) {
+                    $resources[] = [
+                        'id' => $calendar->id,
+                        'title' => $calendar->name,
+                    ];
+                }
+            }
+        }
+
+        // If no filters selected, use default or all available
+        if (empty($resources)) {
+            $defaultCalendars = \App\Models\BookingCalendar::limit(5)->get(); // Or some logic to get defaults
+            foreach ($defaultCalendars as $calendar) {
+                $resources[] = [
+                    'id' => $calendar->id,
+                    'title' => $calendar->name,
+                ];
+            }
+        }
+
+        return $resources;
     }
 }

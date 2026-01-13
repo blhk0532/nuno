@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "941d52b8dbe6d7ff7aef96bb33414f73",
+    "content-hash": "4fe3a4f2665c7ae34f0e35c4e51db1a8",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -6117,6 +6117,72 @@
                 "symlink": true,
                 "relative": true
             }
+        },
+        {
+            "name": "jeffersongoncalves/filament-refresh-sidebar",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeffersongoncalves/filament-refresh-sidebar.git",
+                "reference": "de6cc5b2eeea5682c904114119af8a580db39346"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeffersongoncalves/filament-refresh-sidebar/zipball/de6cc5b2eeea5682c904114119af8a580db39346",
+                "reference": "de6cc5b2eeea5682c904114119af8a580db39346",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.14.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.21",
+                "orchestra/testbench": "^9.0|^10.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "JeffersonGoncalves\\Filament\\RefreshSidebar\\RefreshSidebarServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JeffersonGoncalves\\Filament\\RefreshSidebar\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jefferson Gonçalves",
+                    "email": "gerson.simao.92@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Automatically refresh the Filament sidebar navigation when certain events occur, ensuring menu items and badges are always up to date.",
+            "homepage": "https://github.com/jeffersongoncalves/filament-refresh-sidebar",
+            "keywords": [
+                "filament",
+                "filament-plugin",
+                "jeffersongoncalves",
+                "laravel",
+                "livewire",
+                "navigation",
+                "refresh",
+                "sidebar"
+            ],
+            "support": {
+                "issues": "https://github.com/jeffersongoncalves/filament-refresh-sidebar/issues",
+                "source": "https://github.com/jeffersongoncalves/filament-refresh-sidebar/tree/1.0.1"
+            },
+            "time": "2025-12-23T23:58:40+00:00"
         },
         {
             "name": "jenssegers/agent",

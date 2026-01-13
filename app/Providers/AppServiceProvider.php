@@ -61,8 +61,8 @@ final class AppServiceProvider extends ServiceProvider
                 ])
                 ->icons([
                     'admin' => 'heroicon-o-shield-check',
-                    'app' => 'heroicon-o-queue-list',
-                    'booking' => 'heroicon-o-calendar',
+                    'app' => 'heroicon-o-fire',
+                    'booking' => 'heroicon-o-check-circle',
                     'manager' => 'heroicon-o-users',
                     'queue' => 'heroicon-o-list-bullet',
                     'dialer' => 'heroicon-o-phone',
@@ -75,11 +75,11 @@ final class AppServiceProvider extends ServiceProvider
                     'partner' => 'heroicon-o-user-plus',
                     'service' => 'heroicon-o-lifebuoy',
                     'tools' => 'heroicon-o-wrench',
-                    'storage' => 'heroicon-o-server',
+                    'storage' => 'heroicon-o-folder',
                     'system' => 'heroicon-o-computer-desktop',
                     'chat' => 'heroicon-o-chat-bubble-left-right',
                     'stats' => 'heroicon-o-chart-bar',
-                    'calendar' => 'heroicon-o-calendar',
+                    'calendar' => 'heroicon-o-calendar-days',
                     'sheets' => 'heroicon-o-document-text',
                     'email' => 'heroicon-o-envelope',
                     'notify' => 'heroicon-o-bell',
@@ -114,6 +114,16 @@ final class AppServiceProvider extends ServiceProvider
             if ($admin instanceof Admin && ($admin->role === 'super_admin' || $admin->role === 'superadmin' || $admin->role === 'super')) {
                 $panels = ['admin', 'app', 'booking', 'manager', 'queue', 'dialer', 'clients', 'finance', 'server', 'data', 'super', 'dev',
                     'partner', 'service', 'tools', 'storage', 'system', 'chat', 'stats', 'calendar', 'sheets', 'email', 'notify', 'user'];
+            }
+
+            if ($user instanceof User && ($user->hasRole('super_admin') || $user->hasRole('superadmin') || $user->hasRole('super'))) {
+                $panels = ['admin', 'app', 'booking', 'manager', 'queue', 'dialer', 'clients', 'finance', 'server', 'data', 'super', 'dev',
+                    'partner', 'service', 'tools', 'storage', 'system', 'chat', 'stats', 'calendar', 'sheets', 'email', 'notify', 'user'];
+            }
+
+            if ($user instanceof User && ($user->hasRole('admin') || $user->hasRole('administrator'))) {
+                $panels = ['admin', 'calendar', 'booking', 'clients', 'app', 'manager', 'queue', 'dialer', 'finance',
+                    'server', 'partner', 'service', 'tools', 'storage', 'chat', 'stats', 'sheets', 'email', 'notify', 'user'];
             }
 
             $switch->panels($panels);

@@ -68,34 +68,40 @@ class DashboardBokning extends BaseDashboard
 
     public function filtersForm(Schema $schema): Schema
     {
+        $calendarOptions = BookingCalendarModel::pluck('name', 'id')->toArray();
+        $calendarIds = array_keys($calendarOptions);
+
         return $schema
             ->components([
                 Section::make()
                     ->schema([
                         Select::make('booking_calendars_1')
-                            ->options(fn () => BookingCalendarModel::pluck('name', 'id')->toArray())
-                            ->label('Tekninker Calendar 1')
+                            ->options($calendarOptions)
+                            ->label('#1 ◴ Tekninker')
                             ->placeholder('Select Tekniker for Calendar 1')
                             ->searchable()
                             ->reactive()
+                            ->default($calendarIds[0] ?? null)
                             ->afterStateUpdated(function () {
                                 $this->dispatch('refreshCalendar');
                             }),
                         Select::make('booking_calendars_2')
-                            ->options(fn () => BookingCalendarModel::pluck('name', 'id')->toArray())
-                            ->label('Tekninker Calendar 2')
+                            ->options($calendarOptions)
+                            ->label('#2 ◴ Tekninker')
                             ->placeholder('Select Tekniker for Calendar 2')
                             ->searchable()
                             ->reactive()
+                            ->default($calendarIds[1] ?? null)
                             ->afterStateUpdated(function () {
                                 $this->dispatch('refreshCalendar');
                             }),
                         Select::make('booking_calendars_3')
-                            ->options(fn () => BookingCalendarModel::pluck('name', 'id')->toArray())
-                            ->label('Tekninker Calendar 3')
+                            ->options($calendarOptions)
+                            ->label('#3 ◴ Tekniker')
                             ->placeholder('Select Tekniker for Calendar 3')
                             ->searchable()
                             ->reactive()
+                            ->default($calendarIds[2] ?? null)
                             ->afterStateUpdated(function () {
                                 $this->dispatch('refreshCalendar');
                             })
@@ -131,6 +137,13 @@ public function getColumns(): int | array
 {
     return 3;
 }
+
+public function getHeaderWidgets(): array
+    {
+        return [
+
+        ];
+    }
 
 public function getWidgets(): array
     {

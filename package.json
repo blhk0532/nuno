@@ -13,7 +13,7 @@
         "@eslint/js": "^9.39.2",
         "@laravel/vite-plugin-wayfinder": "^0.1.7",
         "@tailwindcss/vite": "^4.1.18",
-        "@types/node": "^25.0.6",
+        "@types/node": "^25.0.7",
         "eslint": "^9.39.2",
         "eslint-config-prettier": "^10.1.8",
         "eslint-plugin-react": "^7.37.5",
@@ -24,7 +24,7 @@
         "prettier-plugin-organize-imports": "^4.3.0",
         "prettier-plugin-tailwindcss": "^0.7.2",
         "tailwindcss": "^4.1.18",
-        "typescript-eslint": "^8.52.0"
+        "typescript-eslint": "^8.53.0"
     },
     "dependencies": {
         "@fullcalendar/adaptive": "7.0.0-beta.6",

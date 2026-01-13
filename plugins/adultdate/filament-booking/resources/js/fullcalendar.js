@@ -4,6 +4,7 @@ export default function fullcalendar({
                                      view = 'dayGridMonth',
                                      locale = 'sv',
                                      firstDay = 1,
+                                     dayCount = 5,
                                      dayMaxEvents = false,
                                      eventContent = null,
                                      eventClickEnabled = true,
@@ -55,6 +56,7 @@ export default function fullcalendar({
                 view: view,
                 locale: locale,
                 firstDay: firstDay,
+                dayCount: dayCount,
                 dayMaxEvents: dayMaxEvents,
                 eventSources: [
                     {

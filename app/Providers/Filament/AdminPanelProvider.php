@@ -95,7 +95,6 @@ class AdminPanelProvider extends PanelProvider
             ->passwordReset()
             ->emailVerification(false)
             ->emailChangeVerification()
-            ->profile()
             ->spa()
 
             ->navigationGroups([
@@ -223,7 +222,25 @@ class AdminPanelProvider extends PanelProvider
                     )
             )
             ->plugins([
-                // .......
+                FilamentEditProfilePlugin::make()
+                    ->slug('my-profile')
+                    ->setTitle(__('My Profile'))
+                    ->setNavigationLabel(__('My Profile'))
+                    ->setNavigationGroup(__('Group Profile'))
+                    ->setIcon('heroicon-o-user')
+                    ->setSort(10)
+                    ->shouldRegisterNavigation(false)
+                    ->shouldShowEmailForm()
+                    ->shouldShowLocaleForm(options: [
+                        'pt_BR' => __('🇧🇷 Portuguese'),
+                        'en' => __('🇺🇸 English'),
+                        'es' => __('🇪🇸 Spanish'),
+                    ])
+                    ->shouldShowThemeColorForm()
+                    ->shouldShowSanctumTokens()
+                    ->shouldShowMultiFactorAuthentication()
+                    ->shouldShowBrowserSessionsForm()
+                    ->shouldShowAvatarForm(),
                 Lockscreen::make()
                     ->enableRateLimit() // Enable rate limit for the lockscreen. Default: Enable, 5 attempts in 1 minute.
                     ->enableIdleTimeout() // Enable auto lock during idle time. Default: Enable, 30 minutes.
@@ -244,25 +261,6 @@ class AdminPanelProvider extends PanelProvider
                 FilamentIconPickerPlugin::make(),
                 FilamentLogViewer::make()
                     ->navigationGroup(__('Settings')),
-                FilamentEditProfilePlugin::make()
-                    ->slug('auth.profile')
-                    ->setTitle(__('My Profile'))
-                    ->setNavigationLabel(__('My Profile'))
-                    ->setNavigationGroup(__('Group Profile'))
-                    ->setIcon('heroicon-o-user')
-                    ->setSort(10)
-                    ->shouldRegisterNavigation(false)
-                    ->shouldShowEmailForm()
-                    ->shouldShowLocaleForm(options: [
-                        'pt_BR' => __('🇧🇷 Portuguese'),
-                        'en' => __('🇺🇸 English'),
-                        'es' => __('🇪🇸 Spanish'),
-                    ])
-                    ->shouldShowThemeColorForm()
-                    ->shouldShowSanctumTokens()
-                    ->shouldShowMultiFactorAuthentication()
-                    ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
                 FilamentEvolutionPlugin::make()
                     ->whatsappInstanceResource()  // Show instances (default: true)
                     ->viewMessageHistory()        // Show message history
@@ -319,7 +317,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->unsavedChangesAlerts()
             ->passwordReset()
-            ->profile()
             ->databaseNotifications()
             ->databaseNotificationsPolling('30s');
     }

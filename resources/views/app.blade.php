@@ -40,12 +40,14 @@
         <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
         @viteReactRefresh
-        @if(!(request()->route() && str_starts_with(request()->route()->getName() ?? '', 'filament.')))
+        @if(request()->header('X-Inertia'))
             @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
         @endif
         @inertiaHead
     </head>
     <body class="font-sans antialiased">
-        @inertia
+        @if(request()->header('X-Inertia'))
+            @inertia
+        @endif
     </body>
 </html>

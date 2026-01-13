@@ -88,6 +88,11 @@ final class FilamentFullCalendarPlugin implements Plugin
         return $this->config;
     }
 
+        public function getDayCount(): int
+    {
+        return data_get($this->config, 'dayCount', 5);
+    }
+
     public function timezone(string|Closure $timezone): static
     {
         $this->timezone = $timezone;

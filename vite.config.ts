@@ -36,7 +36,6 @@ export default defineConfig({
                 'resources/css/filament/email/theme.css',
                 'resources/css/filament/notify/theme.css',
             ],
-            ssr: 'resources/js/ssr.tsx',
             refresh: true,
         }),
         react(),

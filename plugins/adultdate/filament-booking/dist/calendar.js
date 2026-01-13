@@ -3,7 +3,8 @@ import { Calendar } from '@fullcalendar/core';
 export default function calendar({
                                      view = 'dayGridMonth',
                                      locale = 'en',
-                                     firstDay = 1, 
+                                     firstDay = 1,
+                                    dayCount = 5,
                                      dayMaxEvents = false,
                                      eventContent = null,
                                      eventClickEnabled = true,
@@ -52,6 +53,7 @@ export default function calendar({
                 view: view,
                 locale: locale,
                 firstDay: firstDay,
+                dayCount: dayCount,
                 dayMaxEvents: dayMaxEvents,
                 eventSources: [
                     {

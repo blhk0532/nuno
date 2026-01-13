@@ -39,6 +39,7 @@
         "inertiajs/inertia-laravel": "^2.0.18",
         "internachi/modular": "^2.3",
         "jeffersongoncalves/filament-logo": "@dev",
+        "jeffersongoncalves/filament-refresh-sidebar": "^1.0",
         "joaopaulolndev/filament-edit-profile": "@dev",
         "kirschbaum-development/commentions": "^0.7.5",
         "laravel/folio": "^1.1.12",

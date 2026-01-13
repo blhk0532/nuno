@@ -4,9 +4,15 @@ declare(strict_types=1);
 
 namespace Adultdate\FilamentBooking\Filament\Pages;
 
+use Adultdate\FilamentBooking\Enums\CalendarTheme;
 use Adultdate\FilamentBooking\Models\CalendarSettings;
 use BackedEnum;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
@@ -44,6 +50,14 @@ final class CalendarSettingsPage extends Page implements HasForms
         $this->form->fill([
             'opening_hour_start' => $settings->opening_hour_start?->format('H:i') ?? '09:00',
             'opening_hour_end' => $settings->opening_hour_end?->format('H:i') ?? '17:00',
+            'confirmation_sms' => $settings->confirmation_sms,
+            'confirmation_email' => $settings->confirmation_email,
+            'calendar_weekends' => $settings->calendar_weekends,
+            'calendar_theme' => $settings->calendar_theme?->value ?? 'standard',
+            'confirmation_sms_number' => $settings->confirmation_sms_number,
+            'confirmation_email_address' => $settings->confirmation_email_address,
+            'telavox_jwt' => $settings->telavox_jwt,
+            'calendar_timezone' => $settings->calendar_timezone ?? 'Europe/Stockholm',
         ]);
     }
 
@@ -56,6 +70,14 @@ final class CalendarSettingsPage extends Page implements HasForms
             [
                 'opening_hour_start' => $data['opening_hour_start'],
                 'opening_hour_end' => $data['opening_hour_end'],
+                'confirmation_sms' => $data['confirmation_sms'],
+                'confirmation_email' => $data['confirmation_email'],
+                'calendar_weekends' => $data['calendar_weekends'],
+                'calendar_theme' => $data['calendar_theme'],
+                'confirmation_sms_number' => $data['confirmation_sms_number'],
+                'confirmation_email_address' => $data['confirmation_email_address'],
+                'telavox_jwt' => $data['telavox_jwt'],
+                'calendar_timezone' => $data['calendar_timezone'],
             ]
         );
 
@@ -68,20 +90,65 @@ final class CalendarSettingsPage extends Page implements HasForms
     protected function getFormSchema(): array
     {
         return [
-            TimePicker::make('opening_hour_start')
-                ->label('Öppettid Start')
-                ->required()
-                ->native(false)
-                ->seconds(false)
-                ->default('09:00'),
+            Section::make()
+                ->columns(2)
+                ->schema([
+                    TimePicker::make('opening_hour_start')
+                        ->label('Öppettid Start')
+                        ->required()
+                        ->native(false)
+                        ->seconds(false)
+                        ->default('09:00'),
 
-            TimePicker::make('opening_hour_end')
-                ->label('Öppettid Slut')
-                ->required()
-                ->native(false)
-                ->seconds(false)
-                ->default('17:00')
-                ->rule('after:opening_hour_start'),
+                    TimePicker::make('opening_hour_end')
+                        ->label('Öppettid Slut')
+                        ->required()
+                        ->native(false)
+                        ->seconds(false)
+                        ->default('17:00')
+                        ->rule('after:opening_hour_start'),
+
+                    Textarea::make('confirmation_sms')
+                        ->label('Confirmation SMS')
+                        ->placeholder('Enter SMS confirmation message'),
+
+                    Textarea::make('confirmation_email')
+                        ->label('Confirmation Email')
+                        ->placeholder('Enter email confirmation message'),
+
+                    Toggle::make('calendar_weekends')
+                        ->label('Show Weekends in Calendar')
+                        ->default(false),
+
+                    Select::make('calendar_theme')
+                        ->label('Calendar Theme')
+                        ->enum(CalendarTheme::class)
+                        ->default('standard'),
+
+                    TextInput::make('confirmation_sms_number')
+                        ->label('Confirmation SMS Number')
+                        ->placeholder('Enter phone number for SMS confirmations'),
+
+                    TextInput::make('confirmation_email_address')
+                        ->label('Confirmation Email Address')
+                        ->email()
+                        ->placeholder('Enter email address for confirmations'),
+
+                    TextInput::make('telavox_jwt')
+                        ->label('Telavox JWT')
+                        ->placeholder('Enter Telavox JWT token'),
+
+                    Select::make('calendar_timezone')
+                        ->label('Calendar Timezone')
+                        ->options([
+                            'Europe/Stockholm' => 'Europe/Stockholm',
+                            'Europe/London' => 'Europe/London',
+                            'America/New_York' => 'America/New_York',
+                            'Asia/Tokyo' => 'Asia/Tokyo',
+                            'UTC' => 'UTC',
+                        ])
+                        ->default('Europe/Stockholm'),
+                ]),
         ];
     }
 

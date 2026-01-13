@@ -320,6 +320,7 @@ final class DatabaseSeeder extends Seeder
             BookingCategorySeeder::class,
             BookingClientSeeder::class,
             BookingServiceSeeder::class,
+            BookingCalendarsSeeder::class,
         ]);
     }
 }
