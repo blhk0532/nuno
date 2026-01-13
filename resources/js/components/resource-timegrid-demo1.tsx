@@ -1,6 +1,6 @@
 import { ResourceTimeGrid } from '@/components/resource-timegrid'
 
-export function ResourceTimeGridDemo() {
+export function ResourceTimeGridDemo1() {
   return (
     <ResourceTimeGrid
       className='max-w-300 my-10 mx-auto'
@@ -10,7 +10,7 @@ export function ResourceTimeGridDemo() {
       nowIndicator
       navLinks
       locale='sv'
-      initialView='resourceTimeGridDay'
+      initialView='resourceTimeGridWeek'
       dayMinWidth={200}
       timeZone='UTC'
       resources={[

@@ -1,6 +1,6 @@
 import { ResourceTimeline } from '@/components/resource-timeline'
 
-export function ResourceTimelineDemo() {
+export function ResourceTimelineDemo1() {
   return (
     <ResourceTimeline
       className='max-w-300 my-10 mx-auto'
@@ -10,7 +10,7 @@ export function ResourceTimelineDemo() {
       nowIndicator
       navLinks
       locale='sv'
-      initialView='resourceTimelineDay'
+      initialView='resourceTimelineWeek'
       height='300px'
       contentHeight={300}
       aspectRatio={1.5}
