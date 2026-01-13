@@ -9,7 +9,7 @@ const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 // Prevent loading on non-Inertia pages
 if (!document.querySelector('script[data-page]')) {
-    console.warn('No Inertia page data found, skipping Inertia app initialization');
+    console.warn('Livewire ⚡ Detected: Inertia not initialized.');
 } else {
     createInertiaApp({
         title: (title) => (title ? `${title} - ${appName}` : appName),
