@@ -623,8 +623,12 @@ class Chat extends Component
      */
     private function createMessage(array $attributes): Message
     {
-        // Ensure the conversation still exists before creating the message
-        if (!$this->conversation || !$this->conversation->exists) {
+        // Ensure the conversation still exists in the database before creating the message
+        $conversationExists = $this->conversation instanceof \AdultDate\FilamentWirechat\Models\Conversation
+            ? \AdultDate\FilamentWirechat\Models\Conversation::where('id', $this->conversation->id)->exists()
+            : \Adultdate\Wirechat\Models\Conversation::where('id', $this->conversation->id)->exists();
+
+        if (!$conversationExists) {
             abort(404, __('wirechat::chat.messages.conversation_not_found'));
         }
 
