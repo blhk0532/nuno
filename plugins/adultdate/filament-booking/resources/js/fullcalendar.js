@@ -2,8 +2,8 @@ import { Calendar } from '@fullcalendar/core';
 
 export default function fullcalendar({
                                      view = 'dayGridMonth',
-                                     locale = 'en',
-                                     firstDay = 1, 
+                                     locale = 'sv',
+                                     firstDay = 1,
                                      dayMaxEvents = false,
                                      eventContent = null,
                                      eventClickEnabled = true,
@@ -21,7 +21,7 @@ export default function fullcalendar({
                                      hasNoEventsClickContextMenu = null,
                                      resources = null,
                                      resourceLabelContent = null,
-                                     theme = null,
+                                     theme = 'pulse',
                                      options = {},
                                      eventAssetUrl,
                                  }

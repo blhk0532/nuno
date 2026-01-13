@@ -79,7 +79,7 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
-            ->authGuard('admin')
+            ->authGuard('web')
             ->colors([
                 'primary' => Color::Orange,
             ])
@@ -315,12 +315,7 @@ class AdminPanelProvider extends PanelProvider
                     ->navigationBadgeColor('success')           // string|array|Closure|null
             )
             ->plugins([
-                FilamentWireChatPlugin::make()
-                    ->onlyPages([])
-                    ->excludeResources([
-                        \AdultDate\FilamentWirechat\Filament\Resources\Conversations\ConversationResource::class,
-                        \AdultDate\FilamentWirechat\Filament\Resources\Messages\MessageResource::class,
-                    ]),
+                FilamentWireChatPlugin::make(),
             ])
             ->unsavedChangesAlerts()
             ->passwordReset()

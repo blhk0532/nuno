@@ -97,16 +97,28 @@ public Model|int|string|null $record;
         InteractsWithEvents::refreshRecords insteadof InteractsWithCalendar;
     }
 
-    protected string $view = 'adultdate/filament-booking::service-periods-fullcalendar';
+    protected string $view = 'adultdate/filament-booking::multi-fullcalendar';
     // protected int | string | array $columnSpan = 3;
 
 
     public function getHeading(): string|Htmlable
     {
-        return 'Calendar';
+        $technician = $this->selectedTechnician ? \App\Models\BookingCalendar::with('owner')->find($this->selectedTechnician)?->owner?->name : 'All Tekniker';
+        return 'Calendar - ' . $technician;
     }
 
     public function getFooterActions(): array
+    {
+        return [
+            Action::make('create')
+                ->requiresConfirmation(true)
+                ->action(function (array $arguments) {
+                    dd('Admin action called', $arguments);
+                }),
+        ];
+    }
+
+    public function getHeadingActions(): array
     {
         return [
             Action::make('create')

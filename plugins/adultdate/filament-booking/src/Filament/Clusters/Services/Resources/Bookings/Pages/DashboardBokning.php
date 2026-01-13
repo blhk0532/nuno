@@ -13,7 +13,9 @@ use Illuminate\Support\Str;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar;
+use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar1;
+use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar2;
+use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar3;
 use App\Models\BookingCalendar as BookingCalendarModel;
 use App\UserRole;
 use Filament\Support\Enums\Width;
@@ -24,6 +26,9 @@ use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widg
 
 class DashboardBokning extends BaseDashboard
 {
+
+
+    use HasFiltersForm;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDateRange;
 
@@ -42,12 +47,7 @@ class DashboardBokning extends BaseDashboard
         return true;
     }
 
-        public function getWidgets(): array
-    {
-        return [
-           //     BokningCalendar::class,
-        ];
-    }
+
 
     public static function getNavigationLabel(): string
     {
@@ -65,7 +65,6 @@ class DashboardBokning extends BaseDashboard
         return 'gray';
     }
 
-    use HasFiltersForm;
 
     public function filtersForm(Schema $schema): Schema
     {
@@ -73,22 +72,33 @@ class DashboardBokning extends BaseDashboard
             ->components([
                 Section::make()
                     ->schema([
-                        Select::make('booking_calendars')
+                        Select::make('booking_calendars_1')
                             ->options(fn () => BookingCalendarModel::pluck('name', 'id')->toArray())
-                            ->label('Tekninker')
-                            ->placeholder('Select a calendar owner')
+                            ->label('Tekninker Calendar 1')
+                            ->placeholder('Select Tekniker for Calendar 1')
                             ->searchable()
                             ->reactive()
                             ->afterStateUpdated(function () {
                                 $this->dispatch('refreshCalendar');
                             }),
-
-
-                        DatePicker::make('startDate')
-                            ->maxDate(fn (Get $get) => $get('endDate') ?: now()),
-                        DatePicker::make('endDate')
-                            ->minDate(fn (Get $get) => $get('startDate') ?: now())
-                            ->maxDate(now()),
+                        Select::make('booking_calendars_2')
+                            ->options(fn () => BookingCalendarModel::pluck('name', 'id')->toArray())
+                            ->label('Tekninker Calendar 2')
+                            ->placeholder('Select Tekniker for Calendar 2')
+                            ->searchable()
+                            ->reactive()
+                            ->afterStateUpdated(function () {
+                                $this->dispatch('refreshCalendar');
+                            }),
+                        Select::make('booking_calendars_3')
+                            ->options(fn () => BookingCalendarModel::pluck('name', 'id')->toArray())
+                            ->label('Tekninker Calendar 3')
+                            ->placeholder('Select Tekniker for Calendar 3')
+                            ->searchable()
+                            ->reactive()
+                            ->afterStateUpdated(function () {
+                                $this->dispatch('refreshCalendar');
+                            })
                     ])
                     ->columns(3)
                     ->columnSpanFull(),
@@ -114,23 +124,21 @@ public function getHeaderWidgetsColumns(): int | array
 
 public function getWidgetsColumns(): int | array
 {
-    return 2;
+    return 3;
 }
 
 public function getColumns(): int | array
 {
-    return 2;
+    return 3;
 }
 
-public function getHeaderWidgets(): array
+public function getWidgets(): array
     {
         return [
-                 MultiCalendar::class,
-                MultiCalendar::class,
-                MultiCalendar::class,
-                MultiEventCalendar::class,
-                 MultiEventCalendar::class,
-                  MultiEventCalendar::class,
+                MultiCalendar1::class,
+                MultiCalendar2::class,
+                MultiCalendar3::class,
+
         ];
     }
 

@@ -6,7 +6,12 @@
     <x-filament::section>
         <div class="flex justify-end flex-1 mb-4">
             <x-filament::actions :actions="$this->getCachedHeaderActions()" class="shrink-0" />
+                {{ $this->getHeading() }}
         </div>
+
+            <x-slot name="heading">
+                {{ $this->getHeading() }}
+            </x-slot>
 
         {{-- Ensure the built Alpine component is available (fallback to public/vendor) --}}
         <script defer src="{{ asset('plugins/adultdate/filament-booking/dist/filament-fullcalendar.js') }}"></script>
@@ -26,7 +31,9 @@
                 eventDidMount: {!! htmlspecialchars($this->eventDidMount(), ENT_COMPAT) !!},
                 eventWillUnmount: {!! htmlspecialchars($this->eventWillUnmount(), ENT_COMPAT) !!},
             })" class="filament-fullcalendar" data-filament-fullcalendar="true"></div>
+                            <x-filament-booking::context-menu/>
+
     </x-filament::section>
- 
+
     <x-filament-actions::modals />
 </x-filament-widgets::widget>

@@ -37,17 +37,17 @@ class FilamentBookingPlugin implements Plugin
 
     protected array $plugins = ['dayGrid', 'timeGrid', 'interaction', 'list'];
 
-    protected ?string $schedulerLicenseKey = null;
+    protected ?string $schedulerLicenseKey = 'CC-Attribution-NonCommercial-NoDerivatives';
 
     protected array $config = [];
 
     protected string | Closure | null $timezone = "Europe/Stockholm";
 
-    protected string | Closure | null $locale = null;
+    protected string | Closure | null $locale = 'sv';
 
-    protected ?bool $editable = null;
+    protected ?bool $editable = true;
 
-    protected ?bool $selectable = null;
+    protected ?bool $selectable = true;
 
     public function getId(): string
     {

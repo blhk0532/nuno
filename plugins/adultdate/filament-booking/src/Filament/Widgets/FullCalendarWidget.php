@@ -6,6 +6,8 @@ use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Schemas\Schema;
+use Filament\Forms\Components\Select;
 use Filament\Pages\Concerns\InteractsWithFormActions;
 use Filament\Pages\Concerns\InteractsWithHeaderActions;
 use Filament\Widgets\Widget;
@@ -13,12 +15,16 @@ use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use Adultdate\FilamentBooking\Concerns\HasHeaderActions;
 use Adultdate\FilamentBooking\Filament\Widgets\Concerns\CanBeConfigured;
 use Adultdate\FilamentBooking\Filament\Widgets\Concerns\InteractsWithRawJS;
+use App\Models\BookingCalendar as BookingCalendarModel;
 
 class FullCalendarWidget extends Widget implements HasForms, HasActions
 {
     use InteractsWithForms;
     use InteractsWithActions;
     use HasHeaderActions, CanBeConfigured, InteractsWithRawJS;
+
+    public $selectedTechnician;
+
     /**
      * Blade view used by this widget (NON-static in Filament v3)
      */
@@ -104,5 +110,27 @@ class FullCalendarWidget extends Widget implements HasForms, HasActions
                 $data['resource'] ?? null
             );
         }
+    }
+
+    public function getTechnicianOptions(): array
+    {
+        return \App\Models\User::whereHas('roles', function ($query) {
+            $query->whereIn('name', ['technician', 'admin', 'super_admin']);
+        })->pluck('name', 'id')->toArray();
+    }
+
+    public function form(Schema $schema): Schema
+    {
+        return $schema
+            ->schema([
+                Select::make('selectedTechnician')
+                    ->label('Tekniker')
+                    ->options($this->getTechnicianOptions())
+                    ->searchable()
+                    ->reactive()
+                    ->afterStateUpdated(function ($state) {
+                        $this->updatedSelectedTechnician();
+                    }),
+            ]);
     }
 }

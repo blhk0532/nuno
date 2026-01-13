@@ -32,6 +32,8 @@
         "@fullcalendar/daygrid": "7.0.0-beta.6",
         "@fullcalendar/interaction": "7.0.0-beta.6",
         "@fullcalendar/list": "7.0.0-beta.6",
+        "@fullcalendar/moment": "7.0.0-beta.6",
+        "@fullcalendar/moment-timezone": "7.0.0-beta.6",
         "@fullcalendar/mui": "7.0.0-beta.6",
         "@fullcalendar/multimonth": "7.0.0-beta.6",
         "@fullcalendar/react": "7.0.0-beta.6",

@@ -4,6 +4,12 @@
 
 <x-filament-widgets::widget>
     <x-filament::section>
+
+              <x-slot name="heading">
+
+
+            </x-slot>
+
         <div class="flex justify-end flex-1 mb-4">
             <x-filament::actions :actions="$this->getCachedHeaderActions()" class="shrink-0" />
         </div>

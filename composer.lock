@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ea4a36c4411ebee24b2b089ae4df8eb5",
+    "content-hash": "941d52b8dbe6d7ff7aef96bb33414f73",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -89,7 +89,7 @@
         },
         {
             "name": "adultdate/filament-booking",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/adultdate/filament-booking",
@@ -189,7 +189,7 @@
         },
         {
             "name": "adultdate/filament-dialer",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/adultdate/filament-dialer",
@@ -245,89 +245,8 @@
             }
         },
         {
-            "name": "adultdate/filament-queueable-bulk-actions",
-            "version": "4.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/adultdate/filament-queueable-bulk-actions.git",
-                "reference": "4d17a60f2cf835e560873f5796d6a8ceb97ac61d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/adultdate/filament-queueable-bulk-actions/zipball/4d17a60f2cf835e560873f5796d6a8ceb97ac61d",
-                "reference": "4d17a60f2cf835e560873f5796d6a8ceb97ac61d",
-                "shasum": ""
-            },
-            "require": {
-                "filament/filament": "^4.0",
-                "filament/tables": "^4.0",
-                "php": "^8.2",
-                "spatie/laravel-package-tools": "^1.15.0"
-            },
-            "require-dev": {
-                "laravel/pint": "^1.0",
-                "nunomaduro/collision": "^8.0",
-                "nunomaduro/larastan": "^3.0",
-                "orchestra/testbench": "^10.0",
-                "pestphp/pest": "^4.1",
-                "pestphp/pest-plugin-arch": "^4.0",
-                "pestphp/pest-plugin-laravel": "^4.0",
-                "phpstan/extension-installer": "^1.0",
-                "phpstan/phpstan-deprecation-rules": "^2.0",
-                "phpstan/phpstan-phpunit": "2.0",
-                "spatie/laravel-ray": "^1.26"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "QueueableBulkActions": "Bytexr\\QueueableBulkActions\\Facades\\QueueableBulkActions"
-                    },
-                    "providers": [
-                        "Bytexr\\QueueableBulkActions\\QueueableBulkActionsServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Bytexr\\QueueableBulkActions\\": "src/",
-                    "Bytexr\\QueueableBulkActions\\Database\\Factories\\": "database/factories/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Eddie Rusinskas",
-                    "email": "info@imphus.com",
-                    "role": "Developer"
-                }
-            ],
-            "description": "This Filament plugin simplifies managing bulk operations asynchronously in a queue. It provides tracking and status updates for tasks, while supporting both action calls and job dispatches. Excellent for bulk data updates and tasks with Filament & Livewire support for real-time notifications.",
-            "homepage": "https://github.com/bytexr/queueable-bulk-actions",
-            "keywords": [
-                "bytexr",
-                "filament",
-                "laravel",
-                "queueable-bulk-actions"
-            ],
-            "support": {
-                "issues": "https://github.com/bytexr/queueable-bulk-actions/issues",
-                "source": "https://github.com/bytexr/queueable-bulk-actions"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/bytexr",
-                    "type": "github"
-                }
-            ],
-            "time": "2025-10-24T15:50:21+00:00"
-        },
-        {
             "name": "adultdate/filament-tab-layout-plugin",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/adultdate/filament-tab-plugin",
@@ -424,7 +343,7 @@
         },
         {
             "name": "adultdate/filament-wirechat",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/adultdate/filament-wirechat",
@@ -1122,7 +1041,7 @@
         },
         {
             "name": "bezhansalleh/filament-panel-switch",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/bezhansalleh/filament-panel-switch",
@@ -1333,7 +1252,7 @@
         },
         {
             "name": "bezhansalleh/filament-shield",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/bezhansalleh/filament-shield",
@@ -1438,7 +1357,7 @@
         },
         {
             "name": "binarybuilds/filament-cache-manager",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/binarybuilds/filament-cache-manager",
@@ -1520,7 +1439,7 @@
         },
         {
             "name": "binarybuilds/filament-command-runner",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/binarybuilds/filament-command-runner",
@@ -1602,7 +1521,7 @@
         },
         {
             "name": "binarybuilds/filament-failed-jobs",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/binarybuilds/filament-failed-jobs",
@@ -1895,6 +1814,99 @@
             "time": "2025-11-24T14:40:29+00:00"
         },
         {
+            "name": "bytexr/filament-queueable-bulk-actions",
+            "version": "4.0.0",
+            "dist": {
+                "type": "path",
+                "url": "plugins/bytexr/filament-queueable-bulk-actions",
+                "reference": "c820a2de934cf9e4fe2b0e56d8b1d3d8e2d0a39b"
+            },
+            "require": {
+                "filament/filament": "^4.0",
+                "filament/tables": "^4.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^8.0",
+                "nunomaduro/larastan": "^3.0",
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^4.1",
+                "pestphp/pest-plugin-arch": "^4.0",
+                "pestphp/pest-plugin-laravel": "^4.0",
+                "phpstan/extension-installer": "^1.0",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "2.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Bytexr\\QueueableBulkActions\\QueueableBulkActionsServiceProvider"
+                    ],
+                    "aliases": {
+                        "QueueableBulkActions": "Bytexr\\QueueableBulkActions\\Facades\\QueueableBulkActions"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Bytexr\\QueueableBulkActions\\": "src/",
+                    "Bytexr\\QueueableBulkActions\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Bytexr\\QueueableBulkActions\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "post-autoload-dump": [
+                    "@php ./vendor/bin/testbench package:discover --ansi"
+                ],
+                "analyse": [
+                    "vendor/bin/phpstan analyse"
+                ],
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "test-coverage": [
+                    "vendor/bin/pest --coverage"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Eddie Rusinskas",
+                    "email": "info@imphus.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This Filament plugin simplifies managing bulk operations asynchronously in a queue. It provides tracking and status updates for tasks, while supporting both action calls and job dispatches. Excellent for bulk data updates and tasks with Filament & Livewire support for real-time notifications.",
+            "homepage": "https://github.com/bytexr/queueable-bulk-actions",
+            "keywords": [
+                "bytexr",
+                "filament",
+                "laravel",
+                "queueable-bulk-actions"
+            ],
+            "support": {
+                "issues": "https://github.com/bytexr/queueable-bulk-actions/issues",
+                "source": "https://github.com/bytexr/queueable-bulk-actions"
+            },
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "carbonphp/carbon-doctrine-types",
             "version": "3.2.0",
             "source": {
@@ -1965,7 +1977,7 @@
         },
         {
             "name": "caresome/filament-auth-designer",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/caresome/filament-auth-designer",
@@ -2353,7 +2365,7 @@
         },
         {
             "name": "cmsmaxinc/filament-error-pages",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/cmsmaxinc/filament-error-pages",
@@ -3302,7 +3314,7 @@
         },
         {
             "name": "dashed/filament-numpad-field",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/dashed/filament-numpad-field",
@@ -4167,7 +4179,7 @@
         },
         {
             "name": "fahiem/filament-pinpoint",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/fahiem/filament-pinpoint",
@@ -6043,7 +6055,7 @@
         },
         {
             "name": "jeffersongoncalves/filament-logo",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/jeffersongoncalves/filament-logo",
@@ -6191,7 +6203,7 @@
         },
         {
             "name": "joaopaulolndev/filament-edit-profile",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/joaopaulolndev/filament-edit-profile",
@@ -8119,7 +8131,7 @@
         },
         {
             "name": "leandrocfe/filament-apex-charts",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/leandrocfe/filament-apex-charts",
@@ -9183,7 +9195,7 @@
         },
         {
             "name": "mwguerra/filemanager",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/mwguerra/filemanager",
@@ -9831,7 +9843,7 @@
         },
         {
             "name": "openplain/filament-shadcn-theme",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/openplain/filament-shadcn-theme",
@@ -11700,7 +11712,7 @@
         },
         {
             "name": "pxlrbt/filament-excel",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/pxlrbt/filament-excel",
@@ -11758,7 +11770,7 @@
         },
         {
             "name": "pxlrbt/filament-spotlight",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/pxlrbt/filament-spotlight",
@@ -12602,7 +12614,7 @@
         },
         {
             "name": "relaticle/flowforge",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/relaticle/flowforge",
@@ -13776,7 +13788,7 @@
         },
         {
             "name": "spatie/laravel-google-calendar",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/spatie/laravel-google-calendar",
@@ -18276,7 +18288,7 @@
         },
         {
             "name": "wallacemartinss/filament-icon-picker",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/wallacemartinss/filament-icon-picker",
@@ -18351,7 +18363,7 @@
         },
         {
             "name": "wallacemartinss/filament-whatsapp-conector",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/wallacemartinss/filament-whatsapp-conector",
@@ -18573,7 +18585,7 @@
         },
         {
             "name": "ysfkaya/filament-phone-input",
-            "version": "dev-master",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "plugins/ysfkaya/filament-phone-input",
@@ -24777,7 +24789,6 @@
         "achyutn/filament-log-viewer": 20,
         "adultdate/filament-booking": 20,
         "adultdate/filament-dialer": 20,
-        "adultdate/filament-queueable-bulk-actions": 20,
         "adultdate/filament-tab-layout-plugin": 20,
         "adultdate/filament-wirechat": 20,
         "bezhansalleh/filament-panel-switch": 20,

@@ -19,6 +19,6 @@
     },
     "iconLibrary": "lucide",
     "registries": {
-        "@fullcalendar-monarch": "https://shadcn-registry.fullcalendar.io/monarch/{name}.json"
+        "@fullcalendar-pulse": "https://shadcn-registry.fullcalendar.io/pulse/{name}.json"
     }
 }

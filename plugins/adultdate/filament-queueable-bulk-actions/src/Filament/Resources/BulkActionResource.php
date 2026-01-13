@@ -19,6 +19,7 @@ final class BulkActionResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-clipboard-document-list';
 
     protected static string|UnitEnum|null $navigationGroup = 'Settings';
+     protected static string|null $navigationLabel= 'Bulk Action';
 
     public static function getPluralModelLabel(): string
     {
@@ -67,7 +68,7 @@ final class BulkActionResource extends Resource
         }
     }
 
-    public static function getNavigationGroup(): string|UnitEnum|null
+    public static function getNavigationGroup(): string
     {
         return 'Settings';
     }

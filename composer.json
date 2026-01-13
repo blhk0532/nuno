@@ -10,7 +10,6 @@
         "achyutn/filament-log-viewer": "@dev",
         "adultdate/filament-booking": "@dev",
         "adultdate/filament-dialer": "@dev",
-        "adultdate/filament-queueable-bulk-actions": "@dev",
         "adultdate/filament-tab-layout-plugin": "@dev",
         "adultdate/filament-wirechat": "@dev",
         "andreiio/blade-remix-icon": "^3.8",
@@ -25,6 +24,7 @@
         "binarybuilds/filament-command-runner": "@dev",
         "binarybuilds/filament-failed-jobs": "@dev",
         "blade-ui-kit/blade-heroicons": "^2.6",
+        "bytexr/filament-queueable-bulk-actions": "^4.0",
         "caresome/filament-auth-designer": "@dev",
         "cmsmaxinc/filament-error-pages": "@dev",
         "codeat3/blade-google-material-design-icons": "^1.20",
@@ -94,6 +94,13 @@
         {
             "type": "path",
             "url": "plugins/filament/filament",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "plugins/bytexr/filament-queueable-bulk-actions",
             "options": {
                 "symlink": true
             }

@@ -28,7 +28,9 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Spatie\Permission\Traits\HasRoles;
 use Zap\Models\Concerns\HasSchedules;
+use Laravel\Fortify\TwoFactorAuthenticatable;
 
 /**
  * @property int $id
@@ -84,9 +86,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     use Authorizable;
     use CanResetPassword;
     use HasFactory;
+    use HasRoles;
     use HasSchedules;
     use InteractsWithWirechat;
     use MustVerifyEmail;
+    use TwoFactorAuthenticatable;
     use Notifiable;
 
     protected $fillable = [
@@ -112,9 +116,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        if ($panel->getId() === 'admin') {
-            return false;
-        }
+    //    if ($panel->getId() === 'admin') {
+    //        return false;
+    //    }
 
         return true;
     }

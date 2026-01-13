@@ -3,7 +3,7 @@
 use Filament\Enums\ThemeMode;
 
 return [
-    'defaultCurrency' => 'usd',
+    'defaultCurrency' => 'sek',
     'defaultDateDisplayFormat' => 'M j, Y',
     'defaultIsoDateDisplayFormat' => 'L',
     'defaultDateTimeDisplayFormat' => 'M j, Y H:i:s',

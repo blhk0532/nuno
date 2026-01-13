@@ -78,9 +78,10 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
 
     protected string $view = 'adultdate/filament-booking::service-periods-fullcalendar';
 
-    public function getHeading(): string|Htmlable
+   public function getHeading(): string|Htmlable
     {
-        return 'Calenar';
+        $calendar = $this->selectedCalendar ? \App\Models\BookingCalendar::find($this->selectedCalendar)?->name : 'All Calendars';
+        return 'Calendar - ' . $calendar;
     }
 
     public function getFooterActions(): array

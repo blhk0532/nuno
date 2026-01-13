@@ -29,9 +29,9 @@ class EnsureWirechatPanelAccess
 
         $user = Auth::user();
 
-        if (! $user || ! Auth::canAccessWirechatPanel($panel)) {
-            abort(404);
-        }
+    //    if (! $user || ! Auth::canAccessWirechatPanel($panel)) {
+    //        abort(404);
+    //    }
 
         return $next($request);
     }

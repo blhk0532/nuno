@@ -17,6 +17,7 @@ use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Adultdate\FilamentBooking\Commands\FilamentBookingCommand;
 use Adultdate\FilamentBooking\Testing\TestsFilamentBooking;
+
 use Filament\Facades\Filament;
 
 class FilamentBookingServiceProvider extends PackageServiceProvider
@@ -101,15 +102,15 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
                 'adultdate.filament-booking.filament.resources.booking.daily-locations.widgets.location-calendar-widget',
                 \Adultdate\FilamentBooking\Filament\Resources\Booking\DailyLocations\Widgets\LocationCalendarWidget::class
             );
-            \Livewire\Livewire::component(
-                'adultdate.filament-booking.filament.widgets.bokning-calendar',
-                \Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\BokningCalendar::class
-            );
+
             \Livewire\Livewire::component(
                 'adultdate.filament-booking.filament.widgets.booking-calendar',
                 \Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\BookingCalendar::class
             );
             \Livewire\Livewire::component('adultdate.filament-booking.filament.widgets.event-calendar', \Adultdate\FilamentBooking\Filament\Widgets\EventCalendar::class);
+            \Livewire\Livewire::component('adultdate.filament-booking.filament.clusters.services.resources.bookings.widgets.multi-calendar1', \Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar1::class);
+            \Livewire\Livewire::component('adultdate.filament-booking.filament.clusters.services.resources.bookings.widgets.multi-calendar2', \Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar2::class);
+            \Livewire\Livewire::component('adultdate.filament-booking.filament.clusters.services.resources.bookings.widgets.multi-calendar3', \Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar3::class);
 
         }
 
@@ -247,23 +248,23 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
     protected function getMigrations(): array
     {
         return [
-            'create_booking_addressable_table', 
-            'create_booking_addresses_table', 
+            'create_booking_addressable_table',
+            'create_booking_addresses_table',
             'create_booking_clients_table',
-            'create_booking_comments_table', 
-            'create_booking_exports_table', 
-            'create_booking_imports_table', 
-            'create_booking_media_table', 
-            'create_booking_notifications_table', 
-            'create_booking_payments_table', 
-            'create_booking_settings_table', 
-            'create_booking_brands_table', 
-            'create_booking_categories_table', 
-            'create_booking_category_product_table', 
-            'create_booking_customers_table', 
-            'create_booking_order_items_table', 
-            'create_booking_orders_table', 
-            'create_booking_products_table', 
+            'create_booking_comments_table',
+            'create_booking_exports_table',
+            'create_booking_imports_table',
+            'create_booking_media_table',
+            'create_booking_notifications_table',
+            'create_booking_payments_table',
+            'create_booking_settings_table',
+            'create_booking_brands_table',
+            'create_booking_categories_table',
+            'create_booking_category_product_table',
+            'create_booking_customers_table',
+            'create_booking_order_items_table',
+            'create_booking_orders_table',
+            'create_booking_products_table',
             'create_booking_tag_tables',
         ];
     }
