@@ -153,3 +153,18 @@ div.flex.flex-col.bg-background.rounded-lg.overflow-hidden.border-x.border-t.bor
 div.logo-before{
    display:none!important;
 }
+
+div.flex.flex-col.bg-background.rounded-lg.overflow-hidden.border-x.border-t.border-b.max-w-300.my-10.mx-auto{
+    width: 100%;
+  max-width: 100%;
+}
+
+svg.nordic-logo-frontend{
+ position: absolute;
+  top: 6px;
+  left: 30px;
+}
+
+.nordic-logo-frontend{
+    margin-left: -20px;
+}

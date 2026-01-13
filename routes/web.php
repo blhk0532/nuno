@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\CalendarEventController;
+use App\Http\Controllers\CalendarResourceController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserEmailResetNotification;
-use App\Http\Controllers\UserEmailVerification;
 use App\Http\Controllers\UserEmailVerificationNotificationController;
 use App\Http\Controllers\UserPasswordController;
 use App\Http\Controllers\UserProfileController;
@@ -27,6 +28,9 @@ Route::middleware(['web', 'inertia', 'auth', 'verified'])->group(function (): vo
 
 Route::middleware(['web', 'inertia', 'auth', 'verified'])->group(function (): void {
     Route::get('calendar', fn () => Inertia::render('calendar'))->name('calendar');
+    Route::get('calendars', fn () => Inertia::render('calendars'))->name('calendars');
+    Route::get('calendar/events', CalendarEventController::class)->name('calendar.events');
+    Route::get('calendar/resources', CalendarResourceController::class)->name('calendar.resources');
 });
 
 Route::middleware('auth')->group(function (): void {
@@ -87,7 +91,7 @@ Route::middleware('auth')->group(function (): void {
         ->name('verification.send');
 
     // User Email Verification...
-    Route::get('verify-email/{id}/{hash}', [UserEmailVerification::class, 'update'])
+    Route::get('verify-email/{id}/{hash}', [UserEmailVerificationNotificationController::class, 'update'])
         ->middleware(['signed', 'throttle:6,1'])
         ->name('verification.verify');
 

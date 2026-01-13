@@ -9,18 +9,20 @@ export function ResourceTimeGridDemo() {
       selectable
       nowIndicator
       navLinks
+      locale='sv'
+      initialView='resourceTimeGridWeek'
       dayMinWidth={200}
       timeZone='UTC'
       resources={[
-        { id: 'a', title: 'Room A' },
-        { id: 'b', title: 'Room B' },
-        { id: 'c', title: 'Room C' },
+        { id: '16', title: 'Tekinker 1' },
+        { id: '17', title: 'Tekinker 2' },
+        { id: '18', title: 'Tekinker 3' },
       ]}
-      events='https://fullcalendar.io/api/demo-feeds/events.json?with-resources=3&single-day'
+      events='http://localhost:8000/calendar/events?with-resources=3&single-day'
       addButton={{
-        text: 'Add Room',
+        text: 'Ny Bokning',
         click() {
-          alert('add room...')
+          alert('Ny Bokning...')
         }
       }}
     />

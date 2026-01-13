@@ -9,15 +9,19 @@ export function ResourceTimelineDemo() {
       selectable
       nowIndicator
       navLinks
+      locale='sv'
+      initialView='resourceTimelineWeek'
+      height='300px'
+      contentHeight={300}
       aspectRatio={1.5}
       timeZone='UTC'
       resourceColumnHeaderContent='Rooms'
-      resources='https://fullcalendar.io/api/demo-feeds/resources.json?with-nesting&with-colors'
-      events='https://fullcalendar.io/api/demo-feeds/events.json?single-day&for-resource-timeline'
+      resources='http://localhost:8000/calendar/resources?with-nesting&with-colors'
+      events='http://localhost:8000/calendar/events?single-day&for-resource-timeline'
       addButton={{
-        text: 'Add Room',
+        text: 'Ny Tekniker',
         click() {
-          alert('add room...')
+          alert('Ny Tekniker...')
         }
       }}
     />
