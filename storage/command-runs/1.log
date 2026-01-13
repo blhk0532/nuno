@@ -1,0 +1,10 @@
+
+> build
+> vite build
+
+You are using Node.js 18.19.1. Vite requires Node.js version 20.19+ or 22.12+. Please upgrade your Node.js version.
+vite v7.3.1 building client environment for production...
+[plugin @laravel/vite-plugin-wayfinder] Types generated for actions, routes, form variants
+transforming...
+✓ 2967 modules transformed.
+Generated an empty chunk: "app".

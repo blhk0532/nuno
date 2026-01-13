@@ -45,10 +45,10 @@
         "kirschbaum-development/commentions": "^0.7.5",
         "laravel/folio": "^1.1.12",
         "laravel/fortify": "^1.33.0",
-        "laravel/framework": "^12.46",
+        "laravel/framework": "^12.47",
         "laravel/reverb": "^1.7",
         "laravel/tinker": "^2.11.0",
-        "laravel/wayfinder": "^0.1.12",
+        "laravel/wayfinder": "^0.1.13",
         "laraveljutsu/zap": "@dev",
         "leandrocfe/filament-apex-charts": "@dev",
         "livewire/blaze": "^1.0@beta",
@@ -89,7 +89,7 @@
         "pestphp/pest-plugin-browser": "^4.2.1",
         "pestphp/pest-plugin-laravel": "^4.0.0",
         "pestphp/pest-plugin-type-coverage": "^4.0.3",
-        "rector/rector": "^2.3.0",
+        "rector/rector": "^2.3.1",
         "roave/security-advisories": "dev-latest"
     },
     "repositories": [
