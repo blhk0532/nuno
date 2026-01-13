@@ -149,3 +149,7 @@ div.flex.flex-col.bg-background.rounded-lg.overflow-hidden.border-x.border-t.bor
 .max-w-1200{
     max-width: 1200px;
 }
+
+div.logo-before{
+   display:none!important;
+}
