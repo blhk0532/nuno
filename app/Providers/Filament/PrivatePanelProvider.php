@@ -77,7 +77,7 @@ class PrivatePanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Private/Resources'), for: 'App\Filament\Private\Resources')
             ->discoverPages(in: app_path('Filament/Private/Pages'), for: 'App\Filament\Private\Pages')

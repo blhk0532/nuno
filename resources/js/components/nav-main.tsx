@@ -12,7 +12,7 @@ export function NavMain({ items = [] }: { items: NavItem[] }) {
     const page = usePage();
     return (
         <SidebarGroup className="px-2 py-0">
-            <SidebarGroupLabel>NDS th 🗓 นอร์ดิก ดิจิทัล โซลูชั่นส์</SidebarGroupLabel>
+            <SidebarGroupLabel>NDS 🗓 บริษัทนอร์ดิกดิจิทัลโซลูชั่นส์จำกัด</SidebarGroupLabel>
             <SidebarMenu>
                 {items.map((item) => (
                     <SidebarMenuItem key={item.title}>

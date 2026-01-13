@@ -77,7 +77,7 @@ class ChatPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Chat/Resources'), for: 'App\Filament\Chat\Resources')
             ->discoverPages(in: app_path('Filament/Chat/Pages'), for: 'App\Filament\Chat\Pages')

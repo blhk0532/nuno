@@ -116,14 +116,14 @@ final class AppServiceProvider extends ServiceProvider
                     'partner', 'service', 'tools', 'storage', 'system', 'chat', 'stats', 'calendar', 'sheets', 'email', 'notify', 'user'];
             }
 
-            if ($user instanceof User && ($user->hasRole('super_admin') || $user->hasRole('superadmin') || $user->hasRole('super'))) {
-                $panels = ['admin', 'app', 'booking', 'manager', 'queue', 'dialer', 'clients', 'finance', 'server', 'data', 'super', 'dev',
-                    'partner', 'service', 'tools', 'storage', 'system', 'chat', 'stats', 'calendar', 'sheets', 'email', 'notify', 'user'];
-            }
-
             if ($user instanceof User && ($user->hasRole('admin') || $user->hasRole('administrator'))) {
                 $panels = ['admin', 'calendar', 'booking', 'clients', 'app', 'manager', 'queue', 'dialer', 'finance',
                     'server', 'partner', 'service', 'tools', 'storage', 'chat', 'stats', 'sheets', 'email', 'notify', 'user'];
+            }
+
+            if ($user instanceof User && ($user->hasRole('super_admin') || $user->hasRole('superadmin') || $user->hasRole('super'))) {
+                $panels = ['admin', 'app', 'booking', 'manager', 'queue', 'dialer', 'clients', 'finance', 'server', 'data', 'super', 'dev',
+                    'partner', 'service', 'tools', 'storage', 'system', 'chat', 'stats', 'calendar', 'sheets', 'email', 'notify', 'user'];
             }
 
             $switch->panels($panels);

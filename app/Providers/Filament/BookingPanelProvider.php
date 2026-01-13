@@ -74,7 +74,7 @@ class BookingPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Booking/Resources'), for: 'App\Filament\Booking\Resources')
             ->discoverPages(in: app_path('Filament/Booking/Pages'), for: 'App\Filament\Booking\Pages')

@@ -77,7 +77,7 @@ class StatsPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Stats/Resources'), for: 'App\Filament\Stats\Resources')
             ->discoverPages(in: app_path('Filament/Stats/Pages'), for: 'App\Filament\Stats\Pages')

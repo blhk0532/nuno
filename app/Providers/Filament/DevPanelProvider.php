@@ -77,7 +77,7 @@ class DevPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Dev/Resources'), for: 'App\Filament\Dev\Resources')
             ->discoverPages(in: app_path('Filament/Dev/Pages'), for: 'App\Filament\Dev\Pages')

@@ -13,8 +13,8 @@ import AuthLayout from '@/layouts/auth-layout';
 export default function Register() {
     return (
         <AuthLayout
-            title="Create an account"
-            description="Enter your details below to create your account"
+                 title="Nordic Digital Solutions"
+            description="บริษัทนอร์ดิกดิจิทัลโซลูชั่นส์จำกัด 🇹🇭 🇸🇪"
         >
             <Head title="Register" />
             <Form

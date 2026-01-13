@@ -77,7 +77,7 @@ class NotifyPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Notify/Resources'), for: 'App\Filament\Notify\Resources')
             ->discoverPages(in: app_path('Filament/Notify/Pages'), for: 'App\Filament\Notify\Pages')

@@ -77,7 +77,7 @@ class SystemPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/System/Resources'), for: 'App\Filament\System\Resources')
             ->discoverPages(in: app_path('Filament/System/Pages'), for: 'App\Filament\System\Pages')

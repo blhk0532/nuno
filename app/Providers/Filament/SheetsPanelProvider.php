@@ -77,7 +77,7 @@ class SheetsPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Sheets/Resources'), for: 'App\Filament\Sheets\Resources')
             ->discoverPages(in: app_path('Filament/Sheets/Pages'), for: 'App\Filament\Sheets\Pages')

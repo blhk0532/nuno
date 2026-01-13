@@ -77,7 +77,7 @@ class EmailPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Email/Resources'), for: 'App\Filament\Email\Resources')
             ->discoverPages(in: app_path('Filament/Email/Pages'), for: 'App\Filament\Email\Pages')

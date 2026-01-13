@@ -76,7 +76,7 @@ class UserPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/User/Resources'), for: 'App\Filament\User\Resources')
             ->discoverPages(in: app_path('Filament/User/Pages'), for: 'App\Filament\User\Pages')

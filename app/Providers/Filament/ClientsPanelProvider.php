@@ -77,7 +77,7 @@ class ClientsPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Clients/Resources'), for: 'App\Filament\Clients\Resources')
             ->discoverPages(in: app_path('Filament/Clients/Pages'), for: 'App\Filament\Clients\Pages')

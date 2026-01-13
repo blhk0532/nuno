@@ -77,7 +77,7 @@ class QueuePanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Queue/Resources'), for: 'App\Filament\Queue\Resources')
             ->discoverPages(in: app_path('Filament/Queue/Pages'), for: 'App\Filament\Queue\Pages')

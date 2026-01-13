@@ -24,7 +24,7 @@ use Livewire\Component;
 use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 use Livewire\WithPagination;
-
+use Illuminate\Support\Facades\Auth;
 /**
  * Chat Component
  *
@@ -108,7 +108,7 @@ class Chat extends Component
 
             // Make sure message does not belong to auth
             // Make sure message does not belong to auth
-            if ($event['message']['participant']['participantable_id'] == auth()->id() && $event['message']['participant']['participantable_type'] === $this->auth->getMorphClass()) {
+            if ($event['message']['participant']['participantable_id'] == Auth::id() && $event['message']['participant']['participantable_type'] === $this->auth->getMorphClass()) {
                 return null;
             }
 
@@ -152,7 +152,7 @@ class Chat extends Component
 
             // Make sure message does not belong to auth
 
-            if ($newMessage->participant->participantable_id == auth()->id() && $newMessage->participant->participantable_type == $this->auth->getMorphClass()) {
+            if ($newMessage->participant->participantable_id ==Auth::id() && $newMessage->participant->participantable_type == $this->auth->getMorphClass()) {
                 return null;
             }
 
@@ -252,7 +252,7 @@ class Chat extends Component
      * Delete conversation  */
     public function deleteConversation()
     {
-        abort_unless(auth()->check(), 401);
+        abort_unless(Auth::check(), 401);
 
         // delete conversation
         $this->conversation->deleteFor($this->auth);
@@ -270,7 +270,7 @@ class Chat extends Component
      * Delete conversation  */
     public function clearConversation()
     {
-        abort_unless(auth()->check(), 401);
+        abort_unless(Auth::check(), 401);
 
         // delete conversation
         $this->conversation->clearFor($this->auth);
@@ -304,7 +304,7 @@ class Chat extends Component
 
     public function exitConversation()
     {
-        abort_unless(auth()->check(), 401);
+        abort_unless(Auth::check(), 401);
 
         $auth = $this->auth;
 
@@ -331,12 +331,12 @@ class Chat extends Component
     {
         $perMinute = 60;
 
-        if (RateLimiter::tooManyAttempts('send-message:'.auth()->id(), $perMinute)) {
+        if (RateLimiter::tooManyAttempts('send-message:'.Auth::id(), $perMinute)) {
 
             return abort(429, __('wirechat::chat.messages.rate_limit'));
         }
 
-        RateLimiter::increment('send-message:'.auth()->id());
+        RateLimiter::increment('send-message:'.Auth::id());
     }
 
     /**
@@ -344,7 +344,7 @@ class Chat extends Component
     public function sendMessage()
     {
 
-        abort_unless(auth()->check(), 401);
+        abort_unless(Auth::check(), 401);
 
         // rate limit
         $this->rateLimit();
@@ -423,12 +423,52 @@ class Chat extends Component
                 ]);
 
                 // Create and associate the attachment with the message
+                // Resolve URL safely using try/catch to avoid undefined method errors on some filesystem drivers.
+                try {
+                    $disk = Wirechat::storage()->disk();
+
+                    // If Wirechat::storage()->disk() returns a disk name string, use Storage::disk($disk)
+                    if (is_string($disk)) {
+                        /** @var \Illuminate\Filesystem\FilesystemAdapter $filesystem */
+                        $filesystem = Storage::disk($disk);
+                        if (is_object($filesystem) && method_exists($filesystem, 'url')) {
+                            try {
+                                $url = $filesystem->url($path);
+                            } catch (\Throwable $e) {
+                                // If filesystem->url() fails, fallback to global Storage::url
+                                $url = Storage::url($path);
+                            }
+                        } else {
+                            $url = Storage::url($path);
+                        }
+                    }
+                    // If it returns a filesystem adapter/object that provides url(), call it directly
+                    elseif (is_object($disk) && method_exists($disk, 'url')) {
+                        try {
+                            $url = $disk->url($path);
+                        } catch (\Throwable $e) {
+                            $url = Storage::url($path);
+                        }
+                    }
+                    // Fallback to global Storage URL generation
+                    else {
+                        $url = Storage::url($path);
+                    }
+                } catch (\Throwable $e) {
+                    try {
+                        $url = Storage::url($path);
+                    } catch (\Throwable $e) {
+                        // Fallback to path if URL generation is unavailable
+                        $url = $path;
+                    }
+                }
+
                 $attachment = $message->attachment()->create([
                     'file_path' => $path,
                     'file_name' => basename($path),
                     'original_name' => $attachment->getClientOriginalName(),
                     'mime_type' => $attachment->getMimeType(),
-                    'url' => Storage::disk(Wirechat::storage()->disk())->url($path), // Use disk and path
+                    'url' => $url,
                 ]);
 
                 // dd($attachment);
@@ -524,7 +564,7 @@ class Chat extends Component
             ?? Message::where('id', $messageId)->firstOrFail();
 
         // make sure user is authenticated
-        abort_unless(auth()->check(), 401);
+        abort_unless(Auth::check(), 401);
 
         // make sure user belongs to conversation from the message
         // We are checking the $message->conversation for extra security because the param might be tempered with
@@ -568,7 +608,7 @@ class Chat extends Component
 
         // make sure user is authenticated
 
-        abort_unless(auth()->check(), 401);
+        abort_unless(Auth::check(), 401);
 
         // make sure user owns message OR allow if is admin in group
         abort_unless($message->ownedBy($this->auth) || ($authParticipant->isAdmin() && $this->conversation->isGroup()), 403);
@@ -626,7 +666,7 @@ class Chat extends Component
         // Ensure the conversation still exists in the database before creating the message
         $conversationExists = $this->conversation instanceof \AdultDate\FilamentWirechat\Models\Conversation
             ? \AdultDate\FilamentWirechat\Models\Conversation::where('id', $this->conversation->id)->exists()
-            : \Adultdate\Wirechat\Models\Conversation::where('id', $this->conversation->id)->exists();
+            : \Adultdate\FilamentWirechat\Models\Conversation::where('id', $this->conversation->id)->exists();
 
         if (!$conversationExists) {
             abort(404, __('wirechat::chat.messages.conversation_not_found'));
@@ -638,7 +678,7 @@ class Chat extends Component
         if ($isFilamentWirechat) {
             // Use FilamentWirechat Message model with sendable_id/sendable_type
             // Get the user from authParticipant
-            $user = $this->authParticipant?->participantable ?? auth()->user();
+            $user = $this->authParticipant?->participantable ?? Auth::user();
 
             // Convert MessageType enum if needed (both are string enums, so use value)
             $type = $attributes['type'] ?? \AdultDate\FilamentWirechat\Enums\MessageType::TEXT;
@@ -859,7 +899,7 @@ class Chat extends Component
 
     private function initializeConversation($conversation)
     {
-        abort_unless(auth()->check(), 401);
+        abort_unless(\Illuminate\Support\Facades\Auth::check(), 401);
 
         // Handle different input scenarios
         // Check if it's a Conversation instance (either FilamentWirechat or standalone wirechat)
@@ -906,7 +946,7 @@ class Chat extends Component
     #[Computed(persist: true)]
     public function auth()
     {
-        return auth()->user();
+        return Auth::user();
     }
 
     private function initializeParticipants()

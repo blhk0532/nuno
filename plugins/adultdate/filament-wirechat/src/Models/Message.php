@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * @property int $id
@@ -259,14 +260,28 @@ class Message extends Model
             return false;
         }
 
-        return $this->sendable_type == $user->getMorphClass() && $this->sendable_id == $user->getKey();
+        $userMorphClass = is_object($user) && method_exists($user, 'getMorphClass') ? $user->getMorphClass() : (is_object($user) ? get_class($user) : null);
+        return $this->sendable_type == $userMorphClass && $this->sendable_id == (is_object($user) && method_exists($user, 'getKey') ? $user->getKey() : null);
     }
 
     public function belongsToAuth(): bool
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
-        return $this->sendable_type == $user->getMorphClass() && $this->sendable_id == $user->getKey();
+        if (! is_object($user)) {
+            return false;
+        }
+
+        // Prefer Eloquent Model methods when available to satisfy static analysis
+        if ($user instanceof \Illuminate\Database\Eloquent\Model) {
+            $userMorphClass = $user->getMorphClass();
+            $userKey = $user->getKey();
+        } else {
+            $userMorphClass = get_class($user);
+            $userKey = method_exists($user, 'getAuthIdentifier') ? $user->getAuthIdentifier() : null;
+        }
+
+        return $this->sendable_type == $userMorphClass && $this->sendable_id == $userKey;
     }
 
     // Relationship for the parent message

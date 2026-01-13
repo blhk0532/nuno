@@ -77,7 +77,7 @@ class FinancePanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Finance/Resources'), for: 'App\Filament\Finance\Resources')
             ->discoverPages(in: app_path('Filament/Finance/Pages'), for: 'App\Filament\Finance\Pages')

@@ -14,8 +14,8 @@ import AuthLayout from '@/layouts/auth-layout';
 export default function ForgotPassword({ status }: { status?: string }) {
     return (
         <AuthLayout
-            title="Forgot password"
-            description="Enter your email to receive a password reset link"
+                  title="Nordic Digital Solutions"
+            description="บริษัทนอร์ดิกดิจิทัลโซลูชั่นส์จำกัด 🇹🇭 🇸🇪"
         >
             <Head title="Forgot password" />
 

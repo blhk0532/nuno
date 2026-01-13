@@ -77,7 +77,7 @@ class DialerPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Dialer/Resources'), for: 'App\Filament\Dialer\Resources')
             ->discoverPages(in: app_path('Filament/Dialer/Pages'), for: 'App\Filament\Dialer\Pages')

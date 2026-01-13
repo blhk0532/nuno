@@ -77,7 +77,7 @@ class StoragePanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Storage/Resources'), for: 'App\Filament\Storage\Resources')
             ->discoverPages(in: app_path('Filament/Storage/Pages'), for: 'App\Filament\Storage\Pages')

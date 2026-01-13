@@ -240,7 +240,7 @@ class AdminPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
                 Lockscreen::make()
                     ->enableRateLimit() // Enable rate limit for the lockscreen. Default: Enable, 5 attempts in 1 minute.
                     ->enableIdleTimeout() // Enable auto lock during idle time. Default: Enable, 30 minutes.

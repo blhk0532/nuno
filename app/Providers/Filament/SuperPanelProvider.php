@@ -102,7 +102,7 @@ class SuperPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
                 FilamentEvolutionPlugin::make()
                     ->whatsappInstanceResource()  // Show instances (default: true)
                     ->viewMessageHistory()        // Show message history

@@ -77,7 +77,7 @@ class CalendarPanelProvider extends PanelProvider
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(),
+                    ->shouldShowAvatarForm(true, 'attachments'),
             )
             ->discoverResources(in: app_path('Filament/Calendar/Resources'), for: 'App\Filament\Calendar\Resources')
             ->discoverPages(in: app_path('Filament/Calendar/Pages'), for: 'App\Filament\Calendar\Pages')

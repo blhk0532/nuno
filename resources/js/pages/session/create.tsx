@@ -18,10 +18,12 @@ interface LoginProps {
 
 export default function Login({ status, canResetPassword }: LoginProps) {
     return (
+
         <AuthLayout
-            title="Log in to your account"
-            description="Enter your email and password below to log in"
+            title="Nordic Digital Solutions"
+            description="บริษัทนอร์ดิกดิจิทัลโซลูชั่นส์จำกัด 🇹🇭 🇸🇪"
         >
+
             <Head title="Log in" />
 
             <Form
@@ -33,7 +35,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                     <>
                         <div className="grid gap-6">
                             <div className="grid gap-2">
-                                <Label htmlFor="email">Email address</Label>
+                                <Label htmlFor="email">Username</Label>
                                 <Input
                                     id="email"
                                     type="email"
@@ -56,7 +58,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                             className="ml-auto text-sm"
                                             tabIndex={5}
                                         >
-                                            Forgot password?
+                                            ลืมรหัสผ่าน?
                                         </TextLink>
                                     )}
                                 </div>
@@ -78,7 +80,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                                     name="remember"
                                     tabIndex={3}
                                 />
-                                <Label htmlFor="remember">Remember me</Label>
+                                <Label htmlFor="remember">Remember</Label>
                             </div>
 
                             <Button
@@ -96,10 +98,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                         </div>
 
                         <div className="text-center text-sm text-muted-foreground">
-                            Don't have an account?{' '}
-                            <TextLink href={register()} tabIndex={5}>
-                                Sign up
-                            </TextLink>
+
                         </div>
                     </>
                 )}
