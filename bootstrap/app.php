@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Http\Middleware\DebugRequest;
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
-use App\Http\Middleware\TrustProxies;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -21,12 +19,6 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
 
-        $middleware->web(append: [
-            DebugRequest::class,
-            HandleAppearance::class,
-            AddLinkHeadersForPreloadedAssets::class,
-        ]);
-
         BaseTrustProxies::at('*');
         BaseTrustProxies::withHeaders(
             Request::HEADER_X_FORWARDED_FOR |
@@ -35,6 +27,11 @@ return Application::configure(basePath: dirname(__DIR__))
             Request::HEADER_X_FORWARDED_PROTO |
             Request::HEADER_X_FORWARDED_AWS_ELB
         );
+
+        $middleware->web(append: [
+            HandleAppearance::class,
+            AddLinkHeadersForPreloadedAssets::class,
+        ]);
 
         $middleware->group('inertia', [
             HandleInertiaRequests::class,
