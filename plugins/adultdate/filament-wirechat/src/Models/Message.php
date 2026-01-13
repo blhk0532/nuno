@@ -137,6 +137,14 @@ class Message extends Model
     }
 
     /**
+     * Convenience relationship for User (assuming sendable is User).
+     */
+    public function user(): MorphTo
+    {
+        return $this->sendable();
+    }
+
+    /**
      * Relationship to the Participant model.
      *
      * For FilamentWirechat, messages use sendable (polymorphic to User),

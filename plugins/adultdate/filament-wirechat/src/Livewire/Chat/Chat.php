@@ -655,7 +655,7 @@ class Chat extends Component
                 'sendable_type' => $user->getMorphClass(),
                 'body' => $attributes['body'] ?? null,
                 'type' => $type,
-            ]);
+            ])->load('sendable');
         } else {
             // Use standalone wirechat Message model with participant_id
             return Message::create([
@@ -664,7 +664,7 @@ class Chat extends Component
                 'participant_id' => $this->authParticipant->getKey(),
                 'body' => $attributes['body'] ?? null,
                 'type' => $attributes['type'] ?? MessageType::TEXT,
-            ]);
+            ])->load('participant.user');
         }
     }
 

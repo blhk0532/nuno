@@ -174,3 +174,7 @@ div.fc-timegrid-event .fc-event-time{
 a.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-event-future.fc-daygrid-event.fc-daygrid-dot-event{
     display: none!important;
 }
+
+div.logo-before{
+   display:none!important;
+}

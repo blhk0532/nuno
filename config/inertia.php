@@ -18,11 +18,26 @@ return [
     */
 
     'ssr' => [
-        'enabled' => true,
+        'enabled' => false,
         'url' => 'http://127.0.0.1:13714',
         // 'bundle' => base_path('bootstrap/ssr/ssr.mjs'),
 
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Script Element For Initial Page
+    |--------------------------------------------------------------------------
+    |
+    | By default, Inertia embeds page data in a data-page attribute on the root
+    | element. However, for very large payloads, you may prefer to use a
+    | script element instead.
+    |
+    | See: https://inertiajs.com/docs/v2/getting-started/upgrade-guide#new-default-for-embedding-initial-page-data
+    |
+    */
+
+    'use_script_element_for_initial_page' => true,
 
     /*
     |--------------------------------------------------------------------------
