@@ -47,8 +47,16 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-                 <div className="relative max-h-[256px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                   <ResourceTimelineDemo />
+        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                   <EventCalendarDemo4 />
+                    </div>
+                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                 <EventCalendarDemo5 />
+                    </div>
+                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                  <EventCalendarDemo6 />
+                    </div>
                 </div>
 
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
@@ -62,27 +70,20 @@ export default function Dashboard() {
                   <EventCalendarDemo9 />
                     </div>
                 </div>
-
-                <div className="relative max-h-[600px] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+     <div className="relative max-h-[600px] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                    <ResourceTimeGridDemo />
                 </div>
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                   <EventCalendarDemo4 />
-                    </div>
-                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                 <EventCalendarDemo5 />
-                    </div>
-                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                  <EventCalendarDemo6 />
-                    </div>
+
+                      <div className="relative max-h-[256px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                   <ResourceTimelineDemo />
+                </div>
+              <div className="relative max-h-[600px] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                 <ResourceTimeGridDemo1 />
                 </div>
                 <div className="relative max-h-[284px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                     <ResourceTimelineDemo1 />
                 </div>
-                 <div className="relative max-h-[600px] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                 <ResourceTimeGridDemo1 />
-                </div>
+
             </div>
         </AppLayout>
     );

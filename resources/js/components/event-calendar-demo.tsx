@@ -13,7 +13,7 @@ export function EventCalendarDemo() {
       locale='sv'
       initialView='timeGridWeek'
       timeZone='UTC'
-      events='http://localhost:8000/calendar/events'
+      events='calendar/events'
       addButton={{
         text: 'Ny Bokning',
         click() {

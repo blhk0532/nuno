@@ -18,7 +18,7 @@ export function ResourceTimeGridDemo1() {
         { id: '17', title: 'Tekinker 2' },
         { id: '18', title: 'Tekinker 3' },
       ]}
-      events='http://localhost:8000/calendar/events?with-resources=3&single-day'
+      events='calendar/events?with-resources=3&single-day'
       addButton={{
         text: 'Ny Kalender',
         click() {

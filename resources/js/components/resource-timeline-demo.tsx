@@ -16,8 +16,8 @@ export function ResourceTimelineDemo() {
       aspectRatio={1.5}
       timeZone='UTC'
       resourceColumnHeaderContent='Rooms'
-      resources='http://localhost:8000/calendar/resources?with-nesting&with-colors'
-      events='http://localhost:8000/calendar/events?single-day&for-resource-timeline'
+      resources='calendar/resources?with-nesting&with-colors'
+      events='calendar/events?single-day&for-resource-timeline'
       addButton={{
         text: 'Ny Tekniker',
         click() {

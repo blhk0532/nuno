@@ -1730,7 +1730,7 @@ public Model|int|string|null $record;
         $end = $info->end->toMutable()->endOfDay();
 
         $filters = $this->pageFilters;
-        $selectedCalendarId = $filters['booking_calendars'] ?? null;
+        $selectedCalendarId = $filters['booking_calendars_1'] ?? null;
 
         $serviceUserId = null;
         if ($selectedCalendarId) {
@@ -1837,7 +1837,7 @@ public Model|int|string|null $record;
     protected function getSelectedCalendarId(): ?int
     {
         $filters = $this->pageFilters ?? [];
-        return $filters['booking_calendars'] ?? null;
+        return $filters['booking_calendars_1'] ?? null;
     }
 
     protected function getDefaultCalendarId(): ?int

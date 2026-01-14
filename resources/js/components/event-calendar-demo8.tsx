@@ -13,7 +13,7 @@ export function EventCalendarDemo8() {
       locale='sv'
       initialView='listWeek'
       timeZone='UTC'
-      events='http://localhost:8000/calendar/events?resourceId=17'
+      events='calendar/events?resourceId=17'
       addButton={{
         text: 'Tekniker 2',
         click() {

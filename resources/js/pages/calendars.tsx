@@ -15,6 +15,8 @@ import { EventCalendarDemo8 } from '@/components/event-calendar-demo8';
 import { EventCalendarDemo9 } from '@/components/event-calendar-demo9';
 import { ResourceTimeGridDemo } from '@/components/resource-timegrid-demo';
 import { ResourceTimelineDemo } from '@/components/resource-timeline-demo';
+import { ResourceTimeGridDemo1 } from '@/components/resource-timegrid-demo1';
+import { ResourceTimelineDemo1 } from '@/components/resource-timeline-demo1';
 
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -29,6 +31,7 @@ export default function Dashboard() {
             <AppLayout breadcrumbs={breadcrumbs}>
                 <Head title="Dashboard" />
                 <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl bg-background p-4">
+
                     <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                         <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                             <EventCalendarDemo1 />
@@ -51,21 +54,39 @@ export default function Dashboard() {
                             <EventCalendarDemo6 />
                         </div>
                     </div>
+                             <div className="relative max-h-[284px] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                    <ResourceTimelineDemo />
+                </div>
 
-                     <div className="relative max-h-[284px] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                   <EventCalendarDemo7 />
+                    </div>
+                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                  <EventCalendarDemo8 />
+                    </div>
+                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                  <EventCalendarDemo9 />
+                    </div>
+                </div>
+
+
+
+                    <div className="relative min-h-[100vh] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                    <ResourceTimeGridDemo />
+                </div>
+
+                                 <div className="relative max-h-[284px] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                         <ResourceTimelineDemo />
                     </div>
-                    <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                        <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                            <EventCalendarDemo7 />
-                        </div>
-                        <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                            <EventCalendarDemo8 />
-                        </div>
-                        <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                            <EventCalendarDemo9 />
-                        </div>
-                    </div>
+                <div className="relative min-h-[100vh] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                    <ResourceTimeGridDemo1 />
+                </div>
+
+                                    <div className="relative max-h-[284px] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                    <ResourceTimelineDemo1 />
+                </div>
+
                 </div>
             </AppLayout>
     );

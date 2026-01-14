@@ -13,7 +13,7 @@ export function EventCalendarDemo4() {
       locale='sv'
       initialView='dayGridMonth'
       timeZone='UTC'
-      events='http://localhost:8000/calendar/events?resourceId=16'
+      events='calendar/events?resourceId=16'
       addButton={{
         text: 'Tekniker 1',
         click() {
