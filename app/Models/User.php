@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Traits\HasRoles;
 use Zap\Models\Concerns\HasSchedules;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-
+use Illuminate\Support\Facades\Auth;
 /**
  * @property int $id
  * @property string $ulid
@@ -116,9 +116,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     public function canAccessPanel(Panel $panel): bool
     {
-    //    if ($panel->getId() === 'admin') {
-    //        return false;
-    //    }
+//    $currentUser = Auth::user();
+//    if ($panel->getId() === 'admin' && $currentUser->role !== 'admin' && $currentUser->role !== 'super') {
+//        return false;
+//    }
 
         return true;
     }

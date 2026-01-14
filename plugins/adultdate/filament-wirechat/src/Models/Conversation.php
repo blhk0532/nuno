@@ -8,7 +8,7 @@ use AdultDate\FilamentWirechat\Enums\ParticipantRole;
 use AdultDate\FilamentWirechat\Models\Concerns\HasDynamicIds;
 use AdultDate\FilamentWirechat\Models\Scopes\WithoutRemovedMessages;
 use Adultdate\Wirechat\Facades\Wirechat;
-use Adultdate\Wirechat\Traits\Actionable;
+use AdultDate\FilamentWirechat\Traits\Actionable;
 use Carbon\Carbon;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Auth;
 /**
  * @property int $id
  * @property ConversationType $type Private is 1-1 , group or channel
@@ -289,7 +289,7 @@ class Conversation extends Model
      */
     public function scopeWithoutBlanks(Builder $builder): void
     {
-        $user = auth()->user(); // Get the authenticated user
+        $user = Auth::user(); // Get the authenticated user
         if ($user) {
 
             $builder->whereHas('messages', function ($q) use ($user) {
@@ -307,7 +307,7 @@ class Conversation extends Model
      */
     public function scopeWithoutCleared(Builder $builder): void
     {
-        $user = auth()->user(); // Get the authenticated user
+        $user = Auth::user(); // Get the authenticated user
 
         // dd($model->id);
         // Apply the scope only if the user is authenticated
@@ -331,7 +331,7 @@ class Conversation extends Model
     {
 
         // Dynamically get the parent model (i.e., the user)
-        $user = auth()->user();
+        $user = Auth::user();
 
         if ($user) {
             // Get the table name for conversations dynamically to avoid hardcoding.
@@ -351,7 +351,7 @@ class Conversation extends Model
     public function scopeWithDeleted(Builder $builder)
     {
         // Dynamically get the parent model (i.e., the user)
-        $user = auth()->user();
+        $user = Auth::user();
 
         if ($user) {
             // Get the table name for conversations dynamically to avoid hardcoding.
@@ -444,7 +444,7 @@ class Conversation extends Model
      */
     public function receiverParticipant(): HasOne
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         return $this->hasOne(Participant::class)
             ->withoutParticipantable($user)
@@ -462,7 +462,7 @@ class Conversation extends Model
      */
     public function authParticipant(): HasOne
     {
-        $user = auth()->user();
+        $user = Auth::user();
 
         return $this->hasOne(Participant::class)
             ->whereParticipantable($user)
@@ -481,20 +481,20 @@ class Conversation extends Model
 
         // If it's a self conversation, return the authenticated user
         if ($this->isSelf()) {
-            return auth()->user();
+            return Auth::user();
         }
 
         // Get participants for the current conversation
         $participants = $this->participants()->where('conversation_id', $this->id);
 
         // Try to find the receiver excluding the authenticated user
-        $receiverParticipant = $participants->withoutParticipantable(auth()->user())->first();
+        $receiverParticipant = $participants->withoutParticipantable(Auth::user())->first();
         if ($receiverParticipant) {
             return $receiverParticipant->participantable;
         }
 
         // If no other participant is found, return the authenticated user as the receiver
-        return auth()->user();
+        return Auth::user();
     }
 
     /**
@@ -506,7 +506,7 @@ class Conversation extends Model
     public function markAsRead(?Model $user = null)
     {
 
-        $user = $user ?? auth()->user();
+        $user = $user ?? Auth::user();
         if ($user == null) {
 
             return null;

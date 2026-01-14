@@ -46,7 +46,7 @@ Variables:
 
     {{-- Error State --}}
     <div x-show="error" x-cloak class="flex flex-col items-center justify-center text-center p-6">
-        @svg('heroicon-o-volume-mute', 'w-12 h-12 text-amber-500 mb-3')
+        @svg('heroicon-c-speaker-x-mark', 'w-12 h-12 text-amber-500 mb-3')
         <p class="text-gray-700 dark:text-gray-300 font-medium">Audio unavailable</p>
         <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
             This audio file could not be loaded. It may be inaccessible or the URL has expired.

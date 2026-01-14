@@ -152,13 +152,29 @@ trait InteractsWithWirechat
             // save photo to disk
             $path = $photo->store(Wirechat::storage()->attachmentsDirectory(), Wirechat::storage()->disk());
 
+            // determine URL for the stored file; handle filesystems that don't expose url() on the adapter
+            $diskName = Wirechat::storage()->disk();
+            $diskAdapter = Storage::disk($diskName);
+
+            // Prefer adapter url() when available; otherwise fall back to Storage::url()
+            if (is_callable([$diskAdapter, 'url'])) {
+                try {
+                    // use call_user_func to avoid static analysis complaining about an undefined method
+                    $url = call_user_func([$diskAdapter, 'url'], $path);
+                } catch (\Throwable $e) {
+                    $url = Storage::url($path);
+                }
+            } else {
+                $url = Storage::url($path);
+            }
+
             // create attachment
             $group->cover()->create([
                 'file_path' => $path,
                 'file_name' => basename($path),
                 'original_name' => $photo->getClientOriginalName(),
                 'mime_type' => $photo->getMimeType(),
-                'url' => Storage::disk(Wirechat::storage()->disk())->url($path),
+                'url' => $url,
             ]);
         }
 

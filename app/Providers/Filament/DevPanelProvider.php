@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -25,6 +27,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use App\Filament\Dev\Pages\DevDashboard;
 
 class DevPanelProvider extends PanelProvider
 {
@@ -32,10 +35,10 @@ class DevPanelProvider extends PanelProvider
     {
         return $panel
             ->id('dev')
-            ->path('dev')
+            ->path('nds/dev')
             ->viteTheme('resources/css/filament/dev/theme.css')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
             ->spa()
          // ->profile()
@@ -81,8 +84,9 @@ class DevPanelProvider extends PanelProvider
             )
             ->discoverResources(in: app_path('Filament/Dev/Resources'), for: 'App\Filament\Dev\Resources')
             ->discoverPages(in: app_path('Filament/Dev/Pages'), for: 'App\Filament\Dev\Pages')
+           ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->pages([
-                Dashboard::class,
+                DevDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Dev/Widgets'), for: 'App\Filament\Dev\Widgets')
             ->widgets([
@@ -90,7 +94,7 @@ class DevPanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -99,6 +103,7 @@ class DevPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

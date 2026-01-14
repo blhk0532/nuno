@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
 use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
 use Adultdate\FilamentBooking\Filament\Pages\CalendarSettingsPage;
@@ -70,6 +71,7 @@ use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
 use WallaceMartinss\FilamentEvolution\FilamentEvolutionPlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 
+
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -77,7 +79,7 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->default()
             ->id('admin')
-            ->path('admin')
+            ->path('nds/admin')
             ->login()
             ->authGuard('web')
             ->colors([
@@ -146,7 +148,7 @@ class AdminPanelProvider extends PanelProvider
                 OverlookWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -155,6 +157,7 @@ class AdminPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

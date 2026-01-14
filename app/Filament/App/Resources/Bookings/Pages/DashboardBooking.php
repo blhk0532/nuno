@@ -20,13 +20,13 @@ class DashboardBooking extends BaseDashboard
 {
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDateRange;
 
-    protected static ?string $navigationLabel = 'Dash';
+    protected static ?string $navigationLabel = 'Kalender';
 
     protected static ?string $title = '';
 
     protected static string $routePath = 'service/booking';
 
-    protected static ?string $slug = 'dashboard';
+    protected static ?string $slug = 'booking';
 
     //   protected string $view = 'filament-booking::pages.page';
 
@@ -49,23 +49,23 @@ class DashboardBooking extends BaseDashboard
 
     public static function getNavigationLabel(): string
     {
-        return ''.Str::ucfirst('Booking') ?? 'User';
+        return ''.Str::ucfirst('Kalender') ?? 'User';
     }
 
     public static function getNavigationBadge(): ?string
     {
-        return now()->timezone('Europe/Stockholm')->format('H:m');
+         return 'x1';
 
     }
 
     public static function getNavigationIcon(): string
     {
-        return 'heroicon-o-calendar-date-range';
+        return 'heroicon-c-calendar-date-range';
     }
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return 'success';
+        return 'gray';
     }
 
     use HasFiltersForm;

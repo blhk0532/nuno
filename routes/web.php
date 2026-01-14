@@ -24,6 +24,7 @@ Route::get('/', function () {
 
 Route::middleware(['web', 'inertia', 'auth', 'verified'])->group(function (): void {
     Route::get('dashboard', fn () => Inertia::render('dashboard'))->name('dashboard');
+    Route::get('app', fn () => Inertia::render('app'))->name('app');
 });
 
 Route::middleware(['web', 'inertia', 'auth', 'verified'])->group(function (): void {

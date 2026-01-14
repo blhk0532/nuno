@@ -8,7 +8,7 @@
     wire:key="chats-icon-button-{{ $this->unreadCount }}"
 >
     @if($this->unreadCount > 0)
-        <x-slot name="badge">
+        <x-slot name="badge fi-badge fi-size-xs fi-color fi-color-primary fi-text-color-700 dark:fi-text-color-400">
             {{ $this->unreadCount > 99 ? '99+' : $this->unreadCount }}
         </x-slot>
     @endif

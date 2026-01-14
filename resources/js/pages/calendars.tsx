@@ -1,6 +1,6 @@
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
-import { dashboard } from '@/routes';
+import { dashboard, calendars } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import { EventCalendarDemo } from '@/components/event-calendar-demo';
@@ -19,8 +19,8 @@ import { ResourceTimelineDemo } from '@/components/resource-timeline-demo';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Dashboard',
-        href: dashboard().url,
+        title: 'Calendars',
+        href: calendars().url,
     },
 ];
 

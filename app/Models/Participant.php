@@ -6,9 +6,9 @@ namespace App\Models;
 
 use AdultDate\FilamentWirechat\Enums\Actions;
 use AdultDate\FilamentWirechat\Enums\ParticipantRole;
-use Adultdate\FilamentWirechat\Facades\Wirechat;
+use App\Facades\Wirechat;
 use AdultDate\FilamentWirechat\Models\Scopes\WithoutRemovedActionScope;
-use App\Traits\Actionable;
+use AdultDate\FilamentWirechat\Traits\Actionable;
 use Eloquent;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;

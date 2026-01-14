@@ -2,7 +2,10 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
+use App\Filament\Dialer\Pages\DialerDashboard;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
 use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
@@ -25,6 +28,8 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use AdultDate\FilamentDialer\FilamentDialerPlugin;
+
 
 class DialerPanelProvider extends PanelProvider
 {
@@ -32,10 +37,10 @@ class DialerPanelProvider extends PanelProvider
     {
         return $panel
             ->id('dialer')
-            ->path('dialer')
+            ->path('nds/dialer')
             ->viteTheme('resources/css/filament/dialer/theme.css')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
             ->spa()
          // ->profile()
@@ -81,8 +86,9 @@ class DialerPanelProvider extends PanelProvider
             )
             ->discoverResources(in: app_path('Filament/Dialer/Resources'), for: 'App\Filament\Dialer\Resources')
             ->discoverPages(in: app_path('Filament/Dialer/Pages'), for: 'App\Filament\Dialer\Pages')
+            ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->pages([
-                Dashboard::class,
+                DialerDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Dialer/Widgets'), for: 'App\Filament\Dialer\Widgets')
             ->widgets([
@@ -90,7 +96,7 @@ class DialerPanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -99,12 +105,14 @@ class DialerPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
             ])
             ->plugins([
-                FilamentWireChatPlugin::make()
+                FilamentDialerPlugin::make(),
+                FilamentWirechatPlugin::make()
                     ->onlyPages([])
                     ->excludeResources([
                         \AdultDate\FilamentWirechat\Filament\Resources\Conversations\ConversationResource::class,

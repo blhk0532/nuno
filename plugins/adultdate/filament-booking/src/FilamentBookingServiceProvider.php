@@ -26,6 +26,8 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
 
     public static string $viewNamespace = 'filament-booking';
 
+    protected $lang_path;
+
     public function configurePackage(Package $package): void
     {
         /*
@@ -63,7 +65,7 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
         }
 
         if (file_exists($package->basePath('/../resources/lang'))) {
-            $package->hasTranslations();
+            // $package->hasTranslations();
         }
 
         if (file_exists($package->basePath('/../resources/views'))) {

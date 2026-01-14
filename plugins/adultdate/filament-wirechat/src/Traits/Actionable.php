@@ -1,6 +1,6 @@
 <?php
 
-namespace Adultdate\Wirechat\Traits;
+namespace AdultDate\FilamentWirechat\Traits;
 
 use AdultDate\FilamentWirechat\Models\Action;
 use Illuminate\Database\Eloquent\Relations\MorphMany;

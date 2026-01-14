@@ -8,10 +8,11 @@ import AppLayout from '@/layouts/app-layout';
 import { calendar } from '@/routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
+import { ka } from 'date-fns/locale';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Calendar',
+        title: 'Kalender',
         href: calendar().url,
     },
 ];
@@ -19,7 +20,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function Calendar() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Dashboard" />
+            <Head title="Kalender" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl bg-background p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">

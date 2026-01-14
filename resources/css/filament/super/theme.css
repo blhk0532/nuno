@@ -4,6 +4,7 @@
 @source '../../../../vendor/wallacemartinss/filament-icon-picker/resources/views/**/*';
 @import '../../../../vendor/bezhansalleh/filament-panel-switch/resources/css/panel-switch.css';
 @source '../../../../vendor/bezhansalleh/filament-panel-switch/resources/views/**/*.blade.php';
+@source '../../../../vendor/awcodes/filament-badgeable-column/resources/**/*.blade.php';
 
 @source '../../../../app/Filament/Super/**/*';
 @source '../../../../resources/views/filament/super/**/*';

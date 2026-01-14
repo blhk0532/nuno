@@ -21,7 +21,7 @@
                 </span>
             </template>
             <template x-if="muted">
-                <x-filament::icon icon="heroicon-o-volume-mute" class="w-4 h-4 text-gray-400" />
+                <x-filament::icon icon="heroicon-c-speaker-x-mark" class="w-4 h-4 text-gray-400" />
             </template>
         </div>
         <div class="text-center">
@@ -115,7 +115,7 @@
                 <x-filament::icon icon="heroicon-o-speaker-wave" class="w-6 h-6" />
             </template>
             <template x-if="!muted">
-                <x-filament::icon icon="heroicon-o-volume-mute" class="w-6 h-6" />
+                <x-filament::icon icon="heroicon-c-speaker-x-mark" class="w-6 h-6" />
             </template>
         </button>
     </div>

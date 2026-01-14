@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -25,6 +27,10 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use App\Filament\Queue\Pages\QueueDashboard;
+use Bytexr\QueueableBulkActions\Enums\StatusEnum;
+use Bytexr\QueueableBulkActions\QueueableBulkActionsPlugin;
+use BinaryBuilds\FilamentFailedJobs\FilamentFailedJobsPlugin;
 
 class QueuePanelProvider extends PanelProvider
 {
@@ -32,13 +38,13 @@ class QueuePanelProvider extends PanelProvider
     {
         return $panel
             ->id('queue')
-            ->path('queue')
+            ->path('nds/queue')
             ->viteTheme('resources/css/filament/queue/theme.css')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
             ->spa()
-         // ->profile()
+            // ->profile()
             ->passwordReset()
             ->unsavedChangesAlerts()
             ->databaseNotifications()
@@ -46,17 +52,17 @@ class QueuePanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop(true)
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->brandLogoHeight('34px')
-            ->favicon(fn () => asset('favicon.svg'))
-            ->brandLogo(fn () => view('filament.app.logo'))
+            ->favicon(fn() => asset('favicon.svg'))
+            ->brandLogo(fn() => view('filament.app.logo'))
             ->plugin(
                 AuthDesignerPlugin::make()
                     ->login(
-                        fn (AuthPageConfig $config) => $config
+                        fn(AuthPageConfig $config) => $config
                             ->media(asset('assets/bangkok.jpg'))
                             ->mediaPosition(MediaPosition::Cover)
                             ->blur(1)
                             ->themeToggle()
-                            ->renderHook(AuthDesignerRenderHook::CardBefore, fn () => view('filament.logo-auth'))
+                            ->renderHook(AuthDesignerRenderHook::CardBefore, fn() => view('filament.logo-auth'))
                     ),
                 FilamentIconPickerPlugin::make(),
                 FilamentEditProfilePlugin::make()
@@ -81,8 +87,9 @@ class QueuePanelProvider extends PanelProvider
             )
             ->discoverResources(in: app_path('Filament/Queue/Resources'), for: 'App\Filament\Queue\Resources')
             ->discoverPages(in: app_path('Filament/Queue/Pages'), for: 'App\Filament\Queue\Pages')
+            ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->pages([
-                Dashboard::class,
+                QueueDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Queue/Widgets'), for: 'App\Filament\Queue\Widgets')
             ->widgets([
@@ -90,7 +97,7 @@ class QueuePanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -99,9 +106,21 @@ class QueuePanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugins([
+                FilamentFailedJobsPlugin::make(),
+                QueueableBulkActionsPlugin::make()
+                    ->pollingInterval('5s')
+                    ->colors([
+                        StatusEnum::QUEUED->value => 'slate',
+                        StatusEnum::IN_PROGRESS->value => 'info',
+                        StatusEnum::FINISHED->value => 'success',
+                        StatusEnum::FAILED->value => 'danger',
+                    ]),
             ])
             ->plugins([
                 FilamentWireChatPlugin::make()
@@ -113,4 +132,3 @@ class QueuePanelProvider extends PanelProvider
             ]);
     }
 }
-

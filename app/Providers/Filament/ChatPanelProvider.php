@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -25,6 +27,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use App\Filament\Chat\Pages\ChatDashboard;
 
 class ChatPanelProvider extends PanelProvider
 {
@@ -32,10 +35,10 @@ class ChatPanelProvider extends PanelProvider
     {
         return $panel
             ->id('chat')
-            ->path('chat')
+            ->path('nds/chat')
             ->viteTheme('resources/css/filament/chat/theme.css')
             ->colors([
-                'primary' => Color::Red,
+                'primary' => Color::Gray,
             ])
             ->spa()
          // ->profile()
@@ -82,9 +85,10 @@ class ChatPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Chat/Resources'), for: 'App\Filament\Chat\Resources')
             ->discoverPages(in: app_path('Filament/Chat/Pages'), for: 'App\Filament\Chat\Pages')
          //   ->discoverPages(in: app_path('Filament/Panels/Pages'), for: 'App\Filament\Panels\Pages')
-            ->pages([
+         ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
+         ->pages([
            //         \App\Filament\Panels\Pages\PanDash::class,
-                    Dashboard::class,
+                    ChatDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Chat/Widgets'), for: 'App\Filament\Chat\Widgets')
             ->widgets([
@@ -92,7 +96,7 @@ class ChatPanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -101,6 +105,7 @@ class ChatPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

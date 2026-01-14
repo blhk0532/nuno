@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -24,7 +26,7 @@ class GuestPanelProvider extends PanelProvider
     {
         return $panel
             ->id('guest')
-            ->path('guest')
+            ->path('nds/guest')
             ->colors([
                 'primary' => Color::Gray,
             ])
@@ -41,7 +43,7 @@ class GuestPanelProvider extends PanelProvider
             ])
             ->widgets([])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -50,6 +52,7 @@ class GuestPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->plugins([
                 //

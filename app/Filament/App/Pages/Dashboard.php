@@ -20,7 +20,7 @@ class Dashboard extends BaseDashboard
 
     // Prevent this app-level Dashboard from being auto-discovered so that
     // the explicit `AdminDashboard` can be registered as the admin panel root.
-    protected static bool $isDiscovered = false;
+    protected static bool $isDiscovered = true;
 
     protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-chart-pie';
 
@@ -52,18 +52,19 @@ class Dashboard extends BaseDashboard
 
     public static function getNavigationLabel(): string
     {
-        return 'Dashboard';
+        return Str::ucfirst(Auth::user()->name) ?? null;
     }
 
     public static function getNavigationBadge(): ?string
     {
         //  return now()->format('H:m');
-        return Str::ucfirst(Auth::user()->name) ?? null;
+          return now()->timezone('Europe/Stockholm')->format('H:i');
+
     }
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-o-user-circle';
+        return 'heroicon-o-identification';
     }
 
     public static function getNavigationBadgeColor(): ?string

@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use App\Filament\Admin\Pages\Auth\Login;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
@@ -26,6 +28,8 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use App\Filament\Booking\Pages\GoogleCalendar;
+use App\Filament\Booking\Pages\BookingDashboard;
 
 class BookingPanelProvider extends PanelProvider
 {
@@ -33,11 +37,11 @@ class BookingPanelProvider extends PanelProvider
     {
         return $panel
             ->id('booking')
-            ->path('booking')
+            ->path('nds/booking')
             ->viteTheme('resources/css/filament/booking/theme.css')
             ->login(Login::class)
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
             ->plugin(
                 AuthDesignerPlugin::make()
@@ -76,10 +80,21 @@ class BookingPanelProvider extends PanelProvider
                     ->shouldShowBrowserSessionsForm()
                     ->shouldShowAvatarForm(true, 'attachments'),
             )
+            ->brandName('Noridic Digital')
+            ->sidebarCollapsibleOnDesktop(true)
+            ->databaseNotifications()
+            ->databaseTransactions()
+            ->databaseNotificationsPolling('30s')
+            ->brandLogo(fn () => view('filament.app.logo'))
+            ->favicon(fn () => asset('favicon.svg'))
+            ->brandLogoHeight(fn () => request()->is('admin/login', 'admin/password-reset/*') ? '68px' : '34px')
             ->discoverResources(in: app_path('Filament/Booking/Resources'), for: 'App\Filament\Booking\Resources')
+            ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->discoverPages(in: app_path('Filament/Booking/Pages'), for: 'App\Filament\Booking\Pages')
             ->pages([
-                Dashboard::class,
+            //   Dashboard::class,
+                GoogleCalendar::class,
+                BookingDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Booking/Widgets'), for: 'App\Filament\Booking\Widgets')
             ->widgets([
@@ -96,6 +111,7 @@ class BookingPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

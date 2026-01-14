@@ -33,7 +33,7 @@ import { cn } from '@/lib/utils';
 import { calendar, calendars, dashboard } from '@/routes';
 import { type BreadcrumbItem, type NavItem, type SharedData } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid, Menu, Moon, Search } from 'lucide-react';
+import { BookOpen, Folder, LayoutGrid, Menu, Moon, Search, Sun } from 'lucide-react';
 import AppLogo from './app-logo';
 import AppLogoIcon from './app-logo-icon';
 

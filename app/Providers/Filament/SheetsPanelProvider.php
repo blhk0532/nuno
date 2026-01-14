@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -25,6 +27,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use App\Filament\Sheets\Pages\SheetsDashboard;
 
 class SheetsPanelProvider extends PanelProvider
 {
@@ -32,10 +35,10 @@ class SheetsPanelProvider extends PanelProvider
     {
         return $panel
             ->id('sheets')
-            ->path('sheets')
+            ->path('nds/sheets')
             ->viteTheme('resources/css/filament/sheets/theme.css')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
             ->spa()
          // ->profile()
@@ -81,8 +84,9 @@ class SheetsPanelProvider extends PanelProvider
             )
             ->discoverResources(in: app_path('Filament/Sheets/Resources'), for: 'App\Filament\Sheets\Resources')
             ->discoverPages(in: app_path('Filament/Sheets/Pages'), for: 'App\Filament\Sheets\Pages')
+            ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->pages([
-                Dashboard::class,
+                SheetsDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Sheets/Widgets'), for: 'App\Filament\Sheets\Widgets')
             ->widgets([
@@ -90,7 +94,7 @@ class SheetsPanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -99,6 +103,7 @@ class SheetsPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

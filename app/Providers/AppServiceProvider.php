@@ -40,7 +40,7 @@ final class AppServiceProvider extends ServiceProvider
                     'manager' => 'Manager',
                     'queue' => 'Queue',
                     'dialer' => 'Dialer',
-                    'client' => 'Client',
+                    'clients' => 'Clients',
                     'finance' => 'Finance',
                     'server' => 'Server',
                     'data' => 'Data',
@@ -49,7 +49,7 @@ final class AppServiceProvider extends ServiceProvider
                     'partner' => 'Partner',
                     'service' => 'Service',
                     'tools' => 'Tools',
-                    'storage' => 'Storage',
+                    'files' => 'Files',
                     'system' => 'System',
                     'chat' => 'Chat',
                     'stats' => 'Stats',
@@ -58,32 +58,40 @@ final class AppServiceProvider extends ServiceProvider
                     'email' => 'Email',
                     'notify' => 'Notify',
                     'user' => 'User',
+                    'script' => 'Script',
+                    'guest' => 'Guest',
+                    'private' => 'Private',
+                    'storage' => 'Storage',
                 ])
                 ->icons([
                     'admin' => 'heroicon-o-shield-check',
-                    'app' => 'heroicon-o-fire',
-                    'booking' => 'heroicon-o-check-circle',
-                    'manager' => 'heroicon-o-users',
-                    'queue' => 'heroicon-o-list-bullet',
-                    'dialer' => 'heroicon-o-phone',
-                    'clients' => 'heroicon-o-user-group',
-                    'finance' => 'heroicon-o-currency-dollar',
-                    'server' => 'heroicon-o-server',
-                    'data' => 'heroicon-o-server-stack',
-                    'super' => 'heroicon-o-star',
-                    'dev' => 'heroicon-o-cog-6-tooth',
-                    'partner' => 'heroicon-o-user-plus',
-                    'service' => 'heroicon-o-lifebuoy',
-                    'tools' => 'heroicon-o-wrench',
-                    'storage' => 'heroicon-o-folder',
-                    'system' => 'heroicon-o-computer-desktop',
-                    'chat' => 'heroicon-o-chat-bubble-left-right',
-                    'stats' => 'heroicon-o-chart-bar',
+                    'app' => 'heroicon-s-squares-plus',
+                    'booking' => 'heroicon-c-clipboard-document-check',
+                    'manager' => 'heroicon-m-users',
+                    'queue' => 'heroicon-c-queue-list',
+                    'dialer' => 'heroicon-c-megaphone',
+                    'clients' => 'heroicon-c-user-plus',
+                    'finance' => 'heroicon-c-currency-dollar',
+                    'server' => 'heroicon-s-square-3-stack-3d',
+                    'data' => 'heroicon-s-cloud-arrow-down',
+                    'super' => 'heroicon-m-fire',
+                    'dev' => 'heroicon-m-beaker',
+                    'partner' => 'heroicon-c-chart-pie',
+                    'service' => 'heroicon-c-wrench-screwdriver',
+                    'tools' => 'heroicon-s-bolt',
+                    'files' => 'heroicon-m-server-stack',
+                    'system' => 'heroicon-s-circle-stack',
+                    'chat' => 'heroicon-m-chat-bubble-bottom-center-text',
+                    'stats' => 'heroicon-c-chart-bar',
                     'calendar' => 'heroicon-o-calendar-days',
-                    'sheets' => 'heroicon-o-document-text',
-                    'email' => 'heroicon-o-envelope',
-                    'notify' => 'heroicon-o-bell',
-                    'user' => 'heroicon-o-user-circle',
+                    'sheets' => 'heroicon-s-swatch',
+                    'email' => 'heroicon-c-at-symbol',
+                    'notify' => 'heroicon-s-bell-snooze',
+                    'user' => 'heroicon-s-user-group',
+                    'script' => 'heroicon-c-command-line',
+                    'guest' => 'heroicon-c-user-circle',
+                    'private' => 'heroicon-m-server-stack',
+                    'storage' => 'heroicon-c-server',
                 ])
                 ->iconSize(20)
                 ->renderHook('panels::global-search.after');
@@ -94,36 +102,60 @@ final class AppServiceProvider extends ServiceProvider
 
             $panels = [];
 
-            if ($user instanceof User && $user->hasRole('super_admin') || $user instanceof User && $user->hasRole('superadmin') || $user instanceof User && $user->hasRole('super')) {
-                $panels = ['admin', 'app', 'booking', 'manager', 'queue', 'dialer', 'clients', 'finance', 'server', 'data', 'super', 'dev',
-                    'partner', 'service', 'tools', 'storage', 'system', 'chat', 'stats', 'calendar', 'sheets', 'email', 'notify', 'user'];
-            } elseif (
-                ($admin instanceof Admin && ($admin->role === 'admin')) ||
-                ($user instanceof User && $user->hasRole('admin'))
-            ) {
-                $panels = ['admin', 'app', 'booking', 'manager', 'queue', 'dialer', 'clients', 'finance',
-                    'server', 'partner', 'service', 'tools', 'storage', 'chat', 'stats', 'calendar', 'sheets', 'email', 'notify', 'user'];
-            } elseif ($user instanceof User && (! $user->hasRole('super_admin') && ! $user->hasRole('admin'))) {
-                $panels = [];
-            }
-
-            if (($user instanceof User && $user->hasRole('manager')) || ($admin instanceof Admin && $admin->role === 'manager')) {
+            if ($user?->role && $user?->role === 'guest'){
+                $panels = ['guest'];
+            }elseif ($user?->role && $user?->role === 'partner'){
+                $panels = ['partner'];
+            }elseif ($user?->role && $user?->role === 'service'){
+                $panels = ['service'];
+            }elseif ($user?->role && $user?->role === 'user') {
+                $panels = ['app',
+                           'dialer',
+                           'chat',
+                           'email'];
+            }elseif ($user?->role && $user?->role === 'booking'){
+                $panels = ['app',
+                           'dialer',
+                           'chat',
+                           'email'];
+            }elseif ($user?->role && $user?->role === 'manager') {
                 $panels = ['app', 'booking', 'manager', 'dialer', 'stats', 'email', 'queue', 'chat'];
-            }
-
-            if ($admin instanceof Admin && ($admin->role === 'super_admin' || $admin->role === 'superadmin' || $admin->role === 'super')) {
-                $panels = ['admin', 'app', 'booking', 'manager', 'queue', 'dialer', 'clients', 'finance', 'server', 'data', 'super', 'dev',
-                    'partner', 'service', 'tools', 'storage', 'system', 'chat', 'stats', 'calendar', 'sheets', 'email', 'notify', 'user'];
-            }
-
-            if ($user instanceof User && ($user->hasRole('admin') || $user->hasRole('administrator'))) {
-                $panels = ['admin', 'calendar', 'booking', 'clients', 'app', 'manager', 'queue', 'dialer', 'finance',
-                    'server', 'partner', 'service', 'tools', 'storage', 'chat', 'stats', 'sheets', 'email', 'notify', 'user'];
-            }
-
-            if ($user instanceof User && ($user->hasRole('super_admin') || $user->hasRole('superadmin') || $user->hasRole('super'))) {
-                $panels = ['admin', 'app', 'booking', 'manager', 'queue', 'dialer', 'clients', 'finance', 'server', 'data', 'super', 'dev',
-                    'partner', 'service', 'tools', 'storage', 'system', 'chat', 'stats', 'calendar', 'sheets', 'email', 'notify', 'user'];
+            }elseif ($user?->role && $user?->role === 'admin') {
+                $panels = ['admin', 'app', 'booking', 'manager', 'queue', 'dialer', 'clients', 'finance', 'guest', 'script', 'user',
+                           'server', 'partner', 'service', 'tools', 'files', 'chat', 'stats', 'calendar', 'sheets', 'email', 'notify'];
+            }elseif ($admin?->role && $admin?->role === 'super') {
+                $panels = [
+                'admin',
+                'app',
+                'booking',
+                'calendar',
+                'chat',
+                'clients',
+                'data',
+                'dev',
+                'dialer',
+                'email',
+                'files',
+                'finance',
+                'guest',
+                'manager',
+                'notify',
+                'partner',
+                'private',
+                'queue',
+                'script',
+                'server',
+                'service',
+                'sheets',
+                'stats',
+                'storage',
+                'super',
+                'system',
+                'tools',
+                'user',
+            ];
+            }else{
+                $panels = [];
             }
 
             $switch->panels($panels);

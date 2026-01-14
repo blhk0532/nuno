@@ -24,7 +24,7 @@
                 <span></span>
             @endif
             @if ($muted)
-                <x-filament::icon icon="heroicon-o-volume-mute" class="w-4 h-4 text-gray-400" />
+                <x-filament::icon icon="heroicon-c-speaker-x-mark" class="w-4 h-4 text-gray-400" />
             @endif
         </div>
         <div class="text-center">
@@ -116,7 +116,7 @@
             @if ($muted)
                 <x-filament::icon icon="heroicon-o-speaker-wave" class="w-6 h-6" />
             @else
-                <x-filament::icon icon="heroicon-o-volume-mute" class="w-6 h-6" />
+                <x-filament::icon icon="heroicon-c-speaker-x-mark" class="w-6 h-6" />
             @endif
         </button>
     </div>

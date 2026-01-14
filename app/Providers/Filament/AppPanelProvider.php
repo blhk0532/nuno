@@ -2,7 +2,9 @@
 
 namespace App\Providers\Filament;
 
-use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
+use App\Http\Middleware\FilamentPanelAccess;
+
+use App\Filament\App\Resources\Bookings\Pages\DashboardBooking;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use AdultDate\FilamentWirechat\Filament\Pages\ChatDashboard;
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
@@ -39,6 +41,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use App\Filament\App\Resources\Bookings\Pages\DashboardBokning;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -46,7 +49,7 @@ class AppPanelProvider extends PanelProvider
     {
         return $panel
             ->id('app')
-            ->path('app')
+            ->path('nds/app')
             ->login()
             ->authGuard('web')
             ->colors([
@@ -74,6 +77,7 @@ class AppPanelProvider extends PanelProvider
             ->pages([
              //   AppDashboard::class,
                 DashboardBooking::class,
+                DashboardBokning::class,
                 ChatDashboard::class,
             ])
             ->widgets([
@@ -84,7 +88,7 @@ class AppPanelProvider extends PanelProvider
                 BookingDataLeadResource::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -93,6 +97,7 @@ class AppPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

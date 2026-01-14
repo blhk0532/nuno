@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -25,6 +27,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use App\Filament\Private\Pages\PrivateDashboard;
 
 class PrivatePanelProvider extends PanelProvider
 {
@@ -32,10 +35,10 @@ class PrivatePanelProvider extends PanelProvider
     {
         return $panel
             ->id('private')
-            ->path('private')
+            ->path('nds/private')
             ->viteTheme('resources/css/filament/private/theme.css')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
             ->spa()
          // ->profile()
@@ -81,6 +84,7 @@ class PrivatePanelProvider extends PanelProvider
             )
             ->discoverResources(in: app_path('Filament/Private/Resources'), for: 'App\Filament\Private\Resources')
             ->discoverPages(in: app_path('Filament/Private/Pages'), for: 'App\Filament\Private\Pages')
+            ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->pages([
                 Dashboard::class,
             ])
@@ -90,7 +94,7 @@ class PrivatePanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -99,6 +103,7 @@ class PrivatePanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

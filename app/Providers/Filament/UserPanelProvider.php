@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -25,16 +27,18 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
-
+use App\Filament\User\Pages\UserDashboard;
+use Adultdate\FilamentBooking\Filament\Resources\Booking\Users\UserResource;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 class UserPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
             ->id('user')
-            ->path('user')
+            ->path('nds/user')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
             ->spa()
          // ->profile()
@@ -45,6 +49,7 @@ class UserPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop(true)
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->brandLogoHeight('34px')
+            ->viteTheme('resources/css/filament/user/theme.css')
             ->favicon(fn () => asset('favicon.svg'))
             ->brandLogo(fn () => view('filament.app.logo'))
             ->plugin(
@@ -80,8 +85,12 @@ class UserPanelProvider extends PanelProvider
             )
             ->discoverResources(in: app_path('Filament/User/Resources'), for: 'App\Filament\User\Resources')
             ->discoverPages(in: app_path('Filament/User/Pages'), for: 'App\Filament\User\Pages')
+            ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->pages([
-                Dashboard::class,
+                UserDashboard::class,
+            ])
+            ->resources([
+                UserResource::class,
             ])
             ->discoverWidgets(in: app_path('Filament/User/Widgets'), for: 'App\Filament\User\Widgets')
             ->widgets([
@@ -89,7 +98,7 @@ class UserPanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -98,10 +107,21 @@ class UserPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->plugin(
+                FilamentShieldPlugin::make()
+                    ->navigationLabel('Roles')                  // string|Closure|null
+                    ->navigationIcon('heroicon-o-shield-check')         // string|Closure|null
+                    ->activeNavigationIcon('heroicon-s-shield-check')   // string|Closure|null
+                    ->navigationGroup('Användare')                  // string|Closure|null
+                    ->navigationSort(10)                        // int|Closure|null
+                    ->navigationBadge('Roles')                      // string|Closure|null
+                    ->navigationBadgeColor('success')           // string|array|Closure|null
+            )
             ->plugins([
                 FilamentWireChatPlugin::make()
                     ->onlyPages([])

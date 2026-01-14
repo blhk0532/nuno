@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -25,17 +27,18 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
-
+use App\Filament\Stats\Pages\StatsDashboard;
+use App\Filament\Stats\Pages\UmamiAnalytics;
 class StatsPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
             ->id('stats')
-            ->path('stats')
+            ->path('nds/stats')
             ->viteTheme('resources/css/filament/stats/theme.css')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
             ->spa()
          // ->profile()
@@ -81,8 +84,10 @@ class StatsPanelProvider extends PanelProvider
             )
             ->discoverResources(in: app_path('Filament/Stats/Resources'), for: 'App\Filament\Stats\Resources')
             ->discoverPages(in: app_path('Filament/Stats/Pages'), for: 'App\Filament\Stats\Pages')
+            ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->pages([
-                Dashboard::class,
+                StatsDashboard::class,
+                UmamiAnalytics::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Stats/Widgets'), for: 'App\Filament\Stats\Widgets')
             ->widgets([
@@ -90,7 +95,7 @@ class StatsPanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -99,6 +104,7 @@ class StatsPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

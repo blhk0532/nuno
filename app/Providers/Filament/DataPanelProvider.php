@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
@@ -26,16 +28,23 @@ class DataPanelProvider extends PanelProvider
     {
         return $panel
             ->id('data')
-            ->path('data')
+            ->path('nds/data')
             ->viteTheme('resources/css/filament/data/theme.css')
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->authGuard('admin')
+            ->authGuard('web')
+                        ->brandName('Noridic Digital')
+                        ->sidebarCollapsibleOnDesktop(true)
+            ->brandLogo(fn () => view('filament.app.logo'))
+            ->favicon(fn () => asset('favicon.svg'))
+            ->unsavedChangesAlerts()
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             ->discoverResources(in: app_path('Filament/Data/Resources'), for: 'App\Filament\Data\Resources')
             ->discoverPages(in: app_path('Filament/Data/Pages'), for: 'App\Filament\Data\Pages')
             ->pages([
-                Dashboard::class,
+             //    Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Data/Widgets'), for: 'App\Filament\Data\Widgets')
             ->widgets([
@@ -43,7 +52,7 @@ class DataPanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -52,12 +61,18 @@ class DataPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->plugins([
-                FilamentWirechatPlugin::make(),
+        ->plugins([
+                FilamentWirechatPlugin::make()
+                    ->onlyPages([])
+                    ->excludeResources([
+                        \AdultDate\FilamentWirechat\Filament\Resources\Conversations\ConversationResource::class,
+                        \AdultDate\FilamentWirechat\Filament\Resources\Messages\MessageResource::class,
+                    ]),
             ]);
     }
 }

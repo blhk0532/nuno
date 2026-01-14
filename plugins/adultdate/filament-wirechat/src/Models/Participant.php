@@ -6,7 +6,7 @@ use AdultDate\FilamentWirechat\Enums\Actions;
 use AdultDate\FilamentWirechat\Enums\ParticipantRole;
 use AdultDate\FilamentWirechat\Models\Scopes\WithoutRemovedActionScope;
 use Adultdate\Wirechat\Facades\Wirechat;
-use Adultdate\Wirechat\Traits\Actionable;
+use AdultDate\FilamentWirechat\Traits\Actionable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

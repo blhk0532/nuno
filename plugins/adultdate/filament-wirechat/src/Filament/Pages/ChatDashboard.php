@@ -9,6 +9,8 @@ use Filament\Pages\Page;
 use Filament\Support\Enums\Width;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Notifications\DatabaseNotification;
+use UnitEnum;
 
 class ChatDashboard extends Page
 {
@@ -17,6 +19,8 @@ class ChatDashboard extends Page
     protected string $view = 'filament-wirechat::filament.pages.chat-dashboard';
 
     protected static ?string $title = '';
+
+     protected static string|UnitEnum|null $navigationGroup = '';
 
     protected static ?string $navigationLabel = 'Chats';
 
@@ -56,11 +60,19 @@ class ChatDashboard extends Page
             return null;
         }
 
-        $unreadCount = $user->getUnreadCount() ?? 0;
+        $notifiableType = $user instanceof \Illuminate\Database\Eloquent\Model ? $user->getMorphClass() : get_class($user);
+        $userId = $user instanceof \Illuminate\Database\Eloquent\Model ? $user->getKey() : ($user->id ?? null);
+        if (is_null($userId)) {
+            return null;
+        }
+        $unreadCount = DatabaseNotification::where('notifiable_type', $notifiableType)
+            ->where('notifiable_id', $userId)
+            ->whereNull('read_at')
+            ->count();
 
         // Return null if count is 0 so badge doesn't display
         if ($unreadCount === 0) {
-            return 0;
+            return null;
         }
 
         // Return formatted count (cap at 99+)
@@ -77,7 +89,16 @@ class ChatDashboard extends Page
             return null;
         }
 
-        $unreadCount = $user->getUnreadCount() ?? 0;
+        $notifiableType = $user instanceof \Illuminate\Database\Eloquent\Model ? $user->getMorphClass() : get_class($user);
+        $userId = $user instanceof \Illuminate\Database\Eloquent\Model ? $user->getKey() : ($user->id ?? null);
+        if (is_null($userId)) {
+            return null;
+        }
+
+        $unreadCount = DatabaseNotification::where('notifiable_type', $notifiableType)
+            ->where('notifiable_id', $userId)
+            ->whereNull('read_at')
+            ->count();
 
         // Only return color if there are unread messages
         return $unreadCount > 0 ? 'success' : 'gray';

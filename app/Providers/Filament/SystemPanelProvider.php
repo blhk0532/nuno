@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -25,6 +27,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use App\Filament\System\Pages\SystemDashboard;
 
 class SystemPanelProvider extends PanelProvider
 {
@@ -32,10 +35,10 @@ class SystemPanelProvider extends PanelProvider
     {
         return $panel
             ->id('system')
-            ->path('system')
+            ->path('nds/system')
             ->viteTheme('resources/css/filament/system/theme.css')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
             ->spa()
          // ->profile()
@@ -81,8 +84,9 @@ class SystemPanelProvider extends PanelProvider
             )
             ->discoverResources(in: app_path('Filament/System/Resources'), for: 'App\Filament\System\Resources')
             ->discoverPages(in: app_path('Filament/System/Pages'), for: 'App\Filament\System\Pages')
+            ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->pages([
-                Dashboard::class,
+                SystemDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/System/Widgets'), for: 'App\Filament\System\Widgets')
             ->widgets([
@@ -90,7 +94,7 @@ class SystemPanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -99,6 +103,7 @@ class SystemPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,

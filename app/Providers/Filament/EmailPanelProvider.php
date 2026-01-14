@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -25,6 +27,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use App\Filament\Email\Pages\EmailDashboard;
 
 class EmailPanelProvider extends PanelProvider
 {
@@ -32,10 +35,10 @@ class EmailPanelProvider extends PanelProvider
     {
         return $panel
             ->id('email')
-            ->path('email')
+            ->path('nds/email')
             ->viteTheme('resources/css/filament/email/theme.css')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
             ->spa()
          // ->profile()
@@ -81,8 +84,9 @@ class EmailPanelProvider extends PanelProvider
             )
             ->discoverResources(in: app_path('Filament/Email/Resources'), for: 'App\Filament\Email\Resources')
             ->discoverPages(in: app_path('Filament/Email/Pages'), for: 'App\Filament\Email\Pages')
+            ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->pages([
-                Dashboard::class,
+                EmailDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Email/Widgets'), for: 'App\Filament\Email\Widgets')
             ->widgets([
@@ -90,7 +94,7 @@ class EmailPanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -99,10 +103,12 @@ class EmailPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->plugin(\RickDBCN\FilamentEmail\FilamentEmail::make())
             ->plugins([
                 FilamentWireChatPlugin::make()
                     ->onlyPages([])

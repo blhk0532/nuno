@@ -7,7 +7,7 @@ use AdultDate\FilamentWirechat\Enums\MessageType;
 use AdultDate\FilamentWirechat\Models\Scopes\WithoutRemovedMessages;
 use Adultdate\Wirechat\Facades\Wirechat;
 use Adultdate\Wirechat\Helpers\Helper;
-use Adultdate\Wirechat\Traits\Actionable;
+use AdultDate\FilamentWirechat\Traits\Actionable;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

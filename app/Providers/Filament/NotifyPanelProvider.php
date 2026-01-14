@@ -2,6 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use App\Http\Middleware\FilamentPanelAccess;
+
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
@@ -25,6 +27,8 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use App\Filament\Notify\Pages\NotifyDashboard;
+use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
 
 class NotifyPanelProvider extends PanelProvider
 {
@@ -32,10 +36,10 @@ class NotifyPanelProvider extends PanelProvider
     {
         return $panel
             ->id('notify')
-            ->path('notify')
+            ->path('nds/notify')
             ->viteTheme('resources/css/filament/notify/theme.css')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::Gray,
             ])
             ->spa()
          // ->profile()
@@ -81,8 +85,9 @@ class NotifyPanelProvider extends PanelProvider
             )
             ->discoverResources(in: app_path('Filament/Notify/Resources'), for: 'App\Filament\Notify\Resources')
             ->discoverPages(in: app_path('Filament/Notify/Pages'), for: 'App\Filament\Notify\Pages')
+            ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->pages([
-                Dashboard::class,
+                NotifyDashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Notify/Widgets'), for: 'App\Filament\Notify\Widgets')
             ->widgets([
@@ -90,7 +95,7 @@ class NotifyPanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                EncryptCookies::class,
+                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -99,9 +104,13 @@ class NotifyPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->plugins([
+                FilamentNotifierPlugin::make(),
             ])
             ->plugins([
                 FilamentWireChatPlugin::make()
