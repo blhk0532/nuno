@@ -29,4 +29,5 @@ yarn-error.log
 /tmp/
 **service-account-credentials.json**
 *.zip
-*.bak
+*.bakrr
+.rr.yaml
