@@ -77,7 +77,7 @@ export function EventCalendar({
       <EventDialog categoryOptions={categoryOptions} />
       <MonthDayEventsDialog />
       <EventCreateDialog categoryOptions={categoryOptions} />
-      <div className="bg-background overflow-hidden rounded-xl border shadow-sm">
+      <div className="bg-gray overflow-hidden rounded-xl border shadow-sm">
         <CalendarToolbar
           users={users}
           selectedTechnicianId={selectedTechnicianId}

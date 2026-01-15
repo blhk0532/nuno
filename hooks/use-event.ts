@@ -38,7 +38,7 @@ const DEFAULT_VIEW_CONFIGS: CalendarViewConfigs = {
     expandMultiDayEvents: true,
   },
   month: {
-    eventLimit: 3,
+    eventLimit: 10,
     showMoreEventsIndicator: true,
     hideOutsideDays: true,
   },
@@ -107,7 +107,7 @@ export const useEventCalendarStore = create<EventCalendarState>()(
   persist(
     (set, get) => ({
       selectedEvent: null,
-      currentView: CalendarViewType.DAY,
+      currentView: CalendarViewType.WEEK,
       viewMode: ViewModeType.CALENDAR,
       timeFormat: TimeFormatType.HOUR_24,
       locale: 'en-US',

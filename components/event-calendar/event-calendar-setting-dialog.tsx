@@ -703,21 +703,28 @@ const IntegrationSettings = () => (
         label="Google Calendar Sync"
         description="Sync events with your Google Calendar"
       >
-        <Badge variant="secondary">Coming Soon</Badge>
+        <Badge variant="success">OK!</Badge>
       </ConfigRow>
 
       <ConfigRow
-        label="Outlook Integration"
-        description="Connect with Microsoft Outlook calendar"
+        label="Whatsapp Integration"
+        description="Connect with Facebook Whatsapp calendar"
       >
-        <Badge variant="secondary">Coming Soon</Badge>
+        <Badge variant="success">OK!</Badge>
       </ConfigRow>
 
       <ConfigRow
         label="CalDAV Support"
         description="Connect to CalDAV compatible calendar servers"
       >
-        <Badge variant="secondary">Coming Soon</Badge>
+        <Badge variant="success">OK!</Badge>
+      </ConfigRow>
+
+     <ConfigRow
+        label="Telavox Support"
+        description="Connect to Telavox api communication servers"
+      >
+        <Badge variant="success">OK!</Badge>
       </ConfigRow>
     </ConfigSection>
   </div>

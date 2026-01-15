@@ -132,7 +132,7 @@ padding: 30%;
 	</g>
 </svg>
                     <h1 class="mb-1 font-medium">Nordic Digital Solutions</h1>
-                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">We are currently in development mode. <br>Please notify admin with any feedback.</p>
+                    <p class="mb-2 text-[#706f6c] dark:text-[#A1A09A]">The system is currently in development. <br>Please notify admins with any feedback.</p>
                     <ul class="flex flex-col mb-4 lg:mb-6">
                         <li class="flex items-center gap-4 py-2 relative before:border-l before:border-[#e3e3e0] dark:before:border-[#3E3E3A] before:top-1/2 before:bottom-0 before:left-[0.4rem] before:absolute">
                             <span class="relative py-1 bg-white dark:bg-[#161615]">
@@ -197,7 +197,7 @@ padding: 30%;
                             <span>
                                 Login to view booking
                                 <a href="dashboard" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ms-1">
-                                    <span>Calendar</span>
+                                    <span>Kalender</span>
                                     <svg
                                         width="10"
                                         height="11"
@@ -218,10 +218,16 @@ padding: 30%;
                     </ul>
                     <ul class="flex gap-3 text-sm leading-normal">
                         <li>
-                            <a href="/app/login" target="" class="inline-block dark:bg-[#eeeeec] dark:border-[#eeeeec] dark:text-[#1C1C1A] dark:hover:bg-white dark:hover:border-white hover:bg-black hover:border-black px-5 py-1.5 bg-[#1b1b18] rounded-sm border border-black text-white text-sm leading-normal">
-                                Register
+                            <a href="/login" target="" class="inline-block dark:bg-[#eeeeec] dark:border-[#eeeeec] dark:text-[#1C1C1A] dark:hover:bg-white dark:hover:border-white hover:bg-black hover:border-black px-5 py-1.5 bg-[#1b1b18] rounded-sm border border-black text-white text-sm leading-normal">
+                                Login
                             </a>
                         </li>
+                        <li>
+                            <a href="/register" target="" style="hover:text" class="inline-block dark:bg-[#ca2a1a] dark:border-[#eeeeec]  dark:hover:bg-[#F53003] dark:hover:border-white hover:bg-[#F53003] hover:border-black px-5 py-1.5 bg-[#1b1b18] rounded-sm border border-black text-white text-sm leading-normal hover:text-[#000000] dark:hover:text-[#000000]">
+                                Request Access
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
                 <div style="background: #161615;"  class="bg-[#010101] dark:bg-[#010101] relative lg:-ms-px -mb-px lg:mb-0 rounded-t-lg lg:rounded-t-none lg:rounded-e-lg! aspect-[335/376] lg:aspect-auto w-full lg:w-[438px] shrink-0 overflow-hidden" style="background-color: #FFFFFF;background:#FFFFFF;">
@@ -295,14 +301,7 @@ let phaseTimer = 0;
 
 
 function animate() {
-  phaseTimer++;
-  if (animationPhase === 0 && phaseTimer >= pauseFrames) {
-    animationPhase = 1;
-    phaseTimer = 0;
-  } else if (animationPhase === 1 && phaseTimer >= animateFrames) {
-    animationPhase = 0;
-    phaseTimer = 0;
-  }
+
 
   if (animationPhase === 1) {
     // Slower, more subtle movements
