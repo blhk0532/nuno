@@ -202,66 +202,6 @@ export const EventCalendarFilters = ({
             </div>
           </PopoverContent>
         </Popover>
-        <Popover>
-          <PopoverTrigger asChild>
-            <Button
-              variant={filters.colors.length > 0 ? 'default' : 'outline'}
-              className="h-9 gap-2 px-4 text-sm font-medium transition-all"
-            >
-              <div className="h-4 w-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 ring-2 ring-white" />
-
-
-
-
-
-
-
-
-              {filters.colors.length > 0 && (
-                <Badge variant="secondary" className="ml-1">
-                  {filters.colors.length}
-                </Badge>
-              )}
-            </Button>
-          </PopoverTrigger>
-          <PopoverContent className="w-64 p-4">
-            <div className="space-y-3">
-              <h4 className="text-muted-foreground text-sm font-medium">
-                Filter Status
-              </h4>
-              <div className="grid grid-cols-2 gap-3">
-                {EVENT_COLORS.map((color) => {
-                  const validColors = getColorClasses(color.value);
-                  return (
-                    <div
-                      key={color.value}
-                      className="flex items-center space-x-3"
-                    >
-                      <Checkbox
-                        id={`color-${color.value}`}
-                        checked={filters.colors.includes(color.value)}
-                        onCheckedChange={() =>
-                          toggleArrayFilter('colors', color.value)
-                        }
-                      />
-                      <div className="flex items-center gap-2">
-                        <div
-                          className={`h-4 w-4 rounded-full border-2 border-white shadow-sm ${validColors.bg}`}
-                        />
-                        <Label
-                          htmlFor={`color-${color.value}`}
-                          className="cursor-pointer text-sm font-normal"
-                        >
-                          {color.label}
-                        </Label>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </PopoverContent>
-        </Popover>
         {users.length > 0 && onTechnicianChange && (
           <Select
             value={selectedTechnicianId}
