@@ -39,7 +39,7 @@ export function ViewModeToggle({
               type="button"
               variant={mode === ViewModeType.CALENDAR ? 'default' : 'ghost'}
               className={cn(
-                'group relative h-9 rounded-none rounded-l-md px-3 transition-all',
+                'group relative h-9 rounded-none rounded-l-md px-3 transition-all bg-transparent',
               )}
               onClick={() => onChange(ViewModeType.CALENDAR)}
               aria-label="Calendar view"
@@ -59,7 +59,7 @@ export function ViewModeToggle({
                       animate={{ opacity: 1, width: 'auto', x: 0 }}
                       exit={{ opacity: 0, width: 0, x: -5 }}
                       transition={{ duration: 0.3 }}
-                      className="z-10 ml-2 overflow-hidden text-sm whitespace-nowrap text-white bg-transparent"
+                      className="z-10 ml-2 overflow-hidden text-sm whitespace-nowrap text-white "
                     >
                       Calendar
                     </motion.span>
