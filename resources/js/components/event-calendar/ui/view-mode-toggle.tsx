@@ -59,7 +59,7 @@ export function ViewModeToggle({
                       animate={{ opacity: 1, width: 'auto', x: 0 }}
                       exit={{ opacity: 0, width: 0, x: -5 }}
                       transition={{ duration: 0.3 }}
-                      className="z-10 ml-2 overflow-hidden text-sm whitespace-nowrap text-white"
+                      className="z-10 ml-2 overflow-hidden text-sm whitespace-nowrap text-white bg-trnsparent"
                     >
                       Calendar
                     </motion.span>
