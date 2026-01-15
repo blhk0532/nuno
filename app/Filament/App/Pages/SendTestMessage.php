@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Filament\Admin\Pages;
+namespace App\Filament\App\Pages;
 
 use BackedEnum;
 use Filament\Pages\Page;
@@ -35,6 +35,6 @@ class SendTestMessage extends Page
 
     public function getView(): string
     {
-        return 'filament.admin.pages.send-test-message';
+        return 'filament.app.pages.send-test-message';
     }
 }

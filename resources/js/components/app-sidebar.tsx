@@ -19,28 +19,28 @@ import AppLogo from './app-logo';
 import { DayViewMultiDayEventsRow } from '@/calendar/components/week-and-day-view/day-view-multi-day-events-row';
 
 const mainNavItems: NavItem[] = [
+//   {
+//       title: 'Boknings Kalenders NDS#1',
+//       href: shadcnEventCalendar(),
+//       icon: CalendarDays,
+//   },
     {
         title: 'Boknings Kalenders NDS#1',
-        href: shadcnEventCalendar(),
-        icon: CalendarDays,
-    },
-    {
-        title: 'Boknings Kalenders NDS#2',
         href: app(),
         icon: CalendarDays,
     },
     {
-        title: 'Boknings Kalenders NDS#3',
+        title: 'Boknings Kalenders NDS#2',
         href: dashboard(),
         icon: CalendarDays,
     },
-    {
-        title: 'Boknings Kalenders NDS#4',
-        href: bigCalendar(),
-        icon: CalendarDays,
-    },
+ //   {
+ //       title: 'Boknings Kalenders NDS#4',
+ //       href: bigCalendar(),
+ //       icon: CalendarDays,
+ //   },
             {
-        title: 'Boknings Kalenders NDS#5',
+        title: 'Boknings Kalenders NDS#3',
         href: calendars(),
         icon: CalendarDays,
     },
@@ -51,7 +51,7 @@ const footerNavItems: NavItem[] = [
     {
         title: 'ND Application',
         href: 'https://ndsth.com/nds/app',
-        icon: Bolt,
+        icon: LayoutGrid,
     },
     {
         title: 'Administration',
