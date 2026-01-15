@@ -72,6 +72,7 @@ use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
 use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
 use WallaceMartinss\FilamentEvolution\FilamentEvolutionPlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use N3XT0R\FilamentPassportUi\FilamentPassportUiPlugin;
 
 final class AdminPanelProvider extends PanelProvider
 {
@@ -184,6 +185,7 @@ final class AdminPanelProvider extends PanelProvider
                     })
             )
             ->plugins([
+                FilamentPassportUiPlugin::make(),
                 QueueableBulkActionsPlugin::make()
                     ->pollingInterval('5s')
                     ->colors([

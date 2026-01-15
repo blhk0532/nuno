@@ -36,6 +36,10 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Zap\Models\Concerns\HasSchedules;
+use Laravel\Passport\Contracts\OAuthenticatable;
+use Illuminate\Database\Eloquent\Relations\MorphMany;  // Add this import
+use Laravel\Passport\PersonalAccessTokenResult;
+use Laravel\Passport\Contracts\ScopeAuthorizable;
 
 /**
  * @property int $id
@@ -85,12 +89,11 @@ use Zap\Models\Concerns\HasSchedules;
  * @mixin \Eloquent
  */
 #[ObservedBy(UserObserver::class)]
-final class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, FilamentUser, HasAvatar, HasDefaultTenant, HasTenants, MustVerifyEmailContract, WirechatUser
+final class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, FilamentUser, HasAvatar, HasDefaultTenant, HasTenants, MustVerifyEmailContract, WirechatUser, OAuthenticatable
 {
     use Authenticatable;
     use Authorizable;
     use CanResetPassword;
-    use HasApiTokens;
     use HasFactory;
     use HasRoles;
     use HasSchedules;
@@ -98,6 +101,8 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
     use MustVerifyEmail;
     use Notifiable;
     use TwoFactorAuthenticatable;
+
+    protected $accessToken;
 
     protected $fillable = [
         'status',
@@ -132,6 +137,10 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
 
     public function canImpersonate(): bool
     {
+        $role = $this->role ?? null;
+        if (in_array($role, ['admin', 'super', 'super_admin', 'superadmin'], true)) {
+            return true;
+        }
         return false;
     }
 
@@ -297,6 +306,56 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
         return $participants->where('participantable_id', $this->getKey())
             ->where('participantable_type', $this->getMorphClass())
             ->exists();
+    }
+
+public function oauthApps(): MorphMany  // Change return type from HasMany to MorphMany
+{
+    return $this->morphMany(\Laravel\Passport\Client::class, 'owner');  // Change from hasMany to morphMany with 'owner' as the morph name
+}
+
+public function tokens(): HasMany
+{
+    return $this->hasMany(\Laravel\Passport\Token::class);
+}
+
+public function tokenCan(string $scope): bool
+{
+    return $this->accessToken && $this->accessToken->can($scope);
+}
+
+public function tokenCant(string $scope): bool
+{
+    return ! $this->tokenCan($scope);
+}
+
+public function createToken(string $name, array $scopes = []): \Laravel\Passport\PersonalAccessTokenResult
+{
+    $token = $this->tokens()->create([
+        'name' => $name,
+        'scopes' => $scopes,
+        'revoked' => false,
+    ]);
+
+    $plainTextToken = unpack('C*', \Illuminate\Support\Str::random(40));
+
+    return new \Laravel\Passport\PersonalAccessTokenResult($plainTextToken, $token);
+}
+
+public function currentAccessToken(): ?ScopeAuthorizable
+{
+    return $this->accessToken;
+}
+
+public function withAccessToken(?ScopeAuthorizable $accessToken): static
+{
+    $this->accessToken = $accessToken;
+
+    return $this;
+}
+
+    public function getProviderName(): string
+    {
+        return 'users';
     }
 
     protected static function boot(): void
