@@ -27,7 +27,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
-
+use Adultdate\FilamentBooking\Filament\Resources\BookingCalendars\BookingCalendarResource;
 class CalendarPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -50,6 +50,9 @@ class CalendarPanelProvider extends PanelProvider
             ->brandLogoHeight('34px')
             ->favicon(fn () => asset('favicon.svg'))
             ->brandLogo(fn () => view('filament.app.logo'))
+            ->resources([
+                BookingCalendarResource::class,
+            ])
             ->plugin(
                 AuthDesignerPlugin::make()
                     ->login(

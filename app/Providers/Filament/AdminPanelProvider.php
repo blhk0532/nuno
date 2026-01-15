@@ -28,13 +28,7 @@ use App\Models\User;
 use Asmit\ResizedColumn\ResizedColumnPlugin;
 use Awcodes\Overlook\OverlookPlugin;
 use Awcodes\Overlook\Widgets\OverlookWidget;
-use BezhanSalleh\FilamentExceptions\FilamentExceptionsPlugin;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-use BinaryBuilds\CommandRunner\CommandRunnerPlugin;
-use BinaryBuilds\FilamentCacheManager\FilamentCacheManagerPlugin;
-use BinaryBuilds\FilamentFailedJobs\FilamentFailedJobsPlugin;
-use Bytexr\QueueableBulkActions\Enums\StatusEnum;
-use Bytexr\QueueableBulkActions\QueueableBulkActionsPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
 use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
@@ -62,17 +56,11 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use lockscreen\FilamentLockscreen\Lockscreen;
-use MWGuerra\FileManager\Filament\Pages\FileManager;
-use MWGuerra\FileManager\Filament\Pages\FileSystem;
-use MWGuerra\FileManager\Filament\Pages\SchemaExample;
-use MWGuerra\FileManager\Filament\Resources\FileSystemItemResource;
-use MWGuerra\FileManager\FileManagerPlugin;
 use pxlrbt\FilamentSpotlight\SpotlightPlugin;
-use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
-use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
 use WallaceMartinss\FilamentEvolution\FilamentEvolutionPlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
-use N3XT0R\FilamentPassportUi\FilamentPassportUiPlugin;
+use STS\FilamentImpersonate\Tables\Actions\Impersonate;
+
 
 final class AdminPanelProvider extends PanelProvider
 {
@@ -110,35 +98,16 @@ final class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
 
-            ->discoverClusters(in: app_path('../plugins/adultdate/filament-booking/src/Filament/Clusters'), for: 'Adultdate\\FilamentBooking\\Filament\\Clusters')
-            ->discoverResources(in: app_path('../plugins/adultdate/filament-booking/src/Filament/Resources'), for: 'Adultdate\\FilamentBooking\\Filament\\Resources')
+//            ->discoverResources(in: app_path('../plugins/adultdate/filament-booking/src/Filament/Resources'), for: 'Adultdate\\FilamentBooking\\Filament\\Resources')
 
             ->pages([
                 Sanctum::class,
-                DashboardBooking::class,
-                CalendarSettingsPage::class,
             ])
             ->resources([
                 BookingCalendarResource::class,
-            ])
-
-            ->resources([
-                CustomerResource::class,
-                OrderResource::class,
-                DailyLocationResource::class,
-                BookingServicePeriodResource::class,
-                BookingOutcallQueueResource::class,
-                UserResource::class,
-                BookingCalendarResource::class,
-                BookingDataLeadResource::class,
             ])
             ->widgets([
-                BookingCalendarWidget::class,
-                CustomersChart::class,
-                LatestOrders::class,
-                OrdersChart::class,
-                StatsOverviewWidget::class,
-                EventCalendar::class,
+
             ])
 
             ->widgets([
@@ -173,30 +142,6 @@ final class AdminPanelProvider extends PanelProvider
                         '2xl' => null,
                     ]),
             ])
-            ->plugins([
-                FilamentExceptionsPlugin::make(),
-            ])
-            ->plugin(
-                FilamentCacheManagerPlugin::make()
-                    ->canAccessPlugin(function () {
-                        $user = Auth::user();
-
-                        return $user instanceof User && $user->hasRole('super_admin');
-                    })
-            )
-            ->plugins([
-                FilamentPassportUiPlugin::make(),
-                QueueableBulkActionsPlugin::make()
-                    ->pollingInterval('5s')
-                    ->colors([
-                        StatusEnum::QUEUED->value => 'slate',
-                        StatusEnum::IN_PROGRESS->value => 'info',
-                        StatusEnum::FINISHED->value => 'success',
-                        StatusEnum::FAILED->value => 'danger',
-                    ]),
-            ])
-            ->plugin(CommandRunnerPlugin::make())
-
             ->plugins([
                 EasyFooterPlugin::make()
                     ->hiddenFromPagesEnabled()
@@ -251,27 +196,13 @@ final class AdminPanelProvider extends PanelProvider
                     ->enablePlugin(), // Enable the plugin.
             ])
             ->plugins([
-                FileManagerPlugin::make([
-                    FileManager::class,              // Database mode - full CRUD file manager
-                    FileSystem::class,               // Storage mode - read-only file browser
-                    FileSystemItemResource::class,   // Resource for direct database table editing
-                    SchemaExample::class,            // Demo page showing embed components usage
-                ]),
-                FilamentSpatieLaravelBackupPlugin::make(),
                 SpotlightPlugin::make(),
                 ResizedColumnPlugin::make(),
-                FilamentFailedJobsPlugin::make(),
                 FilamentIconPickerPlugin::make(),
-                FilamentLogViewer::make()
-                    ->navigationGroup(__('Settings')),
-                FilamentEvolutionPlugin::make()
-                    ->whatsappInstanceResource()  // Show instances (default: true)
-                    ->viewMessageHistory()        // Show message history
-                    ->viewWebhookLogs(),           // Show webhook logs
-                FilamentBookingPlugin::make(),
-            ])
+
+ ])
             ->plugins([
-                FilamentNotifierPlugin::make(),
+                FilamentBookingPlugin::make(),
             ])
             ->plugins([
                 TableLayoutTogglePlugin::make()
@@ -320,7 +251,12 @@ final class AdminPanelProvider extends PanelProvider
                     ->navigationBadgeColor('success')           // string|array|Closure|null
             )
             ->plugins([
-                FilamentWirechatPlugin::make(),
+                FilamentWireChatPlugin::make()
+                    ->onlyPages([])
+                    ->excludeResources([
+                        \AdultDate\FilamentWirechat\Filament\Resources\Conversations\ConversationResource::class,
+                        \AdultDate\FilamentWirechat\Filament\Resources\Messages\MessageResource::class,
+                    ]),
             ])
             ->unsavedChangesAlerts()
             ->passwordReset()

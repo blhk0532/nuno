@@ -30,6 +30,7 @@ use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use App\Filament\User\Pages\UserDashboard;
 use Adultdate\FilamentBooking\Filament\Resources\Booking\Users\UserResource;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
+use N3XT0R\FilamentPassportUi\FilamentPassportUiPlugin;
 class UserPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -113,6 +114,7 @@ class UserPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugin(
+                FilamentPassportUiPlugin::make(),
                 FilamentShieldPlugin::make()
                     ->navigationLabel('Roles')                  // string|Closure|null
                     ->navigationIcon('heroicon-o-shield-check')         // string|Closure|null

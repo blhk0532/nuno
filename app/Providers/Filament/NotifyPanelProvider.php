@@ -29,6 +29,7 @@ use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use App\Filament\Notify\Pages\NotifyDashboard;
 use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
+use WallaceMartinss\FilamentEvolution\FilamentEvolutionPlugin;
 
 class NotifyPanelProvider extends PanelProvider
 {
@@ -111,14 +112,13 @@ class NotifyPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentNotifierPlugin::make(),
+                FilamentEvolutionPlugin::make()
+                    ->whatsappInstanceResource()  // Show instances (default: true)
+                    ->viewMessageHistory()        // Show message history
+                    ->viewWebhookLogs()           // Show webhook logs
             ])
             ->plugins([
-                FilamentWireChatPlugin::make()
-                    ->onlyPages([])
-                    ->excludeResources([
-                        \AdultDate\FilamentWirechat\Filament\Resources\Conversations\ConversationResource::class,
-                        \AdultDate\FilamentWirechat\Filament\Resources\Messages\MessageResource::class,
-                    ]),
+                FilamentWirechatPlugin::make(),
             ]);
     }
 }

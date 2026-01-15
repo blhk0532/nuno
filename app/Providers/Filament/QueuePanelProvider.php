@@ -31,7 +31,8 @@ use App\Filament\Queue\Pages\QueueDashboard;
 use Bytexr\QueueableBulkActions\Enums\StatusEnum;
 use Bytexr\QueueableBulkActions\QueueableBulkActionsPlugin;
 use BinaryBuilds\FilamentFailedJobs\FilamentFailedJobsPlugin;
-
+use Adultdate\FilamentBooking\Filament\Resources\BookingCalendars\BookingCalendarResource;
+use Adultdate\FilamentBooking\Filament\Resources\BookingDataLeads\BookingDataLeadResource;
 class QueuePanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -110,6 +111,10 @@ class QueuePanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+            ->resources([
+                BookingCalendarResource::class,
+                BookingDataLeadResource::class,
             ])
             ->plugins([
                 FilamentFailedJobsPlugin::make(),

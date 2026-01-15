@@ -16,7 +16,7 @@
         "asmit/resized-column": "^1.1",
         "awcodes/filament-badgeable-column": "^3.0.1",
         "awcodes/overlook": "^3.0.3",
-        "bezhansalleh/filament-exceptions": "^4.0",
+        "bezhansalleh/filament-exceptions": "@dev",
         "bezhansalleh/filament-panel-switch": "@dev",
         "bezhansalleh/filament-plugin-essentials": "@dev",
         "bezhansalleh/filament-shield": "@dev",
@@ -76,7 +76,7 @@
         "spatie/laravel-google-calendar": "@dev",
         "spiral/roadrunner-cli": "^2.7.2",
         "spiral/roadrunner-http": "^3.6.0",
-        "stechstudio/filament-impersonate": "*",
+        "stechstudio/filament-impersonate": "^4.0",
         "still-code/laravel-umami": "^5.0.3",
         "tapp/filament-maillog": "^2.0.1",
         "usamamuneerchaudhary/filament-notifier": "^1.2",
@@ -89,7 +89,7 @@
         "driftingly/rector-laravel": "^2.1.9",
         "fakerphp/faker": "^1.24.1",
         "fruitcake/laravel-debugbar": "^3.16.3",
-        "laradumps/laradumps": "^5.0",
+        "laradumps/laradumps": "^5.0.1",
         "larastan/larastan": "^3.8.1",
         "laravel/boost": "^1.8.10",
         "laravel/pail": "^1.2.4",
@@ -106,7 +106,7 @@
     "repositories": [
         {
             "type": "path",
-            "url": "plugins/filament/filament",
+            "url": "plugins/bezhansalleh/filament-exceptions",
             "options": {
                 "symlink": true
             }

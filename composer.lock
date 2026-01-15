@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "11f6a56ff52716424603b93576b212f7",
+    "content-hash": "6a8fb44c9b71261609ae141818549e9b",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -954,17 +954,11 @@
         },
         {
             "name": "bezhansalleh/filament-exceptions",
-            "version": "4.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/bezhanSalleh/filament-exceptions.git",
-                "reference": "93709f01ca8ef51b023ce42d0a23c3c45a7695c1"
-            },
+            "version": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/bezhanSalleh/filament-exceptions/zipball/93709f01ca8ef51b023ce42d0a23c3c45a7695c1",
-                "reference": "93709f01ca8ef51b023ce42d0a23c3c45a7695c1",
-                "shasum": ""
+                "type": "path",
+                "url": "plugins/bezhansalleh/filament-exceptions",
+                "reference": "e9679e19cd83d75fc387a8c9a7d99f2e925c0892"
             },
             "require": {
                 "bezhansalleh/filament-plugin-essentials": "^1.0",
@@ -994,12 +988,12 @@
             "type": "library",
             "extra": {
                 "laravel": {
-                    "aliases": {
-                        "FilamentExceptions": "BezhanSalleh\\FilamentExceptions\\Facades\\FilamentExceptions"
-                    },
                     "providers": [
                         "BezhanSalleh\\FilamentExceptions\\FilamentExceptionsServiceProvider"
-                    ]
+                    ],
+                    "aliases": {
+                        "FilamentExceptions": "BezhanSalleh\\FilamentExceptions\\Facades\\FilamentExceptions"
+                    }
                 }
             },
             "autoload": {
@@ -1008,7 +1002,35 @@
                     "BezhanSalleh\\FilamentExceptions\\Database\\Factories\\": "database/factories"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "BezhanSalleh\\FilamentExceptions\\Tests\\": "tests"
+                }
+            },
+            "scripts": {
+                "analyse": [
+                    "phpstan analyse"
+                ],
+                "test": [
+                    "pest --no-coverage"
+                ],
+                "type": [
+                    "pest --type-coverage"
+                ],
+                "cs": [
+                    "rector",
+                    "pint --parallel"
+                ],
+                "refactor": [
+                    "rector"
+                ],
+                "finalize": [
+                    "@cs",
+                    "@analyse",
+                    "@test",
+                    "@type"
+                ]
+            },
             "license": [
                 "MIT"
             ],
@@ -1027,17 +1049,10 @@
                 "filament-exceptions",
                 "laravel"
             ],
-            "support": {
-                "issues": "https://github.com/bezhanSalleh/filament-exceptions/issues",
-                "source": "https://github.com/bezhanSalleh/filament-exceptions/tree/4.0.0"
-            },
-            "funding": [
-                {
-                    "url": "https://github.com/bezhanSalleh",
-                    "type": "github"
-                }
-            ],
-            "time": "2025-12-25T00:36:26+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "bezhansalleh/filament-panel-switch",
@@ -4408,11 +4423,17 @@
         },
         {
             "name": "filament/filament",
-            "version": "4.5.2",
+            "version": "v4.5.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/filamentphp/panels.git",
+                "reference": "0b7eb4fdf32c41b6789bfdf60c9ba3056c99de1c"
+            },
             "dist": {
-                "type": "path",
-                "url": "plugins/filament/filament",
-                "reference": "0d69c8fedfa2212835c1bc0f157098833f5fd16b"
+                "type": "zip",
+                "url": "https://api.github.com/repos/filamentphp/panels/zipball/0b7eb4fdf32c41b6789bfdf60c9ba3056c99de1c",
+                "reference": "0b7eb4fdf32c41b6789bfdf60c9ba3056c99de1c",
+                "shasum": ""
             },
             "require": {
                 "chillerlan/php-qrcode": "^5.0",
@@ -4445,6 +4466,7 @@
                     "Filament\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -4454,10 +4476,7 @@
                 "issues": "https://github.com/filamentphp/filament/issues",
                 "source": "https://github.com/filamentphp/filament"
             },
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
+            "time": "2026-01-07T12:49:48+00:00"
         },
         {
             "name": "filament/forms",
@@ -25882,23 +25901,22 @@
         },
         {
             "name": "laradumps/laradumps",
-            "version": "v5.0.0",
+            "version": "v5.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laradumps/laradumps.git",
-                "reference": "7bfb9b888ce351ca151e29cacf2e2e74c7b62f72"
+                "reference": "e7b3119b50124942cb1062fcbbd0036a27312d6e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laradumps/laradumps/zipball/7bfb9b888ce351ca151e29cacf2e2e74c7b62f72",
-                "reference": "7bfb9b888ce351ca151e29cacf2e2e74c7b62f72",
+                "url": "https://api.github.com/repos/laradumps/laradumps/zipball/e7b3119b50124942cb1062fcbbd0036a27312d6e",
+                "reference": "e7b3119b50124942cb1062fcbbd0036a27312d6e",
                 "shasum": ""
             },
             "require": {
                 "illuminate/mail": "^11.0|^12.0",
                 "illuminate/support": "^11.0|^12.0",
-                "laradumps/laradumps-core": "^4.0.0",
-                "nunomaduro/termwind": "^2.3.3",
+                "laradumps/laradumps-core": "^4.0.1",
                 "php": "^8.2"
             },
             "require-dev": {
@@ -25942,7 +25960,7 @@
             "homepage": "https://github.com/laradumps/laradumps",
             "support": {
                 "issues": "https://github.com/laradumps/laradumps/issues",
-                "source": "https://github.com/laradumps/laradumps/tree/v5.0.0"
+                "source": "https://github.com/laradumps/laradumps/tree/v5.0.1"
             },
             "funding": [
                 {
@@ -25950,25 +25968,24 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-13T12:44:16+00:00"
+            "time": "2026-01-15T18:01:57+00:00"
         },
         {
             "name": "laradumps/laradumps-core",
-            "version": "v4.0.0",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laradumps/laradumps-core.git",
-                "reference": "bb57c8fccb785777020b85592d718e8ff0c9a23a"
+                "reference": "162ceebac8e7253332270421b74a12a94a6f28b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laradumps/laradumps-core/zipball/bb57c8fccb785777020b85592d718e8ff0c9a23a",
-                "reference": "bb57c8fccb785777020b85592d718e8ff0c9a23a",
+                "url": "https://api.github.com/repos/laradumps/laradumps-core/zipball/162ceebac8e7253332270421b74a12a94a6f28b8",
+                "reference": "162ceebac8e7253332270421b74a12a94a6f28b8",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "nunomaduro/termwind": "^2.0",
                 "php": "^8.2",
                 "ramsey/uuid": "^4.9.1",
                 "spatie/backtrace": "^1.5",
@@ -25979,10 +25996,13 @@
                 "symfony/yaml": "^6.4|^7.0|^8.0"
             },
             "require-dev": {
-                "illuminate/support": "^10.46",
+                "illuminate/support": "^12",
                 "laravel/pint": "^1.26.0",
                 "pestphp/pest": "^3.0|^4.0",
                 "phpstan/phpstan": "^1.10.50"
+            },
+            "suggest": {
+                "nunomaduro/termwind": "For a better terminal experience"
             },
             "bin": [
                 "bin/laradumps"
@@ -26011,7 +26031,7 @@
             "homepage": "https://github.com/laradumps/laradumps-core",
             "support": {
                 "issues": "https://github.com/laradumps/laradumps-core/issues",
-                "source": "https://github.com/laradumps/laradumps-core/tree/v4.0.0"
+                "source": "https://github.com/laradumps/laradumps-core/tree/v4.0.1"
             },
             "funding": [
                 {
@@ -26019,7 +26039,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-12T22:10:38+00:00"
+            "time": "2026-01-15T17:33:27+00:00"
         },
         {
             "name": "larastan/larastan",
@@ -28529,6 +28549,7 @@
         "adultdate/filament-dialer": 20,
         "adultdate/filament-tab-layout-plugin": 20,
         "adultdate/filament-wirechat": 20,
+        "bezhansalleh/filament-exceptions": 20,
         "bezhansalleh/filament-panel-switch": 20,
         "bezhansalleh/filament-plugin-essentials": 20,
         "bezhansalleh/filament-shield": 20,
