@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import { useCalendar } from "@/components/calendar/contexts/calendar-context";
 import { formatTime } from "@/components/calendar/helpers";
+import { toZonedTime } from "date-fns-tz";
 
 export function CalendarTimeline() {
-	const { use24HourFormat } = useCalendar();
+	const { use24HourFormat, timezone } = useCalendar();
 	const [currentTime, setCurrentTime] = useState(new Date());
 
 	useEffect(() => {
@@ -12,12 +13,14 @@ export function CalendarTimeline() {
 	}, []);
 
 	const getCurrentTimePosition = () => {
-		const minutes = currentTime.getHours() * 60 + currentTime.getMinutes();
+		// Convert to timezone-specific time for position calculation
+		const zonedTime = toZonedTime(currentTime, timezone);
+		const minutes = zonedTime.getHours() * 60 + zonedTime.getMinutes();
 		return (minutes / 1440) * 100;
 	};
 
 	const formatCurrentTime = () => {
-		return formatTime(currentTime, use24HourFormat);
+		return formatTime(currentTime, use24HourFormat, timezone);
 	};
 
 	return (

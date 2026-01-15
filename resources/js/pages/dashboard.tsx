@@ -1,9 +1,10 @@
 import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
 import AppLayout from '@/layouts/app-layout';
-import { dashboard } from '@/routes';
+import { dashboard } from '../routes';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { EventCalendarDemo } from '@/components/event-calendar-demo';
+import React from "react";
+import { Calendar } from "@/components/calendar/calendar";
 import { EventCalendarDemo1 } from '@/components/event-calendar-demo1';
 import { EventCalendarDemo2 } from '@/components/event-calendar-demo2';
 import { EventCalendarDemo3 } from '@/components/event-calendar-demo3';
@@ -31,9 +32,6 @@ export default function Dashboard() {
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4 bg-background">
 
-                <div className="relative max-h-[600px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                   <EventCalendarDemo />
-                </div>
 
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
@@ -47,41 +45,13 @@ export default function Dashboard() {
                     </div>
                 </div>
 
-        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                   <EventCalendarDemo4 />
-                    </div>
-                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                 <EventCalendarDemo5 />
-                    </div>
-                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                  <EventCalendarDemo6 />
-                    </div>
-                </div>
 
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                   <EventCalendarDemo7 />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                  <EventCalendarDemo8 />
-                    </div>
-                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                  <EventCalendarDemo9 />
-                    </div>
-                </div>
-     <div className="relative max-h-[600px] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                   <ResourceTimeGridDemo />
-                </div>
 
-                      <div className="relative max-h-[256px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                   <ResourceTimelineDemo />
+                           <div className="relative min-h-[900px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                      <ResourceTimeGridDemo />
                 </div>
-              <div className="relative max-h-[600px] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                 <ResourceTimeGridDemo1 />
-                </div>
-                <div className="relative max-h-[284px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
-                    <ResourceTimelineDemo1 />
+                   <div className="relative max-h-[333px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                   <ResourceTimelineDemo1 />
                 </div>
 
             </div>

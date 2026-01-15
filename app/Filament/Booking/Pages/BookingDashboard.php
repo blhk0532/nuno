@@ -72,6 +72,11 @@ class BookingDashboard extends BaseDashboard
         return 'heroicon-o-chart-pie';
     }
 
+        public function getWidgets():array
+    {
+       return [];
+    }
+
     public static function getNavigationBadgeColor(): ?string
     {
         return 'success';

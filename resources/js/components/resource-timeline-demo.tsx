@@ -11,11 +11,11 @@ export function ResourceTimelineDemo() {
       navLinks
       locale='sv'
       initialView='resourceTimelineDay'
-      height='300px'
+      height='333px'
       contentHeight={300}
       aspectRatio={1.5}
       timeZone='UTC'
-      resourceColumnHeaderContent='Rooms'
+      resourceColumnHeaderContent='Service Tekniker'
       resources='calendar/resources?with-nesting&with-colors'
       events='calendar/events?single-day&for-resource-timeline'
       addButton={{

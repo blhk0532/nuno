@@ -1,4 +1,3 @@
-import { formatDate } from "date-fns";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {
@@ -10,7 +9,7 @@ import { useCalendar } from "@/components/calendar/contexts/calendar-context";
 const MotionButton = motion.create(Button);
 
 export function TodayButton() {
-	const { setSelectedDate } = useCalendar();
+	const { setSelectedDate, formatDate } = useCalendar();
 
 	const today = new Date();
 	const handleClick = () => setSelectedDate(today);

@@ -1,4 +1,3 @@
-import { formatDate } from "date-fns";
 import { AnimatePresence, motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useMemo } from "react";
@@ -28,7 +27,7 @@ const MotionButton = motion.create(Button);
 const MotionBadge = motion.create(Badge);
 
 export function DateNavigator({ view, events }: IProps) {
-	const { selectedDate, setSelectedDate } = useCalendar();
+	const { selectedDate, setSelectedDate, formatDate } = useCalendar();
 
 	const month = formatDate(selectedDate, "MMMM");
 	const year = selectedDate.getFullYear();

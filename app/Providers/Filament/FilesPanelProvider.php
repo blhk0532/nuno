@@ -28,7 +28,11 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use App\Filament\Files\Pages\FilesDashboard;
-
+use MWGuerra\FileManager\Filament\Pages\FileManager;
+use MWGuerra\FileManager\Filament\Pages\FileSystem;
+use MWGuerra\FileManager\Filament\Pages\SchemaExample;
+use MWGuerra\FileManager\Filament\Resources\FileSystemItemResource;
+use MWGuerra\FileManager\FileManagerPlugin;
 class FilesPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -115,7 +119,15 @@ class FilesPanelProvider extends PanelProvider
                         \AdultDate\FilamentWirechat\Filament\Resources\Conversations\ConversationResource::class,
                         \AdultDate\FilamentWirechat\Filament\Resources\Messages\MessageResource::class,
                     ]),
-            ]);
+            ])
+            ->plugins([
+                FileManagerPlugin::make([
+                    FileManager::class,              // Database mode - full CRUD file manager
+                    FileSystem::class,               // Storage mode - read-only file browser
+                    FileSystemItemResource::class,   // Resource for direct database table editing
+                    SchemaExample::class,            // Demo page showing embed components usage
+            ])
+                ]);
     }
 }
 

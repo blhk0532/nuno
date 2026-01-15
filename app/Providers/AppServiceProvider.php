@@ -121,8 +121,24 @@ final class AppServiceProvider extends ServiceProvider
             }elseif ($user?->role && $user?->role === 'manager') {
                 $panels = ['app', 'booking', 'manager', 'dialer', 'stats', 'email', 'queue', 'chat'];
             }elseif ($user?->role && $user?->role === 'admin') {
-                $panels = ['admin', 'app', 'booking', 'manager', 'queue', 'dialer', 'clients', 'finance', 'guest', 'script', 'user',
-                           'server', 'partner', 'service', 'tools', 'files', 'chat', 'stats', 'calendar', 'sheets', 'email', 'notify'];
+               $panels = [
+                'admin',
+                'app',
+                'booking',
+                'calendar',
+                'chat',
+                'clients',
+                'data',
+                'dialer',
+                'email',
+                'files',
+                'finance',
+                'notify',
+                'sheets',
+                'stats',
+                'tools',
+                'user',
+            ];
             }elseif ($admin?->role && $admin?->role === 'super') {
                 $panels = [
                 'admin',

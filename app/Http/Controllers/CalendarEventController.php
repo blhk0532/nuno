@@ -26,14 +26,18 @@ final class CalendarEventController extends Controller
 
         $events = $query->get()
             ->map(function (Booking $booking) {
+                // Convert to Europe/Stockholm timezone
+                $startsAt = $booking->starts_at->setTimezone('Europe/Stockholm');
+                $endsAt = $booking->ends_at?->setTimezone('Europe/Stockholm');
+
                 $event = [
                     'id' => $booking->id,
                     'title' => $booking->number,
-                    'start' => $booking->starts_at->toIso8601String(),
+                    'start' => $startsAt->toIso8601String(),
                 ];
 
-                if ($booking->ends_at) {
-                    $event['end'] = $booking->ends_at->toIso8601String();
+                if ($endsAt) {
+                    $event['end'] = $endsAt->toIso8601String();
                 }
 
                 if ($booking->service_user_id) {

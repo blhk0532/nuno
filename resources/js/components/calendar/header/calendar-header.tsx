@@ -61,7 +61,7 @@ export function CalendarHeader() {
 					<AddEditEventDialog>
 						<Button>
 							<Plus className="h-4 w-4" />
-							Ny Bokning
+							Add Event
 						</Button>
 					</AddEditEventDialog>
 				</div>

@@ -10,27 +10,38 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
-import { calendars, dashboard } from '@/routes';
+import { app, bigCalendar, calendarMulti, calendars, dashboard, shadcnEventCalendar } from '@/routes';
 import { calendar } from '@/routes';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
 import { BookOpen, CalendarDays, Folder, LayoutGrid, Bolt, Star, Lightbulb} from 'lucide-react';
 import AppLogo from './app-logo';
+import { DayViewMultiDayEventsRow } from '@/calendar/components/week-and-day-view/day-view-multi-day-events-row';
 
 const mainNavItems: NavItem[] = [
     {
-        title: 'Bokningar',
-        href: dashboard(),
-        icon: Lightbulb,
-    },
-            {
-        title: 'Calednars',
-        href: calendars(),
-        icon: LayoutGrid,
+        title: 'Boknings Kalenders NDS#1',
+        href: shadcnEventCalendar(),
+        icon: CalendarDays,
     },
     {
-        title: 'Kalendrar',
-        href: calendar(),
+        title: 'Boknings Kalenders NDS#2',
+        href: app(),
+        icon: CalendarDays,
+    },
+    {
+        title: 'Boknings Kalenders NDS#3',
+        href: dashboard(),
+        icon: CalendarDays,
+    },
+    {
+        title: 'Boknings Kalenders NDS#4',
+        href: bigCalendar(),
+        icon: CalendarDays,
+    },
+            {
+        title: 'Boknings Kalenders NDS#5',
+        href: calendars(),
         icon: CalendarDays,
     },
 
@@ -38,14 +49,14 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'App',
-        href: 'https://ndsth.com/app',
-        icon: Star,
+        title: 'ND Application',
+        href: 'https://ndsth.com/nds/app',
+        icon: Bolt,
     },
     {
-        title: 'Admin',
-        href: 'https://ndsth.com/admin',
-        icon: Bolt,
+        title: 'Administration',
+        href: 'https://ndsth.com/nds/admin',
+        icon: LayoutGrid,
     },
 ];
 

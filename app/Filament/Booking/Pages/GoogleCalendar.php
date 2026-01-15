@@ -11,9 +11,11 @@ class GoogleCalendar extends Page
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-calendar-days';
 
-    protected static ?string $navigationLabel = 'Google Kalender';
+    protected static ?string $navigationLabel = 'Google Sync';
 
     protected static ?string $title = '';
+
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $slug = 'google-calendar';
 }

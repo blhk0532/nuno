@@ -23,7 +23,7 @@ use Adultdate\FilamentBooking\Filament\Widgets\FilamentInfosWidget;
 use Adultdate\FilamentBooking\Filament\Widgets\AccountWidget;
 use Adultdate\FilamentBooking\Filament\Widgets\FullCalendarWidget;
 use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiEventCalendar;
-
+use UnitEnum;
 class DashboardBokning extends BaseDashboard
 {
 
@@ -37,6 +37,8 @@ class DashboardBokning extends BaseDashboard
      protected static ?string $title = 'Calender';
 
     protected static string $routePath = 'service/bokning';
+
+    protected static string|UnitEnum|null $navigationGroup = '';
 
     protected static ?string $slug = 'bokning';
 

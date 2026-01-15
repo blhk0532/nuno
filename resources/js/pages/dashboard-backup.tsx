@@ -1,0 +1,91 @@
+import { PlaceholderPattern } from '@/components/ui/placeholder-pattern';
+import AppLayout from '@/layouts/app-layout';
+import { dashboard } from '@/routes';
+import { type BreadcrumbItem } from '@/types';
+import { Head } from '@inertiajs/react';
+import React from "react";
+import { Calendar } from "@/components/calendar/calendar";
+import { EventCalendarDemo1 } from '@/components/event-calendar-demo1';
+import { EventCalendarDemo2 } from '@/components/event-calendar-demo2';
+import { EventCalendarDemo3 } from '@/components/event-calendar-demo3';
+import { EventCalendarDemo4 } from '@/components/event-calendar-demo4';
+import { EventCalendarDemo5 } from '@/components/event-calendar-demo5';
+import { EventCalendarDemo6 } from '@/components/event-calendar-demo6';
+import { EventCalendarDemo7 } from '@/components/event-calendar-demo7';
+import { EventCalendarDemo8 } from '@/components/event-calendar-demo8';
+import { EventCalendarDemo9 } from '@/components/event-calendar-demo9';
+import { ResourceTimeGridDemo } from '@/components/resource-timegrid-demo';
+import { ResourceTimelineDemo } from '@/components/resource-timeline-demo';
+import { ResourceTimeGridDemo1 } from '@/components/resource-timegrid-demo1';
+import { ResourceTimelineDemo1 } from '@/components/resource-timeline-demo1';
+
+const breadcrumbs: BreadcrumbItem[] = [
+    {
+        title: 'Dashboard',
+        href: dashboard().url,
+    },
+];
+
+export default function Dashboard() {
+    return (
+        <AppLayout breadcrumbs={breadcrumbs}>
+            <Head title="Dashboard" />
+            <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl p-4 bg-background">
+
+                <div className="relative max-h-[600px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                      <Calendar />
+                </div>
+
+                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                    <EventCalendarDemo1 />
+                    </div>
+                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                   <EventCalendarDemo2 />
+                    </div>
+                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                  <EventCalendarDemo3 />
+                    </div>
+                </div>
+
+        <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                   <EventCalendarDemo4 />
+                    </div>
+                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                 <EventCalendarDemo5 />
+                    </div>
+                    <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                  <EventCalendarDemo6 />
+                    </div>
+                </div>
+
+                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                   <EventCalendarDemo7 />
+                    </div>
+                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                  <EventCalendarDemo8 />
+                    </div>
+                    <div className="relative aspect-video overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                  <EventCalendarDemo9 />
+                    </div>
+                </div>
+     <div className="relative max-h-[600px] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                   <ResourceTimeGridDemo />
+                </div>
+
+                      <div className="relative max-h-[333px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                   <ResourceTimelineDemo />
+                </div>
+              <div className="relative max-h-[600px] w-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                 <ResourceTimeGridDemo1 />
+                </div>
+                <div className="relative max-h-[284px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
+                    <ResourceTimelineDemo1 />
+                </div>
+
+            </div>
+        </AppLayout>
+    );
+}

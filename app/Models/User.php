@@ -237,6 +237,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             ->as('membership');
     }
 
+    public function phone_queues(): HasMany
+    {
+        return $this->hasMany(\AdultDate\FilamentDialer\Models\PhoneQueue::class);
+    }
+
     public function getDefaultTenant(Panel $panel): ?Model
     {
         return $this->currentTeam;

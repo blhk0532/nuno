@@ -1,4 +1,3 @@
-import {format, parseISO} from "date-fns";
 import type {FC} from "react";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {
@@ -22,14 +21,14 @@ import {
 import {EventBullet} from "@/components/calendar/views/month-view/event-bullet";
 
 export const AgendaEvents: FC = () => {
-    const {events, use24HourFormat, badgeVariant, agendaModeGroupBy, selectedDate} =
+    const {events, use24HourFormat, badgeVariant, agendaModeGroupBy, selectedDate, formatDate, timezone} =
         useCalendar();
 
     const monthEvents = getEventsForMonth(events, selectedDate)
 
     const agendaEvents = Object.groupBy(monthEvents, (event) => {
         return agendaModeGroupBy === "date"
-            ? format(parseISO(event.startDate), "yyyy-MM-dd")
+            ? formatDate(event.startDate, "yyyy-MM-dd")
             : event.color;
     });
 
@@ -48,7 +47,7 @@ export const AgendaEvents: FC = () => {
                         key={date}
                         heading={
                             agendaModeGroupBy === "date"
-                                ? format(parseISO(date), "EEEE, MMMM d, yyyy")
+                                ? formatDate(date, "EEEE, MMMM d, yyyy")
                                 : toCapitalize(groupedEvents![0].color)
                         }
                     >
@@ -96,21 +95,21 @@ export const AgendaEvents: FC = () => {
                                             {agendaModeGroupBy === "date" ? (
                                                 <>
                                                     <p className="text-sm">
-                                                        {formatTime(event.startDate, use24HourFormat)}
+                                                        {formatTime(event.startDate, use24HourFormat, timezone)}
                                                     </p>
                                                     <span className="text-muted-foreground">-</span>
                                                     <p className="text-sm">
-                                                        {formatTime(event.endDate, use24HourFormat)}
+                                                        {formatTime(event.endDate, use24HourFormat, timezone)}
                                                     </p>
                                                 </>
                                             ) : (
                                                 <>
                                                     <p className="text-sm">
-                                                        {format(event.startDate, "MM/dd/yyyy")}
+                                                        {formatDate(event.startDate, "MM/dd/yyyy")}
                                                     </p>
                                                     <span className="text-sm">at</span>
                                                     <p className="text-sm">
-                                                        {formatTime(event.startDate, use24HourFormat)}
+                                                        {formatTime(event.startDate, use24HourFormat, timezone)}
                                                     </p>
                                                 </>
                                             )}

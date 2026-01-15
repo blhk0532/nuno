@@ -25,7 +25,7 @@ class DashboardBooking extends BaseDashboard
 
     protected static ?string $navigationLabel = 'Dash';
 
-     protected static ?string $title = 'Kalender';
+     protected static ?string $title = 'Calendar';
 
         protected static ?int $navigationSort = -1;
 
@@ -58,13 +58,13 @@ public function getMaxContentWidth(): Width
 
     public static function getNavigationLabel(): string
     {
-        return '' . Str::ucfirst('Kalender') ?? 'User';
+        return '' . Str::ucfirst('Calendar') ?? 'User';
     }
 
     public static function getNavigationBadge(): ?string
     {
         //  return now()->format('H:m');
-     return now()->timezone('Europe/Stockholm')->format('H:i');
+     return 'x1';
     }
 
     public static function getNavigationBadgeColor(): ?string

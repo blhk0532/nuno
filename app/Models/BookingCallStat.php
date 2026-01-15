@@ -41,6 +41,6 @@ class BookingCallStat extends Model
 
     public function booking(): BelongsTo
     {
-        return $this->belongsTo(\Adultdate\FilamentBooking\Models\Booking\Booking::class, 'booking_id');
+        return $this->belongsTo(\App\Models\Booking\Booking::class, 'booking_id');
     }
 }

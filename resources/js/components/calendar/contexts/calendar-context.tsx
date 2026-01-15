@@ -8,6 +8,7 @@ import type {
 	TCalendarView,
 	TEventColor,
 } from "@/components/calendar/types";
+import { formatInTimeZone } from "date-fns-tz";
 
 interface ICalendarContext {
 	selectedDate: Date;
@@ -17,6 +18,12 @@ interface ICalendarContext {
 	setAgendaModeGroupBy: (groupBy: "date" | "color") => void;
 	use24HourFormat: boolean;
 	toggleTimeFormat: () => void;
+	timezone: string;
+	setTimezone: (timezone: string) => void;
+	startHour: number;
+	endHour: number;
+	setWorkingHours: (startHour: number, endHour: number) => void;
+	formatDate: (date: Date | string, formatString: string) => string;
 	setSelectedDate: (date: Date | undefined) => void;
 	selectedUserId: IUser["id"] | "all";
 	setSelectedUserId: (userId: IUser["id"] | "all") => void;
@@ -38,6 +45,9 @@ interface CalendarSettings {
 	view: TCalendarView;
 	use24HourFormat: boolean;
 	agendaModeGroupBy: "date" | "color";
+	timezone: string;
+	startHour: number;
+	endHour: number;
 }
 
 const DEFAULT_SETTINGS: CalendarSettings = {
@@ -45,6 +55,9 @@ const DEFAULT_SETTINGS: CalendarSettings = {
 	view: "day",
 	use24HourFormat: true,
 	agendaModeGroupBy: "date",
+	timezone: "Europe/Stockholm",
+	startHour: 7,
+	endHour: 17,
 };
 
 const CalendarContext = createContext({} as ICalendarContext);
@@ -83,6 +96,9 @@ export function CalendarProvider({
 	const [agendaModeGroupBy, setAgendaModeGroupByState] = useState<
 		"date" | "color"
 	>(settings.agendaModeGroupBy);
+	const [timezone, setTimezoneState] = useState<string>(settings.timezone);
+	const [startHour, setStartHourState] = useState<number>(settings.startHour);
+	const [endHour, setEndHourState] = useState<number>(settings.endHour);
 
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [selectedUserId, setSelectedUserId] = useState<IUser["id"] | "all">(
@@ -119,6 +135,17 @@ export function CalendarProvider({
 	const setAgendaModeGroupBy = (groupBy: "date" | "color") => {
 		setAgendaModeGroupByState(groupBy);
 		updateSettings({ agendaModeGroupBy: groupBy });
+	};
+
+	const setTimezone = (newTimezone: string) => {
+		setTimezoneState(newTimezone);
+		updateSettings({ timezone: newTimezone });
+	};
+
+	const setWorkingHours = (newStartHour: number, newEndHour: number) => {
+		setStartHourState(newStartHour);
+		setEndHourState(newEndHour);
+		updateSettings({ startHour: newStartHour, endHour: newEndHour });
 	};
 
 	const filterEventsBySelectedColors = (color: TEventColor) => {
@@ -184,6 +211,11 @@ export function CalendarProvider({
 		setSelectedUserId("all");
 	};
 
+	const formatDate = (date: Date | string, formatString: string): string => {
+		const dateObj = typeof date === "string" ? new Date(date) : date;
+		return formatInTimeZone(dateObj, timezone, formatString);
+	};
+
 	const value = {
 		selectedDate,
 		setSelectedDate: handleSelectDate,
@@ -202,6 +234,12 @@ export function CalendarProvider({
 		setView,
 		agendaModeGroupBy,
 		setAgendaModeGroupBy,
+		timezone,
+		setTimezone,
+		startHour,
+		endHour,
+		setWorkingHours,
+		formatDate,
 		addEvent,
 		updateEvent,
 		removeEvent,

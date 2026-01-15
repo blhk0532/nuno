@@ -70,7 +70,7 @@ export function MonthEventBadge({
 	className,
 	position: propPosition,
 }: IProps) {
-	const { badgeVariant, use24HourFormat } = useCalendar();
+	const { badgeVariant, use24HourFormat, timezone } = useCalendar();
 
 	const itemStart = startOfDay(parseISO(event.startDate));
 	const itemEnd = endOfDay(parseISO(event.endDate));
@@ -129,7 +129,7 @@ export function MonthEventBadge({
 					<div className="hidden sm:block">
 						{renderBadgeTime && (
 							<span>
-							{formatTime(new Date(event.startDate), use24HourFormat)}
+							{formatTime(new Date(event.startDate), use24HourFormat, timezone)}
 						</span>
 						)}
 					</div>

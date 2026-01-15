@@ -3,7 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Http\Middleware\FilamentPanelAccess;
-use AchyutN\FilamentLogViewer\FilamentLogViewer;
+
 use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
 use Adultdate\FilamentBooking\Filament\Pages\CalendarSettingsPage;
 use Adultdate\FilamentBooking\Filament\Resources\Booking\BookingOutcallQueues\BookingOutcallQueueResource;
@@ -26,13 +26,9 @@ use App\Models\User;
 use Asmit\ResizedColumn\ResizedColumnPlugin;
 use Awcodes\Overlook\OverlookPlugin;
 use Awcodes\Overlook\Widgets\OverlookWidget;
-use BezhanSalleh\FilamentExceptions\FilamentExceptionsPlugin;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-use BinaryBuilds\CommandRunner\CommandRunnerPlugin;
-use BinaryBuilds\FilamentCacheManager\FilamentCacheManagerPlugin;
-use BinaryBuilds\FilamentFailedJobs\FilamentFailedJobsPlugin;
-use Bytexr\QueueableBulkActions\Enums\StatusEnum;
-use Bytexr\QueueableBulkActions\QueueableBulkActionsPlugin;
+use Filament\Navigation\MenuItem;
+
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
 use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
@@ -66,11 +62,20 @@ use MWGuerra\FileManager\Filament\Pages\SchemaExample;
 use MWGuerra\FileManager\Filament\Resources\FileSystemItemResource;
 use MWGuerra\FileManager\FileManagerPlugin;
 use pxlrbt\FilamentSpotlight\SpotlightPlugin;
-use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
+
 use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
 use WallaceMartinss\FilamentEvolution\FilamentEvolutionPlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 
+use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
+use Bytexr\QueueableBulkActions\Enums\StatusEnum;
+use Bytexr\QueueableBulkActions\QueueableBulkActionsPlugin;
+use BinaryBuilds\CommandRunner\CommandRunnerPlugin;
+use BinaryBuilds\FilamentCacheManager\FilamentCacheManagerPlugin;
+use BinaryBuilds\FilamentFailedJobs\FilamentFailedJobsPlugin;
+use BezhanSalleh\FilamentExceptions\FilamentExceptionsPlugin;
+use AchyutN\FilamentLogViewer\FilamentLogViewer;
+use Devtical\Sanctum\SanctumPlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -98,7 +103,6 @@ class AdminPanelProvider extends PanelProvider
             ->emailVerification(false)
             ->emailChangeVerification()
             ->spa()
-
             ->navigationGroups([
                 NavigationGroup::make('Account')
                     ->icon('heroicon-o-user-circle'),
@@ -295,7 +299,7 @@ class AdminPanelProvider extends PanelProvider
                     ->modalHeading('Switch Panels')
                     ->modalSubmitAction(false)
                     ->modalCancelAction(false)
-                    ->sort(-1)
+                    ->sort(1)
                     ->modalContent(function () {
                         $user = Auth::user();
                         $panels = collect(filament()->getPanels())->filter(function ($panel) use ($user) {
@@ -304,6 +308,10 @@ class AdminPanelProvider extends PanelProvider
 
                         return view('switch-panels-modal', ['panels' => $panels]);
                     }),
+                Action::make()
+                    ->label(trans('Sanctum'))
+                    ->url($panel->getPath().'/'.config('filament-sanctum.navigation.slug'))
+                    ->icon(config('filament-sanctum.navigation.icon', 'heroicon-o-finger-print')),
             ])
             ->plugin(
                 FilamentShieldPlugin::make()

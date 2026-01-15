@@ -37,7 +37,7 @@ export function EventDropConfirmationDialog({
                                                 onCancel,
                                             }: EventDropConfirmationDialogProps) {
 
-    const {use24HourFormat} = useCalendar();
+    const {use24HourFormat, timezone} = useCalendar();
 
     if (!event || !newStartDate || !newEndDate) {
         return null;
@@ -46,7 +46,7 @@ export function EventDropConfirmationDialog({
     const originalStart = new Date(event.startDate);
 
     const formatDate = (date: Date) => {
-        return format(date, "MMM dd, yyyy 'at '") + formatTime(date, use24HourFormat);
+        return format(date, "MMM dd, yyyy 'at '") + formatTime(date, use24HourFormat, timezone);
     };
 
     const handleConfirm = () => {

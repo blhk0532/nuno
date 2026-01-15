@@ -13,12 +13,12 @@ import { CalendarSkeleton } from "@/components/calendar/skeletons/calendar-skele
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Calendars',
-        href: dashboard().url,
+        title: 'Booking',
+        href: '/booking',
     },
 ];
 
-export default function Calendars() {
+export default function Booking() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />

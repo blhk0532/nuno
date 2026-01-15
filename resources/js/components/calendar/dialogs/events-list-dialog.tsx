@@ -1,4 +1,3 @@
-import {format} from "date-fns";
 import type {ReactNode} from "react";
 import {
     Modal,
@@ -30,7 +29,7 @@ export function EventListDialog({
                                 }: EventListDialogProps) {
     const cellEvents = events;
     const hiddenEventsCount = Math.max(cellEvents.length - maxVisibleEvents, 0);
-    const {badgeVariant, use24HourFormat} = useCalendar();
+    const {badgeVariant, use24HourFormat, formatDate, timezone} = useCalendar();
 
     const defaultTrigger = (
         <span className="cursor-pointer">
@@ -51,7 +50,7 @@ export function EventListDialog({
                         <div className="flex items-center gap-2">
                             <EventBullet color={cellEvents[0]?.color} className=""/>
                             <p className="text-sm font-medium">
-                                Events on {format(date, "EEEE, MMMM d, yyyy")}
+                                Events on {formatDate(date, "EEEE, MMMM d, yyyy")}
                             </p>
                         </div>
                     </ModalTitle>
@@ -73,7 +72,7 @@ export function EventListDialog({
                                         <div className="flex justify-between items-center w-full">
                                             <p className="text-sm font-medium">{event.title}</p>
                                             <p className="text-xs">
-                                                {formatTime(event.startDate, use24HourFormat)}
+                                                {formatTime(event.startDate, use24HourFormat, timezone)}
                                             </p>
                                         </div>
                                 </div>

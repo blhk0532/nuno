@@ -195,7 +195,7 @@ class Booking extends Model
                         $bookingNumber = 'BK-' . strrev($timeStamp) . '-NDS-' . $dateStamp . '-' . $timeStamp;
         $baseTitle = ($this->client?->address ?? '') . '  '  . ($this->client?->city ?? '');
 
-        return [ 
+        return [
             'id' => $this->id,
             'title' => $baseTitle,
             'start' => $start,
@@ -216,8 +216,8 @@ class Booking extends Model
                 'service_user' => $this->serviceUser?->name,
                 'booking_user' => $this->bookingUser?->name,
                 'booking_user_id' => $this->bookingUser?->id,
-                'location' => $this->location?->name,
-                'displayLocation' => $this->location?->name,
+                'location' => $this->bookingLocation?->name ?? $this->location,
+                'displayLocation' => $this->bookingLocation?->name ?? $this->location,
                 // Model FQCN used by calendar to select custom event content
                 'model' => static::class,
                 'status' => $this->status?->value,

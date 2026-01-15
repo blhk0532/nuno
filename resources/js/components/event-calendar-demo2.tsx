@@ -13,6 +13,9 @@ export function EventCalendarDemo2() {
       locale='sv'
       initialView='timeGridWeek'
       timeZone='UTC'
+    slotMinTime="07:00:00"
+    slotMaxTime="17:00:00"
+    slotDuration="01:00:00"
       events='calendar/events?resourceId=17'
       addButton={{
         text: 'Tekniker 2',

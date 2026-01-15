@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <script defer src="https://cloud.umami.is/script.js" data-website-id="d808ea76-a668-41c1-be52-d3cd132e91e9"></script>
         {{-- Inline script to detect system dark mode preference and apply it immediately --}}
         <script>

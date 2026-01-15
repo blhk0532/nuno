@@ -20,7 +20,7 @@ class ChatDashboard extends Page
 
     protected static ?string $title = '';
 
-     protected static string|UnitEnum|null $navigationGroup = '';
+     protected static string|UnitEnum|null $navigationGroup = ' ';
 
     protected static ?string $navigationLabel = 'Chats';
 
@@ -30,7 +30,7 @@ class ChatDashboard extends Page
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-chat-bubble-left-ellipsis';
 
-    protected static bool $shouldRegisterNavigation = true;
+    protected static bool $shouldRegisterNavigation = false;
 
     protected function getHeaderWidgets(): array
     {
@@ -47,6 +47,11 @@ class ChatDashboard extends Page
     public function getMaxContentWidth(): Width
     {
         return Width::Full;
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return $panel ?? 'Chats';
     }
 
     /**

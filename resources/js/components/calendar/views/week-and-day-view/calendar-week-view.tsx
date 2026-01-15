@@ -24,7 +24,7 @@ interface IProps {
 }
 
 export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
-    const {selectedDate, use24HourFormat} = useCalendar();
+    const {selectedDate, use24HourFormat, formatDate} = useCalendar();
 
     const weekStart = startOfWeek(selectedDate);
     const weekDays = Array.from({length: 7}, (_, i) => addDays(weekStart, i));
@@ -78,16 +78,16 @@ export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
                                 >
                                     {/* Mobile: Show only day abbreviation and number */}
                                     <span className="block sm:hidden">
-									{format(day, "EEE").charAt(0)}
+									{formatDate(day, "EEE").charAt(0)}
                                         <span className="block font-semibold text-t-secondary text-xs">
-										{format(day, "d")}
+										{formatDate(day, "d")}
 									</span>
 								</span>
                                     {/* Desktop: Show full format */}
                                     <span className="hidden sm:inline">
-									{format(day, "EE")}{" "}
+									{formatDate(day, "EE")}{" "}
                                         <span className="ml-1 font-semibold text-t-secondary">
-										{format(day, "d")}
+										{formatDate(day, "d")}
 									</span>
 								</span>
                                 </motion.span>
@@ -113,7 +113,7 @@ export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
                                     <div className="absolute -top-3 right-2 flex h-6 items-center">
                                         {index !== 0 && (
                                             <span className="text-xs text-t-quaternary">
-												{format(
+												{formatDate(
                                                     new Date().setHours(hour, 0, 0, 0),
                                                     use24HourFormat ? "HH:00" : "h a",
                                                 )}

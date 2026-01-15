@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\CalendarBookingController;
+use App\Http\Controllers\Api\CalendarDataController;
 use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\CalendarResourceController;
 use App\Http\Controllers\SessionController;
@@ -22,16 +24,48 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::prefix('api/calendar')->group(function (): void {
+    Route::get('bookings/public', [CalendarBookingController::class, 'publicIndex']);
+});
+
 Route::middleware(['web', 'inertia', 'auth', 'verified'])->group(function (): void {
     Route::get('dashboard', fn () => Inertia::render('dashboard'))->name('dashboard');
     Route::get('app', fn () => Inertia::render('app'))->name('app');
+    Route::get('bokningar', fn () => Inertia::render('bokningar'))->name('bokningar');
 });
 
 Route::middleware(['web', 'inertia', 'auth', 'verified'])->group(function (): void {
     Route::get('calendar', fn () => Inertia::render('calendar'))->name('calendar');
     Route::get('calendars', fn () => Inertia::render('calendars'))->name('calendars');
+    Route::get('calendar-one', fn () => Inertia::render('calendar-one'))->name('calendar-one');
+    Route::get('calendar-two', fn () => Inertia::render('calendar-two'))->name('calendar-two');
+    Route::get('calendar-multi', fn () => Inertia::render('calendar-multi'))->name('calendar-multi');
+    Route::get('calendar-example', fn () => Inertia::render('calendar-example'))->name('calendar-example');
+    Route::get('big-calendar', fn () => Inertia::render('big-calendar'))->name('big-calendar');
+    Route::get('full-calendar', fn () => Inertia::render('full-calendar'))->name('full-calendar');
+    Route::get('shadcn-event-calendar', fn () => Inertia::render('shadcn-event-calendar'))->name('shadcn-event-calendar');
+    Route::get('booking-calendar', fn () => Inertia::render('booking-calendar'))->name('booking-calendar');
     Route::get('calendar/events', CalendarEventController::class)->name('calendar.events');
     Route::get('calendar/resources', CalendarResourceController::class)->name('calendar.resources');
+
+    // API routes for calendar booking operations
+    Route::prefix('api/calendar')->group(function (): void {
+        Route::get('bookings', [CalendarBookingController::class, 'index']);
+        Route::post('bookings', [CalendarBookingController::class, 'store']);
+        Route::put('bookings/{booking}', [CalendarBookingController::class, 'update']);
+        Route::delete('bookings/{booking}', [CalendarBookingController::class, 'destroy']);
+        Route::patch('bookings/{booking}/move', [CalendarBookingController::class, 'move']);
+        Route::patch('bookings/{booking}/resize', [CalendarBookingController::class, 'resize']);
+
+        // API routes for calendar data
+        Route::get('clients', [CalendarDataController::class, 'clients']);
+        Route::get('services', [CalendarDataController::class, 'services']);
+        Route::get('locations', [CalendarDataController::class, 'locations']);
+        Route::get('service-users', [CalendarDataController::class, 'serviceUsers']);
+        Route::get('calendars', [CalendarDataController::class, 'calendars']);
+        Route::get('categories', [CalendarDataController::class, 'categories']);
+        Route::get('stats', [CalendarDataController::class, 'bookingStats']);
+    });
 });
 
 Route::middleware(['web', 'inertia', 'auth'])->group(function (): void {

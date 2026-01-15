@@ -51,12 +51,12 @@ class DashboardBokning extends BaseDashboard
 
     public static function getNavigationLabel(): string
     {
-        return '' . Str::ucfirst('Bokning') ?? 'User';
+        return '' . Str::ucfirst('Kalender') ?? 'User';
     }
 
     public static function getNavigationBadge(): ?string
     {
-          return now()->timezone('Europe/Stockholm')->format('H:i');
+          return 'x3';
 
     }
 

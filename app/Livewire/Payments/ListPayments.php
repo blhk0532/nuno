@@ -3,7 +3,7 @@
 namespace App\Livewire\Payments;
 
 use App\Enums\PaymentStatus;
-use App\Filament\Resources\Incomes\IncomeResource;
+use App\Filament\Finance\Resources\Incomes\IncomeResource;
 use App\Models\Income;
 use App\Services\PaymentDueService;
 use Filament\Actions\Action;

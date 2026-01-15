@@ -14,3 +14,12 @@ display:none!important;
 li.fi-sidebar-item.fi-active.fi-sidebar-item-has-url {
 
 }
+nav.fi-sidebar {
+display:none!important;
+}
+.fi-sidebar {
+display:none!important;
+}
+.fi-page-header-main-ctn {
+padding: 0px!important;
+}

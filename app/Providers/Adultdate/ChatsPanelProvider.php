@@ -19,6 +19,7 @@ class ChatsPanelProvider extends PanelProvider
             ->chatsSearch()
             ->emojiPicker(position: EmojiPickerPosition::Docked)
             ->webPushNotifications()
+            ->heart()
             ->messagesQueue('messages')
             ->eventsQueue('default')
           //   ->layout('layouts.app')

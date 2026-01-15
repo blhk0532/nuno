@@ -24,7 +24,7 @@ class CallingLogResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-phone-arrow-up-right';
 
-    protected static string|UnitEnum|null $navigationGroup = '';
+    protected static string|UnitEnum|null $navigationGroup = ' ';
 
     // Disable tenant scoping for this resource (no `team` relationship on CallingLog).
     protected static bool $isScopedToTenant = false;

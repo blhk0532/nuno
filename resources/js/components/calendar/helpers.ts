@@ -25,6 +25,7 @@ import {
 	subWeeks,
 	subYears,
 } from "date-fns";
+import { formatInTimeZone } from "date-fns-tz";
 import { useCalendar } from "@/components/calendar/contexts/calendar-context";
 import type {
 	ICalendarCell,
@@ -281,10 +282,15 @@ export function getMonthCellEvents(
 export function formatTime(
 	date: Date | string,
 	use24HourFormat: boolean,
+	timezone?: string,
 ): string {
 	const parsedDate = typeof date === "string" ? parseISO(date) : date;
 	if (!isValid(parsedDate)) return "";
-	return format(parsedDate, use24HourFormat ? "HH:mm" : "h:mm a");
+	const formatString = use24HourFormat ? "HH:mm" : "h:mm a";
+	if (timezone) {
+		return formatInTimeZone(parsedDate, timezone, formatString);
+	}
+	return format(parsedDate, formatString);
 }
 
 export const getFirstLetters = (str: string): string => {

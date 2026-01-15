@@ -36,6 +36,8 @@ export function Settings() {
 		setView,
 		agendaModeGroupBy,
 		setAgendaModeGroupBy,
+		timezone,
+		setTimezone,
 	} = useCalendar();
 	const { showConfirmation, setShowConfirmation } = useDragDrop();
 	const { theme, setTheme } = useTheme();
@@ -157,6 +159,19 @@ export function Settings() {
 							/>
 						</DropdownMenuShortcut>
 					</DropdownMenuItem>
+				</DropdownMenuGroup>
+				<DropdownMenuSeparator />
+				<DropdownMenuGroup>
+					<DropdownMenuLabel>Timezone</DropdownMenuLabel>
+					<DropdownMenuRadioGroup
+						value={timezone}
+						onValueChange={setTimezone}
+					>
+						<DropdownMenuRadioItem value="Europe/Stockholm">Stockholm (CET/CEST)</DropdownMenuRadioItem>
+						<DropdownMenuRadioItem value="UTC">UTC</DropdownMenuRadioItem>
+						<DropdownMenuRadioItem value="Europe/London">London (GMT/BST)</DropdownMenuRadioItem>
+						<DropdownMenuRadioItem value="America/New_York">New York (EST/EDT)</DropdownMenuRadioItem>
+					</DropdownMenuRadioGroup>
 				</DropdownMenuGroup>
 				<DropdownMenuSeparator />
 				<DropdownMenuGroup>

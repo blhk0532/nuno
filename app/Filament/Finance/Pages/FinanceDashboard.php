@@ -24,9 +24,9 @@ class FinanceDashboard extends BaseDashboard
 
     protected static ?string $slug = 'dashboard';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = -10;
 
-    protected static ?int $sort = 0;
+    protected static ?int $sort = -10;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChartPie;
 

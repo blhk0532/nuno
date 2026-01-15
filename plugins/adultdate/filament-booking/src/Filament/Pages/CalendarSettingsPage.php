@@ -122,7 +122,11 @@ final class CalendarSettingsPage extends Page implements HasForms
 
                     Select::make('calendar_theme')
                         ->label('Calendar Theme')
-                        ->enum(CalendarTheme::class)
+                        ->options([
+                            'standard' => 'Standard',
+                            'bootstrap' => 'Bootstrap',
+                            'bootstrap5' => 'Bootstrap5',
+                        ])
                         ->default('standard'),
 
                     TextInput::make('confirmation_sms_number')

@@ -29,17 +29,6 @@ final class DatabaseSeeder extends Seeder
                 'email_verified_at' => now(),
             ]
         );
-        //    Super::firstOrCreate(
-        //        ['email' => 'admin@ndsth.com'],
-        //        [
-        //            'name' => 'admin',
-        //            'role' => 'admin',
-        //            'password' => 'bkkbkk',
-        //            'email_verified_at' => now(),
-        //        ]
-        //    );
-
-        // Admin
 
         Admin::firstOrCreate(
             ['email' => 'super@ndsth.com'],
@@ -122,34 +111,7 @@ final class DatabaseSeeder extends Seeder
             [
                 'name' => 'Berit',
                 'role' => 'manager',
-                'password' => 'qwe321asd',
-                'email_verified_at' => now(),
-            ]
-        );
-        User::firstOrCreate(
-            ['email' => 'bokning1@ndsth.com'],
-            [
-                'name' => 'Bokning1',
-                'role' => 'booking',
-                'password' => 'qwe321asd',
-                'email_verified_at' => now(),
-            ]
-        );
-        User::firstOrCreate(
-            ['email' => 'bokning2@ndsth.com'],
-            [
-                'name' => 'Bokning2',
-                'role' => 'booking',
-                'password' => 'qwe321asd',
-                'email_verified_at' => now(),
-            ]
-        );
-        User::firstOrCreate(
-            ['email' => 'bokning3@ndsth.com'],
-            [
-                'name' => 'Bokning3',
-                'role' => 'booking',
-                'password' => 'qwe321asd',
+                'password' => 'manager123',
                 'email_verified_at' => now(),
             ]
         );
@@ -158,7 +120,7 @@ final class DatabaseSeeder extends Seeder
             [
                 'name' => 'Manager1',
                 'role' => 'manager',
-                'password' => 'qwe321asd',
+                'password' => 'manager123',
                 'email_verified_at' => now(),
             ]
         );
@@ -167,61 +129,133 @@ final class DatabaseSeeder extends Seeder
             [
                 'name' => 'Manager2',
                 'role' => 'manager',
-                'password' => 'qwe321asd',
+                'password' => 'manager123',
                 'email_verified_at' => now(),
             ]
         );
         User::firstOrCreate(
-            ['email' => 'guest@ndsth.com'],
+            ['email' => 'manager3@ndsth.com'],
             [
-                'name' => 'Guest',
-                'role' => 'guest',
-                'password' => 'qwe321asd',
+                'name' => 'Manager3',
+                'role' => 'manager',
+                'password' => 'manager123',
                 'email_verified_at' => now(),
             ]
         );
         User::firstOrCreate(
-            ['email' => 'user1@ndsth.com'],
+            ['email' => 'bokning1@ndsth.com'],
             [
-                'name' => 'User 1',
-                'role' => 'user',
-                'password' => 'qwe321asd',
+                'name' => 'Bokning1',
+                'role' => 'booking',
+                'password' => 'booking123',
                 'email_verified_at' => now(),
             ]
         );
         User::firstOrCreate(
-            ['email' => 'user2@ndsth.com'],
+            ['email' => 'bokning2@ndsth.com'],
             [
-                'name' => 'User 2',
-                'role' => 'user',
-                'password' => 'qwe321asd',
+                'name' => 'Bokning2',
+                'role' => 'booking',
+                'password' => 'booking123',
                 'email_verified_at' => now(),
             ]
         );
         User::firstOrCreate(
-            ['email' => 'user3@ndsth.com'],
+            ['email' => 'bokning3@ndsth.com'],
             [
-                'name' => 'User 3',
-                'role' => 'user',
-                'password' => 'qwe321asd',
+                'name' => 'Bokning3',
+                'role' => 'booking',
+                'password' => 'booking123',
                 'email_verified_at' => now(),
             ]
         );
-        User::firstOrCreate(
-            ['email' => 'user4@ndsth.com'],
+                User::firstOrCreate(
+            ['email' => 'bokning4@ndsth.com'],
             [
-                'name' => 'User 4',
-                'role' => 'user',
-                'password' => 'qwe321asd',
+                'name' => 'Bokning4',
+                'role' => 'booking',
+                'password' => 'booking123',
                 'email_verified_at' => now(),
             ]
         );
         User::firstOrCreate(
+            ['email' => 'bokning5@ndsth.com'],
+            [
+                'name' => 'Bokning5',
+                'role' => 'booking',
+                'password' => 'booking123',
+                'email_verified_at' => now(),
+            ]
+        );
+        User::firstOrCreate(
+            ['email' => 'bokning6@ndsth.com'],
+            [
+                'name' => 'Bokning6',
+                'role' => 'booking',
+                'password' => 'booking123',
+                'email_verified_at' => now(),
+            ]
+        );
+                User::firstOrCreate(
+            ['email' => 'bokning7@ndsth.com'],
+            [
+                'name' => 'Bokning7',
+                'role' => 'booking',
+                'password' => 'booking123',
+                'email_verified_at' => now(),
+            ]
+        );
+        User::firstOrCreate(
+            ['email' => 'bokning8@ndsth.com'],
+            [
+                'name' => 'Bokning8',
+                'role' => 'booking',
+                'password' => 'booking123',
+                'email_verified_at' => now(),
+            ]
+        );
+        User::firstOrCreate(
+            ['email' => 'bokning9@ndsth.com'],
+            [
+                'name' => 'Bokning9',
+                'role' => 'booking',
+                'password' => 'booking123',
+                'email_verified_at' => now(),
+            ]
+        );
+                User::firstOrCreate(
+            ['email' => 'bokning10@ndsth.com'],
+            [
+                'name' => 'Bokning10',
+                'role' => 'booking',
+                'password' => 'booking123',
+                'email_verified_at' => now(),
+            ]
+        );
+        User::firstOrCreate(
+            ['email' => 'bokning11@ndsth.com'],
+            [
+                'name' => 'Bokning11',
+                'role' => 'booking',
+                'password' => 'booking123',
+                'email_verified_at' => now(),
+            ]
+        );
+        User::firstOrCreate(
+            ['email' => 'bokning12@ndsth.com'],
+            [
+                'name' => 'Bokning12',
+                'role' => 'booking',
+                'password' => 'booking123',
+                'email_verified_at' => now(),
+            ]
+        );
+                User::firstOrCreate(
             ['email' => 'service1@example.com'],
             [
                 'name' => 'Tekniker 1',
                 'role' => 'service',
-                'password' => 'qwe321asd',
+                'password' => 'service123',
                 'email_verified_at' => now(),
             ]
         );
@@ -230,7 +264,7 @@ final class DatabaseSeeder extends Seeder
             [
                 'name' => 'Tekniker 2',
                 'role' => 'service',
-                'password' => 'qwe321asd',
+                'password' => 'service123',
                 'email_verified_at' => now(),
             ]
         );
@@ -239,16 +273,100 @@ final class DatabaseSeeder extends Seeder
             [
                 'name' => 'Tekniker 3',
                 'role' => 'service',
-                'password' => 'qwe321asd',
+                'password' => 'service123',
+                'email_verified_at' => now(),
+            ]
+        );
+    //   User::firstOrCreate(
+    //       ['email' => 'service4@example.com'],
+    //       [
+    //           'name' => 'Tekniker 4',
+    //           'role' => 'service',
+    //           'password' => 'service123',
+    //           'email_verified_at' => now(),
+    //       ]
+    //   );
+    //           User::firstOrCreate(
+    //       ['email' => 'service5@example.com'],
+    //       [
+    //           'name' => 'Tekniker 5',
+    //           'role' => 'service',
+    //           'password' => 'service123',
+    //           'email_verified_at' => now(),
+    //       ]
+    //   );
+    //   User::firstOrCreate(
+    //       ['email' => 'service6@example.com'],
+    //       [
+    //           'name' => 'Tekniker 6',
+    //           'role' => 'service',
+    //           'password' => 'service123',
+    //           'email_verified_at' => now(),
+    //       ]
+    //   );
+
+        User::firstOrCreate(
+            ['email' => 'partner1@ndsth.com'],
+            [
+                'name' => 'Partner 1',
+                'role' => 'partner',
+                'password' => 'partner123',
                 'email_verified_at' => now(),
             ]
         );
         User::firstOrCreate(
-            ['email' => 'service4@example.com'],
+            ['email' => 'partner2@ndsth.com'],
             [
-                'name' => 'Tekniker 4',
-                'role' => 'service',
-                'password' => 'qwe321asd',
+                'name' => 'Partner 2',
+                'role' => 'partner',
+                'password' => 'partner123',
+                'email_verified_at' => now(),
+            ]
+        );
+        User::firstOrCreate(
+            ['email' => 'partner3@ndsth.com'],
+            [
+                'name' => 'Partner 3',
+                'role' => 'partner',
+                'password' => 'partner123',
+                'email_verified_at' => now(),
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'user1@ndsth.com'],
+            [
+                'name' => 'User 1',
+                'role' => 'user',
+                'password' => 'user123',
+                'email_verified_at' => now(),
+            ]
+        );
+        User::firstOrCreate(
+            ['email' => 'user2@ndsth.com'],
+            [
+                'name' => 'User 2',
+                'role' => 'user',
+                'password' => 'user123',
+                'email_verified_at' => now(),
+            ]
+        );
+        User::firstOrCreate(
+            ['email' => 'user3@ndsth.com'],
+            [
+                'name' => 'User 3',
+                'role' => 'user',
+                'password' => 'user123',
+                'email_verified_at' => now(),
+            ]
+        );
+
+        User::firstOrCreate(
+            ['email' => 'guest@ndsth.com'],
+            [
+                'name' => 'Guest',
+                'role' => 'guest',
+                'password' => 'guest123',
                 'email_verified_at' => now(),
             ]
         );
@@ -260,7 +378,7 @@ final class DatabaseSeeder extends Seeder
             [
                 'name' => 'Tekniker 1',
                 'role' => 'service',
-                'password' => 'qwe321asd',
+                'password' => 'service123',
                 'email_verified_at' => now(),
             ]
         );
@@ -269,7 +387,7 @@ final class DatabaseSeeder extends Seeder
             [
                 'name' => 'Tekniker 2',
                 'role' => 'service',
-                'password' => 'qwe321asd',
+                'password' => 'service123',
                 'email_verified_at' => now(),
             ]
         );
@@ -278,19 +396,37 @@ final class DatabaseSeeder extends Seeder
             [
                 'name' => 'Tekniker 3',
                 'role' => 'service',
-                'password' => 'qwe321asd',
+                'password' => 'service123',
                 'email_verified_at' => now(),
             ]
         );
-        Service::firstOrCreate(
-            ['email' => 'service4@example.com'],
-            [
-                'name' => 'Tekniker 4',
-                'role' => 'service',
-                'password' => 'qwe321asd',
-                'email_verified_at' => now(),
-            ]
-        );
+    //    Service::firstOrCreate(
+    //        ['email' => 'service4@example.com'],
+    //        [
+    //            'name' => 'Tekniker 4',
+    //            'role' => 'service',
+    //            'password' => 'service123',
+    //            'email_verified_at' => now(),
+    //        ]
+    //    );
+    //    Service::firstOrCreate(
+    //        ['email' => 'service5@example.com'],
+    //        [
+    //            'name' => 'Tekniker 5',
+    //            'role' => 'service',
+    //            'password' => 'service123',
+    //            'email_verified_at' => now(),
+    //        ]
+    //    );
+    //    Service::firstOrCreate(
+    //        ['email' => 'service6@example.com'],
+    //        [
+    //            'name' => 'Tekniker 6',
+    //            'role' => 'service',
+    //            'password' => 'service123',
+    //            'email_verified_at' => now(),
+    //        ]
+    //    );
 
         // Partner
 
@@ -299,7 +435,7 @@ final class DatabaseSeeder extends Seeder
             [
                 'name' => 'Partner 1',
                 'role' => 'partner',
-                'password' => 'qwe321asd',
+                'password' => 'partner123',
                 'email_verified_at' => now(),
             ]
         );
@@ -307,12 +443,20 @@ final class DatabaseSeeder extends Seeder
             ['email' => 'partner2@example.com'],
             [
                 'name' => 'Partner 2',
-                'role' => 'Partner',
-                'password' => 'qwe321asd',
+                'role' => 'partner',
+                'password' => 'partner123',
                 'email_verified_at' => now(),
             ]
         );
-
+        Partner::firstOrCreate(
+            ['email' => 'partner3@example.com'],
+            [
+                'name' => 'Partner 3',
+                'role' => 'partner',
+                'password' => 'partner123',
+                'email_verified_at' => now(),
+            ]
+        );
         // Booking
 
         $this->call([

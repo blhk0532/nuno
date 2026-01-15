@@ -25,4 +25,11 @@ class PaymentDueService
         return Payment::where('status', PaymentStatus::UNPAID)
             ->where('next_payment', '<', now()->toDateString());
     }
+
+    public function byPriority(): Builder
+    {
+        return Payment::where('status', PaymentStatus::UNPAID)
+            ->where('is_priority', true)
+            ->orderBy('next_payment');
+    }
 }

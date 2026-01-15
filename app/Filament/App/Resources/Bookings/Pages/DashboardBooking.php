@@ -15,7 +15,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Enums\Width;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Str;
-
+use UnitEnum;
 class DashboardBooking extends BaseDashboard
 {
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDateRange;
@@ -23,6 +23,8 @@ class DashboardBooking extends BaseDashboard
     protected static ?string $navigationLabel = 'Kalender';
 
     protected static ?string $title = '';
+
+     protected static string|UnitEnum|null $navigationGroup = '';
 
     protected static string $routePath = 'service/booking';
 

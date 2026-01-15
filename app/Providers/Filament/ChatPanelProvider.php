@@ -42,6 +42,8 @@ class ChatPanelProvider extends PanelProvider
             ])
             ->spa()
          // ->profile()
+         ->sidebarFullyCollapsibleOnDesktop()
+         ->sidebarWidth('10rem')
             ->passwordReset()
             ->unsavedChangesAlerts()
             ->databaseNotifications()

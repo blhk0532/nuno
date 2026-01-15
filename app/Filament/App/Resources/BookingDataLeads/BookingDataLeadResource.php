@@ -25,7 +25,7 @@ class BookingDataLeadResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
-    protected static \UnitEnum|string|null $navigationGroup = '';
+    protected static \UnitEnum|string|null $navigationGroup = ' ';
 
     protected static ?int $navigationSort = 11;
 
