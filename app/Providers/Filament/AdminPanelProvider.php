@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers\Filament;
 
-use App\Http\Middleware\FilamentPanelAccess;
-
+use AchyutN\FilamentLogViewer\FilamentLogViewer;
 use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
 use Adultdate\FilamentBooking\Filament\Pages\CalendarSettingsPage;
 use Adultdate\FilamentBooking\Filament\Resources\Booking\BookingOutcallQueues\BookingOutcallQueueResource;
@@ -22,18 +23,24 @@ use Adultdate\FilamentBooking\Filament\Widgets\OrdersChart;
 use Adultdate\FilamentBooking\Filament\Widgets\StatsOverviewWidget;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
+use App\Http\Middleware\FilamentPanelAccess;
 use App\Models\User;
 use Asmit\ResizedColumn\ResizedColumnPlugin;
 use Awcodes\Overlook\OverlookPlugin;
 use Awcodes\Overlook\Widgets\OverlookWidget;
+use BezhanSalleh\FilamentExceptions\FilamentExceptionsPlugin;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
-use Filament\Navigation\MenuItem;
-
+use BinaryBuilds\CommandRunner\CommandRunnerPlugin;
+use BinaryBuilds\FilamentCacheManager\FilamentCacheManagerPlugin;
+use BinaryBuilds\FilamentFailedJobs\FilamentFailedJobsPlugin;
+use Bytexr\QueueableBulkActions\Enums\StatusEnum;
+use Bytexr\QueueableBulkActions\QueueableBulkActionsPlugin;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
 use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
 use Caresome\FilamentAuthDesigner\View\AuthDesignerRenderHook;
 use Devonab\FilamentEasyFooter\EasyFooterPlugin;
+use Devtical\Sanctum\Pages\Sanctum;
 use Filament\Actions\Action;
 use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
@@ -41,7 +48,6 @@ use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Navigation\NavigationGroup;
-use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
@@ -62,22 +68,12 @@ use MWGuerra\FileManager\Filament\Pages\SchemaExample;
 use MWGuerra\FileManager\Filament\Resources\FileSystemItemResource;
 use MWGuerra\FileManager\FileManagerPlugin;
 use pxlrbt\FilamentSpotlight\SpotlightPlugin;
-
+use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
 use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
 use WallaceMartinss\FilamentEvolution\FilamentEvolutionPlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 
-use ShuvroRoy\FilamentSpatieLaravelBackup\FilamentSpatieLaravelBackupPlugin;
-use Bytexr\QueueableBulkActions\Enums\StatusEnum;
-use Bytexr\QueueableBulkActions\QueueableBulkActionsPlugin;
-use BinaryBuilds\CommandRunner\CommandRunnerPlugin;
-use BinaryBuilds\FilamentCacheManager\FilamentCacheManagerPlugin;
-use BinaryBuilds\FilamentFailedJobs\FilamentFailedJobsPlugin;
-use BezhanSalleh\FilamentExceptions\FilamentExceptionsPlugin;
-use AchyutN\FilamentLogViewer\FilamentLogViewer;
-use Devtical\Sanctum\SanctumPlugin;
-
-class AdminPanelProvider extends PanelProvider
+final class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
@@ -98,9 +94,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('Noridic Digital')
             ->defaultThemeMode(ThemeMode::Dark)
             ->revealablePasswords(true)
-            ->registration(false)
             ->passwordReset()
-            ->emailVerification(false)
             ->emailChangeVerification()
             ->spa()
             ->navigationGroups([
@@ -119,7 +113,7 @@ class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('../plugins/adultdate/filament-booking/src/Filament/Resources'), for: 'Adultdate\\FilamentBooking\\Filament\\Resources')
 
             ->pages([
-            //    Pages\Dashboard::class,
+                Sanctum::class,
                 DashboardBooking::class,
                 CalendarSettingsPage::class,
             ])
@@ -152,7 +146,7 @@ class AdminPanelProvider extends PanelProvider
                 OverlookWidget::class,
             ])
             ->middleware([
-                 EncryptCookies::class,
+                EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -308,9 +302,9 @@ class AdminPanelProvider extends PanelProvider
 
                         return view('switch-panels-modal', ['panels' => $panels]);
                     }),
-                Action::make()
-                    ->label(trans('Sanctum'))
-                    ->url($panel->getPath().'/'.config('filament-sanctum.navigation.slug'))
+                Action::make('sanctum')
+                    ->label(trans('Auth Tokens'))
+                    ->url('/nds/admin/'.config('filament-sanctum.navigation.slug'))
                     ->icon(config('filament-sanctum.navigation.icon', 'heroicon-o-finger-print')),
             ])
             ->plugin(
@@ -324,7 +318,7 @@ class AdminPanelProvider extends PanelProvider
                     ->navigationBadgeColor('success')           // string|array|Closure|null
             )
             ->plugins([
-                FilamentWireChatPlugin::make(),
+                FilamentWirechatPlugin::make(),
             ])
             ->unsavedChangesAlerts()
             ->passwordReset()

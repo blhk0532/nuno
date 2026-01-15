@@ -348,7 +348,7 @@ export function EventCalendarDemo() {
                     right: '',
                 }}
                 slotMinTime="07:00:00"
-                slotMaxTime="21:00:00"
+                slotMaxTime="17:00:00"
                 slotDuration="01:00:00"
                 weekends={true}
                 addButton={{

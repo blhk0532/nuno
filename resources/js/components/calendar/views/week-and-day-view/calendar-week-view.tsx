@@ -24,11 +24,11 @@ interface IProps {
 }
 
 export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
-    const {selectedDate, use24HourFormat, formatDate} = useCalendar();
+    const {selectedDate, use24HourFormat, formatDate, startHour, endHour} = useCalendar();
 
     const weekStart = startOfWeek(selectedDate);
     const weekDays = Array.from({length: 7}, (_, i) => addDays(weekStart, i));
-    const hours = Array.from({length: 24}, (_, i) => i);
+    const hours = Array.from({length: endHour - startHour + 1}, (_, i) => startHour + i);
 
     return (
         <motion.div

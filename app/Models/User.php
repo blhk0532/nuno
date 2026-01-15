@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use Adultdate\Wirechat\Contracts\WirechatUser;
 use Adultdate\Wirechat\Panel as WirechatStandalonePanel;
 use Adultdate\Wirechat\Traits\InteractsWithWirechat;
 use App\Observers\UserObserver;
+use Exception;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasAvatar;
 use Filament\Models\Contracts\HasDefaultTenant;
@@ -27,11 +30,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Fortify\TwoFactorAuthenticatable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Zap\Models\Concerns\HasSchedules;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Illuminate\Support\Facades\Auth;
+
 /**
  * @property int $id
  * @property string $ulid
@@ -48,13 +53,13 @@ use Illuminate\Support\Facades\Auth;
  * @property int|null $current_team_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\Team|null $currentTeam
+ * @property-read Team|null $currentTeam
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Team> $ownedTeams
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Team> $ownedTeams
  * @property-read int|null $owned_teams_count
- * @property-read \App\Models\Membership|null $membership
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Team> $teams
+ * @property-read Membership|null $membership
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, Team> $teams
  * @property-read int|null $teams_count
  *
  * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
@@ -80,18 +85,19 @@ use Illuminate\Support\Facades\Auth;
  * @mixin \Eloquent
  */
 #[ObservedBy(UserObserver::class)]
-class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, FilamentUser, HasAvatar, HasDefaultTenant, HasTenants, MustVerifyEmailContract, WirechatUser
+final class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, FilamentUser, HasAvatar, HasDefaultTenant, HasTenants, MustVerifyEmailContract, WirechatUser
 {
     use Authenticatable;
     use Authorizable;
     use CanResetPassword;
+    use HasApiTokens;
     use HasFactory;
     use HasRoles;
     use HasSchedules;
     use InteractsWithWirechat;
     use MustVerifyEmail;
-    use TwoFactorAuthenticatable;
     use Notifiable;
+    use TwoFactorAuthenticatable;
 
     protected $fillable = [
         'status',
@@ -112,37 +118,16 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     ];
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function canAccessPanel(Panel $panel): bool
     {
-//    $currentUser = Auth::user();
-//    if ($panel->getId() === 'admin' && $currentUser->role !== 'admin' && $currentUser->role !== 'super') {
-//        return false;
-//    }
+        //    $currentUser = Auth::user();
+        //    if ($panel->getId() === 'admin' && $currentUser->role !== 'admin' && $currentUser->role !== 'super') {
+        //        return false;
+        //    }
 
         return true;
-    }
-
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'status' => 'boolean',
-            'custom_fields' => 'array',
-        ];
-    }
-
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->ulid)) {
-                $model->ulid = (string) \Illuminate\Support\Str::ulid();
-            }
-        });
     }
 
     public function canImpersonate(): bool
@@ -150,22 +135,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return false;
     }
 
-    protected function canManageTeam(): bool
-    {
-        return false;
-    }
-
-    protected function canRegisterTeam(): bool
-    {
-        return false;
-    }
-
-
     public function getFilamentName(): string
     {
         return "{$this->first_name} {$this->last_name}";
     }
-
 
     public function getFilamentAvatarUrl(): ?string
     {
@@ -207,7 +180,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             return false;
         }
 
-        return $this->id == $team->user_id;
+        return $this->id === $team->user_id;
     }
 
     public function personalTeam(): ?Team
@@ -309,8 +282,8 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
             }
 
             return $participants->contains(function ($participant) {
-                return $participant->participantable_id == $this->getKey() &&
-                    $participant->participantable_type == $this->getMorphClass();
+                return $participant->participantable_id === $this->getKey() &&
+                    $participant->participantable_type === $this->getMorphClass();
             });
         }
 
@@ -324,5 +297,36 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         return $participants->where('participantable_id', $this->getKey())
             ->where('participantable_type', $this->getMorphClass())
             ->exists();
+    }
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        self::creating(function ($model) {
+            if (empty($model->ulid)) {
+                $model->ulid = (string) \Illuminate\Support\Str::ulid();
+            }
+        });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'email_verified_at' => 'datetime',
+            'password' => 'hashed',
+            'status' => 'boolean',
+            'custom_fields' => 'array',
+        ];
+    }
+
+    protected function canManageTeam(): bool
+    {
+        return false;
+    }
+
+    protected function canRegisterTeam(): bool
+    {
+        return false;
     }
 }

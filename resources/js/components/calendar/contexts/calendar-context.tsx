@@ -84,19 +84,28 @@ export function CalendarProvider({
 		},
 	);
 
+	// Ensure working hours are always set
+	const updatedSettings = {
+		...settings,
+		startHour: settings.startHour ?? DEFAULT_SETTINGS.startHour,
+		endHour: settings.endHour ?? DEFAULT_SETTINGS.endHour,
+	};
+
 	const [badgeVariant, setBadgeVariantState] = useState<"dot" | "colored">(
-		settings.badgeVariant,
+		updatedSettings.badgeVariant,
 	);
 	const [currentView, setCurrentViewState] = useState<TCalendarView>(
-		settings.view,
+		updatedSettings.view,
 	);
 	const [use24HourFormat, setUse24HourFormatState] = useState<boolean>(
-		settings.use24HourFormat,
+		updatedSettings.use24HourFormat,
 	);
 	const [agendaModeGroupBy, setAgendaModeGroupByState] = useState<
 		"date" | "color"
-	>(settings.agendaModeGroupBy);
-	const [timezone, setTimezoneState] = useState<string>(settings.timezone);
+	>(updatedSettings.agendaModeGroupBy);
+	const [timezone, setTimezoneState] = useState<string>(updatedSettings.timezone);
+	const [startHour, setStartHourState] = useState<number>(updatedSettings.startHour);
+	const [endHour, setEndHourState] = useState<number>(updatedSettings.endHour);
 	const [startHour, setStartHourState] = useState<number>(settings.startHour);
 	const [endHour, setEndHourState] = useState<number>(settings.endHour);
 
@@ -118,34 +127,53 @@ export function CalendarProvider({
 
 	const setBadgeVariant = (variant: "dot" | "colored") => {
 		setBadgeVariantState(variant);
-		updateSettings({ badgeVariant: variant });
+		setSettings({
+			...updatedSettings,
+			badgeVariant: variant,
+		});
 	};
 
 	const setView = (newView: TCalendarView) => {
 		setCurrentViewState(newView);
-		updateSettings({ view: newView });
+		setSettings({
+			...updatedSettings,
+			view: newView,
+		});
 	};
 
 	const toggleTimeFormat = () => {
 		const newValue = !use24HourFormat;
 		setUse24HourFormatState(newValue);
-		updateSettings({ use24HourFormat: newValue });
+		setSettings({
+			...updatedSettings,
+			use24HourFormat: newValue,
+		});
 	};
 
 	const setAgendaModeGroupBy = (groupBy: "date" | "color") => {
 		setAgendaModeGroupByState(groupBy);
-		updateSettings({ agendaModeGroupBy: groupBy });
+		setSettings({
+			...updatedSettings,
+			agendaModeGroupBy: groupBy,
+		});
 	};
 
 	const setTimezone = (newTimezone: string) => {
 		setTimezoneState(newTimezone);
-		updateSettings({ timezone: newTimezone });
+		setSettings({
+			...updatedSettings,
+			timezone: newTimezone,
+		});
 	};
 
 	const setWorkingHours = (newStartHour: number, newEndHour: number) => {
 		setStartHourState(newStartHour);
 		setEndHourState(newEndHour);
-		updateSettings({ startHour: newStartHour, endHour: newEndHour });
+		setSettings({
+			...updatedSettings,
+			startHour: newStartHour,
+			endHour: newEndHour,
+		});
 	};
 
 	const filterEventsBySelectedColors = (color: TEventColor) => {
