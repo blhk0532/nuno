@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Server\Pages;
+namespace App\Filament\Locale\Pages;
 
 use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\BookingCalendar;
 use BackedEnum;
@@ -18,7 +18,7 @@ use Illuminate\Support\Str;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseSlowRequests;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseUsage;
 
-class ServerDashboard extends BaseDashboard
+class LocaleDashboard extends BaseDashboard
 {
     protected static ?string $title = '';
 
@@ -64,7 +64,7 @@ class ServerDashboard extends BaseDashboard
 
     public static function getNavigationLabel(): string
     {
-        return 'Server';
+        return 'Locale';
     }
 
     public static function getNavigationBadge(): ?string

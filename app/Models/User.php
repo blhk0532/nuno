@@ -388,4 +388,9 @@ public function withAccessToken(?ScopeAuthorizable $accessToken): static
     {
         return false;
     }
+
+    public function canBeImpersonated(): bool
+    {
+        return auth()->user()->role === 'super';
+    }
 }

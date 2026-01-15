@@ -5,6 +5,7 @@ namespace App\Filament\Admin\Resources\Users\Tables;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Facades\Filament;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -41,10 +42,11 @@ class UsersTable
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
-                Impersonate::make()
-                    ->can(fn ($record) => !($record->hasRole('super') || $record->email === 'super@ndsth.com')),
-                DeleteAction::make(),
+                EditAction::make()
+                    ->visible(fn ($record) => Filament::auth()->user()->hasRole('super_admin') || !$record->hasRole('super_admin')),
+                Impersonate::make(),
+                DeleteAction::make()
+                    ->visible(fn ($record) => Filament::auth()->user()->hasRole('super_admin') || !$record->hasRole('super_admin')),
             ]);
     }
 }

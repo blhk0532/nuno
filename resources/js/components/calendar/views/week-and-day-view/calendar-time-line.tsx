@@ -17,16 +17,16 @@ export function CalendarTimeline() {
 		const zonedTime = toZonedTime(currentTime, timezone);
 		const currentHour = zonedTime.getHours();
 		const currentMinute = zonedTime.getMinutes();
-		
+
 		// If current time is outside working hours, don't show the timeline
 		if (currentHour < startHour || currentHour > endHour) {
 			return -1;
 		}
-		
+
 		// Calculate minutes from start of working day
 		const minutesFromStart = (currentHour - startHour) * 60 + currentMinute;
 		const totalWorkingMinutes = (endHour - startHour + 1) * 60;
-		
+
 		return (minutesFromStart / totalWorkingMinutes) * 100;
 	};
 
@@ -37,7 +37,7 @@ export function CalendarTimeline() {
 	return (
 		<div
 			className="pointer-events-none absolute inset-x-0 z-50 border-t border-primary"
-			style={{ 
+			style={{
 				top: `${getCurrentTimePosition()}%`,
 				display: getCurrentTimePosition() >= 0 ? 'block' : 'none'
 			}}
