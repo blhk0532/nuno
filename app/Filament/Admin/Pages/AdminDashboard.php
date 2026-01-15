@@ -80,7 +80,7 @@ class AdminDashboard extends BaseDashboard
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-o-users';
+        return 'heroicon-o-shield-check';
     }
 
     public static function getNavigationSort(): ?int

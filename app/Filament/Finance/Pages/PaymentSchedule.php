@@ -16,12 +16,24 @@ class PaymentSchedule extends Page implements HasForms
   use InteractsWithForms;
   protected string $view = 'filament.pages.payment-schedule';
   protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-calendar-date-range';
-  protected static ?string $navigationLabel = 'Payments Schedule';
+  protected static ?string $navigationLabel = 'Schedule';
   protected $listeners = ['paymentPriority' => '$refresh'];
+
+   protected static ?int $navigationSort = 2;
+
+    protected static ?int $sort = 2;
+
   public function getHeading(): ?string
   {
-    return __('Payments Schedule');
+    return __('Schedule');
   }
+
+  public function navigationLabel(): ?string
+  {
+
+    return __('Schedule');
+  }
+
   protected function getFormSchema(): array
   {
     $payment = app(PaymentDueService::class);

@@ -80,7 +80,7 @@ class ContentDashboard extends BaseDashboard
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-o-users';
+        return 'heroicon-s-pencil-square';
     }
 
     public static function getNavigationSort(): ?int

@@ -18,7 +18,7 @@ use AdultDate\FilamentWirechat\Filament\Pages\ChatDashboard as BaseDashboard;
 
 class ChatDashboard extends BaseDashboard
 {
-    protected static ?string $title = 'Dashboard';
+    protected static ?string $title = '';
 
     protected static ?string $slug = 'dashboard';
 
@@ -78,7 +78,7 @@ class ChatDashboard extends BaseDashboard
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-o-users';
+        return 'heroicon-m-chat-bubble-bottom-center-text';
     }
 
     public static function getNavigationSort(): ?int

@@ -80,7 +80,7 @@ class LocaleDashboard extends BaseDashboard
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-o-users';
+        return 'heroicon-m-globe-alt';
     }
 
     public static function getNavigationSort(): ?int

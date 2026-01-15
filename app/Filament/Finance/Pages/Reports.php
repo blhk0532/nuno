@@ -27,6 +27,10 @@ class Reports extends Page implements HasForms, HasTable
   protected static ?string $navigationLabel = 'Reports';
   protected string $view = 'filament.pages.reports';
 
+     protected static ?int $navigationSort = 3;
+
+    protected static ?int $sort = 3;
+
   public ?string $from = null;
   public ?string $to = null;
 

@@ -86,7 +86,7 @@ class PrivatePanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Private/Pages'), for: 'App\Filament\Private\Pages')
             ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->pages([
-                Dashboard::class,
+            //    Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Private/Widgets'), for: 'App\Filament\Private\Widgets')
             ->widgets([

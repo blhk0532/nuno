@@ -2,7 +2,7 @@
 
 namespace App\Filament\Product\Pages;
 
-use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\BookingCalendar;
+use App\Filament\Product\Clusters\Services\Resources\Bookings\Widgets\BookingCalendar;
 use BackedEnum;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Support\Icons\Heroicon;
@@ -80,7 +80,7 @@ class ProductDashboard extends BaseDashboard
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-o-users';
+        return 'heroicon-s-shopping-bag';
     }
 
     public static function getNavigationSort(): ?int

@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
 
 class StatsDashboard extends BaseDashboard
 {
-    protected static ?string $title = 'Dashboard';
+    protected static ?string $title = '';
 
     protected static ?string $slug = 'dashboard';
 

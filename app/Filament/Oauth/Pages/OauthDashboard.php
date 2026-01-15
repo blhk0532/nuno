@@ -80,7 +80,7 @@ class OauthDashboard extends BaseDashboard
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-o-users';
+        return 'heroicon-m-lock-closed';
     }
 
     public static function getNavigationSort(): ?int

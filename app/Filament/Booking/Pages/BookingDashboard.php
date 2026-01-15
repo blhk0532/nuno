@@ -16,7 +16,7 @@ class BookingDashboard extends BaseDashboard
 {
     use BaseDashboard\Concerns\HasFiltersForm;
 
-    protected static ?string $title = 'dashboard';
+    protected static ?string $title = '';
 
 
     protected static ?string $navigationLabel = 'Bookings';
@@ -69,7 +69,7 @@ class BookingDashboard extends BaseDashboard
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-o-chart-pie';
+        return 'heroicon-c-clipboard-document-check';
     }
 
         public function getWidgets():array

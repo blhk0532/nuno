@@ -20,7 +20,7 @@ use Illuminate\Support\Str;
 
 class PartnerDashboard extends BaseDashboard
 {
-    protected static ?string $title = 'Dashboard';
+    protected static ?string $title = '';
 
     protected static ?string $slug = 'dashboard';
 
@@ -80,7 +80,7 @@ class PartnerDashboard extends BaseDashboard
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-o-users';
+        return 'heroicon-c-chart-pie';
     }
 
     public static function getNavigationSort(): ?int

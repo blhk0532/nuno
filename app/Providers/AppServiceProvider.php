@@ -88,7 +88,7 @@ final class AppServiceProvider extends ServiceProvider
                     'partner' => 'heroicon-c-chart-pie',
                     'plugins' => 'heroicon-m-puzzle-piece',
                     'private' => 'heroicon-m-server-stack',
-                    'products' => 'heroicon-s-shopping-bag',
+                    'product' => 'heroicon-m-shopping-bag',
                     'queue' => 'heroicon-c-queue-list',
                     'script' => 'heroicon-c-command-line',
                     'server' => 'heroicon-s-square-3-stack-3d',

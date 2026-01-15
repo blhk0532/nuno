@@ -80,7 +80,7 @@ class PluginsDashboard extends BaseDashboard
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-o-users';
+        return 'heroicon-m-puzzle-piece';
     }
 
     public static function getNavigationSort(): ?int

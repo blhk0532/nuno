@@ -80,7 +80,7 @@ class ServerDashboard extends BaseDashboard
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-o-users';
+        return 'heroicon-s-square-3-stack-3d';
     }
 
     public static function getNavigationSort(): ?int
