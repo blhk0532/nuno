@@ -106,8 +106,6 @@ export function CalendarProvider({
 	const [timezone, setTimezoneState] = useState<string>(updatedSettings.timezone);
 	const [startHour, setStartHourState] = useState<number>(updatedSettings.startHour);
 	const [endHour, setEndHourState] = useState<number>(updatedSettings.endHour);
-	const [startHour, setStartHourState] = useState<number>(settings.startHour);
-	const [endHour, setEndHourState] = useState<number>(settings.endHour);
 
 	const [selectedDate, setSelectedDate] = useState(new Date());
 	const [selectedUserId, setSelectedUserId] = useState<IUser["id"] | "all">(
