@@ -86,6 +86,7 @@
         "spatie/laravel-model-states": "^2.12.2",
         "spiral/roadrunner-cli": "^2.7.2",
         "spiral/roadrunner-http": "^3.6.0",
+        "statikbe/laravel-filament-chained-translation-manager": "^4.2",
         "stechstudio/filament-impersonate": "^4.0.2",
         "still-code/laravel-umami": "^5.0.3",
         "tapp/filament-maillog": "^2.0.1",

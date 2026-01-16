@@ -29,7 +29,8 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use App\Filament\Locale\Pages\LocaleDashboard;
-
+use Statikbe\FilamentTranslationManager\Pages\TranslationManagerPage;
+use Statikbe\FilamentTranslationManager\FilamentChainedTranslationManagerPlugin;
 class LocalePanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -86,8 +87,11 @@ class LocalePanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Locale/Resources'), for: 'App\Filament\Locale\Resources')
             ->discoverPages(in: app_path('Filament/Locale/Pages'), for: 'App\Filament\Locale\Pages')
            ->discoverResources(in: app_path('Filament/Locale/Resources'), for: 'App\Filament\Locale\Resources')
-            ->pages([
+                       ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
+
+           ->pages([
                 LocaleDashboard::class,
+                TranslationManagerPage::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Locale/Widgets'), for: 'App\Filament\Locale\Widgets')
             ->widgets([
@@ -108,6 +112,9 @@ class LocalePanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+            ])
+                        ->plugins([
+                      FilamentChainedTranslationManagerPlugin::make(),
             ])
             ->plugins([
                 FilamentWireChatPlugin::make()

@@ -24,6 +24,7 @@
 @source '../../../../vendor/wallacemartinss/filament-icon-picker/resources/views/**/*';
 @source '../../../../vendor/awcodes/overlook/resources/**/*.blade.php';
 
+@source '../../../../vendor/statikbe/laravel-filament-chained-translation-manager/resources/**/*.blade.php';
 
 
 ::-webkit-scrollbar {
