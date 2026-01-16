@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6a8fb44c9b71261609ae141818549e9b",
+    "content-hash": "a5e3d7cbe812efe6871582f8b1cf7478",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -521,6 +521,169 @@
             "time": "2025-02-22T11:28:38+00:00"
         },
         {
+            "name": "alizharb/filament-activity-log",
+            "version": "2.0.5",
+            "dist": {
+                "type": "path",
+                "url": "plugins/alizharb/filament-activity-log",
+                "reference": "26a2b9a9d3d6a7015620e799b88e658ca0326b87"
+            },
+            "require": {
+                "filament/actions": "^4.2",
+                "filament/filament": "^4.0",
+                "phiki/phiki": "*",
+                "php": "^8.2",
+                "spatie/laravel-activitylog": "^4.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.0",
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^3.0",
+                "pestphp/pest-plugin-laravel": "^3.0",
+                "pestphp/pest-plugin-livewire": "^3.0",
+                "phpstan/phpstan": "^2.0"
+            },
+            "type": "filament-plugin",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "AlizHarb\\ActivityLog\\ActivityLogServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AlizHarb\\ActivityLog\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "AlizHarb\\ActivityLog\\Tests\\": "tests/"
+                }
+            },
+            "scripts": {
+                "test": [
+                    "vendor/bin/pest"
+                ],
+                "test-coverage": [
+                    "vendor/bin/pest --coverage"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ali Harb",
+                    "email": "harbzali@gmail.com",
+                    "homepage": "https://github.com/alizharb",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A powerful, feature-rich activity logging solution for FilamentPHP v4 with timeline views, dashboard widgets, and revert actions.",
+            "homepage": "https://github.com/alizharb/filament-activity-log",
+            "keywords": [
+                "activity-log",
+                "activity-tracking",
+                "audit-log",
+                "audit-trail",
+                "dashboard-widget",
+                "filament",
+                "filament-plugin",
+                "filament-v4",
+                "laravel",
+                "laravel-12",
+                "php",
+                "spatie",
+                "timeline"
+            ],
+            "support": {
+                "issues": "https://github.com/alizharb/filament-activity-log/issues",
+                "source": "https://github.com/alizharb/filament-activity-log",
+                "docs": "https://github.com/alizharb/filament-activity-log#readme"
+            },
+            "funding": [
+                {
+                    "type": "github",
+                    "url": "https://github.com/sponsors/alizharb"
+                }
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "andreia/filament-ui-switcher",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/andreia/filament-ui-switcher.git",
+                "reference": "94a4e71a14401c244e848e4405e860d06a96c7d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/andreia/filament-ui-switcher/zipball/94a4e71a14401c244e848e4405e860d06a96c7d8",
+                "reference": "94a4e71a14401c244e848e4405e860d06a96c7d8",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.1",
+                "illuminate/contracts": "^12.0|^11.0",
+                "livewire/livewire": "^3.0",
+                "php": "^8.4|^8.3|^8.2",
+                "spatie/laravel-package-tools": "^1.92"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.0|^9.0",
+                "pestphp/pest": "^3.0|^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Andreia\\FilamentUiSwitcher\\FilamentUiSwitcherServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Andreia\\FilamentUiSwitcher\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andréia Bohner",
+                    "email": "andreiabohner@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Add a modal with options to switch between different UI layouts and styles (colors, fonts, font sizes).",
+            "homepage": "https://github.com/andreia/filament-ui-switcher",
+            "keywords": [
+                "customization",
+                "dashboard",
+                "filament",
+                "laravel",
+                "layout",
+                "switcher",
+                "ui"
+            ],
+            "support": {
+                "issues": "https://github.com/andreia/filament-ui-switcher/issues",
+                "source": "https://github.com/andreia/filament-ui-switcher"
+            },
+            "time": "2025-11-24T20:35:20+00:00"
+        },
+        {
             "name": "andreiio/blade-remix-icon",
             "version": "3.8.0",
             "source": {
@@ -577,6 +740,55 @@
                 }
             ],
             "time": "2025-12-29T12:31:33+00:00"
+        },
+        {
+            "name": "anish/text-input-entry",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/anishregmi17/filament-textinput-entry.git",
+                "reference": "927b1a2a75a6a9e46b986140e8d1a06b307a3866"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/anishregmi17/filament-textinput-entry/zipball/927b1a2a75a6a9e46b986140e8d1a06b307a3866",
+                "reference": "927b1a2a75a6a9e46b986140e8d1a06b307a3866",
+                "shasum": ""
+            },
+            "require": {
+                "filament/support": "^3.0|^4.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.16"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Anish\\TextInputEntry\\TextInputEntryServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Anish\\TextInputEntry\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "anishregmi17",
+                    "email": "anishregminaglibang@gmail.com"
+                }
+            ],
+            "description": "A Filament plugin for editable text input entries in infolists",
+            "support": {
+                "issues": "https://github.com/anishregmi17/filament-textinput-entry/issues",
+                "source": "https://github.com/anishregmi17/filament-textinput-entry/tree/v1.0.0"
+            },
+            "time": "2025-12-07T15:57:20+00:00"
         },
         {
             "name": "anourvalar/eloquent-serialize",
@@ -3079,6 +3291,48 @@
             "time": "2024-05-06T16:37:16+00:00"
         },
         {
+            "name": "daacreators/creators-ticketing",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "plugins/daacreators/creators-ticketing",
+                "reference": "509cbe1a44086885bc00cde0e7a09f8d3e3513a5"
+            },
+            "require": {
+                "filament/filament": "^4.1",
+                "illuminate/contracts": "^11.0|^12.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "daacreators\\CreatorsTicketing\\TicketingServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "daacreators\\CreatorsTicketing\\": "src/",
+                    "daacreators\\CreatorsTicketing\\Database\\Seeders\\": "database/seeders/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jabir Khan",
+                    "email": "hello@jabirkhan.com"
+                }
+            ],
+            "description": "A robust and dynamic ticketing system for Filament 4.",
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
             "name": "danharrin/date-format-converter",
             "version": "v0.3.1",
             "source": {
@@ -3435,6 +3689,83 @@
                 "source": "https://github.com/defuse/php-encryption/tree/v2.4.0"
             },
             "time": "2023-06-19T06:10:36+00:00"
+        },
+        {
+            "name": "deldius/filament-user-field",
+            "version": "1.0.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Deldius/filament-user-field.git",
+                "reference": "d224d8afe8e97e0e5425d2ae0c622a5080fcc538"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Deldius/filament-user-field/zipball/d224d8afe8e97e0e5425d2ae0c622a5080fcc538",
+                "reference": "d224d8afe8e97e0e5425d2ae0c622a5080fcc538",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^8",
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^3",
+                "pestphp/pest-plugin-arch": "^3.0",
+                "pestphp/pest-plugin-laravel": "^3.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "UserField": "Deldius\\UserField\\Facades\\UserField"
+                    },
+                    "providers": [
+                        "Deldius\\UserField\\UserFieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Deldius\\UserField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Trung",
+                    "email": "trungk10.uel@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Utility fields for User: Entry, Input, Column",
+            "homepage": "https://github.com/deldius/filament-user-field",
+            "keywords": [
+                "Deldius",
+                "filament-user-field",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/deldius/filament-user-field/issues",
+                "source": "https://github.com/deldius/filament-user-field"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/Deldius",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-01-08T08:53:10+00:00"
         },
         {
             "name": "devonab/filament-easy-footer",
@@ -4238,6 +4569,59 @@
                 "source": "https://github.com/ezyang/htmlpurifier/tree/v4.19.0"
             },
             "time": "2025-10-17T16:34:55+00:00"
+        },
+        {
+            "name": "facade/ignition-contracts",
+            "version": "1.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/facade/ignition-contracts.git",
+                "reference": "3c921a1cdba35b68a7f0ccffc6dffc1995b18267"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/facade/ignition-contracts/zipball/3c921a1cdba35b68a7f0ccffc6dffc1995b18267",
+                "reference": "3c921a1cdba35b68a7f0ccffc6dffc1995b18267",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^v2.15.8",
+                "phpunit/phpunit": "^9.3.11",
+                "vimeo/psalm": "^3.17.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Facade\\IgnitionContracts\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "homepage": "https://flareapp.io",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Solution contracts for Ignition",
+            "homepage": "https://github.com/facade/ignition-contracts",
+            "keywords": [
+                "contracts",
+                "flare",
+                "ignition"
+            ],
+            "support": {
+                "issues": "https://github.com/facade/ignition-contracts/issues",
+                "source": "https://github.com/facade/ignition-contracts/tree/1.0.2"
+            },
+            "time": "2020-10-16T08:27:54+00:00"
         },
         {
             "name": "fahiem/filament-pinpoint",
@@ -5616,6 +6000,83 @@
             "time": "2025-12-27T19:43:20+00:00"
         },
         {
+            "name": "guava/filament-icon-select-column",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/GuavaCZ/filament-icon-select-column.git",
+                "reference": "2d2f19b06752aef567eeae72294cf7ea6bbc8f2f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/GuavaCZ/filament-icon-select-column/zipball/2d2f19b06752aef567eeae72294cf7ea6bbc8f2f",
+                "reference": "2d2f19b06752aef567eeae72294cf7ea6bbc8f2f",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.14.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.8|^8.1",
+                "nunomaduro/larastan": "^2.0.1",
+                "pestphp/pest": "^2.0",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0",
+                "phpstan/extension-installer": "^1.1",
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-phpunit": "^1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "FilamentIconSelectColumn": "Guava\\FilamentIconSelectColumn\\Facades\\FilamentIconSelectColumn"
+                    },
+                    "providers": [
+                        "Guava\\FilamentIconSelectColumn\\FilamentIconSelectColumnServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Guava\\FilamentIconSelectColumn\\": "src/",
+                    "Guava\\FilamentIconSelectColumn\\Database\\Factories\\": "database/factories/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lukas Frey",
+                    "email": "lukas.frey@guava.cz",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Adds a icon select (via dropdown) column to your filament tables.",
+            "homepage": "https://github.com/GuavaCZ/filament-icon-select-column",
+            "keywords": [
+                "Guava",
+                "filament-icon-select-column",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/GuavaCZ/filament-icon-select-column/issues",
+                "source": "https://github.com/GuavaCZ/filament-icon-select-column/tree/2.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/GuavaCZ",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-08-18T06:07:28+00:00"
+        },
+        {
             "name": "guzzlehttp/guzzle",
             "version": "7.10.0",
             "source": {
@@ -6480,6 +6941,135 @@
             "time": "2025-12-23T23:58:40+00:00"
         },
         {
+            "name": "jeffersongoncalves/filament-whatsapp-widget",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "plugins/jeffersongoncalves/filament-whatsapp-widget",
+                "reference": "1f456702ac0125199a6bda4761d4b41df8103129"
+            },
+            "require": {
+                "filament/filament": "^4.0",
+                "jeffersongoncalves/laravel-whatsapp-widget": "^1.4",
+                "laravel/framework": "^11.0|^12.0",
+                "php": "^8.2|^8.3",
+                "spatie/laravel-package-tools": "^1.14.0",
+                "ysfkaya/filament-phone-input": "^4.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "laravel/pint": "^1.24",
+                "orchestra/testbench": "^9.0|^10.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "JeffersonGoncalves\\Filament\\WhatsappWidget\\WhatsappWidgetServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JeffersonGoncalves\\Filament\\WhatsappWidget\\": "src"
+                }
+            },
+            "scripts": {
+                "post-autoload-dump": [
+                    "@php ./vendor/bin/testbench package:discover --ansi"
+                ],
+                "analyse": [
+                    "vendor/bin/phpstan analyse"
+                ],
+                "format": [
+                    "vendor/bin/pint"
+                ]
+            },
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jefferson Gonçalves",
+                    "email": "gerson.simao.92@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This Filament package provides a simple yet customizable WhatsApp widget for your website. It allows you to easily add a clickable WhatsApp button or floating widget to connect visitors directly with your WhatsApp account. The widget is designed to be easily integrated into your Laravel application and is fully customizable to match your website's design.",
+            "homepage": "https://github.com/jeffersongoncalves/filament-whatsapp-widget",
+            "keywords": [
+                "filament-whatsapp-widget",
+                "jeffersongoncalves",
+                "laravel"
+            ],
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
+        },
+        {
+            "name": "jeffersongoncalves/laravel-whatsapp-widget",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeffersongoncalves/laravel-whatsapp-widget.git",
+                "reference": "885344c45dc75d24bfc42e50e360b0bac20b6741"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeffersongoncalves/laravel-whatsapp-widget/zipball/885344c45dc75d24bfc42e50e360b0bac20b6741",
+                "reference": "885344c45dc75d24bfc42e50e360b0bac20b6741",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^11.0|^12.0",
+                "php": "^8.2|^8.3",
+                "spatie/laravel-package-tools": "^1.14.0"
+            },
+            "require-dev": {
+                "larastan/larastan": "^3.0",
+                "orchestra/testbench": "^9.0|^10.0",
+                "pestphp/pest": "^3.7.4",
+                "pestphp/pest-plugin-laravel": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "JeffersonGoncalves\\WhatsappWidget\\WhatsappWidgetServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "JeffersonGoncalves\\WhatsappWidget\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jefferson Gonçalves",
+                    "email": "gerson.simao.92@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This Laravel package provides a simple yet customizable WhatsApp widget for your website. It allows you to easily add a clickable WhatsApp button or floating widget to connect visitors directly with your WhatsApp account. The widget is designed to be easily integrated into your Laravel application and is fully customizable to match your website's design.",
+            "homepage": "https://github.com/jeffersongoncalves/laravel-whatsapp-widget",
+            "keywords": [
+                "jeffersongoncalves",
+                "laravel",
+                "laravel-whatsapp-widget"
+            ],
+            "support": {
+                "issues": "https://github.com/jeffersongoncalves/laravel-whatsapp-widget/issues",
+                "source": "https://github.com/jeffersongoncalves/laravel-whatsapp-widget/tree/v1.4.0"
+            },
+            "time": "2025-12-27T20:09:03+00:00"
+        },
+        {
             "name": "jenssegers/agent",
             "version": "v2.6.4",
             "source": {
@@ -6643,6 +7233,77 @@
                 "symlink": true,
                 "relative": true
             }
+        },
+        {
+            "name": "joaopaulolndev/filament-world-clock",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/joaopaulolndev/filament-world-clock.git",
+                "reference": "5532d63aeb8e52537f54a66b9fddf66119275ed4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/joaopaulolndev/filament-world-clock/zipball/5532d63aeb8e52537f54a66b9fddf66119275ed4",
+                "reference": "5532d63aeb8e52537f54a66b9fddf66119275ed4",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0",
+                "outhebox/blade-flags": "^1.5",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.9|^8.6",
+                "orchestra/testbench": "^8.0|^9.0|^10.0",
+                "pestphp/pest": "^2.1|^3.4.7",
+                "pestphp/pest-plugin-arch": "^2.0|^3.0",
+                "pestphp/pest-plugin-laravel": "^2.0|^3.1.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Joaopaulolndev\\FilamentWorldClock\\FilamentWorldClockServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Joaopaulolndev\\FilamentWorldClock\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "João Paulo Leite Nascimento",
+                    "email": "joaopauloln7@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Show hours around the world by timezone",
+            "homepage": "https://github.com/joaopaulolndev/filament-world-clock",
+            "keywords": [
+                "filament-world-clock",
+                "joaopaulolndev",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/joaopaulolndev/filament-world-clock/issues",
+                "source": "https://github.com/joaopaulolndev/filament-world-clock"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/joaopaulolndev",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-08-09T23:33:24+00:00"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -7361,16 +8022,16 @@
         },
         {
             "name": "laravel/horizon",
-            "version": "v5.42.0",
+            "version": "v5.43.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/horizon.git",
-                "reference": "7d50d317ce97e5961e85dcd57f51190ade56fd77"
+                "reference": "2a04285ba83915511afbe987cbfedafdc27fd2de"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/horizon/zipball/7d50d317ce97e5961e85dcd57f51190ade56fd77",
-                "reference": "7d50d317ce97e5961e85dcd57f51190ade56fd77",
+                "url": "https://api.github.com/repos/laravel/horizon/zipball/2a04285ba83915511afbe987cbfedafdc27fd2de",
+                "reference": "2a04285ba83915511afbe987cbfedafdc27fd2de",
                 "shasum": ""
             },
             "require": {
@@ -7434,9 +8095,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/horizon/issues",
-                "source": "https://github.com/laravel/horizon/tree/v5.42.0"
+                "source": "https://github.com/laravel/horizon/tree/v5.43.0"
             },
-            "time": "2026-01-06T14:49:58+00:00"
+            "time": "2026-01-15T15:10:56+00:00"
         },
         {
             "name": "laravel/octane",
@@ -10453,6 +11114,76 @@
             "time": "2024-05-16T03:13:13+00:00"
         },
         {
+            "name": "mokhosh/filament-rating",
+            "version": "v2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mokhosh/filament-rating.git",
+                "reference": "e7eae7eebf7db3a6b43f5287458f67d5bb27ba93"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mokhosh/filament-rating/zipball/e7eae7eebf7db3a6b43f5287458f67d5bb27ba93",
+                "reference": "e7eae7eebf7db3a6b43f5287458f67d5bb27ba93",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^8.0 || ^9.0",
+                "orchestra/testbench": "^9.0 || ^10.0",
+                "pestphp/pest": "^2.1",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^3.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Mokhosh\\FilamentRating\\FilamentRatingServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Mokhosh\\FilamentRating\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mo Khosh",
+                    "email": "mskhoshnazar@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Add rating fields and columns to Filament forms and tables",
+            "homepage": "https://github.com/mokhosh/filament-rating",
+            "keywords": [
+                "filament-rating",
+                "laravel",
+                "mokhosh"
+            ],
+            "support": {
+                "issues": "https://github.com/mokhosh/filament-rating/issues",
+                "source": "https://github.com/mokhosh/filament-rating"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/mokhosh",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-08-21T01:50:56+00:00"
+        },
+        {
             "name": "monolog/monolog",
             "version": "3.10.0",
             "source": {
@@ -12158,6 +12889,74 @@
                 "source": "https://github.com/orchestral/workbench/tree/v10.0.8"
             },
             "time": "2026-01-12T14:48:09+00:00"
+        },
+        {
+            "name": "outhebox/blade-flags",
+            "version": "1.5.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/MohmmedAshraf/blade-flags.git",
+                "reference": "f467991314b93ed83c12dafe7ec40ab43b5a61c1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/MohmmedAshraf/blade-flags/zipball/f467991314b93ed83c12dafe7ec40ab43b5a61c1",
+                "reference": "f467991314b93ed83c12dafe7ec40ab43b5a61c1",
+                "shasum": ""
+            },
+            "require": {
+                "blade-ui-kit/blade-icons": "^1.1",
+                "illuminate/support": "^8.0|^9.0|^10.0|^11.0|^12.0",
+                "php": "^7.4|^8.0|^8.1|^8.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0|^10.0",
+                "phpunit/phpunit": "^9.0|^10.5|^11.5.3"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "OutheBox\\BladeFlags\\BladeFlagsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "OutheBox\\BladeFlags\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Mohamed Ashraf",
+                    "email": "cupo.ashraf@gmail.com",
+                    "homepage": "https://github.com/MohmmedAshraf"
+                }
+            ],
+            "description": "A package to easily make use of country & language flags in your Laravel Blade views.",
+            "homepage": "https://github.com/MohmmedAshraf/blade-flags",
+            "keywords": [
+                "blade",
+                "country flags",
+                "flags",
+                "language flags",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/MohmmedAshraf/blade-flags/issues",
+                "source": "https://github.com/MohmmedAshraf/blade-flags/tree/1.5.4"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/MohmmedAshraf",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-08-30T07:16:05+00:00"
         },
         {
             "name": "owenvoke/blade-fontawesome",
@@ -18007,6 +18806,86 @@
                 }
             ],
             "time": "2026-01-05T09:32:05+00:00"
+        },
+        {
+            "name": "spatie/laravel-model-states",
+            "version": "2.12.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-model-states.git",
+                "reference": "516e66ab310a699f23f2e3e9181fdd55c2376491"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-model-states/zipball/516e66ab310a699f23f2e3e9181fdd55c2376491",
+                "reference": "516e66ab310a699f23f2e3e9181fdd55c2376491",
+                "shasum": ""
+            },
+            "require": {
+                "ext-json": "*",
+                "facade/ignition-contracts": "^1.0.2|^2.0",
+                "illuminate/contracts": "^12.0",
+                "illuminate/database": "^12.0",
+                "illuminate/support": "^12.0",
+                "php": "^8.4",
+                "spatie/laravel-package-tools": "^1.19",
+                "spatie/php-structure-discoverer": "^2.3.1"
+            },
+            "require-dev": {
+                "illuminate/contracts": "^12.0",
+                "illuminate/database": "^12.0",
+                "illuminate/support": "^12.0",
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^4.1.4",
+                "spatie/laravel-package-tools": "^1.9",
+                "spatie/php-structure-discoverer": "^2.2",
+                "symfony/var-dumper": "^7.3.5|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Spatie\\ModelStates\\ModelStatesServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\ModelStates\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Brent Roose",
+                    "email": "brent@spatie.be",
+                    "homepage": "https://spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "State support for Eloquent models",
+            "homepage": "https://github.com/spatie/laravel-model-states",
+            "keywords": [
+                "spatie",
+                "state"
+            ],
+            "support": {
+                "source": "https://github.com/spatie/laravel-model-states/tree/2.12.2"
+            },
+            "funding": [
+                {
+                    "url": "https://spatie.be/open-source/support-us",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-12-10T09:23:31+00:00"
         },
         {
             "name": "spatie/laravel-package-tools",
@@ -23968,11 +24847,11 @@
         },
         {
             "name": "ysfkaya/filament-phone-input",
-            "version": "dev-main",
+            "version": "4.0.0",
             "dist": {
                 "type": "path",
                 "url": "plugins/ysfkaya/filament-phone-input",
-                "reference": "5683875dff0f0465fbe8da51a07f164eef9fb66b"
+                "reference": "59786b906f0e2c5871eb1e6e3581333d6220b458"
             },
             "require": {
                 "filament/filament": "^4.0",
@@ -27356,12 +28235,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "8db0a0103c58e46c235523631e155680d7e0a7c1"
+                "reference": "95fda149b750941a5d7bd292e712107ca3227a04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/8db0a0103c58e46c235523631e155680d7e0a7c1",
-                "reference": "8db0a0103c58e46c235523631e155680d7e0a7c1",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/95fda149b750941a5d7bd292e712107ca3227a04",
+                "reference": "95fda149b750941a5d7bd292e712107ca3227a04",
                 "shasum": ""
             },
             "conflict": {
@@ -27376,11 +28255,12 @@
                 "aimeos/ai-cms-grapesjs": ">=2021.04.1,<2021.10.8|>=2022.04.1,<2022.10.9|>=2023.04.1,<2023.10.15|>=2024.04.1,<2024.10.8|>=2025.04.1,<2025.10.2",
                 "aimeos/ai-controller-frontend": "<2020.10.15|>=2021.04.1,<2021.10.8|>=2022.04.1,<2022.10.8|>=2023.04.1,<2023.10.9|==2024.04.1",
                 "aimeos/aimeos-core": ">=2022.04.1,<2022.10.17|>=2023.04.1,<2023.10.17|>=2024.04.1,<2024.04.7",
+                "aimeos/aimeos-laravel": "==2021.10",
                 "aimeos/aimeos-typo3": "<19.10.12|>=20,<20.10.5",
                 "airesvsg/acf-to-rest-api": "<=3.1",
                 "akaunting/akaunting": "<2.1.13",
                 "akeneo/pim-community-dev": "<5.0.119|>=6,<6.0.53",
-                "alextselegidis/easyappointments": "<1.5.2.0-beta1",
+                "alextselegidis/easyappointments": "<=1.5.2",
                 "alexusmai/laravel-file-manager": "<=3.3.1",
                 "algolia/algoliasearch-magento-2": "<=3.16.1|>=3.17.0.0-beta1,<=3.17.1",
                 "alt-design/alt-redirect": "<1.6.4",
@@ -27955,7 +28835,7 @@
                 "phpxmlrpc/extras": "<0.6.1",
                 "phpxmlrpc/phpxmlrpc": "<4.9.2",
                 "pi/pi": "<=2.5",
-                "pimcore/admin-ui-classic-bundle": "<1.7.6",
+                "pimcore/admin-ui-classic-bundle": "<=1.7.15|>=2.0.0.0-RC1-dev,<=2.2.2",
                 "pimcore/customer-management-framework-bundle": "<4.2.1",
                 "pimcore/data-hub": "<1.2.4",
                 "pimcore/data-importer": "<1.8.9|>=1.9,<1.9.3",
@@ -27963,6 +28843,7 @@
                 "pimcore/ecommerce-framework-bundle": "<1.0.10",
                 "pimcore/perspective-editor": "<1.5.1",
                 "pimcore/pimcore": "<=11.5.13|>=12.0.0.0-RC1-dev,<12.3.1",
+                "pimcore/web2print-tools-bundle": "<=5.2.1|>=6.0.0.0-RC1-dev,<=6.1",
                 "piwik/piwik": "<1.11",
                 "pixelfed/pixelfed": "<0.12.5",
                 "plotly/plotly.js": "<2.25.2",
@@ -28074,7 +28955,7 @@
                 "snipe/snipe-it": "<=8.3.4",
                 "socalnick/scn-social-auth": "<1.15.2",
                 "socialiteproviders/steam": "<1.1",
-                "solspace/craft-freeform": ">=5,<5.10.16",
+                "solspace/craft-freeform": "<4.1.29|>=5,<5.10.16",
                 "soosyze/soosyze": "<=2",
                 "spatie/browsershot": "<5.0.5",
                 "spatie/image-optimizer": "<1.7.3",
@@ -28358,7 +29239,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-14T22:05:56+00:00"
+            "time": "2026-01-15T23:06:28+00:00"
         },
         {
             "name": "spatie/backtrace",
@@ -28558,9 +29439,11 @@
         "binarybuilds/filament-failed-jobs": 20,
         "caresome/filament-auth-designer": 20,
         "cmsmaxinc/filament-error-pages": 20,
+        "daacreators/creators-ticketing": 20,
         "dashed/filament-numpad-field": 20,
         "fahiem/filament-pinpoint": 20,
         "jeffersongoncalves/filament-logo": 20,
+        "jeffersongoncalves/filament-whatsapp-widget": 20,
         "joaopaulolndev/filament-edit-profile": 20,
         "laraveljutsu/zap": 20,
         "leandrocfe/filament-apex-charts": 20,
@@ -28574,8 +29457,7 @@
         "shreejan/dash-arrange": 20,
         "spatie/laravel-google-calendar": 20,
         "wallacemartinss/filament-icon-picker": 20,
-        "wallacemartinss/filament-whatsapp-conector": 20,
-        "ysfkaya/filament-phone-input": 20
+        "wallacemartinss/filament-whatsapp-conector": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

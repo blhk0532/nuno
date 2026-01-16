@@ -82,6 +82,15 @@ class FilamentErrorPagesServiceProvider extends PackageServiceProvider
                 if ($panel = filament()->getPanels()[$panelName] ?? false) {
                     filament()->setCurrentPanel($panel);
 
+                    // Extract tenant based on panel's tenant route prefix
+                    $tenantRoutePrefix = filament()->getCurrentPanel()->getTenantRoutePrefix();
+                    if ($tenantRoutePrefix) {
+                        $pattern = '/'.$tenantRoutePrefix.'\/([^\/]+)/';
+                        if (preg_match($pattern, $request->path(), $matches)) {
+                            $tenantId = $matches[1];
+                        }
+                    }
+
                     // Get the plugins of the current panel
                     $plugins = filament()->getCurrentPanel()->getPlugins();
 
@@ -91,24 +100,24 @@ class FilamentErrorPagesServiceProvider extends PackageServiceProvider
                     if ($usedByPanel) {
                         $route = 'filament.'.$panel->getId().'.pages.'.$statusCode;
 
-                        // Check if the previous request was redirected to the error page
-                        $isRedirected = $request->url() === route(
-                            $route,
-                            filament()->getCurrentPanel()->getTenantModel() ? $tenantId : null
-                        );
+                        // Set the current panel
+                        filament()->setCurrentPanel($panel);
 
-                        // Handle NotFoundHttpException for panels
-                        if (! $isRedirected) {
-                            $isDefaultPanel = filament()->getCurrentPanel()->getId() === filament()->getDefaultPanel()->getId();
-
-                            if (filament()->getPanels()[$panelName] ?? $isDefaultPanel) {
-                                // https://github.com/livewire/livewire/discussions/4905#discussioncomment-7115155
-                                return (new Redirector(App::get('url')))->route(
-                                    $route,
-                                    filament()->getCurrentPanel()->getTenantModel() ? $tenantId : null
-                                );
+                        // Extract tenant based on panel's tenant route prefix
+                        $tenantRoutePrefix = filament()->getCurrentPanel()->getTenantRoutePrefix();
+                        if ($tenantRoutePrefix) {
+                            $pattern = '/'.$tenantRoutePrefix.'\/([^\/]+)/';
+                            if (preg_match($pattern, $request->path(), $matches)) {
+                                $tenantId = $matches[1];
                             }
                         }
+
+                        // Always render the view directly with Filament layout
+                        return response()->view('filament-error-pages::error-page', [
+                            'code' => $statusCode,
+                            'title' => __('filament-error-pages::error-pages.' . $statusCode . '.title'),
+                            'description' => __('filament-error-pages::error-pages.' . $statusCode . '.description'),
+                        ], $statusCode);
                     }
                 }
 

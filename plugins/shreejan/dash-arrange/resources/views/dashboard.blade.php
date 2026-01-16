@@ -71,7 +71,7 @@
                     x-on:click="customizeDashboard()"
                     size="sm"
                 >
-                    {{ config('dash-arrange.customize_dashboard_title', 'Customize My Dashboard') }}
+                    {{ config('dash-arrange.customize_dashboard_title', 'Customize') }}
                 </x-filament::button>
 
                 <x-filament::button

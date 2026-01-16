@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use AlizHarb\ActivityLog\ActivityLogPlugin;
+use Cmsmaxinc\FilamentErrorPages\FilamentErrorPagesPlugin;
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
 use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
 use Adultdate\FilamentBooking\Filament\Pages\CalendarSettingsPage;
@@ -60,7 +62,14 @@ use pxlrbt\FilamentSpotlight\SpotlightPlugin;
 use WallaceMartinss\FilamentEvolution\FilamentEvolutionPlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use STS\FilamentImpersonate\Tables\Actions\Impersonate;
-
+use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
+use AlizHarb\ActivityLog\Widgets\LatestActivityWidget;
+use Joaopaulolndev\FilamentWorldClock\FilamentWorldClockPlugin;
+use JeffersonGoncalves\Filament\WhatsappWidget\WhatsappWidgetPlugin;
+use App\Filament\Panels\Widgets\WorldClockWidget;
+use JeffersonGoncalves\Filament\WhatsappWidget\Resources\WhatsappAgentResource;
+use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
+use Filament\View\PanelsRenderHook;
 
 final class AdminPanelProvider extends PanelProvider
 {
@@ -76,9 +85,9 @@ final class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Orange,
             ])
             ->sidebarCollapsibleOnDesktop(true)
-            ->brandLogo(fn () => view('filament.app.logo'))
-            ->favicon(fn () => asset('favicon.svg'))
-            ->brandLogoHeight(fn () => request()->is('admin/login', 'admin/password-reset/*') ? '68px' : '34px')
+            ->brandLogo(fn() => view('filament.app.logo'))
+            ->favicon(fn() => asset('favicon.svg'))
+            ->brandLogoHeight(fn() => request()->is('admin/login', 'admin/password-reset/*') ? '68px' : '34px')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->brandName('Noridic Digital')
             ->defaultThemeMode(ThemeMode::Dark)
@@ -98,22 +107,20 @@ final class AdminPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
             ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
 
-//            ->discoverResources(in: app_path('../plugins/adultdate/filament-booking/src/Filament/Resources'), for: 'Adultdate\\FilamentBooking\\Filament\\Resources')
+            //            ->discoverResources(in: app_path('../plugins/adultdate/filament-booking/src/Filament/Resources'), for: 'Adultdate\\FilamentBooking\\Filament\\Resources')
 
             ->pages([
                 Sanctum::class,
             ])
             ->resources([
                 BookingCalendarResource::class,
+                WhatsappAgentResource::class,
             ])
-            ->widgets([
-
-            ])
-
             ->widgets([
                 Widgets\AccountWidget::class,
-                Widgets\FilamentInfoWidget::class,
+            //    Widgets\FilamentInfoWidget::class,
                 OverlookWidget::class,
+                LatestActivityWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -130,6 +137,27 @@ final class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            ->plugin(FilamentUiSwitcherPlugin::make()
+                ->iconRenderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER))
+            ->plugins([
+                FilamentApexChartsPlugin::make(),
+                FilamentEvolutionPlugin::make(),
+            ])
+            ->plugins([
+                FilamentWorldClockPlugin::make()
+                    ->timezones([
+                        'Europe/Stockholm',
+                        'Asia/Bangkok',
+                    ])
+                    ->setTimeFormat('H:i') //Optional time format default is: 'H:i'
+                    ->shouldShowTitle(false) //Optional show title default is: true
+                    ->setTitle('Hours') //Optional title default is: 'World Clock'
+                    ->setDescription('Different description') //Optional description default is: 'Show hours around the world by timezone'
+                    ->setQuantityPerRow(1) //Optional quantity per row default is: 1
+                    ->setColumnSpan('1/2') //Optional column span default is: '1/2'
+                    ->setSort(-1),
+
+            ])
             ->plugins([
                 OverlookPlugin::make()
                     ->sort(2)
@@ -141,6 +169,15 @@ final class AdminPanelProvider extends PanelProvider
                         'xl' => 5,
                         '2xl' => null,
                     ]),
+            ])
+            ->plugins([
+                WhatsappWidgetPlugin::make(),
+            ])
+            ->plugins([
+                ActivityLogPlugin::make()
+                    ->label('Log')
+                    ->pluralLabel('Logs')
+                    ->navigationGroup('System'),
             ])
             ->plugins([
                 EasyFooterPlugin::make()
@@ -161,12 +198,12 @@ final class AdminPanelProvider extends PanelProvider
             ->plugin(
                 AuthDesignerPlugin::make()
                     ->login(
-                        fn (AuthPageConfig $config) => $config
+                        fn(AuthPageConfig $config) => $config
                             ->media(asset('assets/background.jpg'))
                             ->mediaPosition(MediaPosition::Cover)
                             ->blur(1)
                             ->themeToggle()
-                            ->renderHook(AuthDesignerRenderHook::CardBefore, fn () => view('filament.logo-auth'))
+                            ->renderHook(AuthDesignerRenderHook::CardBefore, fn() => view('filament.logo-auth'))
                     )
             )
             ->plugins([
@@ -200,7 +237,7 @@ final class AdminPanelProvider extends PanelProvider
                 ResizedColumnPlugin::make(),
                 FilamentIconPickerPlugin::make(),
 
- ])
+            ])
             ->plugins([
                 FilamentBookingPlugin::make(),
             ])
@@ -237,7 +274,7 @@ final class AdminPanelProvider extends PanelProvider
                     }),
                 Action::make('sanctum')
                     ->label(trans('Auth Tokens'))
-                    ->url('/nds/admin/'.config('filament-sanctum.navigation.slug'))
+                    ->url('/nds/admin/' . config('filament-sanctum.navigation.slug'))
                     ->icon(config('filament-sanctum.navigation.icon', 'heroicon-o-finger-print')),
             ])
             ->plugin(

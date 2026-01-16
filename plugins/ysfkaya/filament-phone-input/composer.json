@@ -1,5 +1,6 @@
 {
     "name": "ysfkaya/filament-phone-input",
+    "version": "4.0.0",
     "description": "A phone input component for Laravel Filament",
     "keywords": [
         "laravel",

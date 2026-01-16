@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Cmsmaxinc\FilamentErrorPages\FilamentErrorPagesPlugin;
 use App\Http\Middleware\FilamentPanelAccess;
 
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
@@ -28,6 +29,8 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use App\Filament\Manager\Pages\ManagerDashboard;
+use daacreators\CreatorsTicketing\TicketingPlugin;
+use daacreators\CreatorsTicketing\Filament\Widgets\TicketStatsWidget;
 
 class ManagerPanelProvider extends PanelProvider
 {
@@ -51,6 +54,9 @@ class ManagerPanelProvider extends PanelProvider
             ->brandLogoHeight('34px')
             ->favicon(fn () => asset('favicon.svg'))
             ->brandLogo(fn () => view('filament.app.logo'))
+            ->plugins([
+                TicketingPlugin::make(),
+            ])
             ->plugin(
                 AuthDesignerPlugin::make()
                     ->login(
@@ -92,6 +98,7 @@ class ManagerPanelProvider extends PanelProvider
             ->widgets([
                 //    AccountWidget::class,
                 //    FilamentInfoWidget::class,
+                TicketStatsWidget::class,
             ])
             ->middleware([
                  EncryptCookies::class,

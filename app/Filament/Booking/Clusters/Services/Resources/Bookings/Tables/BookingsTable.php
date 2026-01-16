@@ -13,6 +13,7 @@ use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Guava\FilamentIconSelectColumn\Tables\Columns\IconSelectColumn;
 
 class BookingsTable
 {
@@ -27,18 +28,22 @@ class BookingsTable
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
-                TextColumn::make('status')
-                    ->badge(),
-                TextColumn::make('currency')
-                    ->searchable()
-                    ->sortable()
-                    ->toggleable(),
                 TextColumn::make('total_price')
                     ->searchable()
                     ->sortable()
                     ->summarize([
                         Sum::make()
                             ->money(),
+                    ]),
+                IconSelectColumn::make('state')
+                    ->label('Status')
+                    ->options([
+                        'opt1' => 'Option 1',
+                        'opt2' => 'Option 2',
+                    ])
+                    ->icons([
+                        'opt1' => 'heroicon-o-check',
+                        'opt2' => 'heroicon-o-x-mark',
                     ]),
                 TextColumn::make('created_at')
                     ->label('Booking date')

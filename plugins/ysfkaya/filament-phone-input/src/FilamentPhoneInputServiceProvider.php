@@ -29,8 +29,9 @@ class FilamentPhoneInputServiceProvider extends PackageServiceProvider
             AlpineComponent::make('filament-phone-input', __DIR__.'/../dist/js/filament-phone-input.js'),
         ], package: 'ysfkaya/filament-phone-input');
 
-        $this->publishes([
-            $this->package->basePath('/../images/vendor/intl-tel-input/build') => public_path("vendor/{$this->package->shortName()}"),
-        ], "{$this->package->shortName()}-assets");
+        // Note: intl-tel-input assets are not published locally - they may be served from CDN
+        // $this->publishes([
+        //     $this->package->basePath('/../images/vendor/intl-tel-input/build') => public_path("vendor/{$this->package->shortName()}"),
+        // ], "{$this->package->shortName()}-assets");
     }
 }

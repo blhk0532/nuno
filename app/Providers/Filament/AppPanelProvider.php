@@ -2,8 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use Cmsmaxinc\FilamentErrorPages\FilamentErrorPagesPlugin;
 use App\Http\Middleware\FilamentPanelAccess;
-
 use App\Filament\App\Resources\Bookings\Pages\DashboardBooking;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use AdultDate\FilamentWirechat\Filament\Pages\ChatDashboard;
@@ -42,6 +42,8 @@ use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use App\Filament\App\Resources\Bookings\Pages\DashboardBokning;
+use App\Filament\App\Pages\TeamInvitationAccept;
+use Filament\Facades\Filament;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -103,6 +105,14 @@ class AppPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
+                FilamentErrorPagesPlugin::make()
+                    ->routes([
+                        'nds/*',
+                        'nds/app/*',
+                        'nds/app/team/*',
+                    ]),
+            ])
+            ->plugins([
                 //    FilamentShieldPlugin::make(),
             ])
             ->plugins([
@@ -155,9 +165,9 @@ class AppPanelProvider extends PanelProvider
                 'wirechat' => Action::make('wirechat')
                     ->label(fn (): string => __('Chats'))
                     ->url(fn (): string => ChatDashboard::getUrl())
-                    ->icon('heroicon-m-chat-bubble-left-ellipsis'),
+                    ->icon('heroicon-m-chat-bubble-left-right'),
                 'profile' => Action::make('profile')
-                    ->label(fn (): string => __('My Profile'))
+                    ->label(fn (): string => __('Profile'))
                     ->url(fn (): string => EditProfilePage::getUrl())
                     ->icon('heroicon-m-user-circle'),
 
@@ -168,13 +178,16 @@ class AppPanelProvider extends PanelProvider
                 CurrentTenant::class,
             ], isPersistent: true)
             ->tenantMenuItems([
+                'register' => fn (Action $action) => $action->label('Register team')
+                ->icon('heroicon-m-user-plus')
+                    ->visible(fn () => User::canRegisterTeam() !== false),
+                'invitations' => Action::make('invitations')
+                    ->label('Team Invitation')
+                    ->url(fn (): string => TeamInvitationAccept::getUrl())
+                    ->icon('heroicon-m-users')
+                    ->visible(fn () => Filament::getTenant() !== null),
                 'profile' => fn (Action $action) => $action->label('Edit team profile')
                     ->visible(fn () => User::canManageTeam() !== false),
-                Action::make('settings')
-                    ->label('Settings')
-                    ->visible(true),
-                'register' => fn (Action $action) => $action->label('Register new team')
-                    ->hidden(fn (): bool => ! Gate::allows('manage-team')),
             ])
             ->plugin(
                 AuthDesignerPlugin::make()

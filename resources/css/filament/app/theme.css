@@ -21,6 +21,7 @@
 @import '../../../../vendor/bezhansalleh/filament-panel-switch/resources/css/panel-switch.css';
 @source '../../../../vendor/bezhansalleh/filament-panel-switch/resources/views/**/*.blade.php';
 
+@source '../../../../vendor/cmsmaxinc/filament-error-pages/resources/**/*.blade.php';
 
 ::-webkit-scrollbar {
     width: .56vw !important;

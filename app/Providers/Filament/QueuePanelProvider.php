@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Cmsmaxinc\FilamentErrorPages\FilamentErrorPagesPlugin;
 use App\Http\Middleware\FilamentPanelAccess;
 
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;

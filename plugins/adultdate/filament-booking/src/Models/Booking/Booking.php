@@ -14,12 +14,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Spatie\ModelStates\HasStates;
 
 class Booking extends Model
 {
     /** @use HasFactory<BookingFactory> */
     use HasFactory;
-
+    use HasStates;
     use SoftDeletes;
 
     protected $table = 'booking_bookings';
@@ -70,6 +71,7 @@ class Booking extends Model
         'ends_at' => 'datetime',
         'start_time',
         'end_time',
+        'state' => \Adultdate\FilamentBooking\Enums\BookingState::class,
     ];
 
     protected $attributes = [
@@ -94,6 +96,11 @@ class Booking extends Model
                 ]);
             }
         });
+    }
+
+    protected function registerStates(): void
+    {
+        $this->addState('state', \Adultdate\FilamentBooking\Enums\BookingState::class);
     }
 
     /** @return MorphOne<OrderAddress, $this> */

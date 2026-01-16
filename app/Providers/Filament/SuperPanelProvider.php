@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
+use Cmsmaxinc\FilamentErrorPages\FilamentErrorPagesPlugin;
 use AchyutN\FilamentLogViewer\FilamentLogViewer;
 use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
 use Adultdate\FilamentBooking\Filament\Pages\CalendarSettingsPage;
@@ -73,7 +74,7 @@ use Usamamuneerchaudhary\Notifier\FilamentNotifierPlugin;
 use WallaceMartinss\FilamentEvolution\FilamentEvolutionPlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use N3XT0R\FilamentPassportUi\FilamentPassportUiPlugin;
-
+use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 final class SuperPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -165,6 +166,9 @@ final class SuperPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+                        ->plugins([
+                 FilamentApexChartsPlugin::make()
+             ])
             ->plugins([
                 OverlookPlugin::make()
                     ->sort(2)

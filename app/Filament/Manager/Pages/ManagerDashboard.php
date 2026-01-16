@@ -8,6 +8,7 @@ use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use daacreators\CreatorsTicketing\Filament\Widgets\TicketStatsWidget;
 
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseCache;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseExceptions;
@@ -43,7 +44,7 @@ class ManagerDashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
-
+TicketStatsWidget::class,
         ];
     }
 

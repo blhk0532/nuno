@@ -38,14 +38,14 @@ enum AuthRole: string implements HasLabel, HasColor
     public function getColor(): string|array|null
     {
         return match ($this) {
-            self::ADMIN => 'primary',
-            self::SUPER => 'secondary',
-            self::MANAGER => 'success',
-            self::SERVICE => 'warning',
-            self::BOOKING => 'info',
-            self::PARTNER => 'gray',
-            self::GUEST => 'danger',
-            self::USER => 'primary',
+            self::ADMIN => ['display' => '#3b82f6', 'dropdown' => 'primary'],
+            self::SUPER => ['display' => '#9333ea', 'dropdown' => 'secondary'],
+            self::MANAGER => ['display' => '#10b981', 'dropdown' => 'success'],
+            self::SERVICE => ['display' => '#f97316', 'dropdown' => 'warning'],
+            self::BOOKING => ['display' => '#6366f1', 'dropdown' => 'info'],
+            self::PARTNER => ['display' => '#6b7280', 'dropdown' => 'gray'],
+            self::GUEST => ['display' => '#ef4444', 'dropdown' => 'danger'],
+            self::USER => ['display' => '#3b82f6', 'dropdown' => 'primary'],
         };
     }
 }

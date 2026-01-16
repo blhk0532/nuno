@@ -2,8 +2,8 @@
 
 namespace App\Providers\Filament;
 
+use Cmsmaxinc\FilamentErrorPages\FilamentErrorPagesPlugin;
 use App\Http\Middleware\FilamentPanelAccess;
-
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use App\Filament\Admin\Pages\Auth\Login;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;

@@ -144,6 +144,7 @@ final class AppServiceProvider extends ServiceProvider
                 'locale',
                 'manager',
                 'notify',
+                'oauth',
                 'partner',
                 'product',
                 'plugins',

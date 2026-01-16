@@ -83,6 +83,6 @@ return [
     | Customize button color, colors can be added in AdminPanelProvider.php -> colors array.
     |
     */
-    'customize_dashboard_title' => 'Customize My Dashboard',
+    'customize_dashboard_title' => 'Customize',
     'customize_dashboard_button_color' => 'primary',
 ];

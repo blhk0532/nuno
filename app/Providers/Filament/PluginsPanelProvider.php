@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use Cmsmaxinc\FilamentErrorPages\FilamentErrorPagesPlugin;
 use App\Http\Middleware\FilamentPanelAccess;
 
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
@@ -28,6 +29,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use App\Filament\Plugins\Pages\PluginsDashboard;
+use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 
 class PluginsPanelProvider extends PanelProvider
 {
@@ -108,6 +110,9 @@ class PluginsPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+                        ->plugins([
+                 FilamentApexChartsPlugin::make()
+             ])
             ->plugins([
                 FilamentWireChatPlugin::make()
                     ->onlyPages([])

@@ -40,6 +40,9 @@ use Laravel\Passport\Contracts\OAuthenticatable;
 use Illuminate\Database\Eloquent\Relations\MorphMany;  // Add this import
 use Laravel\Passport\PersonalAccessTokenResult;
 use Laravel\Passport\Contracts\ScopeAuthorizable;
+use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\LogOptions;
+
 
 /**
  * @property int $id
@@ -101,6 +104,7 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
     use MustVerifyEmail;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use LogsActivity;
 
     protected $accessToken;
 
@@ -133,6 +137,12 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
         //    }
 
         return true;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logAll();
     }
 
     public function canImpersonate(): bool
@@ -381,12 +391,12 @@ public function withAccessToken(?ScopeAuthorizable $accessToken): static
 
     protected function canManageTeam(): bool
     {
-        return false;
+        return auth()->user()->role === 'super' || auth()->user()->role === 'admin' || auth()->user()->role === 'manager';
     }
 
     protected function canRegisterTeam(): bool
     {
-        return false;
+        return auth()->user()->role === 'super' || auth()->user()->role === 'admin' || auth()->user()->role === 'manager';
     }
 
     public function canBeImpersonated(): bool

@@ -40,13 +40,6 @@ class PluginsDashboard extends BaseDashboard
         return 2;
     }
 
-    public function getWidgets(): array
-    {
-        return [
-
-        ];
-    }
-
     protected function getHeaderActions(): array
     {
         return [];

@@ -32,19 +32,12 @@ class AdminDashboard extends BaseDashboard
 
     // Prevent this app-level Dashboard from being auto-discovered so that
     // the explicit `AdminDashboard` can be registered as the admin panel root.
-    protected static bool $isDiscovered = true;
+    protected static bool $isDiscovered = false;
 
     public function getColumns(): int
     {
         // Use fewer columns so widgets are wider and not visually compressed.
         return 2;
-    }
-
-    public function getWidgets(): array
-    {
-        return [
-
-        ];
     }
 
     protected function getHeaderActions(): array
