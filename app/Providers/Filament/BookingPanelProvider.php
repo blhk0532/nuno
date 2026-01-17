@@ -51,6 +51,7 @@ use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use Filament\Navigation\Sidebar;
 use Filament\Navigation\NavigationGroup;
 use Filament\Themes\ThemeMode;
+use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
 use Devtical\Sanctum\Pages\Sanctum;
 
 class BookingPanelProvider extends PanelProvider
@@ -125,6 +126,7 @@ class BookingPanelProvider extends PanelProvider
             //    BookingDashboard::class,
                 CalendarSettingsPage::class,
                 Sanctum::class,
+
             ])
 
             ->pages([
@@ -167,6 +169,7 @@ class BookingPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
+                FilamentGeneralSettingsPlugin::make(),
                 FilamentBookingPlugin::make(),
                 FilamentWireChatPlugin::make()
                     ->onlyPages([])
