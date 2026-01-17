@@ -12,6 +12,7 @@ use Filament\Widgets\Widget;
 use App\Filament\Admin\Widgets\UserDonut;
 use App\Filament\Admin\Widgets\AccountInfoStackWidget;
 use App\Filament\Admin\Widgets\WorldClockWidget;
+
 class Dashboard extends BaseDashboard
 {
     use HasDashArrange;
@@ -34,10 +35,9 @@ class Dashboard extends BaseDashboard
         return 'Administration';
     }
 
-        public static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
         return now()->timezone('Asia/Bangkok')->format('H:i');
-
     }
 
     public static function getNavigationBadgeColor(): ?string
@@ -51,12 +51,12 @@ class Dashboard extends BaseDashboard
     }
 
 
-  public function getHeaderWidgets(): array
-{
+    public function getHeaderWidgets(): array
+    {
 
-    return [
-        AccountInfoStackWidget::class,
-        WorldClockWidget::class,
-    ];
-}
+        return [
+            AccountInfoStackWidget::class,
+            WorldClockWidget::class,
+        ];
+    }
 }

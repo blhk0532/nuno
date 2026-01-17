@@ -50,9 +50,9 @@ class AdminDashboard extends BaseDashboard
         return [];
     }
 
-    protected function getHeaderTitle(): string
+    protected function getHeaderTitle(): ?string
     {
-        return false;
+        return null;
     }
 
     public static function shouldRegisterNavigation(): bool
@@ -91,7 +91,7 @@ class AdminDashboard extends BaseDashboard
         return 2;
     }
 
-    public function getHeaderWidgets(): array
+    public function getWidgets(): array
 {
     return [
         // Left column: stacked
