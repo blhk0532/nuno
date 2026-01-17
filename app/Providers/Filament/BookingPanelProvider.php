@@ -148,10 +148,7 @@ class BookingPanelProvider extends PanelProvider
             //    EventCalendar::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Booking/Widgets'), for: 'App\Filament\Booking\Widgets')
-            ->widgets([
-                //    AccountWidget::class,
-                //    FilamentInfoWidget::class,
-            ])
+
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
