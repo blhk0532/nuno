@@ -36,11 +36,11 @@ class DashboardBokning extends BaseDashboard
 
      protected static ?string $title = '';
 
-    protected static string $routePath = 'service/bokning';
+    protected static string $routePath = 'dashboard';
 
     protected static string|UnitEnum|null $navigationGroup = '';
 
-    protected static ?string $slug = 'bokning';
+    protected static ?string $slug = 'dashboard';
 
         protected string $view = 'filament-booking::pages.page';
 

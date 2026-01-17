@@ -6,7 +6,7 @@ use Filament\Widgets\Widget;
 
 class FilamentInfoWidget extends Widget
 {
-    protected static ?int $sort = 1;
+    protected static ?int $sort = -1;
 
     protected static bool $isLazy = false;
 

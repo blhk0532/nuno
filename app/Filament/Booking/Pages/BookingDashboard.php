@@ -11,7 +11,8 @@ use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-
+use App\Filament\Admin\Widgets\AccountInfoStackWidget;
+use App\Filament\Admin\Widgets\WorldClockWidget;
 class BookingDashboard extends BaseDashboard
 {
     use BaseDashboard\Concerns\HasFiltersForm;
@@ -72,15 +73,19 @@ class BookingDashboard extends BaseDashboard
         return 'heroicon-c-clipboard-document-check';
     }
 
-        public function getWidgets():array
-    {
-       return [
 
-       ];
-    }
 
     public static function getNavigationBadgeColor(): ?string
     {
         return 'success';
+    }
+
+        public function getHeaderWidgets(): array
+    {
+
+        return [
+            AccountInfoStackWidget::class,
+            WorldClockWidget::class,
+        ];
     }
 }

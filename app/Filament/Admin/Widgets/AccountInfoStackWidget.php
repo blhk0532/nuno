@@ -26,8 +26,9 @@ protected int | string | array $columnSpan = [
     protected function getStackedWidgets(): array
     {
         return [
-            AccountWidget::class,
             FilamentInfoWidget::class,
+            AccountWidget::class,
+
         ];
     }
 

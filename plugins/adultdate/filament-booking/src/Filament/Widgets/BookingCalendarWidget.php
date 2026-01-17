@@ -72,7 +72,7 @@ class BookingCalendarWidget extends FullCalendarWidget implements HasCalendar
         InteractsWithEvents::refreshRecords insteadof InteractsWithCalendar;
     }
 
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 10;
 
     protected static bool $isDiscovered = true;
 
@@ -127,8 +127,8 @@ class BookingCalendarWidget extends FullCalendarWidget implements HasCalendar
             'nowIndicator' => true,
             'selectable' => true,
             'dateClick' => true,
-            'slotMinTime' => '00:00:00',
-            'slotMaxTime' => '24:00:00',
+            'slotMinTime' => '07:00:00',
+            'slotMaxTime' => '21:00:00',
             'slotDuration' => '00:30:00',
             'allDayText' => '🗓️',
             'allDaySlot' => true,
@@ -136,13 +136,12 @@ class BookingCalendarWidget extends FullCalendarWidget implements HasCalendar
             'themeSystem' => $settings?->calendar_theme?->value ?? 'standard',
             'views' => [
                 'timeGridDay' => [
-                    'slotMinTime' => '00:00:00',
-                    'slotMaxTime' => '24:00',
+                    'slotMinTime' => '07:00:00',
+                    'slotMaxTime' => '21:00:00',
                 ],
                 'timeGridWeek' => [
-                    'slotMinTime' => '00:00:00',
-                    'slotMaxTime' => '24:00',
-                    'slotHeight' => 120,
+                    'slotMinTime' => '07:00:00',
+                    'slotMaxTime' => '21:00:00',
                 ],
             ],
             'dayRender' => 'function(info) { info.el.addEventListener("contextmenu", function(e) { e.preventDefault(); $wire.dispatch("calendar--open-menu", { context: "DateClick", data: { date: info.dateStr } }); }); }',

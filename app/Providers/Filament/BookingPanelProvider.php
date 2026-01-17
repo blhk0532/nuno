@@ -30,7 +30,7 @@ use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use App\Filament\Booking\Pages\GoogleCalendar;
 use App\Filament\Booking\Pages\InertiaCalendar;
-use App\Filament\Booking\Pages\BookingDashboard;
+use Adultdate\FilamentBooking\Filament\Pages\BookingDashboard;
 use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
 use Adultdate\FilamentBooking\Filament\Pages\CalendarSettingsPage;
 use Adultdate\FilamentBooking\Filament\Resources\Booking\BookingOutcallQueues\BookingOutcallQueueResource;
@@ -49,6 +49,9 @@ use Adultdate\FilamentBooking\Filament\Widgets\OrdersChart;
 use Adultdate\FilamentBooking\Filament\Widgets\StatsOverviewWidget;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use Filament\Navigation\Sidebar;
+use Filament\Navigation\NavigationGroup;
+use Filament\Themes\ThemeMode;
+
 class BookingPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -110,18 +113,22 @@ class BookingPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->discoverPages(in: app_path('Filament/Booking/Pages'), for: 'App\Filament\Booking\Pages')
             ->discoverClusters(in: app_path('Filament/Booking/Clusters'), for: 'App\\Filament\\Booking\\Clusters')
-
+            ->navigationGroups([
+                NavigationGroup::make('Boknings Kalendrar')
+                    ->icon('heroicon-o-calendar-days'),
+            ])
             ->pages([
             //   Dashboard::class,
                 GoogleCalendar::class,
                 InertiaCalendar::class,
             //    BookingDashboard::class,
+                CalendarSettingsPage::class,
             ])
 
             ->pages([
             //    Pages\Dashboard::class,
             //    DashboardBooking::class,
-                CalendarSettingsPage::class,
+
             ])
             ->resources([
                 BookingCalendarResource::class,
@@ -138,7 +145,7 @@ class BookingPanelProvider extends PanelProvider
                 LatestOrders::class,
                 OrdersChart::class,
                 StatsOverviewWidget::class,
-                EventCalendar::class,
+            //    EventCalendar::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Booking/Widgets'), for: 'App\Filament\Booking\Widgets')
             ->widgets([

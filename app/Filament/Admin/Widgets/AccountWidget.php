@@ -7,7 +7,7 @@ use Filament\Widgets\Widget;
 
 class AccountWidget extends Widget
 {
-    protected static ?int $sort = -3;
+    protected static ?int $sort = 2;
 
     protected static bool $isLazy = false;
 

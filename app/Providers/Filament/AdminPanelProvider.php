@@ -101,8 +101,8 @@ final class AdminPanelProvider extends PanelProvider
             ->emailChangeVerification()
             ->spa()
             ->navigationGroups([
-                NavigationGroup::make('Account')
-                    ->icon('heroicon-o-user-circle'),
+                NavigationGroup::make('Boknings Kalendrar')
+                    ->icon('heroicon-o-calendar-days'),
             ])
 
             ->defaultThemeMode(config('teamkit.theme_mode', ThemeMode::Dark))

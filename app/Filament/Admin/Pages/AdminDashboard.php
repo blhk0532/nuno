@@ -18,7 +18,7 @@ use Filament\Widgets\StatsOverview;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseSlowQueries;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseSlowRequests;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseUsage;
-use Filament\Layouts\Layout;
+use Filament\Widgets\Layout;
 use App\Filament\Admin\Widgets\AccountWidget;
 use App\Filament\Admin\Widgets\FilamentInfoWidget;
 use Joaopaulolndev\FilamentWorldClock\Widgets\WorldClockWidget;
