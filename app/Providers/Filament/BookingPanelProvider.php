@@ -169,7 +169,6 @@ class BookingPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                FilamentGeneralSettingsPlugin::make(),
                 FilamentBookingPlugin::make(),
                 FilamentWireChatPlugin::make()
                     ->onlyPages([])
