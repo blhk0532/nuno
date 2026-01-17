@@ -43,7 +43,7 @@ if (($i = array_search('nds', $segments)) !== false) {
         }
 
         if (! $this->checkPanelAccess($panelId) && $panelId !== 'app') {
-            return redirect('/app')->with('error', 'Unauthorized access');
+            abort(403, 'Not authorized to access ' . $panelId . ' panel');
         }
 
         return $next($request);

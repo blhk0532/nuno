@@ -221,6 +221,7 @@ final class SuperPanelProvider extends PanelProvider
                     ->withLinks([
                         ['title' => 'ndsth.com', 'url' => 'https://ndsth.com', 'target' => '_blank'],
                     ]),
+                FilamentErrorPagesPlugin::make(),
             ])
             ->plugin(
                 AuthDesignerPlugin::make()

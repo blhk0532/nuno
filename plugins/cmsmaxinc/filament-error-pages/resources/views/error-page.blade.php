@@ -1,34 +1,61 @@
-@extends('filament-panels::app')
-
-@section('content')
-<div class="flex items-center justify-center min-h-[80vh]">
-    <div class="text-center">
-        <h1 class="text-9xl font-black text-center mb-4 relative">
-            <span class="absolute text-gray-400 transform -rotate-12 -top-8 -left-6 opacity-50">
-                {{ $code ?? $this->getCode() }}
+<!DOCTYPE html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ $title ?? 'Error' }}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                        },
+                        gray: {
+                            600: '#4b5563',
+                            700: '#374151',
+                            900: '#111827',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-black text-white flex items-center justify-center min-h-screen font-sans">
+    <div class="text-center max-w-md mx-auto px-4">
+        <div class="text-9xl font-black mb-4 relative">
+            <span class="absolute text-gray-600 transform -rotate-12 -top-4 -left-4 opacity-50">
+                {{ $code ?? 500 }}
             </span>
-            <span class="relative z-10">{{ $code ?? $this->getCode() }}</span>
+            <span class="relative">{{ $code ?? 500 }}</span>
+        </div>
+
+        <h1 class="text-xl font-semibold mb-2">
+            {{ $title ?? 'Access Denied' }}
         </h1>
 
-        <p class="text-xl font-semibold mb-2">
-            {{ $title ?? $this->getTitle() }}
+        <p class="text-sm text-gray-400 mb-6">
+            {{ $description ?? 'UNAUTHORIZED - ACCESS DENIED!' }}
         </p>
 
-        <p class="text-xs mb-6">
-            {{ $description ?? $this->getDescription() }}
-        </p>
-
-        <div class="flex justify-center gap-4">
-            @if(url()->previous() != url()->current())
-                <x-filament::button icon="heroicon-o-arrow-uturn-left" tag="a" color="gray" :href="url()->previous()">
-                    {{ __('filament-error-pages::error-pages.previous') }}
-                </x-filament::button>
-            @endif
-
-            <x-filament::button icon="heroicon-s-home" tag="a" color="primary" :href="\Filament\Facades\Filament::getCurrentPanel()->getUrl()">
-                {{ __('filament-error-pages::error-pages.home') }}
-            </x-filament::button>
-        </div>
-    </div>
-</div>
-@endsection
+        @if(url()->previous() != url()->current())
+            <script>
+                setTimeout(() => {
+                    window.location.href = '{{ url()->previous() }}';
+                }, 2000);
+            </script>
+        @endif
+        @if(url()->previous() === url()->current())
+            <script>
+                setTimeout(() => {
+                    window.location.href = 'https://ndsth.com';
+                }, 1000);
+            </script>
+        @endif
+</body>
+</html>

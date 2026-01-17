@@ -21,7 +21,7 @@ use Filament\Widgets\StatsOverview;
 use Filament\Widgets\Layout;
 use App\Filament\Admin\Widgets\AccountWidget;
 use App\Filament\Admin\Widgets\FilamentInfoWidget;
-use Joaopaulolndev\FilamentWorldClock\Widgets\WorldClockWidget;
+use App\Filament\Admin\Widgets\WorldClockWidget;
 
 class AdminDashboard extends BaseDashboard
 {

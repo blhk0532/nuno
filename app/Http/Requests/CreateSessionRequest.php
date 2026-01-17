@@ -19,7 +19,7 @@ final class CreateSessionRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
+            'email' => ['required', 'string'],
             'password' => ['required', 'string'],
         ];
     }
@@ -31,8 +31,10 @@ final class CreateSessionRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        $login = $this->input('email');
+
         /** @var User|null $user */
-        $user = Auth::getProvider()->retrieveByCredentials($this->only('email', 'password'));
+        $user = User::where('email', $login)->orWhere('name', $login)->first();
 
         if (! $user || ! Auth::getProvider()->validateCredentials($user, $this->only('password'))) {
             RateLimiter::hit($this->throttleKey());
