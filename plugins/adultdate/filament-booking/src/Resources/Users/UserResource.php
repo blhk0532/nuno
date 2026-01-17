@@ -18,9 +18,10 @@ class UserResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $navigationLabel = 'Users';
+    protected static ?string $navigationLabel = 'Användare';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Bokning';
+        protected static string | UnitEnum | null $navigationGroup = 'Bokningar Admin';
+
 
     protected static ?string $recordTitleAttribute = 'name';
 

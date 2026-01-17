@@ -91,37 +91,9 @@ final class CalendarDataController extends Controller
 
     public function serviceUsers(Request $request): JsonResponse
     {
-        $activeCalendars = BookingCalendar::query()
-            ->where('is_active', true)
-            ->get();
-
-        $calendarAccessMap = [];
-
-        foreach ($activeCalendars as $calendar) {
-            $calendarId = $calendar->id;
-            if ($calendar->owner_id) {
-                $calendarAccessMap[$calendar->owner_id][] = $calendarId;
-            }
-
-            foreach ((array) $calendar->access as $accessId) {
-                if (! $accessId) {
-                    continue;
-                }
-
-                $calendarAccessMap[$accessId][] = $calendarId;
-            }
-        }
-
-        $technicianIds = array_values(array_unique(array_map('intval', array_keys($calendarAccessMap))));
-
-        if (empty($technicianIds)) {
-            return response()->json([]);
-        }
-
         $users = User::query()
             ->where('role', 'service')
             ->where('status', 1)
-            ->whereIn('id', $technicianIds)
             ->when($request->has('search'), function ($query) use ($request) {
                 $search = $request->input('search');
                 $query->where('name', 'like', "%{$search}%")
@@ -129,13 +101,23 @@ final class CalendarDataController extends Controller
             })
             ->limit(50)
             ->get()
-            ->map(function ($user) use ($calendarAccessMap) {
+            ->map(function ($user) {
+                // Get calendar access for this user
+                $activeCalendars = BookingCalendar::query()
+                    ->where('is_active', true)
+                    ->where(function ($query) use ($user) {
+                        $query->where('owner_id', $user->id)
+                              ->orWhereJsonContains('access', $user->id);
+                    })
+                    ->pluck('id')
+                    ->toArray();
+
                 return [
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
                     'phone' => $user->phone,
-                    'calendar_ids' => array_values(array_unique($calendarAccessMap[$user->id] ?? [])),
+                    'calendar_ids' => $activeCalendars,
                 ];
             });
 

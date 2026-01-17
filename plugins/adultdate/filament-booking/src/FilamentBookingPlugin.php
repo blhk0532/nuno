@@ -28,8 +28,15 @@ use Adultdate\FilamentBooking\Filament\Resources\Booking\BookingOutcallQueues\Bo
 use Adultdate\FilamentBooking\Filament\Resources\Booking\Users\UserResource;
 use Adultdate\FilamentBooking\Filament\Resources\BookingCalendars\BookingCalendarResource;
 use Adultdate\FilamentBooking\Filament\Resources\BookingDataLeads\BookingDataLeadResource;
-use Adultdate\FilamentBooking\Filament\Pages\Dashboard;
+
 use Illuminate\Support\Facades\Auth;
+use App\Filament\Booking\Pages\GoogleCalendar;
+use App\Filament\Booking\Pages\InertiaCalendar;
+use Illuminate\Support\ServiceProvider;
+use Filament\Support\Facades\FilamentView;
+use Filament\View\PanelsRenderHook;
+use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
+use App\Filament\Booking\Clusters\Services\Resources\Bookings\Pages\DashboardBokning;
 
 class FilamentBookingPlugin implements Plugin
 {
@@ -96,7 +103,39 @@ class FilamentBookingPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        //
+        // Open sidebar on all pages by default
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::BODY_END,
+            fn (): string => <<<HTML
+<script>
+    document.addEventListener('alpine:init', () => {
+        if (Alpine.store('sidebar')) {
+            Alpine.store('sidebar').open();
+        }
+    });
+</script>
+HTML
+        );
+
+        // Close sidebar on specific pages
+        FilamentView::registerRenderHook(
+        PanelsRenderHook::BODY_END,
+        fn (): string => <<<HTML
+<script>
+    document.addEventListener('alpine:init', () => {
+        if (Alpine.store('sidebar')) {
+            Alpine.store('sidebar').close();
+        }
+    });
+</script>
+HTML,
+        scopes: [
+                DashboardBooking::class,
+                GoogleCalendar::class,
+                DashboardBokning::class,
+                InertiaCalendar::class,
+            ],
+        );
     }
 
     public static function make(): static

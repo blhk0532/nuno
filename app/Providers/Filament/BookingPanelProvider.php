@@ -29,6 +29,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use App\Filament\Booking\Pages\GoogleCalendar;
+use App\Filament\Booking\Pages\InertiaCalendar;
 use App\Filament\Booking\Pages\BookingDashboard;
 use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
 use Adultdate\FilamentBooking\Filament\Pages\CalendarSettingsPage;
@@ -47,6 +48,7 @@ use Adultdate\FilamentBooking\Filament\Widgets\LatestOrders;
 use Adultdate\FilamentBooking\Filament\Widgets\OrdersChart;
 use Adultdate\FilamentBooking\Filament\Widgets\StatsOverviewWidget;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
+use Filament\Navigation\Sidebar;
 class BookingPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -112,14 +114,13 @@ class BookingPanelProvider extends PanelProvider
             ->pages([
             //   Dashboard::class,
                 GoogleCalendar::class,
-                BookingDashboard::class,
+                InertiaCalendar::class,
+            //    BookingDashboard::class,
             ])
-            ->resources([
-                BookingCalendarResource::class,
-            ])
-                        ->pages([
+
+            ->pages([
             //    Pages\Dashboard::class,
-                DashboardBooking::class,
+            //    DashboardBooking::class,
                 CalendarSettingsPage::class,
             ])
             ->resources([

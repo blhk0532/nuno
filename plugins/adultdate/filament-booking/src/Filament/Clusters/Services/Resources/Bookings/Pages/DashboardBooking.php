@@ -17,6 +17,7 @@ use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widg
 use App\Models\BookingCalendar as BookingCalendarModel;
 use App\UserRole;
 use Filament\Support\Enums\Width;
+use Filament\Navigation\Sidebar;
 
 class DashboardBooking extends BaseDashboard
 {
@@ -25,7 +26,7 @@ class DashboardBooking extends BaseDashboard
 
     protected static ?string $navigationLabel = 'Dash';
 
-     protected static ?string $title = 'Calendar';
+     protected static ?string $title = '';
 
         protected static ?int $navigationSort = -1;
 
@@ -38,6 +39,12 @@ class DashboardBooking extends BaseDashboard
   //  protected static ?string $slug = 'dashboard';
 
         protected string $view = 'filament-booking::pages.page';
+
+
+    public function mount(): void
+    {
+        $this->dispatch('filament-collapse-sidebar');
+    }
 
     public static function shouldRegisterNavigation(): bool
     {
@@ -58,7 +65,7 @@ public function getMaxContentWidth(): Width
 
     public static function getNavigationLabel(): string
     {
-        return '' . Str::ucfirst('Calendar') ?? 'User';
+        return '' . Str::ucfirst('Bokning Kalender') ?? 'Bokning Kalender';
     }
 
     public static function getNavigationBadge(): ?string

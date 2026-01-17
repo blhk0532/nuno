@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class OrdersChart extends ChartWidget
 {
     protected ?string $heading = 'Bokningar per månad';
-
+protected static bool $isDiscovered = false;
     protected static ?int $sort = 11;
 
     protected function getType(): string

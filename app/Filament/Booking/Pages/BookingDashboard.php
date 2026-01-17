@@ -19,7 +19,7 @@ class BookingDashboard extends BaseDashboard
     protected static ?string $title = '';
 
 
-    protected static ?string $navigationLabel = 'Bookings';
+    protected static ?string $navigationLabel = 'Bokning NDS';
 
 
     protected static ?string $slug = 'dashboard';
@@ -57,7 +57,7 @@ class BookingDashboard extends BaseDashboard
 
     public static function getNavigationLabel(): string
     {
-        return Str::ucfirst('Bookings') ?? null;
+        return Str::ucfirst('Bokning NDS') ?? null;
     }
 
     public static function getNavigationBadge(): ?string
@@ -74,7 +74,9 @@ class BookingDashboard extends BaseDashboard
 
         public function getWidgets():array
     {
-       return [];
+       return [
+
+       ];
     }
 
     public static function getNavigationBadgeColor(): ?string

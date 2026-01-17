@@ -70,6 +70,11 @@ use App\Filament\Panels\Widgets\WorldClockWidget;
 use JeffersonGoncalves\Filament\WhatsappWidget\Resources\WhatsappAgentResource;
 use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
 use Filament\View\PanelsRenderHook;
+use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
+
+use App\Filament\Admin\Widgets\AccountInfoStackWidget;
 
 final class AdminPanelProvider extends PanelProvider
 {
@@ -105,7 +110,7 @@ final class AdminPanelProvider extends PanelProvider
             ->discoverClusters(in: app_path('Filament/Admin/Clusters'), for: 'App\\Filament\\Admin\\Clusters')
             ->discoverPages(in: app_path('Filament/Admin/Pages'), for: 'App\\Filament\\Admin\\Pages')
             ->discoverResources(in: app_path('Filament/Admin/Resources'), for: 'App\\Filament\\Admin\\Resources')
-            ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
+        //    ->discoverWidgets(in: app_path('Filament/Admin/Widgets'), for: 'App\\Filament\\Admin\\Widgets')
 
             //            ->discoverResources(in: app_path('../plugins/adultdate/filament-booking/src/Filament/Resources'), for: 'Adultdate\\FilamentBooking\\Filament\\Resources')
 
@@ -117,10 +122,9 @@ final class AdminPanelProvider extends PanelProvider
                 WhatsappAgentResource::class,
             ])
             ->widgets([
-                Widgets\AccountWidget::class,
-            //    Widgets\FilamentInfoWidget::class,
-                OverlookWidget::class,
-                LatestActivityWidget::class,
+            //    AccountInfoStackWidget::class,
+            //    OverlookWidget::class,
+            //    LatestActivityWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -138,24 +142,21 @@ final class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugin(FilamentUiSwitcherPlugin::make()
-                ->iconRenderHook(PanelsRenderHook::GLOBAL_SEARCH_AFTER))
+                ->iconRenderHook(PanelsRenderHook::TOPBAR_LOGO_AFTER))
             ->plugins([
                 FilamentApexChartsPlugin::make(),
                 FilamentEvolutionPlugin::make(),
             ])
             ->plugins([
-                FilamentWorldClockPlugin::make()
-                    ->timezones([
-                        'Europe/Stockholm',
-                        'Asia/Bangkok',
-                    ])
-                    ->setTimeFormat('H:i') //Optional time format default is: 'H:i'
-                    ->shouldShowTitle(false) //Optional show title default is: true
-                    ->setTitle('Hours') //Optional title default is: 'World Clock'
-                    ->setDescription('Different description') //Optional description default is: 'Show hours around the world by timezone'
-                    ->setQuantityPerRow(1) //Optional quantity per row default is: 1
-                    ->setColumnSpan('1/2') //Optional column span default is: '1/2'
-                    ->setSort(-1),
+                FilamentGeneralSettingsPlugin::make()
+                    ->canAccess(fn() => Auth::user()->role === 'super')
+                    ->setSort(3)
+                    ->setIcon('heroicon-o-cog')
+                    ->setNavigationGroup('Settings')
+                    ->setTitle('Settings')
+                    ->setNavigationLabel('Settings'),
+            ])
+            ->plugins([
 
             ])
             ->plugins([

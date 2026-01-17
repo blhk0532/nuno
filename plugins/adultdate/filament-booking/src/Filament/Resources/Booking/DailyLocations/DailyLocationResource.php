@@ -26,9 +26,11 @@ class DailyLocationResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'location';
 
+     protected static ?string $modelLabel =  'Location';
+
     protected static ?string $navigationLabel = 'Områden';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Kalender';
+    protected static string | UnitEnum | null $navigationGroup = 'Hantera Kalendrar';
 
     protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedMapPin;
 

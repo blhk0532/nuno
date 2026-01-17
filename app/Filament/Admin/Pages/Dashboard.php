@@ -5,7 +5,13 @@ namespace App\Filament\Admin\Pages;
 use Shreejan\DashArrange\Traits\HasDashArrange;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Illuminate\Contracts\Support\Htmlable;
-
+use Filament\Layouts\Layout;
+use App\Filament\Admin\Widgets\AccountWidget;
+use App\Filament\Admin\Widgets\FilamentInfoWidget;
+use Filament\Widgets\Widget;
+use App\Filament\Admin\Widgets\UserDonut;
+use App\Filament\Admin\Widgets\AccountInfoStackWidget;
+use App\Filament\Admin\Widgets\WorldClockWidget;
 class Dashboard extends BaseDashboard
 {
     use HasDashArrange;
@@ -44,4 +50,13 @@ class Dashboard extends BaseDashboard
         return 'heroicon-o-shield-check';
     }
 
+
+  public function getHeaderWidgets(): array
+{
+
+    return [
+        AccountInfoStackWidget::class,
+        WorldClockWidget::class,
+    ];
+}
 }

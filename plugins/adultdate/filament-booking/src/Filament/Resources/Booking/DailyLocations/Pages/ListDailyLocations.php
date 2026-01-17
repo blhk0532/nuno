@@ -6,6 +6,7 @@ use Adultdate\FilamentBooking\Filament\Resources\Booking\DailyLocations\DailyLoc
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 use Adultdate\FilamentBooking\Filament\Resources\Booking\DailyLocations\Widgets\EventCalendar;
+use Adultdate\FilamentBooking\Filament\Widgets\BookingCalendarWidget;
 
 class ListDailyLocations extends ListRecords
 {
@@ -18,10 +19,10 @@ class ListDailyLocations extends ListRecords
         ];
     }
 
-    protected function getHeaderWidgets(): array
+    protected function getFooterWidgets(): array
     {
         return [
-           EventCalendar::class,
+           BookingCalendarWidget::class,
         ];
     }
 }

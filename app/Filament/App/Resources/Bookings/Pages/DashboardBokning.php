@@ -13,9 +13,9 @@ use Illuminate\Support\Str;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
-use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar1;
-use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar2;
-use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar3;
+use App\Filament\App\Resources\Bookings\Widgets\MultiCalendar1;
+use App\Filament\App\Resources\Bookings\Widgets\MultiCalendar2;
+use App\Filament\App\Resources\Bookings\Widgets\MultiCalendar3;
 use App\Models\BookingCalendar as BookingCalendarModel;
 use App\UserRole;
 use Filament\Support\Enums\Width;
@@ -34,7 +34,7 @@ class DashboardBokning extends BaseDashboard
 
 //    protected static ?string $navigationLabel = 'Dash';
 
-     protected static ?string $title = 'Calender';
+     protected static ?string $title = '';
 
     protected static string $routePath = 'service/bokning';
 
@@ -53,7 +53,7 @@ class DashboardBokning extends BaseDashboard
 
     public static function getNavigationLabel(): string
     {
-        return '' . Str::ucfirst('Calender') ?? 'User';
+        return '' . Str::ucfirst('Kalender') ?? 'User';
     }
 
     public static function getNavigationBadge(): ?string

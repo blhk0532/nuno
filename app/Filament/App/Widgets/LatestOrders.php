@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Auth;
 class LatestOrders extends BaseWidget
 {
     protected int|string|array $columnSpan = 'full';
-
+protected static bool $isDiscovered = false;
     protected static ?string $heading = 'Senaste Bokningar';
 
     protected static ?int $sort = 12;

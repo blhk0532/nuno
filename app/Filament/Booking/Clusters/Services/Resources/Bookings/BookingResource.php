@@ -26,11 +26,13 @@ class BookingResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'number';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Bokning';
+    protected static string | UnitEnum | null $navigationGroup = 'Bokningar Admin';
 
     protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-calendar-days';
 
     protected static ?int $navigationSort = 2;
+
+    protected static ?string $navigationLabel = 'Bokningar';
 
     /**
      * Disable Filament tenant scoping for this resource to avoid
@@ -87,13 +89,13 @@ public static function form(Schema $schema): Schema
         return parent::getGlobalSearchEloquentQuery()->with(['customer', 'items']);
     }
 
-    public static function getNavigationBadge(): ?string
-    {
-        /** @var class-string<Model> $modelClass */
-        $modelClass = static::$model;
-
-        return (string) $modelClass::where('status', 'booked')->count();
-    }
+//   public static function getNavigationBadge(): ?string
+//   {
+//       /** @var class-string<Model> $modelClass */
+//       $modelClass = static::$model;
+//
+//       return (string) $modelClass::where('status', 'booked')->count();
+//   }
 
     public static function mutateFormDataBeforeCreate(array $data): array
     {

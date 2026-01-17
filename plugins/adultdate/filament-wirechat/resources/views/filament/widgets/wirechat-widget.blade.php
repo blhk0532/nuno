@@ -1,5 +1,5 @@
 <x-filament-widgets::widget>
-    <div style="min-height: calc(100vh - 8rem); max-height: calc(100vh - 8rem); height: calc(100vh - 8rem); overflow: hidden;">
+    <div style="min-height: calc(100vh - 4rem); max-height: calc(100vh - 4rem); height: calc(100vh - 4rem); overflow: hidden;">
         <livewire:filament-wirechat.widget :panel="\Filament\Facades\Filament::getCurrentPanel()?->getId()" />
     </div>
     <style>
@@ -11,7 +11,7 @@
             padding: 0 !important;
             min-height: 0 !important;
         }
-        
+
         /* Target elements with empty path in x-data */
         [x-data*="path: ''"]:empty {
             display: none !important;
@@ -19,7 +19,7 @@
             margin: 0 !important;
             padding: 0 !important;
         }
-        
+
         /* Remove gap between widgets on dashboard - target footer widgets container */
         .fi-page-footer-widgets > div:last-child,
         .fi-page-footer-widgets > [wire\:id*="wirechat-widget"] {
@@ -36,14 +36,14 @@
                     }
                 });
             }
-            
+
             // Run on page load
             if (document.readyState === 'loading') {
                 document.addEventListener('DOMContentLoaded', removeEmptySchemaComponents);
             } else {
                 removeEmptySchemaComponents();
             }
-            
+
             // Run after Livewire updates
             document.addEventListener('livewire:init', () => {
                 Livewire.hook('morph', () => {

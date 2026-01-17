@@ -23,7 +23,7 @@ use Adultdate\FilamentBooking\Filament\Widgets\FilamentInfosWidget;
 use Adultdate\FilamentBooking\Filament\Widgets\AccountWidget;
 use Adultdate\FilamentBooking\Filament\Widgets\FullCalendarWidget;
 use App\Filament\Booking\Clusters\Services\Resources\Bookings\Widgets\MultiEventCalendar;
-
+use UnitEnum;
 class DashboardBokning extends BaseDashboard
 {
 
@@ -36,11 +36,17 @@ class DashboardBokning extends BaseDashboard
 
      protected static ?string $title = '';
 
+    protected static string | UnitEnum | null $navigationGroup = 'Boknings Kalendrar';
+
     protected static string $routePath = 'service/bokning';
+
+            protected static ?int $navigationSort = 3;
+
+
 
   //  protected static ?string $slug = 'dashboard';
 
-        protected string $view = 'filament-booking::pages.page';
+        protected string $view = 'filament.booking.pages.calendar-booking';
 
     public static function shouldRegisterNavigation(): bool
     {
@@ -51,19 +57,19 @@ class DashboardBokning extends BaseDashboard
 
     public static function getNavigationLabel(): string
     {
-        return '' . Str::ucfirst('Kalender') ?? 'User';
+        return '' . Str::ucfirst('Multi Kalendrar') ?? 'User';
     }
 
-    public static function getNavigationBadge(): ?string
-    {
-          return 'x3';
-
-    }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return 'gray';
-    }
+//    public static function getNavigationBadge(): ?string
+//    {
+//          return 'x3';
+//
+//    }
+//
+//    public static function getNavigationBadgeColor(): ?string
+//    {
+//        return 'gray';
+//    }
 
 
     public function filtersForm(Schema $schema): Schema

@@ -12,13 +12,13 @@ class BookingCalendar extends Page
 {
     protected string $view = 'filament-booking::pages.booking-calendar';
 
-    protected static ?string $navigationLabel = 'Calendar';
+    protected static ?string $navigationLabel = 'Kalender';
 
     protected static BackedEnum | string | null $navigationIcon = 'heroicon-o-calendar';
 
     protected static ?int $sort = 1;
 
-    protected static string | UnitEnum | null $navigationGroup = 'Bokning';
+    protected static string | UnitEnum | null $navigationGroup = 'Bokningar Admin';
 
     /**
      * Return header widgets for the page.
@@ -39,7 +39,7 @@ class BookingCalendar extends Page
 
 //    protected function getHeaderActions(): array
 //    {
-//        return [            
+//        return [
 //            \Filament\Actions\CreateAction::make('create-new-booking')::make()
 //                ->label('New schedule')
 //                ->icon('heroicon-o-calendar'),];

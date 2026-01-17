@@ -32,7 +32,7 @@ final class CalendarSettingsPage extends Page implements HasForms
 
     protected static ?string $navigationLabel = 'Settings';
 
-    protected static string|UnitEnum|null $navigationGroup = 'Kalender';
+    protected static string|UnitEnum|null $navigationGroup = 'Hantera Kalendrar';
 
      protected static ?int $sort = 12;
      protected static ?int $navigationSort = 12;
@@ -44,6 +44,7 @@ final class CalendarSettingsPage extends Page implements HasForms
             [
                 'opening_hour_start' => '09:00',
                 'opening_hour_end' => '17:00',
+                'calendar_timezone' => 'Europe/Stockholm',
             ]
         );
 
@@ -116,10 +117,6 @@ final class CalendarSettingsPage extends Page implements HasForms
                         ->label('Confirmation Email')
                         ->placeholder('Enter email confirmation message'),
 
-                    Toggle::make('calendar_weekends')
-                        ->label('Show Weekends in Calendar')
-                        ->default(false),
-
                     Select::make('calendar_theme')
                         ->label('Calendar Theme')
                         ->options([
@@ -152,6 +149,12 @@ final class CalendarSettingsPage extends Page implements HasForms
                             'UTC' => 'UTC',
                         ])
                         ->default('Europe/Stockholm'),
+
+
+                    Toggle::make('calendar_weekends')
+                        ->label('Show Weekends in Calendar')
+                        ->default(false),
+
                 ]),
         ];
     }

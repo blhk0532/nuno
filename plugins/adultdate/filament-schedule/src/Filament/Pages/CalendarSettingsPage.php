@@ -35,6 +35,7 @@ final class CalendarSettingsPage extends Page implements HasForms
             [
                 'opening_hour_start' => '09:00',
                 'opening_hour_end' => '17:00',
+                'calendar_timezone' => 'Europe/Stockholm',
             ]
         );
 
@@ -53,6 +54,7 @@ final class CalendarSettingsPage extends Page implements HasForms
             [
                 'opening_hour_start' => $data['opening_hour_start'],
                 'opening_hour_end' => $data['opening_hour_end'],
+                'calendar_timezone' => 'Europe/Stockholm',
             ]
         );
 

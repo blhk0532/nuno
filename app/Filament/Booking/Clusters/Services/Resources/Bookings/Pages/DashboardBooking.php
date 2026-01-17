@@ -17,6 +17,7 @@ use App\Filament\Booking\Clusters\Services\Resources\Bookings\Widgets\BookingCal
 use App\Models\BookingCalendar as BookingCalendarModel;
 use App\UserRole;
 use Filament\Support\Enums\Width;
+use UnitEnum;
 
 class DashboardBooking extends BaseDashboard
 {
@@ -25,13 +26,15 @@ class DashboardBooking extends BaseDashboard
 
     protected static ?string $navigationLabel = 'Dash';
 
-     protected static ?string $title = 'Calendar';
+     protected static ?string $title = '';
 
-        protected static ?int $navigationSort = -1;
+        protected static ?int $navigationSort = 2;
 
-        protected static ?int $sort = -1;
+        protected static ?int $sort = 2;
 
     protected static string $routePath = 'service/booking';
+
+     protected static string | UnitEnum | null $navigationGroup = 'Boknings Kalendrar';
 
 
      use HasFiltersForm;
@@ -58,23 +61,23 @@ public function getMaxContentWidth(): Width
 
     public static function getNavigationLabel(): string
     {
-        return '' . Str::ucfirst('Calendar') ?? 'User';
+        return '' . Str::ucfirst('Bokning Kalender') ?? 'User';
     }
 
-    public static function getNavigationBadge(): ?string
-    {
-        //  return now()->format('H:m');
-     return 'x1';
-    }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return 'gray';
-    }
+//    public static function getNavigationBadge(): ?string
+//    {
+//        //  return now()->format('H:m');
+//     return 'x1';
+//    }
+//
+//    public static function getNavigationBadgeColor(): ?string
+//    {
+//        return 'gray';
+//    }
 
                 public static function getNavigationSort(): ?int
     {
-        return -1;
+        return 1;
     }
 
                 public static function getSort(): ?int

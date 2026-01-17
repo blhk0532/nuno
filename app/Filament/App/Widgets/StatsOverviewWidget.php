@@ -13,7 +13,7 @@ use Illuminate\Support\Number;
 class StatsOverviewWidget extends BaseWidget
 {
     use InteractsWithPageFilters;
-
+protected static bool $isDiscovered = false;
     protected static ?int $sort = 10;
 
     protected function getStats(): array

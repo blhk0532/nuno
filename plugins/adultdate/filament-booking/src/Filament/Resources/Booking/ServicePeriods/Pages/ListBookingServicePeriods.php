@@ -22,7 +22,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Filament\Schemas\Components\FusedGroup;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
-
+use Adultdate\FilamentBooking\Filament\Widgets\BookingCalendarWidget;
 
 class ListBookingServicePeriods extends ListRecords
 {
@@ -30,6 +30,14 @@ class ListBookingServicePeriods extends ListRecords
      protected static ?int $sort = -1;
      protected static ?int $navigationSort = -3;
     protected static string $resource = BookingServicePeriodResource::class;
+
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            BookingCalendarWidget::class,
+        ];
+    }
 
     protected function getHeaderActions(): array
     {
@@ -75,7 +83,7 @@ Section::make('')
                                 TextInput::make('email')
                                     ->email()
                                     ->maxLength(255),
-                         
+
                                 TextInput::make('address')
                                     ->maxLength(255),
                                 TextInput::make('city')
@@ -189,10 +197,4 @@ Section::make('')
     }
 
 
-    protected function getHeaderWidgets(): array
-    {
-        return [
-            \Adultdate\FilamentBooking\Filament\Resources\Booking\ServicePeriods\Widgets\BookingPeriodsCalendar::class,
-        ];
-    }
 }

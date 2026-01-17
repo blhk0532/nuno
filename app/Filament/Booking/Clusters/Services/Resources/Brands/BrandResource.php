@@ -29,6 +29,8 @@ class BrandResource extends Resource
 
     protected static ?string $navigationParentItem = 'Services';
 
+    protected static string | null $navigationLabel = 'Företag';
+
     protected static ?int $navigationSort = 1;
 
     protected static bool $isScopedToTenant = false;

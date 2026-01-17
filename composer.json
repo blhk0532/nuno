@@ -3,7 +3,10 @@
     "name": "nunomaduro/laravel-starter-kit-inertia-react",
     "type": "project",
     "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "keywords": [
+        "laravel",
+        "framework"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.4.0",
@@ -13,7 +16,7 @@
         "adultdate/filament-tab-layout-plugin": "@dev",
         "adultdate/filament-wirechat": "@dev",
         "alizharb/filament-activity-log": "2.0.5",
-        "andreia/filament-ui-switcher": "^1.0.1",
+        "andreia/filament-ui-switcher": "@dev",
         "andreiio/blade-remix-icon": "^3.8",
         "anish/text-input-entry": "^1.0",
         "asmit/resized-column": "^1.1",
@@ -34,11 +37,11 @@
         "dashed/filament-numpad-field": "@dev",
         "davidhsianturi/blade-bootstrap-icons": "^2.1",
         "deldius/filament-user-field": "^1.0.4",
-        "devonab/filament-easy-footer": "^2.1.1",
+        "devonab/filament-easy-footer": "@dev",
         "devtical/filament-sanctum": "^1.0",
         "eightynine/filament-excel-import": "^4.0",
         "fahiem/filament-pinpoint": "@dev",
-        "filament/filament": "^4.5.2",
+        "filament/filament": "^4.5.3",
         "guava/filament-icon-select-column": "^2.0",
         "hydrat/filament-table-layout-toggle": "^3.0",
         "inertiajs/inertia-laravel": "^2.0.19",
@@ -46,8 +49,11 @@
         "jeffersongoncalves/filament-logo": "@dev",
         "jeffersongoncalves/filament-refresh-sidebar": "^1.0.1",
         "jeffersongoncalves/filament-whatsapp-widget": "@dev",
+        "joaopaulolndev/filament-edit-env": "^2.0",
         "joaopaulolndev/filament-edit-profile": "@dev",
-        "joaopaulolndev/filament-world-clock": "^2.0",
+        "joaopaulolndev/filament-general-settings": "^2.0.1",
+        "joaopaulolndev/filament-pdf-viewer": "^2.1",
+        "joaopaulolndev/filament-world-clock": "@dev",
         "kirschbaum-development/commentions": "^0.7.5",
         "laravel/folio": "^1.1.12",
         "laravel/fortify": "^1.33.0",
@@ -72,7 +78,7 @@
         "n3xt0r/filament-passport-ui": "^2.0",
         "n3xt0r/laravel-passport-authorization-core": "^1.2.4",
         "nunomaduro/essentials": "^1.0.1",
-        "openplain/filament-shadcn-theme": "dev-main",
+        "openplain/filament-shadcn-theme": "@dev",
         "owenvoke/blade-fontawesome": "^3.0",
         "pxlrbt/filament-excel": "@dev",
         "pxlrbt/filament-spotlight": "@dev",
@@ -86,7 +92,7 @@
         "spatie/laravel-model-states": "^2.12.2",
         "spiral/roadrunner-cli": "^2.7.2",
         "spiral/roadrunner-http": "^3.6.0",
-        "statikbe/laravel-filament-chained-translation-manager": "^4.2",
+        "statikbe/laravel-filament-chained-translation-manager": "^4.2.1",
         "stechstudio/filament-impersonate": "^4.0.2",
         "still-code/laravel-umami": "^5.0.3",
         "tapp/filament-maillog": "^2.0.1",
@@ -115,7 +121,21 @@
         "roave/security-advisories": "dev-latest"
     },
     "repositories": [
+        {
+            "type": "path",
+            "url": "plugins/devonab/filament-easy-footer",
+            "options": {
+                "symlink": true
+            }
+        },
                 {
+            "type": "path",
+            "url": "plugins/joaopaulolndev/filament-world-clock",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
             "type": "path",
             "url": "plugins/daacreators/creators-ticketing",
             "options": {
@@ -157,7 +177,7 @@
                 "symlink": true
             }
         },
-                {
+        {
             "type": "path",
             "url": "plugins/cmsmaxinc/filament-error-pages",
             "options": {

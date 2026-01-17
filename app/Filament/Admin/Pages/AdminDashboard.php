@@ -8,7 +8,8 @@ use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-
+use Filament\Widgets\Widget;
+use Filament\Widgets\StatsOverview;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseCache;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseExceptions;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseQueues;
@@ -17,10 +18,14 @@ use Illuminate\Support\Str;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseSlowQueries;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseSlowRequests;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseUsage;
+use Filament\Layouts\Layout;
+use App\Filament\Admin\Widgets\AccountWidget;
+use App\Filament\Admin\Widgets\FilamentInfoWidget;
+use Joaopaulolndev\FilamentWorldClock\Widgets\WorldClockWidget;
 
 class AdminDashboard extends BaseDashboard
 {
-    protected static ?string $title = '';
+    protected static ?string $title = 'a';
 
     protected static ?string $slug = 'dashboard';
 
@@ -85,4 +90,21 @@ class AdminDashboard extends BaseDashboard
     {
         return 2;
     }
+
+    public function getHeaderWidgets(): array
+{
+    return [
+        // Left column: stacked
+        Layout::column([
+            AccountWidget::class,
+            FilamentInfoWidget::class,
+        ])
+        ->columnSpan(1), // occupies 1/2 of layout
+
+        // Right column: single
+        WorldClockWidget::class
+            ->columnSpan(1),
+    ];
+}
+
 }

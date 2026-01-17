@@ -27,13 +27,13 @@ class BookingCalendarResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
-    protected static string|UnitEnum|null $navigationGroup = 'Kalender';
+    protected static string|UnitEnum|null $navigationGroup = 'Hantera Kalendrar';
 
     protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-calendar-days';
 
-    protected static ?int $sort = 8;
+    protected static ?int $sort = 1;
 
-    protected static ?int $navigationSort = 8;
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {

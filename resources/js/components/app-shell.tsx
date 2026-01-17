@@ -8,7 +8,7 @@ interface AppShellProps {
 }
 
 export function AppShell({ children, variant = 'header' }: AppShellProps) {
-    const isOpen = usePage<SharedData>().props.sidebarOpen;
+    const isOpen = usePage<SharedData>().props.sidebarOpen ?? false;
 
     if (variant === 'header') {
         return (
@@ -16,5 +16,5 @@ export function AppShell({ children, variant = 'header' }: AppShellProps) {
         );
     }
 
-    return <SidebarProvider defaultOpen={isOpen}>{children}</SidebarProvider>;
+    return <SidebarProvider defaultOpen={false}>{children}</SidebarProvider>;
 }

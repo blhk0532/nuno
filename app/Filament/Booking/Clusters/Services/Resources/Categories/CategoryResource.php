@@ -31,6 +31,8 @@ class CategoryResource extends Resource
 
     protected static ?string $navigationParentItem = 'Services';
 
+    protected static string | null $navigationLabel = 'Kategorier';
+
     protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema

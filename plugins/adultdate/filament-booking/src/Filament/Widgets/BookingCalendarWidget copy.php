@@ -38,6 +38,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Illuminate\Contracts\Support\Htmlable;
 
 class BookingCalendarWidget extends FullCalendarWidget implements HasCalendar
 {
@@ -78,6 +79,11 @@ class BookingCalendarWidget extends FullCalendarWidget implements HasCalendar
         return Booking::class;
     }
 
+    public function getHeading(): string|Htmlable
+    {
+        return '';
+    }
+
     public function getModelAlt(): string
     {
         return Booking::class;
@@ -102,7 +108,7 @@ class BookingCalendarWidget extends FullCalendarWidget implements HasCalendar
     {
         return [
             'initialView' => 'timeGridWeek',
-            'timeZone' => config('app.timezone'), 
+            'timeZone' => config('app.timezone'),
             'headerToolbar' => [
                 'left' => 'prev,next today',
                 'center' => 'title',

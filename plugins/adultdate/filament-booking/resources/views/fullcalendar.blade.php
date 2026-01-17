@@ -6,7 +6,7 @@
     <x-filament::section>
         <div class="flex justify-end flex-1 mb-4">
             <x-filament::actions :actions="$this->getCachedHeaderActions()" class="shrink-0" />
-                {{ $this->getHeading() }}
+                {{ $this->getHeading() ? $this->getHeading() : '' }}
         </div>
 
             <x-slot name="heading">

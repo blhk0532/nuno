@@ -12,6 +12,8 @@ class ServicesCluster extends Cluster
 
     protected static string | UnitEnum | null $navigationGroup = 'Services';
 
+    protected static string | null $navigationLabel = 'Tjänster';
+
     protected static ?int $navigationSort = 1;
 
     protected static ?string $slug = 'shop/services';

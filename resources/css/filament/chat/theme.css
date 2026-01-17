@@ -11,19 +11,14 @@
 h1.fi-header-heading {
 display:none!important;
 }
-li.fi-sidebar-item.fi-active.fi-sidebar-item-has-url {
 
-}
-nav.fi-sidebar {
-display:none!important;
-}
-.fi-sidebar {
-display:none!important;
-}
 .fi-page-header-main-ctn {
 padding: 0px!important;
 }
 
+div.w-full.h-full {
+  border-radius: 0px!important;
+}
 
 ::-webkit-scrollbar {
     width: .56vw !important;
@@ -175,4 +170,9 @@ a.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-
 
 div.logo-before{
    display:none!important;
+}
+
+main.fi-main.fi-width-full{
+    padding:0px!important;
+    margin:0px!important;
 }

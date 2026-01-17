@@ -25,15 +25,15 @@ class BookingServicePeriodResource extends Resource
 
         protected static ?string $recordTitleAttribute = 'period';
 
- protected static ?string $modelLabel =  'Calendar Bookings';
+ protected static ?string $modelLabel =  'Period';
 
-    protected static ?string $navigationLabel = 'Stopptid';
+    protected static ?string $navigationLabel = 'Stopptider';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Kalender';
+    protected static string | UnitEnum | null $navigationGroup = 'Hantera Kalendrar';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClock;
 
-    protected static ?int $sort = 1;
+  protected static ?int $navigationSort = 2;
 
     protected static bool $isScopedToTenant = false;
 
@@ -61,9 +61,9 @@ class BookingServicePeriodResource extends Resource
 
     public static function getWidgets(): array
     {
-     
+
             return [\Adultdate\FilamentBooking\Filament\Resources\Booking\ServicePeriods\Widgets\BookingPeriodsCalendar::class];
-      
+
     }
 
 

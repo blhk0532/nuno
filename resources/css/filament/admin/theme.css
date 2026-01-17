@@ -180,3 +180,15 @@ a.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-
 div.logo-before{
    display:none!important;
 }
+
+.filament-world-clock-header {
+    margin-bottom: 1.5rem!important;
+}
+
+div.filament-world-clock-content-city-hour {
+    font-size: 1rem!important;
+    font-weight: 600!important;
+}
+div.filament-world-clock-content {
+    gap:1rem!important;
+}

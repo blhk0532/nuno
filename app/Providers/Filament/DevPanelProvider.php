@@ -29,6 +29,9 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use App\Filament\Dev\Pages\DevDashboard;
+use Joaopaulolndev\FilamentEditEnv\FilamentEditEnvPlugin;
+use Illuminate\Support\Facades\Auth;
+use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
 
 class DevPanelProvider extends PanelProvider
 {
@@ -42,7 +45,7 @@ class DevPanelProvider extends PanelProvider
                 'primary' => Color::Gray,
             ])
             ->spa()
-         // ->profile()
+            // ->profile()
             ->passwordReset()
             ->unsavedChangesAlerts()
             ->databaseNotifications()
@@ -50,17 +53,17 @@ class DevPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop(true)
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->brandLogoHeight('34px')
-            ->favicon(fn () => asset('favicon.svg'))
-            ->brandLogo(fn () => view('filament.app.logo'))
+            ->favicon(fn() => asset('favicon.svg'))
+            ->brandLogo(fn() => view('filament.app.logo'))
             ->plugin(
                 AuthDesignerPlugin::make()
                     ->login(
-                        fn (AuthPageConfig $config) => $config
+                        fn(AuthPageConfig $config) => $config
                             ->media(asset('assets/bangkok.jpg'))
                             ->mediaPosition(MediaPosition::Cover)
                             ->blur(1)
                             ->themeToggle()
-                            ->renderHook(AuthDesignerRenderHook::CardBefore, fn () => view('filament.logo-auth'))
+                            ->renderHook(AuthDesignerRenderHook::CardBefore, fn() => view('filament.logo-auth'))
                     ),
                 FilamentIconPickerPlugin::make(),
                 FilamentEditProfilePlugin::make()
@@ -85,7 +88,7 @@ class DevPanelProvider extends PanelProvider
             )
             ->discoverResources(in: app_path('Filament/Dev/Resources'), for: 'App\Filament\Dev\Resources')
             ->discoverPages(in: app_path('Filament/Dev/Pages'), for: 'App\Filament\Dev\Pages')
-           ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
+            ->discoverResources(in: app_path('Filament/Panels/Resources'), for: 'App\Filament\Panels\Resources')
             ->pages([
                 DevDashboard::class,
             ])
@@ -95,7 +98,7 @@ class DevPanelProvider extends PanelProvider
                 //    FilamentInfoWidget::class,
             ])
             ->middleware([
-                 EncryptCookies::class,
+                EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -109,6 +112,20 @@ class DevPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+                        ->plugins([
+                FilamentGeneralSettingsPlugin::make()
+                    ->canAccess(fn() => Auth::user()->role === 'super')
+                    ->setSort(3)
+                    ->setIcon('heroicon-o-cog')
+                    ->setNavigationGroup('Settings')
+                    ->setTitle('Settings')
+                    ->setNavigationLabel('Settings'),
+            ])
+            ->plugins([
+                FilamentEditEnvPlugin::make()
+                    ->showButton(fn() => Auth::user()->role === 'super')
+                    ->setIcon('heroicon-o-cog'),
+            ])
             ->plugins([
                 FilamentWireChatPlugin::make()
                     ->onlyPages([])
@@ -119,4 +136,3 @@ class DevPanelProvider extends PanelProvider
             ]);
     }
 }
-

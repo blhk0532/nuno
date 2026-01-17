@@ -98,7 +98,7 @@ class BokningCalendar extends FullCalendarWidget implements HasCalendar
 
     public function getHeading(): string|Htmlable
     {
-        return 'Calendar';
+        return '';
     }
 
     public function getFooterActions(): array

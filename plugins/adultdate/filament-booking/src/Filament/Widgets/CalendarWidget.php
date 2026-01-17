@@ -36,7 +36,7 @@ class CalendarWidget extends FullCalendarWidget implements \Adultdate\FilamentBo
 
     protected static bool $isDiscovered = true;
 
-    protected static ?string $title = 'calendar';
+    protected static ?string $title = '';
 
     protected static string $viewIdentifier = 'adultdate/filament-booking::calendar-widget';
 

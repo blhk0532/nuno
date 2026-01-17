@@ -44,12 +44,6 @@ export default function Dashboard() {
                   <EventCalendarDemo3 />
                     </div>
                 </div>
-
-
-
-                           <div className="relative min-h-[900px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                      <ResourceTimeGridDemo />
-                </div>
                    <div className="relative max-h-[333px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border">
                    <ResourceTimelineDemo1 />
                 </div>

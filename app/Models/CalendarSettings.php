@@ -39,7 +39,7 @@ final class CalendarSettings extends Model
         'confirmation_sms_number' => null,
         'confirmation_email_address' => null,
         'telavox_jwt' => null,
-        'calendar_timezone' => null,
+        'calendar_timezone' => 'Europe/Stockholm',
     ];
 
     public function user(): BelongsTo

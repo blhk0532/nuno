@@ -13,6 +13,8 @@ class CustomersChart extends ChartWidget
 
     protected static ?int $sort = 12;
 
+    protected static bool $isDiscovered = false;
+
     protected function getType(): string
     {
         return 'line';
