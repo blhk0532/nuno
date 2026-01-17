@@ -32,7 +32,7 @@ export default function Dashboard() {
                 <Head title="Dashboard" />
                 <div className="flex h-full flex-1 flex-col gap-4 overflow-x-auto rounded-xl bg-background p-4">
 
-                    <div className="relative max-h-[680px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
+                    <div className="relative max-h-[560px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
                         <EventCalendarDemo />
                     </div>
 

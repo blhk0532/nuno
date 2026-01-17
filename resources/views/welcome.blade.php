@@ -195,9 +195,9 @@ padding: 30%;
                                 </span>
                             </span>
                             <span>
-                                Login to view booking
-                                <a href="dashboard" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ms-1">
-                                    <span>Kalender</span>
+                                Login to booking panel
+                                <a href="nds/booking" target="_blank" class="inline-flex items-center space-x-1 font-medium underline underline-offset-4 text-[#f53003] dark:text-[#FF4433] ms-1">
+                                    <span>Bokning</span>
                                     <svg
                                         width="10"
                                         height="11"

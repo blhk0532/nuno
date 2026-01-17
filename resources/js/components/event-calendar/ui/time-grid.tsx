@@ -40,7 +40,7 @@ export const TimeGrid = memo((props: TimeGridProps) => {
               key={`${timeIndex}-${dayIndex}`}
               className={cn(
                 'hover:bg-primary/10 relative flex items-center justify-center border-r last:border-r-0 hover:cursor-pointer',
-                todayIndex === dayIndex && highlightToday && 'bg-muted',
+                todayIndex === dayIndex && highlightToday && 'bg-muted/20',
                 isDynamic ? 'flex-none' : 'flex-1',
               )}
               style={

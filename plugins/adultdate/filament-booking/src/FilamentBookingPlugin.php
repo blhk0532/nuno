@@ -37,7 +37,7 @@ use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
 use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
 use App\Filament\Booking\Clusters\Services\Resources\Bookings\Pages\DashboardBokning;
-
+use App\Filament\Booking\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppDashboardBooking;
 class FilamentBookingPlugin implements Plugin
 {
     use EvaluatesClosures;
@@ -134,6 +134,7 @@ HTML,
                 GoogleCalendar::class,
                 DashboardBokning::class,
                 InertiaCalendar::class,
+                AppDashboardBooking::class,
             ],
         );
     }

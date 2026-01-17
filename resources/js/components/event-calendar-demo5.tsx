@@ -11,13 +11,16 @@ export function EventCalendarDemo5() {
       nowIndicator
       navLinks
       locale='sv'
-      initialView='dayGridMonth'
+      initialView='timeGridWeek'
       timeZone='UTC'
+          slotMinTime="07:00:00"
+    slotMaxTime="17:00:00"
+    slotDuration="01:00:00"
       events='calendar/events?resourceId=17'
       addButton={{
-        text: 'Tekniker 2',
+        text: 'Tekniker 5',
         click() {
-          alert('Tekniker 2 ...')
+          alert('Tekniker 5 ...')
         }
       }}
     />
