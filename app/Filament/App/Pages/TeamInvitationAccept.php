@@ -20,6 +20,11 @@ class TeamInvitationAccept extends Page implements HasTable
 
     protected string $view = 'filament.app.pages.team-invitation-accept';
 
+    public static function shouldRegisterSpotlight(): bool
+    {
+        return false;
+    }
+
     public static function table(Table $table): Table
     {
         return $table

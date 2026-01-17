@@ -38,6 +38,11 @@ class SendWhatsapp extends Page
         return false;
     }
 
+    public static function shouldRegisterSpotlight(): bool
+    {
+        return false;
+    }
+
     public function schema(Schema $schema): Schema
     {
         return $schema

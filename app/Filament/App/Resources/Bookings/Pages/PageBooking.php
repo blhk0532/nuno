@@ -36,6 +36,11 @@ class PageBooking extends BasePage
 
     protected static bool $isDiscovered = false;
 
+    public static function shouldRegisterSpotlight(): bool
+    {
+        return false;
+    }
+
     public function filtersForm(Schema $schema): Schema
     {
         return $schema

@@ -27,6 +27,11 @@ class BookingService extends Page
 
     protected static string | UnitEnum | null $navigationGroup = '';
 
+    public static function shouldRegisterSpotlight(): bool
+    {
+        return false;
+    }
+
     /**
      * Return header widgets for the page.
      *
