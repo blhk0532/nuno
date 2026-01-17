@@ -29,6 +29,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use App\Filament\Chat\Pages\ChatDashboard;
+use Devtical\Sanctum\Pages\Sanctum;
 
 class ChatPanelProvider extends PanelProvider
 {
@@ -92,6 +93,7 @@ class ChatPanelProvider extends PanelProvider
          ->pages([
            //         \App\Filament\Panels\Pages\PanDash::class,
                     ChatDashboard::class,
+                    Sanctum::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Chat/Widgets'), for: 'App\Filament\Chat\Widgets')
             ->widgets([

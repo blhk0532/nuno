@@ -267,8 +267,6 @@ final class SuperPanelProvider extends PanelProvider
                     SchemaExample::class,            // Demo page showing embed components usage
                 ]),
                 FilamentSpatieLaravelBackupPlugin::make(),
-                SpotlightPlugin::make(),
-                ResizedColumnPlugin::make(),
                 FilamentFailedJobsPlugin::make(),
                 FilamentIconPickerPlugin::make(),
                 FilamentLogViewer::make()

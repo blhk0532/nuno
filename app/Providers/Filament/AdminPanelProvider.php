@@ -234,7 +234,6 @@ final class AdminPanelProvider extends PanelProvider
                     ->enablePlugin(), // Enable the plugin.
             ])
             ->plugins([
-                SpotlightPlugin::make(),
                 ResizedColumnPlugin::make(),
                 FilamentIconPickerPlugin::make(),
 
