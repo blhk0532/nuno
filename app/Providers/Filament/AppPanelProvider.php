@@ -77,7 +77,7 @@ class AppPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverWidgets(in: app_path('Filament/App/Widgets'), for: 'App\\Filament\\App\\Widgets')
             ->pages([
-             //   AppDashboard::class,
+                AppDashboard::class,
                 DashboardBooking::class,
                 DashboardBokning::class,
                 ChatDashboard::class,

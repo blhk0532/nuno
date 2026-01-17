@@ -14,12 +14,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use BezhanSalleh\PanelSwitch\PanelSwitch;
+use App\Http\Responses\CustomLoginResponse;
+use Laravel\Fortify\Contracts\LoginResponse;
 
 final class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
     {
-        //
+        $this->app->singleton(LoginResponse::class, CustomLoginResponse::class);
     }
 
     public function boot(): void
