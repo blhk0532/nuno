@@ -75,6 +75,7 @@ use WallaceMartinss\FilamentEvolution\FilamentEvolutionPlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use N3XT0R\FilamentPassportUi\FilamentPassportUiPlugin;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
+use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
 final class SuperPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -277,6 +278,7 @@ final class SuperPanelProvider extends PanelProvider
                     ->viewMessageHistory()        // Show message history
                     ->viewWebhookLogs(),           // Show webhook logs
                 FilamentBookingPlugin::make(),
+                FilamentGeneralSettingsPlugin::make(),
             ])
             ->plugins([
                 FilamentNotifierPlugin::make(),
