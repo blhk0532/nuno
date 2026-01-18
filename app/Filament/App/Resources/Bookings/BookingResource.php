@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\Bookings;
 
 use Adultdate\FilamentBooking\Models\Booking\Booking;
@@ -19,7 +21,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Facades\Auth;
 use UnitEnum;
 
-class BookingResource extends Resource
+final class BookingResource extends Resource
 {
     protected static ?string $model = Booking::class;
 
@@ -27,11 +29,13 @@ class BookingResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'number';
 
+    protected static ?string $navigationLabel = 'Bokning';
 
+    protected static string|UnitEnum|null $navigationGroup = 'Mina Sidor';
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-s-chart-pie';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-clipboard-document-check';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 1;
 
     /**
      * Disable Filament tenant scoping for this resource to avoid
@@ -98,7 +102,7 @@ class BookingResource extends Resource
         }
 
         /** @var class-string<Model> $modelClass */
-        $modelClass = static::$model;
+        $modelClass = self::$model;
 
         $count = $modelClass::where('status', 'booked')
             ->where(function ($q) use ($userId) {
@@ -112,12 +116,27 @@ class BookingResource extends Resource
 
     public static function mutateFormDataBeforeCreate(array $data): array
     {
-        return static::calculateTotalPrice($data);
+        return self::calculateTotalPrice($data);
     }
 
     public static function mutateFormDataBeforeSave(array $data): array
     {
-        return static::calculateTotalPrice($data);
+        return self::calculateTotalPrice($data);
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => ListBookings::route('/'),
+            'create' => CreateBooking::route('/create'),
+            'edit' => EditBooking::route('/{record}/edit'),
+        ];
+    }
+
+    /** @return Builder<Booking> */
+    public static function getTableQuery(): Builder
+    {
+        return parent::getTableQuery()->withoutGlobalScope(SoftDeletingScope::class);
     }
 
     protected static function calculateTotalPrice(array $data): array
@@ -139,20 +158,5 @@ class BookingResource extends Resource
         }
 
         return $data;
-    }
-
-    public static function getPages(): array
-    {
-        return [
-            'index' => ListBookings::route('/'),
-            'create' => CreateBooking::route('/create'),
-            'edit' => EditBooking::route('/{record}/edit'),
-        ];
-    }
-
-    /** @return Builder<Booking> */
-    public static function getTableQuery(): Builder
-    {
-        return parent::getTableQuery()->withoutGlobalScope(SoftDeletingScope::class);
     }
 }

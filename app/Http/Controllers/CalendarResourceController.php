@@ -12,10 +12,15 @@ final class CalendarResourceController extends Controller
 {
     public function __invoke(Request $request): JsonResponse
     {
-        $resources = User::query()
+        $query = User::query()
             ->where('role', 'service')
-            ->where('status', 1)
-            ->get()
+            ->where('status', 1);
+
+        if ($request->has('limit')) {
+            $query->limit($request->input('limit'));
+        }
+
+        $resources = $query->get()
             ->map(function (User $user) {
                 return [
                     'id' => (string) $user->id,

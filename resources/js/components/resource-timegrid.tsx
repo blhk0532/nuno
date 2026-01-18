@@ -76,6 +76,7 @@ export function ResourceTimeGrid({
         resourceExpanderContent={(data) => (
           <EventCalendarExpanderIcon isExpanded={data.isExpanded} />
         )}
+        firstDay={1}
         {...restOptions}
       />
     </EventCalendarContainer>

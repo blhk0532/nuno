@@ -111,7 +111,7 @@ export const useEventCalendarStore = create<EventCalendarState>()(
       viewMode: ViewModeType.CALENDAR,
       timeFormat: TimeFormatType.HOUR_24,
       locale: 'en-US',
-      firstDayOfWeek: 0, // sunday
+      firstDayOfWeek: 1, // monday
       daysCount: 7,
       loading: false,
       error: null,

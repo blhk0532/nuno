@@ -1,44 +1,44 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adultdate\FilamentBooking;
 
+use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
+use Adultdate\FilamentBooking\Filament\Pages\BookingCalendar;
+use Adultdate\FilamentBooking\Filament\Resources\Booking\BookingOutcallQueues\BookingOutcallQueueResource;
+use Adultdate\FilamentBooking\Filament\Resources\Booking\Customers\CustomerResource;
+use Adultdate\FilamentBooking\Filament\Resources\Booking\DailyLocations\DailyLocationResource;
+use Adultdate\FilamentBooking\Filament\Resources\Booking\DailyLocations\Widgets\EventCalendar;
+use Adultdate\FilamentBooking\Filament\Resources\Booking\Orders\OrderResource;
+use Adultdate\FilamentBooking\Filament\Resources\Booking\ServicePeriods\BookingServicePeriodResource;
+use Adultdate\FilamentBooking\Filament\Resources\Booking\Users\UserResource;
+use Adultdate\FilamentBooking\Filament\Resources\BookingCalendars\BookingCalendarResource;
+use Adultdate\FilamentBooking\Filament\Resources\BookingDataLeads\BookingDataLeadResource;
+use Adultdate\FilamentBooking\Filament\Widgets\BookingCalendarWidget;
+use Adultdate\FilamentBooking\Filament\Widgets\CustomersChart;
+use Adultdate\FilamentBooking\Filament\Widgets\LatestOrders;
+use Adultdate\FilamentBooking\Filament\Widgets\OrdersChart;
+use Adultdate\FilamentBooking\Filament\Widgets\StatsOverviewWidget;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppDashboardBokning;
+use App\Filament\App\Pages\InertiaCalendar as AppInertiaCalendar;
+use App\Filament\Booking\Clusters\Services\Resources\Bookings\Pages\DashboardBokning;
+use App\Filament\Booking\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppDashboardBooking;
+use App\Filament\Booking\Pages\GoogleCalendar;
+use App\Filament\Booking\Pages\InertiaCalendar;
 use Closure;
 use Filament\Contracts\Plugin;
 use Filament\Panel;
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
-use Filament\Support\Facades\FilamentAsset;
-use Filament\Navigation\NavigationGroup;
 use Filament\Support\Concerns\EvaluatesClosures;
-use Adultdate\FilamentBooking\Filament\Clusters\Products\ProductsCluster;
-use Adultdate\FilamentBooking\Filament\Clusters\Services\ServicesCluster;
-use Adultdate\FilamentBooking\Filament\Pages\BookingCalendar;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\Customers\CustomerResource;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\Orders\OrderResource;
-use Adultdate\FilamentBooking\Filament\Widgets\BookingCalendarWidget;
-use Adultdate\FilamentBooking\Filament\Widgets\CustomersChart;
-use Adultdate\FilamentBooking\Filament\Widgets\LatestOrders;
-use Adultdate\FilamentBooking\Filament\Widgets\OrdersChart;
-use Adultdate\FilamentBooking\Filament\Widgets\StatsOverviewWidget;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\DailyLocations\DailyLocationResource;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\ServicePeriods\BookingServicePeriodResource;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\DailyLocations\Widgets\EventCalendar;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\BookingOutcallQueues\BookingOutcallQueueResource;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\Users\UserResource;
-use Adultdate\FilamentBooking\Filament\Resources\BookingCalendars\BookingCalendarResource;
-use Adultdate\FilamentBooking\Filament\Resources\BookingDataLeads\BookingDataLeadResource;
-
-use Illuminate\Support\Facades\Auth;
-use App\Filament\Booking\Pages\GoogleCalendar;
-use App\Filament\Booking\Pages\InertiaCalendar;
-use Illuminate\Support\ServiceProvider;
+use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentView;
 use Filament\View\PanelsRenderHook;
-use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
-use App\Filament\Booking\Clusters\Services\Resources\Bookings\Pages\DashboardBokning;
-use App\Filament\Booking\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppDashboardBooking;
-class FilamentBookingPlugin implements Plugin
+use Illuminate\Support\Facades\Auth;
+
+final class FilamentBookingPlugin implements Plugin
 {
     use EvaluatesClosures;
 
@@ -48,13 +48,26 @@ class FilamentBookingPlugin implements Plugin
 
     protected array $config = [];
 
-    protected string | Closure | null $timezone = "Europe/Stockholm";
+    protected string|Closure|null $timezone = 'Europe/Stockholm';
 
-    protected string | Closure | null $locale = 'sv';
+    protected string|Closure|null $locale = 'sv';
 
     protected ?bool $editable = true;
 
     protected ?bool $selectable = true;
+
+    public static function make(): static
+    {
+        return app(self::class);
+    }
+
+    public static function get(): static
+    {
+        /** @var static $plugin */
+        $plugin = filament(app(static::class)->getId());
+
+        return $plugin;
+    }
 
     public function getId(): string
     {
@@ -72,32 +85,32 @@ class FilamentBookingPlugin implements Plugin
           //  ->discoverResources(in: app_path('../plugins/adultdate/filament-booking/src/Filament/Resources'), for: 'Adultdate\\FilamentBooking\\Filament\\Resources')
             ->databaseNotifications()
             ->pages([
-            //    BookingCalendar::class,
+                //    BookingCalendar::class,
             ])
             ->resources([
-            //    CustomerResource::class,
-            //    OrderResource::class,
-            //    DailyLocationResource::class,
-            //    BookingServicePeriodResource::class,
-            //    BookingOutcallQueueResource::class,
-            //    UserResource::class,
-            //    BookingCalendarResource::class,
-            //    BookingDataLeadResource::class,
+                //    CustomerResource::class,
+                //    OrderResource::class,
+                //    DailyLocationResource::class,
+                //    BookingServicePeriodResource::class,
+                //    BookingOutcallQueueResource::class,
+                //    UserResource::class,
+                //    BookingCalendarResource::class,
+                //    BookingDataLeadResource::class,
             ])
             ->widgets([
-            //    BookingCalendarWidget::class,
-            //    CustomersChart::class,
-            //    LatestOrders::class,
-            //    OrdersChart::class,
-            //    StatsOverviewWidget::class,
-            //    EventCalendar::class,
+                //    BookingCalendarWidget::class,
+                //    CustomersChart::class,
+                //    LatestOrders::class,
+                //    OrdersChart::class,
+                //    StatsOverviewWidget::class,
+                //    EventCalendar::class,
             ]);
 
         FilamentAsset::register([
-            AlpineComponent::make('calendar', __DIR__ . '/../dist/js/calendar.js'),
-            AlpineComponent::make('calendar-context-menu', __DIR__ . '/../dist/js/calendar-context-menu.js'),
-            AlpineComponent::make('calendar-event', __DIR__ . '/../dist/js/calendar-event.js'),
-            AlpineComponent::make('filament-fullcalendar-alpine', __DIR__ . '/../dist/js/filament-fullcalendar.js'),
+            AlpineComponent::make('calendar', __DIR__.'/../dist/js/calendar.js'),
+            AlpineComponent::make('calendar-context-menu', __DIR__.'/../dist/js/calendar-context-menu.js'),
+            AlpineComponent::make('calendar-event', __DIR__.'/../dist/js/calendar-event.js'),
+            AlpineComponent::make('filament-fullcalendar-alpine', __DIR__.'/../dist/js/filament-fullcalendar.js'),
         ], 'adultdate/filament-booking');
     }
 
@@ -106,7 +119,7 @@ class FilamentBookingPlugin implements Plugin
         // Open sidebar on all pages by default
         FilamentView::registerRenderHook(
             PanelsRenderHook::BODY_END,
-            fn (): string => <<<HTML
+            fn (): string => <<<'HTML'
 <script>
     document.addEventListener('alpine:init', () => {
         if (Alpine.store('sidebar')) {
@@ -119,8 +132,8 @@ HTML
 
         // Close sidebar on specific pages
         FilamentView::registerRenderHook(
-        PanelsRenderHook::BODY_END,
-        fn (): string => <<<HTML
+            PanelsRenderHook::BODY_END,
+            fn (): string => <<<'HTML'
 <script>
     document.addEventListener('alpine:init', () => {
         if (Alpine.store('sidebar')) {
@@ -129,27 +142,16 @@ HTML
     });
 </script>
 HTML,
-        scopes: [
+            scopes: [
                 DashboardBooking::class,
                 GoogleCalendar::class,
                 DashboardBokning::class,
                 InertiaCalendar::class,
                 AppDashboardBooking::class,
+                AppInertiaCalendar::class,
+                AppDashboardBokning::class,
             ],
         );
-    }
-
-    public static function make(): static
-    {
-        return app(static::class);
-    }
-
-    public static function get(): static
-    {
-        /** @var static $plugin */
-        $plugin = filament(app(static::class)->getId());
-
-        return $plugin;
     }
 
     public function plugins(array $plugins, bool $merge = true): static
@@ -159,8 +161,7 @@ HTML,
         return $this;
     }
 
-
-        public function getDayCount(): int
+    public function getDayCount(): int
     {
         return data_get($this->config, 'dayCount', 5);
     }
@@ -194,12 +195,12 @@ HTML,
         return $this->config;
     }
 
-        public function getWeekends(): bool
+    public function getWeekends(): bool
     {
         return $this->weekends ?? data_get($this->config, 'weekends', false);
     }
 
-    public function timezone(string | Closure $timezone): static
+    public function timezone(string|Closure $timezone): static
     {
         $this->timezone = $timezone;
 
@@ -211,7 +212,7 @@ HTML,
         return $this->evaluate($this->timezone) ?? config('app.timezone');
     }
 
-    public function locale(string | Closure $locale): static
+    public function locale(string|Closure $locale): static
     {
         $this->locale = $locale;
 
@@ -220,7 +221,7 @@ HTML,
 
     public function getLocale(): string
     {
-        return $this->evaluate($this->locale) ?? strtolower(str_replace('_', '-', app()->getLocale()));
+        return $this->evaluate($this->locale) ?? mb_strtolower(str_replace('_', '-', app()->getLocale()));
     }
 
     public function editable(bool $editable = true): static
@@ -232,11 +233,12 @@ HTML,
 
     public function isEditable(): bool
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return false;
         }
 
         $user = Auth::user();
+
         return in_array($user->role, [\App\UserRole::ADMIN, \App\UserRole::SUPER_ADMIN]);
     }
 

@@ -11,7 +11,7 @@ import { getColorClasses } from '@/lib/event';
 interface DayCellProps {
   date: Date;
   baseDate: Date;
-  eventsByDate: Record<string, Events[]>;
+  eventsByDate: Record<string, { regular: Events[]; allDay: Events[] }>;
   locale: Locale;
   timeFormat: TimeFormatType;
   monthViewConfig: MonthViewConfig;
@@ -36,13 +36,15 @@ export function DayCell({
   onOpenEvent,
 }: DayCellProps) {
   const dateKey = format(date, 'yyyy-MM-dd');
-  const dayEvents = eventsByDate[dateKey] || [];
+  const dayEvents = eventsByDate[dateKey];
+  const regularEvents = dayEvents?.regular || [];
+  const allDayEvents = dayEvents?.allDay || [];
   const isToday = isSameDay(date, new Date());
   const isWithinMonth = isSameMonth(date, baseDate);
-  const isEmpty = dayEvents.length === 0;
-  const firstEvent = dayEvents[0];
+  const isEmpty = regularEvents.length === 0 && allDayEvents.length === 0;
+  const firstEvent = regularEvents[0];
   const _isFocused = focusedDate && isSameDay(date, focusedDate);
-  const shouldRenderEvents = isWithinMonth && dayEvents.length > 0;
+  const shouldRenderEvents = isWithinMonth && (regularEvents.length > 0 || allDayEvents.length > 0);
   const colorClasses = firstEvent ? getColorClasses(firstEvent.color) : null;
   return (
     <div
@@ -92,7 +94,28 @@ export function DayCell({
         )}
       </div>
       {isWithinMonth && (
-        <div className="item flex flex-1 flex-col justify-center gap-1 overflow-hidden">
+        <div className="item flex flex-1 flex-col gap-1 overflow-hidden">
+          {/* All-day events */}
+          {allDayEvents.length > 0 && (
+            <div className="flex flex-wrap gap-0.5 mb-1 text-center truncate max-w-full w-full">
+              {allDayEvents.slice(0, 2).map((event) => (
+                <div
+                  key={event.id}
+                  className="bg-muted text-muted-foreground rounded px-1 pb-1.5 pt-1.5 text-sm truncate max-w-full font-bold w-full"
+                  title={event.location || event.title}
+                >
+                  {event.location || event.title}
+                </div>
+              ))}
+              {allDayEvents.length > 2 && (
+                <div className="text-muted-foreground text-xs">
+                  +{allDayEvents.length - 2}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Regular events */}
           {shouldRenderEvents && firstEvent && (
             <button
               className={cn(
@@ -110,15 +133,21 @@ export function DayCell({
                 {firstEvent.title}
               </span>
               <div className="hidden items-center truncate text-white sm:flex">
-                <Clock className="mr-1 h-3 w-3" />
-                <span className="truncate">
-                  {formatTimeDisplay(firstEvent.startTime, timeFormat)} -{' '}
-                  {formatTimeDisplay(firstEvent.endTime, timeFormat)}
-                </span>
+                {firstEvent.isAllDay ? (
+                  <span className="text-xs font-medium">All Day</span>
+                ) : (
+                  <>
+                    <Clock className="mr-1 h-3 w-3" />
+                    <span className="truncate">
+                      {formatTimeDisplay(firstEvent.startTime, timeFormat)} -{' '}
+                      {formatTimeDisplay(firstEvent.endTime, timeFormat)}
+                    </span>
+                  </>
+                )}
               </div>
             </button>
           )}
-          {dayEvents.length > 1 ? (
+          {regularEvents.length > 1 ? (
             <Button
               variant="ghost"
               size="sm"
@@ -127,7 +156,7 @@ export function DayCell({
             >
               <Plus className="h-1.5 w-1.5" />
               <span className="hidden sm:block">
-                {dayEvents.length - 1} more
+                {regularEvents.length - 1} more
               </span>
             </Button>
           ) : (

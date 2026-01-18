@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { formatDate, generateTimeSlots, getCurrentTimeInSweden, formatTimeDisplay, isSameDay } from '@/lib/date';
+import { format } from 'date-fns';
 import { ScrollArea } from '../ui/scroll-area';
 import { WeekDayHeaders } from './ui/week-days-header';
 import { TimeGrid } from './ui/time-grid';
@@ -78,9 +79,10 @@ export function EventCalendarDays({
     currentDate,
     daysCount,
     localeObj,
+    firstDayOfWeek,
   );
 
-  const { singleDayEvents, multiDayEvents } = useFilteredEvents(
+  const { singleDayEvents, multiDayEvents, allDayEvents } = useFilteredEvents(
     events,
     weekDays,
   );
@@ -92,6 +94,23 @@ export function EventCalendarDays({
   );
   const multiDayEventRows = useMultiDayEventRows(multiDayEvents, weekDays);
   const timeSlots = useMemo(() => generateTimeSlots(START_HOUR, END_HOUR), []);
+
+  // Group all-day events by day
+  const allDayEventsByDay = useMemo(() => {
+    const grouped: Record<string, Events[]> = {};
+    weekDays.forEach((day) => {
+      grouped[format(day, 'yyyy-MM-dd')] = [];
+    });
+
+    allDayEvents.forEach((event) => {
+      const dateKey = format(event.startDate, 'yyyy-MM-dd');
+      if (grouped[dateKey]) {
+        grouped[dateKey].push(event);
+      }
+    });
+
+    return grouped;
+  }, [allDayEvents, weekDays]);
 
   const totalMultiDayRows =
     multiDayEventRows.length > 0
@@ -170,7 +189,7 @@ export function EventCalendarDays({
             daysInWeek={weekDays}
             formatDate={formatDate}
             locale={localeObj}
-            firstDayOfWeek={firstDayOfWeek}
+            firstDayOfWeek={0}
             highlightToday
             showDayNumber
           />
@@ -246,6 +265,52 @@ export function EventCalendarDays({
             </div>
           </div>
         )}
+      {/* All-day events section */}
+      <div className="bg-background border-border sticky top-[48px] z-30 mb-2 flex border-b">
+        <div className="flex h-[32px] w-[51px] items-center justify-center text-xs font-medium text-muted-foreground">
+          All Day
+        </div>
+        <div className="relative flex-1">
+          <div className="flex h-[32px]">
+            {weekDays.map((day, dayIndex) => {
+              const dateKey = format(day, 'yyyy-MM-dd');
+              const dayAllDayEvents = allDayEventsByDay[dateKey] || [];
+              const hasEvents = dayAllDayEvents.length > 0;
+
+              return (
+                <div
+                  key={`all-day-cell-${dayIndex}`}
+                  className={cn(
+                    'relative flex items-center justify-center border-r px-1 last:border-r-0',
+                    todayIndex === dayIndex && 'bg-primary/10',
+                    'flex-none',
+                  )}
+                  style={{ width: `${dayWidthPercent}%` }}
+                >
+                  {hasEvents && (
+                    <div className="flex flex-wrap gap-0.5 mb-1 text-center truncate max-w-full w-full">
+                      {dayAllDayEvents.slice(0, 2).map((event) => (
+                        <div
+                          key={event.id}
+                          className="bg-muted text-muted-foreground rounded px-1 pb-1.5 pt-1.5 text-sm truncate max-w-full font-bold w-full"
+                          title={event.location || event.title}
+                        >
+                          {event.location || event.title}
+                        </div>
+                      ))}
+                      {dayAllDayEvents.length > 2 && (
+                        <div className="text-muted-foreground text-xs">
+                          +{dayAllDayEvents.length - 2}
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
       <div className="h-full">
         <ScrollArea className="h-full w-full">
           <div className="flex flex-1 overflow-hidden">

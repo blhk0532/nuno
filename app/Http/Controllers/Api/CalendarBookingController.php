@@ -18,6 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Adultdate\FilamentBooking\Models\Booking\DailyLocation;
 
 final class CalendarBookingController extends Controller
 {
@@ -57,9 +58,19 @@ final class CalendarBookingController extends Controller
             $query->where('service_user_id', $request->input('resource_id'));
         }
 
+        if ($request->has('service_user_id')) {
+            $query->where('service_user_id', $request->input('service_user_id'));
+        }
+
         $bookings = $query->get();
 
-        return $bookings->map(function (Booking $booking) {
+        // Get DailyLocation events as all-day events
+        $dailyLocations = DailyLocation::query()
+            ->with(['serviceUser'])
+            ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
+            ->get();
+
+        $bookingEvents = $bookings->map(function (Booking $booking) {
             $event = [
                 'id' => $booking->id,
                 'title' => $booking->number,
@@ -94,6 +105,34 @@ final class CalendarBookingController extends Controller
 
             return $event;
         })->toArray();
+
+        $locationEvents = $dailyLocations->map(function (DailyLocation $location) {
+            $event = [
+                'id' => 'location-' . $location->id,
+                'title' => $location->location ?: ($location->serviceUser?->name ?? 'Location'),
+                'start' => $location->date?->toDateString(),
+                'allDay' => true,
+                'backgroundColor' => '#f3f4f6',
+                'borderColor' => 'transparent',
+                'textColor' => '#111827',
+                'extendedProps' => [
+                    'type' => 'location',
+                    'eventsType' => 'location',
+                    'daily_location_id' => $location->id,
+                    'service_user_id' => $location->service_user_id,
+                    'service_user_name' => $location->serviceUser?->name,
+                    'location' => $location->location,
+                ],
+            ];
+
+            if ($location->service_user_id) {
+                $event['resourceId'] = (string) $location->service_user_id;
+            }
+
+            return $event;
+        })->toArray();
+
+        return array_merge($bookingEvents, $locationEvents);
     }
 
     public function store(StoreBookingRequest $request): JsonResponse

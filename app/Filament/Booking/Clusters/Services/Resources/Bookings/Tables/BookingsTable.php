@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Booking\Clusters\Services\Resources\Bookings\Tables;
 
 use Filament\Actions\DeleteBulkAction;
@@ -11,11 +13,10 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
 use Guava\FilamentIconSelectColumn\Tables\Columns\IconSelectColumn;
+use Illuminate\Database\Eloquent\Builder;
 
-class BookingsTable
+final class BookingsTable
 {
     public static function configure(Table $table): Table
     {
@@ -37,13 +38,16 @@ class BookingsTable
                     ]),
                 IconSelectColumn::make('state')
                     ->label('Status')
-                    ->options([
-                        'opt1' => 'Option 1',
-                        'opt2' => 'Option 2',
-                    ])
+                    ->options(\Adultdate\FilamentBooking\Enums\BookingState::toOptions())
                     ->icons([
-                        'opt1' => 'heroicon-o-check',
-                        'opt2' => 'heroicon-o-x-mark',
+                        \Adultdate\FilamentBooking\Enums\Pending::class => 'heroicon-o-clock',
+                        \Adultdate\FilamentBooking\Enums\Paid::class => 'heroicon-o-check',
+                        \Adultdate\FilamentBooking\Enums\Failed::class => 'heroicon-o-x-mark',
+                    ])
+                    ->colors([
+                        \Adultdate\FilamentBooking\Enums\Pending::class => ['display' => 'amber-600', 'dropdown' => 'amber-500'],
+                        \Adultdate\FilamentBooking\Enums\Paid::class => ['display' => 'green-600', 'dropdown' => 'green-500'],
+                        \Adultdate\FilamentBooking\Enums\Failed::class => ['display' => 'red-600', 'dropdown' => 'red-500'],
                     ]),
                 TextColumn::make('created_at')
                     ->label('Booking date')

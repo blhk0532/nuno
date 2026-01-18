@@ -47,8 +47,9 @@ class PageBooking extends BasePage
             ->components([
                 Select::make('booking_calendars')
                     ->label('Calendars')
-                    ->options(fn () => BookingCalendarModel::whereHas('owner', fn ($q) => $q->where('role', UserRole::SERVICE))->pluck('name', 'id'))
+                    ->options(fn () => ['all' => 'Show All'] + BookingCalendarModel::whereHas('owner', fn ($q) => $q->where('role', UserRole::SERVICE))->pluck('name', 'id')->toArray())
                     ->placeholder('Select a calendar')
+                    ->default('all')
                     ->reactive()
                     ->afterStateUpdated(function () {
                         $this->dispatch('refreshCalendar');

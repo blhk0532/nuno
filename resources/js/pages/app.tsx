@@ -16,24 +16,41 @@ const formatTime = (date: Date) =>
   `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
 
 const transformBookingToEvent = (booking: any): Events => {
-  const fallbackDate = booking.extendedProps?.service_date
-    ? new Date(booking.extendedProps.service_date)
-    : new Date();
-  const startBase = booking.start ? new Date(booking.start) : fallbackDate;
-  const endBase = booking.end ? new Date(booking.end) : startBase;
+  const isAllDay = booking.allDay === true || booking.type === 'location' || booking.eventsType === 'location';
+  
+  let startDate: Date;
+  let endDate: Date;
+  let startTime: string;
+  let endTime: string;
 
-  const startZoned = toZonedTime(startBase, SWEDEN_TIMEZONE);
-  const endZoned = toZonedTime(endBase, SWEDEN_TIMEZONE);
+  if (isAllDay) {
+    // For all-day events, use the date directly without timezone conversion
+    startDate = new Date(booking.start);
+    endDate = new Date(booking.start); // Same date for all-day events
+    startTime = '00:00';
+    endTime = '23:59';
+  } else {
+    const fallbackDate = booking.extendedProps?.service_date
+      ? new Date(booking.extendedProps.service_date)
+      : new Date();
+    const startBase = booking.start ? new Date(booking.start) : fallbackDate;
+    const endBase = booking.end ? new Date(booking.end) : startBase;
 
-  const startTime = booking.extendedProps?.start_time ?? formatTime(startZoned);
-  const endTime = booking.extendedProps?.end_time ?? formatTime(endZoned);
+    const startZoned = toZonedTime(startBase, SWEDEN_TIMEZONE);
+    const endZoned = toZonedTime(endBase, SWEDEN_TIMEZONE);
+
+    startDate = startZoned;
+    endDate = endZoned;
+    startTime = booking.extendedProps?.start_time ?? formatTime(startZoned);
+    endTime = booking.extendedProps?.end_time ?? formatTime(endZoned);
+  }
 
   return {
     id: booking.id.toString(),
     title: booking.title || booking.number || 'Booking',
     description: booking.description || '',
-    startDate: startZoned,
-    endDate: endZoned,
+    startDate,
+    endDate,
     startTime,
     endTime,
     isRepeating: false,
@@ -54,6 +71,7 @@ const transformBookingToEvent = (booking: any): Events => {
         ? String(booking.extendedProps.booking_calendar_id)
         : undefined,
     google_event_id: booking.extendedProps?.google_event_id ?? undefined,
+    isAllDay,
   };
 };
 
@@ -180,7 +198,7 @@ export default function ShadcnEventCalendar() {
       </AppLayout>
     );
   }
-
+ 
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="NDS Calendar" />

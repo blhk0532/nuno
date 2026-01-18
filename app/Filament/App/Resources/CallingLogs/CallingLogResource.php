@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\CallingLogs;
 
 use App\Filament\App\Resources\CallingLogs\Pages\CreateCallingLog;
@@ -14,7 +16,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class CallingLogResource extends Resource
+final class CallingLogResource extends Resource
 {
     protected static ?string $model = CallingLog::class;
 
@@ -22,9 +24,9 @@ class CallingLogResource extends Resource
 
     protected static ?int $navigationSort = 10;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-phone-arrow-up-right';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-m-phone-arrow-up-right';
 
-    protected static string|UnitEnum|null $navigationGroup = ' ';
+    protected static string|UnitEnum|null $navigationGroup = 'Mina Sidor';
 
     // Disable tenant scoping for this resource (no `team` relationship on CallingLog).
     protected static bool $isScopedToTenant = false;
@@ -55,8 +57,5 @@ class CallingLogResource extends Resource
         ];
     }
 
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
-    }
+
 }

@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Models\Admin;
-use App\Models\Permission;
-use App\Models\Role;
-use App\Models\User;
+use App\Http\Responses\CustomLoginResponse;
+use BezhanSalleh\PanelSwitch\PanelSwitch;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
-use BezhanSalleh\PanelSwitch\PanelSwitch;
-use App\Http\Responses\CustomLoginResponse;
 use Laravel\Fortify\Contracts\LoginResponse;
 
 final class AppServiceProvider extends ServiceProvider
@@ -27,8 +23,10 @@ final class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->app->bind(\Filament\Auth\Http\Responses\Contracts\LoginResponse::class, function () {
-            return new class implements \Filament\Auth\Http\Responses\Contracts\LoginResponse {
-                public function toResponse($request) {
+            return new class implements \Filament\Auth\Http\Responses\Contracts\LoginResponse
+            {
+                public function toResponse($request)
+                {
                     return redirect()->to('/nds/app');
                 }
             };
@@ -37,7 +35,7 @@ final class AppServiceProvider extends ServiceProvider
         $this->bootModelsDefaults();
         $this->bootPasswordDefaults();
 
-          if (app()->environment('production')) {
+        if (app()->environment('production')) {
             URL::forceScheme('https');
         }
 
@@ -120,101 +118,102 @@ final class AppServiceProvider extends ServiceProvider
 
             $panels = [];
 
-            if ($user?->role && $user?->role === 'guest'){
+            if ($user?->role && $user?->role === 'guest') {
                 $panels = ['guest'];
-            }elseif ($user?->role && $user?->role === 'partner'){
+            } elseif ($user?->role && $user?->role === 'partner') {
                 $panels = ['partner'];
-            }elseif ($user?->role && $user?->role === 'service'){
+            } elseif ($user?->role && $user?->role === 'service') {
                 $panels = ['service'];
-            }elseif ($user?->role && $user?->role === 'user') {
+            } elseif ($user?->role && $user?->role === 'user') {
                 $panels = ['app',
-                           'dialer',
-                           'chat',
-                           'email'];
-            }elseif ($user?->role && $user?->role === 'booking'){
+                    'dialer',
+                    'chat',
+                    'email'];
+            } elseif ($user?->role && $user?->role === 'booking') {
                 $panels = ['app',
-                           'dialer',
-                           'chat',
-                           'email'];
-            }elseif ($user?->role && $user?->role === 'manager') {
+                    'dialer',
+                    'chat',
+                    'email'];
+            } elseif ($user?->role && $user?->role === 'manager') {
                 $panels = ['app', 'booking', 'manager', 'dialer', 'stats', 'email', 'queue', 'chat'];
-            }elseif ($user?->role && $user?->role === 'admin') {
-               $panels = [
-                'admin',
-                'app',
-                'booking',
-                'calendar',
-                'chat',
-                'clients',
-                'content',
-                'data',
-                'dev',
-                'dialer',
-                'email',
-                'files',
-                'finance',
-                'locale',
-                'manager',
-                'notify',
-                'oauth',
-                'partner',
-                'private',
-                'product',
-                'plugins',
-                'queue',
-                'script',
-                'server',
-                'service',
-                'sheets',
-                'stats',
-                'storage',
-                'super',
-                'system',
-                'tools',
-                'user',
-            ];
-            }elseif ($admin?->role && $admin?->role === 'super') {
+            } elseif ($user?->role && $user?->role === 'admin') {
                 $panels = [
-                'admin',
-                'app',
-                'booking',
-                'calendar',
-                'chat',
-                'clients',
-                'content',
-                'data',
-                'dev',
-                'dialer',
-                'email',
-                'files',
-                'finance',
-                'locale',
-                'manager',
-                'notify',
-                'oauth',
-                'partner',
-                'private',
-                'product',
-                'plugins',
-                'queue',
-                'script',
-                'server',
-                'service',
-                'sheets',
-                'stats',
-                'storage',
-                'super',
-                'system',
-                'tools',
-                'user',
-            ];
-            }else{
+                    'admin',
+                    'app',
+                    'booking',
+                    'calendar',
+                    'chat',
+                    'clients',
+                    'content',
+                    'data',
+                    'dev',
+                    'dialer',
+                    'email',
+                    'files',
+                    'finance',
+                    'locale',
+                    'manager',
+                    'notify',
+                    'oauth',
+                    'partner',
+                    'private',
+                    'product',
+                    'plugins',
+                    'queue',
+                    'script',
+                    'server',
+                    'service',
+                    'sheets',
+                    'stats',
+                    'storage',
+                    'super',
+                    'system',
+                    'tools',
+                    'user',
+                ];
+            } elseif ($admin?->role && $admin?->role === 'super') {
+                $panels = [
+                    'admin',
+                    'app',
+                    'booking',
+                    'calendar',
+                    'chat',
+                    'clients',
+                    'content',
+                    'data',
+                    'dev',
+                    'dialer',
+                    'email',
+                    'files',
+                    'finance',
+                    'locale',
+                    'manager',
+                    'notify',
+                    'oauth',
+                    'partner',
+                    'private',
+                    'product',
+                    'plugins',
+                    'queue',
+                    'script',
+                    'server',
+                    'service',
+                    'sheets',
+                    'stats',
+                    'storage',
+                    'super',
+                    'system',
+                    'tools',
+                    'user',
+                ];
+            } else {
                 $panels = [];
             }
 
             $switch->panels($panels);
 
         });
+
     }
 
     private function bootModelsDefaults(): void

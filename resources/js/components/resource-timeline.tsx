@@ -72,6 +72,7 @@ export function ResourceTimeline({
         resourceExpanderContent={(data) => (
           <EventCalendarExpanderIcon isExpanded={data.isExpanded} />
         )}
+        firstDay={1}
         {...restOptions}
       />
     </EventCalendarContainer>

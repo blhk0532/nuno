@@ -34,32 +34,32 @@ const mainNavItems: NavItem[] = [
     {
         title: 'NDS Kalender #2',
         href: dashboard(),
-        icon: CalendarDays,
+        icon: LayoutGrid,
     },
  //   {
  //       title: 'Boknings Kalenders NDS#4',
  //       href: bigCalendar(),
  //       icon: CalendarDays,
  //   },
-            {
-        title: 'NDS Kalender #3',
-        href: calendars(),
-        icon: CalendarDays,
-    },
+ //           {
+ //       title: 'NDS Kalender #3',
+ //       href: calendars(),
+ //       icon: CalendarDays,
+ //   },
 
 ];
 
 const footerNavItems: NavItem[] = [
-    {
-        title: 'NDS App',
-        href: 'https://ndsth.com/nds/app',
-        icon: LayoutGrid,
-    },
-    {
-        title: 'Admin',
-        href: 'https://ndsth.com/nds/admin',
-        icon: LayoutGrid,
-    },
+//    {
+//        title: 'NDS App',
+//        href: 'https://ndsth.com/nds/app',
+//        icon: LayoutGrid,
+//    },
+//    {
+//        title: 'Admin',
+//        href: 'https://ndsth.com/nds/admin',
+//        icon: LayoutGrid,
+//    },
 ];
 
 export function AppSidebar() {
@@ -85,6 +85,7 @@ export function AppSidebar() {
             </SidebarContent>
 
             <SidebarFooter>
+
                 <NavFooter items={footerNavItems} className="mt-auto" />
 
                 <NavUser />

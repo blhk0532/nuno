@@ -48,8 +48,8 @@ export function rangeText(view: TCalendarView, date: Date): string {
 			end = endOfMonth(date);
 			break;
 		case "week":
-			start = startOfWeek(date);
-			end = endOfWeek(date);
+			start = startOfWeek(date, { weekStartsOn: 1 });
+			end = endOfWeek(date, { weekStartsOn: 1 });
 			break;
 		case "day":
 			return format(date, FORMAT_STRING);
@@ -153,13 +153,15 @@ export function getCalendarCells(selectedDate: Date): ICalendarCell[] {
 
 	const daysInMonth = endOfMonth(selectedDate).getDate(); // Faster than new Date(year, month + 1, 0)
 	const firstDayOfMonth = startOfMonth(selectedDate).getDay();
+	// Adjust for Monday as first day of week (0 = Sunday, so Monday = 0 when adjusted)
+	const adjustedFirstDay = (firstDayOfMonth + 6) % 7; // Convert Sunday=0 to Monday=0
 	const daysInPrevMonth = endOfMonth(new Date(year, month - 1)).getDate();
-	const totalDays = firstDayOfMonth + daysInMonth;
+	const totalDays = adjustedFirstDay + daysInMonth;
 
-	const prevMonthCells = Array.from({ length: firstDayOfMonth }, (_, i) => ({
-		day: daysInPrevMonth - firstDayOfMonth + i + 1,
+	const prevMonthCells = Array.from({ length: adjustedFirstDay }, (_, i) => ({
+		day: daysInPrevMonth - adjustedFirstDay + i + 1,
 		currentMonth: false,
-		date: new Date(year, month - 1, daysInPrevMonth - firstDayOfMonth + i + 1),
+		date: new Date(year, month - 1, daysInPrevMonth - adjustedFirstDay + i + 1),
 	}));
 
 	const currentMonthCells = Array.from({ length: daysInMonth }, (_, i) => ({

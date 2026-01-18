@@ -21,6 +21,7 @@ export default function Dashboard() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
+        <div id="dashboard-container" className="w-full max-w-[100%] max-h-[96vh] overflow-auto">
             <div className="flex flex-1 flex-col gap-4 overflow-x-auto rounded-xl bg-background p-4">
                 <div className="grid auto-rows-min gap-4 md:grid-cols-3">
                     <div className="relative overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
@@ -49,6 +50,7 @@ export default function Dashboard() {
                         <EventCalendarDemo />
                     </div>
             </div>
+        </div>
         </AppLayout>
     );
 }

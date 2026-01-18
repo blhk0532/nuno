@@ -1,7 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adultdate\FilamentBooking;
 
+use Adultdate\FilamentBooking\Commands\FilamentBookingCommand;
+use Adultdate\FilamentBooking\Testing\TestsFilamentBooking;
+use Filament\Facades\Filament;
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\Asset;
 use Filament\Support\Assets\Css;
@@ -15,12 +20,8 @@ use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Adultdate\FilamentBooking\Commands\FilamentBookingCommand;
-use Adultdate\FilamentBooking\Testing\TestsFilamentBooking;
 
-use Filament\Facades\Filament;
-
-class FilamentBookingServiceProvider extends PackageServiceProvider
+final class FilamentBookingServiceProvider extends PackageServiceProvider
 {
     public static string $name = 'filament-booking';
 
@@ -35,7 +36,7 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
          *
          * More info: https://github.com/spatie/laravel-package-tools
          */
-        $package->name(static::$name)
+        $package->name(self::$name)
             ->hasCommands($this->getCommands())
             ->hasInstallCommand(function (InstallCommand $command) {
                 $command
@@ -69,7 +70,7 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
         }
 
         if (file_exists($package->basePath('/../resources/views'))) {
-            $package->hasViews(static::$viewNamespace);
+            $package->hasViews(self::$viewNamespace);
         }
     }
 
@@ -78,7 +79,7 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
     public function packageBooted(): void
     {
         // Register observers
-        \Adultdate\FilamentBooking\Models\Booking\Booking::observe(\Adultdate\FilamentBooking\Observers\BookingObserver::class);
+        Models\Booking\Booking::observe(Observers\BookingObserver::class);
 
         // Asset Registration
         FilamentAsset::registerScriptData(
@@ -120,18 +121,18 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
             assets: [
                 AlpineComponent::make(
                     'calendar',
-                    __DIR__ . '/../dist/js/calendar.js',
+                    __DIR__.'/../dist/js/calendar.js',
                 ),
                 AlpineComponent::make(
                     'calendar-context-menu',
-                    __DIR__ . '/../dist/js/calendar-context-menu.js',
+                    __DIR__.'/../dist/js/calendar-context-menu.js',
                 ),
                 AlpineComponent::make(
                     'calendar-event',
-                    __DIR__ . '/../dist/js/calendar-event.js',
+                    __DIR__.'/../dist/js/calendar-event.js',
                 ),
-                AlpineComponent::make('filament-booking-alpine', __DIR__ . '/../resources/dist/filament-booking.js'),
-                AlpineComponent::make('filament-fullcalendar-alpine', __DIR__ . '/../dist/js/filament-fullcalendar.js'),
+                AlpineComponent::make('filament-booking-alpine', __DIR__.'/../resources/dist/filament-booking.js'),
+                AlpineComponent::make('filament-fullcalendar-alpine', __DIR__.'/../dist/js/filament-fullcalendar.js'),
                 Css::make('calendar-styles', 'https://cdn.jsdelivr.net/npm/@event-calendar/build@4.5.0/dist/event-calendar.min.css'),
                 Js::make('calendar-script', 'https://cdn.jsdelivr.net/npm/@event-calendar/build@4.5.0/dist/event-calendar.min.js'),
             ],
@@ -139,14 +140,14 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
         );
 
         // Ensure views are available under the legacy namespace used across the package
-        $viewsPath = __DIR__ . '/../resources/views';
+        $viewsPath = __DIR__.'/../resources/views';
         if (is_dir($viewsPath)) {
             $this->loadViewsFrom($viewsPath, 'adultdate/filament-booking');
         }
 
         // Migration Publishing
         $this->publishes([
-            __DIR__ . '/../database/migrations' => database_path('migrations'),
+            __DIR__.'/../database/migrations' => database_path('migrations'),
         ], 'adultdate/filament-booking-migrations');
 
         // Testing
@@ -159,6 +160,30 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
                     \Adultdate\FilamentBooking\Filament\Resources\BookingCalendars\BookingCalendarResource::class,
                 ]);
             });
+        }
+
+        // Register Livewire component aliases for App-level Filament widgets
+        // so resource-scoped widget names used in blade/views can be resolved.
+        if (class_exists('\Livewire\Livewire')) {
+            \Livewire\Livewire::component(
+                'app.filament.app.clusters.services.resources.bookings.widgets.booking-calendar',
+                \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\BookingCalendar::class
+            );
+
+            \Livewire\Livewire::component(
+                'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar1',
+                \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar1::class
+            );
+
+            \Livewire\Livewire::component(
+                'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar2',
+                \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar2::class
+            );
+
+            \Livewire\Livewire::component(
+                'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar3',
+                \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar3::class
+            );
         }
     }
 
@@ -173,7 +198,7 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
     protected function getAssets(): array
     {
 
-        $distPath = __DIR__ . '/../../dist/js';
+        $distPath = __DIR__.'/../../dist/js';
 
         if (is_dir($distPath)) {
             return [
@@ -189,19 +214,19 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
                 // Calendar Alpine components
                 AlpineComponent::make(
                     'calendar',
-                    $distPath . '/calendar.js'
+                    $distPath.'/calendar.js'
                 ),
                 AlpineComponent::make(
                     'calendar-context-menu',
-                    $distPath . '/calendar-context-menu.js'
+                    $distPath.'/calendar-context-menu.js'
                 ),
                 AlpineComponent::make(
                     'calendar-event',
-                    $distPath . '/calendar-event.js'
+                    $distPath.'/calendar-event.js'
                 ),
                 AlpineComponent::make(
                     'filament-fullcalendar-alpine',
-                    $distPath . '/filament-fullcalendar.js'
+                    $distPath.'/filament-fullcalendar.js'
                 ),
             ];
         }
@@ -282,7 +307,7 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
         $filesystem = app(Filesystem::class);
 
         foreach ($directories as $directory) {
-            if (!$filesystem->exists($directory)) {
+            if (! $filesystem->exists($directory)) {
                 $filesystem->makeDirectory($directory, 0755, true);
             }
         }
@@ -319,7 +344,7 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
         $productImagesLink = public_path('storage/product-images');
         $productImagesTarget = storage_path('app/product-images');
 
-        if (!$filesystem->exists($productImagesLink)) {
+        if (! $filesystem->exists($productImagesLink)) {
             $filesystem->link($productImagesTarget, $productImagesLink);
         }
     }
@@ -328,7 +353,7 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
     {
         // Register media library routes for serving media files and conversions
         app('router')->get('/storage/product-images/{mediaId}/conversions/{conversionName}', function ($mediaId, $conversionName) {
-            $media = \Spatie\MediaLibrary\MediaCollections\Models\Media::findOrFail($mediaId);
+            $media = Media::findOrFail($mediaId);
 
             if ($media->hasGeneratedConversion($conversionName)) {
                 return response()->file($media->getPath($conversionName), [
@@ -342,7 +367,7 @@ class FilamentBookingServiceProvider extends PackageServiceProvider
         })->name('media.conversion');
 
         app('router')->get('/storage/product-images/{mediaId}/{filename}', function ($mediaId, $filename) {
-            $media = \Spatie\MediaLibrary\MediaCollections\Models\Media::findOrFail($mediaId);
+            $media = Media::findOrFail($mediaId);
 
             return response()->file($media->getPath(), [
                 'Access-Control-Allow-Origin' => '*',

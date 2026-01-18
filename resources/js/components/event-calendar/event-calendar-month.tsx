@@ -53,6 +53,7 @@ export function EventCalendarMonth({ events, baseDate }: CalendarMonthProps) {
     baseDate,
     DAYS_IN_WEEK,
     localeObj,
+    firstDayOfWeek,
   );
 
   // Calculate visible days in month
@@ -65,18 +66,22 @@ export function EventCalendarMonth({ events, baseDate }: CalendarMonthProps) {
     return eachDayOfInterval({ start: gridStart, end: gridEnd });
   }, [baseDate, weekStartDay]);
 
-  // Groups events by their start date
+  // Groups events by their start date, separating all-day events
   const eventsGroupedByDate = useMemo(() => {
-    const groupedEvents: Record<string, Events[]> = {};
+    const groupedEvents: Record<string, { regular: Events[]; allDay: Events[] }> = {};
 
     visibleDays.forEach((day) => {
-      groupedEvents[format(day, 'yyyy-MM-dd')] = [];
+      groupedEvents[format(day, 'yyyy-MM-dd')] = { regular: [], allDay: [] };
     });
 
     events.forEach((event) => {
       const dateKey = format(event.startDate, 'yyyy-MM-dd');
       if (groupedEvents[dateKey]) {
-        groupedEvents[dateKey].push(event);
+        if (event.isAllDay) {
+          groupedEvents[dateKey].allDay.push(event);
+        } else {
+          groupedEvents[dateKey].regular.push(event);
+        }
       }
     });
 
@@ -85,7 +90,9 @@ export function EventCalendarMonth({ events, baseDate }: CalendarMonthProps) {
 
   const handleShowDayEvents = (date: Date) => {
     const dateKey = format(date, 'yyyy-MM-dd');
-    openDayEventsDialog(date, eventsGroupedByDate[dateKey] || []);
+    const dayEvents = eventsGroupedByDate[dateKey];
+    const allEvents = [...(dayEvents?.regular || []), ...(dayEvents?.allDay || [])];
+    openDayEventsDialog(date, allEvents);
   };
 
   return (
@@ -95,7 +102,7 @@ export function EventCalendarMonth({ events, baseDate }: CalendarMonthProps) {
         daysInWeek={weekDays}
         formatDate={formatDate}
         locale={localeObj}
-        firstDayOfWeek={firstDayOfWeek}
+        firstDayOfWeek={0}
       />
       <div
         ref={daysContainerRef}

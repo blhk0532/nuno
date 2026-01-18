@@ -94,9 +94,20 @@ public function getMaxContentWidth(): Width
                 Section::make()
                     ->schema([
                         Select::make('booking_calendars')
-                            ->options(fn () => BookingCalendarModel::pluck('name', 'id')->toArray())
+                            ->options(fn () => ['all' => 'Show All'] + BookingCalendarModel::pluck('name', 'id')->toArray())
                             ->label('Tekninker')
                             ->placeholder('Select a calendar owner')
+                            ->searchable()
+                            ->default('all')
+                            ->reactive()
+                            ->afterStateUpdated(function () {
+                                $this->dispatch('refreshCalendar');
+                            }),
+                        Select::make('show_all_day_events')
+                            ->options([true => 'Ja', false => 'Nej'])
+                            ->label('Visa heldags händelser')
+                            ->placeholder('Visa heldags?')
+                            ->default(true)
                             ->searchable()
                             ->reactive()
                             ->afterStateUpdated(function () {
@@ -110,7 +121,7 @@ public function getMaxContentWidth(): Width
                             ->minDate(fn (Get $get) => $get('startDate') ?: now())
                             ->maxDate(now()),
                     ])
-                    ->columns(3)
+                    ->columns(4)
                     ->columnSpanFull(),
             ]);
     }

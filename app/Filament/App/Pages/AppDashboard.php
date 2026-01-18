@@ -1,24 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Pages;
 
-use BackedEnum;
-use Filament\Pages\Dashboard as BaseDashboard;
-use Filament\Support\Icons\Heroicon;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
+use App\Filament\Admin\Widgets\AccountInfoStackWidget;
+use App\Filament\Admin\Widgets\WorldClockWidget;
 use App\Filament\App\Resources\Bookings\Widgets\BookingCalendar;
 use App\Models\BookingCalendar as BookingCalendarModel;
+use BackedEnum;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
+use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
-use Filament\Support\Enums\Width;
-use App\Filament\Admin\Widgets\AccountInfoStackWidget;
-use App\Filament\Admin\Widgets\WorldClockWidget;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use UnitEnum;
+
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseCache;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseExceptions;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseQueues;
@@ -28,9 +29,8 @@ use UnitEnum;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseSlowRequests;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseUsage;
 
-class AppDashboard extends BaseDashboard
+final class AppDashboard extends BaseDashboard
 {
-
     use HasFiltersForm;
 
     protected static ?string $title = '';
@@ -39,17 +39,53 @@ class AppDashboard extends BaseDashboard
 
     protected string $view = 'filament.app.dashboard';
 
-
+    //    protected static string | UnitEnum | null $navigationGroup = 'Mina Sidor';
 
     protected static ?int $navigationSort = 0;
 
     protected static ?int $sort = 0;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedChartPie;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-m-identification';
 
     // Prevent this app-level Dashboard from being auto-discovered so that
     // the explicit `AdminDashboard` can be registered as the admin panel root.
     protected static bool $isDiscovered = true;
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        return true;
+    }
+
+    public static function getNavigationLabel(): string
+    {
+        return ''.Str::ucfirst(Auth::user()->name) ?? 'User';
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return 'Online';
+
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'success';
+    }
+
+    public static function getNavigationIcon(): ?string
+    {
+        return 'heroicon-m-identification';
+    }
+
+    public static function getNavigationSort(): ?int
+    {
+        return 2;
+    }
+
+    public static function getSort(): ?int
+    {
+        return 2;
+    }
 
     public function filtersForm(Schema $schema): Schema
     {
@@ -58,10 +94,11 @@ class AppDashboard extends BaseDashboard
                 Section::make()
                     ->schema([
                         Select::make('booking_calendars')
-                            ->options(fn () => BookingCalendarModel::pluck('name', 'id')->toArray())
+                            ->options(fn () => ['all' => 'Show All'] + BookingCalendarModel::pluck('name', 'id')->toArray())
                             ->label('Tekninker')
                             ->placeholder('Välj en tekninker...')
                             ->searchable()
+                            ->default('all')
                             ->reactive()
                             ->afterStateUpdated(function () {
                                 $this->dispatch('refreshCalendar');
@@ -75,13 +112,23 @@ class AppDashboard extends BaseDashboard
                             ->afterStateUpdated(function () {
                                 $this->dispatch('refreshCalendar');
                             }),
+                        Select::make('show_all_day_events')
+                            ->options([true => 'Ja', false => 'Nej'])
+                            ->label('Visa heldags händelser')
+                            ->placeholder('Visa heldags?')
+                            ->default(true)
+                            ->searchable()
+                            ->reactive()
+                            ->afterStateUpdated(function () {
+                                $this->dispatch('refreshCalendar');
+                            }),
                         DatePicker::make('startDate')
                             ->maxDate(fn (Get $get) => $get('endDate') ?: now()),
                         DatePicker::make('endDate')
                             ->minDate(fn (Get $get) => $get('startDate') ?: now())
                             ->maxDate(now()),
                     ])
-                    ->columns(4)
+                    ->columns(5)
                     ->columnSpanFull(),
             ]);
     }
@@ -99,7 +146,7 @@ class AppDashboard extends BaseDashboard
             \App\Filament\App\Widgets\StatsOverviewWidget::class,
             \App\Filament\App\Widgets\OrdersChart::class,
             \App\Filament\App\Widgets\CustomersChart::class,
-        //     \App\Filament\App\Widgets\BookingStats::class,
+            //     \App\Filament\App\Widgets\BookingStats::class,
         ];
     }
 
@@ -112,11 +159,11 @@ class AppDashboard extends BaseDashboard
         ];
     }
 
-        public function getFooterWidgets(): array
+    public function getFooterWidgets(): array
     {
 
         return [
-                        \App\Filament\App\Widgets\LatestOrders::class,
+            \App\Filament\App\Widgets\LatestOrders::class,
         ];
     }
 
@@ -128,41 +175,5 @@ class AppDashboard extends BaseDashboard
     protected function getHeaderTitle(): string
     {
         return false;
-    }
-
-    public static function shouldRegisterNavigation(): bool
-    {
-        return true;
-    }
-
-    public static function getNavigationLabel(): string
-    {
-        return ''.Str::ucfirst(Auth::user()->name) ?? 'User';
-    }
-
-    public static function getNavigationBadge(): ?string
-    {
-        return now()->timezone('Asia/Bangkok')->format('H:i');
-
-    }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return 'gray';
-    }
-
-    public static function getNavigationIcon(): ?string
-    {
-        return 'heroicon-s-squares-plus';
-    }
-
-    public static function getNavigationSort(): ?int
-    {
-        return 2;
-    }
-
-    public static function getSort(): ?int
-    {
-        return 2;
     }
 }

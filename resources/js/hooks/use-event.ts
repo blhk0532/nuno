@@ -114,7 +114,7 @@ export const useEventCalendarStore = create<EventCalendarState>()(
       viewMode: ViewModeType.CALENDAR,
       timeFormat: TimeFormatType.HOUR_24,
       locale: 'en-US',
-      firstDayOfWeek: 0, // sunday
+      firstDayOfWeek: 1, // monday
       daysCount: 7,
       loading: false,
       error: null,
@@ -274,6 +274,13 @@ export const useEventCalendarStore = create<EventCalendarState>()(
     }),
     {
       name: 'event-calendar',
+      version: 1,
+      migrate: (persistedState: any, version: number) => {
+        if (version === 0) {
+          persistedState.firstDayOfWeek = 1;
+        }
+        return persistedState;
+      },
       partialize: (state) => ({
         currentView: state.currentView,
         viewMode: state.viewMode,

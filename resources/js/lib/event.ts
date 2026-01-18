@@ -37,19 +37,21 @@ import { enUS } from 'date-fns/locale';
  * @param {Date} currentDate - Reference date for the week
  * @param {number} daysInWeek - Number of days in week (typically 7)
  * @param {Locale} [locale] - Optional locale for week calculation
+ * @param {0 | 1 | 2 | 3 | 4 | 5 | 6} [firstDayOfWeek] - First day of week (0=Sunday, 1=Monday, etc.)
  * @returns {Object} Week information including days array and today's index
  *
  * @example
- * const { weekDays, weekNumber, todayIndex } = useWeekDays(new Date(), 7);
+ * const { weekDays, weekNumber, todayIndex } = useWeekDays(new Date(), 7, undefined, 1); // Monday first
  */
 export function useWeekDays(
   currentDate: Date,
   daysInWeek: number,
   locale?: Locale,
+  firstDayOfWeek: 0 | 1 | 2 | 3 | 4 | 5 | 6 = 1,
 ) {
   const weekStart = useMemo(
-    () => startOfWeek(currentDate, { locale }),
-    [currentDate, locale],
+    () => startOfWeek(currentDate, { weekStartsOn: firstDayOfWeek, locale }),
+    [currentDate, locale, firstDayOfWeek],
   );
 
   const weekNumber = useMemo(
@@ -94,10 +96,17 @@ export function useFilteredEvents(events: EventTypes[], daysInWeek: Date[]) {
   return useMemo(() => {
     const singleDayEvents: EventTypes[] = [];
     const multiDayEvents: EventTypes[] = [];
+    const allDayEvents: EventTypes[] = [];
 
     const [firstDayOfWeek, lastDayOfWeek] = [daysInWeek[0], daysInWeek[6]];
 
     events.forEach((event) => {
+      // Check if it's an all-day event
+      if (event.isAllDay) {
+        allDayEvents.push(event);
+        return;
+      }
+
       const startDate = new Date(event.startDate);
       const endDate = new Date(event.endDate);
       const dayDiff = differenceInDays(endDate, startDate);
@@ -115,7 +124,7 @@ export function useFilteredEvents(events: EventTypes[], daysInWeek: Date[]) {
       }
     });
 
-    return { singleDayEvents, multiDayEvents };
+    return { singleDayEvents, multiDayEvents, allDayEvents };
   }, [events, daysInWeek]);
 }
 

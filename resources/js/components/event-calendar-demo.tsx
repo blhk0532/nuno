@@ -95,13 +95,13 @@ export function EventCalendarDemo() {
             });
 
             // Pre-fill form with selected date/time
-            setData({
-                ...data,
+            setData((currentData) => ({
+                ...currentData,
                 service_date: start.toISOString().split('T')[0],
                 start_time: start.toTimeString().slice(0, 5),
                 end_time: end ? end.toTimeString().slice(0, 5) : '',
                 service_user_id: info.resource?.id || '',
-            });
+            }));
 
             setIsEditMode(false);
             setShowBookingModal(true);
@@ -123,7 +123,8 @@ export function EventCalendarDemo() {
 
             // Pre-fill form with event data for editing
             const props = event.extendedProps;
-            setData({
+            setData((currentData) => ({
+                ...currentData,
                 service_date:
                     props.service_date ||
                     event.start?.toISOString().split('T')[0] ||
@@ -144,7 +145,7 @@ export function EventCalendarDemo() {
                 total_price: props.total_price || '',
                 notes: props.notes || '',
                 service_note: '',
-            });
+            }));
 
             setIsEditMode(true);
             setShowBookingModal(true);
@@ -335,6 +336,7 @@ export function EventCalendarDemo() {
                 navLinks
                 locale="sv"
                 initialView="timeGridWeek"
+                firstDay={1}
                 timeZone="Europe/Stockholm"
                 events="/api/calendar/bookings"
                 resources="/calendar/resources"

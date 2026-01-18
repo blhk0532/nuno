@@ -33,7 +33,10 @@ export function WeekDayHeaders({
   highlightToday = true,
 }: WeekDayHeadersProps) {
   const today = new Date();
-  const reorderedDays = useMemo(() => {
+  const displayDays = useMemo(() => {
+    if (firstDayOfWeek === 0) {
+      return daysInWeek;
+    }
     const ordered = [...daysInWeek];
     return ordered
       .slice(firstDayOfWeek)
@@ -55,7 +58,7 @@ export function WeekDayHeaders({
           </div>
         </motion.div>
       )}
-      {reorderedDays.map((day, dayIndex) => {
+      {displayDays.map((day, dayIndex) => {
         const isToday = highlightToday && isSameDay(day, today);
 
         return (

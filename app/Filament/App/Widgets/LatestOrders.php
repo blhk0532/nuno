@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Widgets;
 
 use Adultdate\FilamentBooking\Models\Booking\Booking;
@@ -10,11 +12,13 @@ use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Illuminate\Support\Facades\Auth;
 
-class LatestOrders extends BaseWidget
+final class LatestOrders extends BaseWidget
 {
     protected int|string|array $columnSpan = 'full';
-protected static bool $isDiscovered = false;
-    protected static ?string $heading = 'Senaste Bokningar';
+
+    protected static bool $isDiscovered = false;
+
+    protected static ?string $heading = 'Mina Bokningar';
 
     protected static ?int $sort = 0;
 

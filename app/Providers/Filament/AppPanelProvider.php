@@ -1,20 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers\Filament;
 
-use Cmsmaxinc\FilamentErrorPages\FilamentErrorPagesPlugin;
-use App\Http\Middleware\FilamentPanelAccess;
-use App\Filament\App\Resources\Bookings\Pages\DashboardBooking;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use AdultDate\FilamentWirechat\Filament\Pages\ChatDashboard;
-use AdultDate\FilamentWirechat\Filament\Pages\ChatPage;
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
-use App\Filament\App\Pages\AppDashboard;
+use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBokning as AppBookingMultiCalendar;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppBookingSinleCalendar;
+use App\Filament\App\Pages\InertiaCalendar;
+use App\Filament\App\Pages\TeamInvitationAccept;
 use App\Filament\App\Pages\Tenancy\EditTeamProfile;
 use App\Filament\App\Pages\Tenancy\RegisterTeam;
 use App\Filament\App\Resources\BookingDataLeads\BookingDataLeadResource;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\CurrentTenant;
+use App\Http\Middleware\FilamentPanelAccess;
+use App\Http\Middleware\VerifyCsrfToken;
 use App\Models\Team;
 use App\Models\User;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
@@ -22,33 +26,31 @@ use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
 use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
 use Caresome\FilamentAuthDesigner\View\AuthDesignerRenderHook;
+use Cmsmaxinc\FilamentErrorPages\FilamentErrorPagesPlugin;
 use Filament\Actions\Action;
 use Filament\Enums\ThemeMode;
+use Filament\Facades\Filament;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Hydrat\TableLayoutToggle\TableLayoutTogglePlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
-use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
-use App\Filament\App\Resources\Bookings\Pages\DashboardBokning;
-use App\Filament\App\Pages\TeamInvitationAccept;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
-use Filament\Facades\Filament;
-use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
-use Filament\View\PanelsRenderHook;
-class AppPanelProvider extends PanelProvider
+use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+
+final class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
@@ -75,19 +77,28 @@ class AppPanelProvider extends PanelProvider
             ->brandLogoHeight(fn () => request()->is('admin/login', 'admin/password-reset/*') ? '68px' : '34px')
             ->viteTheme('resources/css/filament/app/theme.css')
             ->defaultThemeMode(config('teamkit.theme_mode', ThemeMode::Dark))
-            ->discoverClusters(in: app_path('Filament/App/Clusters'), for: 'App\\Filament\\App\\Clusters')
+        //    ->discoverClusters(in: app_path('Filament/App/Clusters'), for: 'App\\Filament\\App\\Clusters')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverWidgets(in: app_path('Filament/App/Widgets'), for: 'App\\Filament\\App\\Widgets')
+            ->navigationGroups([
+                NavigationGroup::make('Kalendrar')
+                    ->icon('heroicon-m-calendar-days'),
+                NavigationGroup::make('Mina Sidor')
+                    ->icon('heroicon-o-identification'),
+            ])
             ->pages([
                 ChatDashboard::class,
+                InertiaCalendar::class,
+                AppBookingSinleCalendar::class,
+                AppBookingMultiCalendar::class,
             ])
             ->widgets([
                 //    Widgets\AccountWidget::class,
                 //    Widgets\FilamentInfoWidget::class,
             ])
             ->resources([
-            //    BookingDataLeadResource::class,
+                //    BookingDataLeadResource::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -116,7 +127,7 @@ class AppPanelProvider extends PanelProvider
                 //    FilamentShieldPlugin::make(),
             ])
             ->plugins([
-                FilamentApexChartsPlugin::make()
+                FilamentApexChartsPlugin::make(),
             ])
             ->plugins([
                 TableLayoutTogglePlugin::make()
@@ -158,7 +169,7 @@ class AppPanelProvider extends PanelProvider
                     ->shouldShowAvatarForm(true, 'attachments'),
             ])
             ->plugins([
-                FilamentWireChatPlugin::make()
+                FilamentWirechatPlugin::make()
                     ->onlyPages([])
                     ->excludeResources([
                         \AdultDate\FilamentWirechat\Filament\Resources\Conversations\ConversationResource::class,
@@ -185,7 +196,7 @@ class AppPanelProvider extends PanelProvider
             ], isPersistent: true)
             ->tenantMenuItems([
                 'register' => fn (Action $action) => $action->label('Register team')
-                ->icon('heroicon-m-user-plus')
+                    ->icon('heroicon-m-user-plus')
                     ->visible(fn () => User::canRegisterTeam() !== false),
                 'invitations' => Action::make('invitations')
                     ->label('Team Invitation')

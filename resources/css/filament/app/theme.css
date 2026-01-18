@@ -202,7 +202,46 @@ header.fi-header.fi-header-has-breadcrumbs{
 
 */
 
+
+.filament-world-clock-header {
+    margin-bottom: 1.5rem!important;
+}
+
+div.filament-world-clock-content-city-hour {
+    font-size: 1rem!important;
+    font-weight: 600!important;
+}
+div.filament-world-clock-content {
+    gap:1rem!important;
+}
+
+
 div.fi-sc-tabs{
-        position: absolute;
-    top: 7rem;
+    position: absolute;
+    top: 5rem;
+    height:2rem;
+}
+
+div.fi-header.fi-header-has-breadcrumbs{
+    display:none!important;
+}
+.fi-header.fi-header-has-breadcrumbs{
+    display:none!important;
+}
+
+@media screen and (min-width: 900px) {
+.fi-modal-window.fi-modal-window-has-close-btn.fi-modal-window-has-content.fi-modal-window-has-footer.fi-align-start.fi-width-md{
+    z-index: 10000 !important;
+min-width: 868px!important;;
+}
+form.fi-modal-window.fi-modal-window-has-close-btn.fi-modal-window-has-content.fi-modal-window-has-footer.fi-align-start.fi-width-md{
+    min-width: 868px!important;
+}
+}
+
+
+@media screen and (min-width: 900px) {
+.fi-modal-window.fi-modal-window-has-close-btn.fi-modal-window-has-content.fi-modal-window-has-footer.fi-align-start.fi-width-lg{
+   min-width: 868px!important;
+}
 }

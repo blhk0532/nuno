@@ -26,7 +26,7 @@ interface IProps {
 export function CalendarWeekView({singleDayEvents, multiDayEvents}: IProps) {
     const {selectedDate, use24HourFormat, formatDate, startHour, endHour} = useCalendar();
 
-    const weekStart = startOfWeek(selectedDate);
+    const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
     const weekDays = Array.from({length: 7}, (_, i) => addDays(weekStart, i));
     const hours = Array.from({length: endHour - startHour + 1}, (_, i) => startHour + i);
 

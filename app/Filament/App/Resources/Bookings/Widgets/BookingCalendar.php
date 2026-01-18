@@ -1725,9 +1725,10 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
 
         $filters = $this->pageFilters;
         $selectedCalendarId = $filters['booking_calendars'] ?? null;
+        $showAllDayEvents = $filters['show_all_day_events'] ?? true;
 
         $serviceUserId = null;
-        if ($selectedCalendarId) {
+        if ($selectedCalendarId && $selectedCalendarId !== 'all') {
             $calendar = \App\Models\BookingCalendar::find($selectedCalendarId);
             $serviceUserId = $calendar?->owner_id;
         }
@@ -1741,7 +1742,7 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
 
         $bookings = Booking::query()
             ->with(['client', 'service', 'serviceUser', 'bookingUser', 'location'])
-            ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
+            ->when($selectedCalendarId && $selectedCalendarId !== 'all', fn ($query) => $query->where('booking_calendar_id', $selectedCalendarId))
             ->where(function ($query) use ($start, $end) {
                 $query->whereBetween('service_date', [$start->toDateString(), $end->toDateString()])
                     ->when(
@@ -1756,35 +1757,38 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
         $bookingEvents = $bookings->map(fn (Booking $booking) => $booking->toCalendarEvent())->toArray();
 
         // Also include DailyLocation entries as all-day events on calendar
-        $dailyLocations = DailyLocation::query()
-            ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
-            ->whereBetween('date', [$start, $end])
-            ->with(['serviceUser'])
-            ->get();
+        $locationEvents = [];
+        if ($showAllDayEvents) {
+            $dailyLocations = DailyLocation::query()
+                ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
+                ->whereBetween('date', [$start, $end])
+                ->with(['serviceUser'])
+                ->get();
 
-        $locationEvents = $dailyLocations->map(function (DailyLocation $loc) {
-            $title = $loc->location ?: ($loc->serviceUser?->name ?? 'Location');
+            $locationEvents = $dailyLocations->map(function (DailyLocation $loc) {
+                $title = $loc->location ?: ($loc->serviceUser?->name ?? 'Location');
 
-            return [
-                'id' => $loc->id,
-                'title' => $title,
-                'eventsType' => 'location',
-                'type' => 'location',
-                'start' => $loc->date?->toDateString(),
-                'number' => 0,
-                'allDay' => true,
-                'backgroundColor' => '#f3f4f6',
-                'borderColor' => 'transparent',
-                'textColor' => '#111827',
-                'extendedProps' => [
-                    'is_location' => true,
+                return [
+                    'id' => $loc->id,
+                    'title' => $title,
+                    'eventsType' => 'location',
                     'type' => 'location',
-                    'daily_location_id' => $loc->id,
-                    'service_user_id' => $loc->service_user_id,
-                    'location' => $loc->location,
-                ],
-            ];
-        })->toArray();
+                    'start' => $loc->date?->toDateString(),
+                    'number' => 0,
+                    'allDay' => true,
+                    'backgroundColor' => '#f3f4f6',
+                    'borderColor' => 'transparent',
+                    'textColor' => '#111827',
+                    'extendedProps' => [
+                        'is_location' => true,
+                        'type' => 'location',
+                        'daily_location_id' => $loc->id,
+                        'service_user_id' => $loc->service_user_id,
+                        'location' => $loc->location,
+                    ],
+                ];
+            })->toArray();
+        }
 
         return collect(array_merge($bookingEvents, $locationEvents, $blockingEvents));
     }

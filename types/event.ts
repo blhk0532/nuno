@@ -24,6 +24,7 @@ export interface Events {
   service_user_id?: string;
   booking_calendar_id?: string;
   google_event_id?: string;
+  isAllDay?: boolean;
 }
 
 export interface QuickAddMeta {

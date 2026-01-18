@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\BookingDataLeads;
 
 use App\Filament\App\Resources\BookingDataLeads\Pages\CreateBookingDataLead;
@@ -10,24 +12,25 @@ use App\Filament\App\Resources\BookingDataLeads\Schemas\BookingDataLeadForm;
 use App\Filament\App\Resources\BookingDataLeads\Schemas\BookingDataLeadInfolist;
 use App\Filament\App\Resources\BookingDataLeads\Tables\BookingDataLeadsTable;
 use App\Models\BookingDataLead;
+use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
-class BookingDataLeadResource extends Resource
+final class BookingDataLeadResource extends Resource
 {
     protected static ?string $model = BookingDataLead::class;
 
-    protected static string|\BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-m-user-group';
 
     protected static ?string $navigationLabel = 'Leads';
 
     protected static bool $isScopedToTenant = false;
 
-    protected static \UnitEnum|string|null $navigationGroup = ' ';
+    protected static UnitEnum|string|null $navigationGroup = 'Mina Sidor';
 
-    protected static ?int $navigationSort = 11;
+    protected static ?int $navigationSort = 2;
 
     public static function form(Schema $schema): Schema
     {
@@ -56,7 +59,7 @@ class BookingDataLeadResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $modelClass = static::$model;
+        $modelClass = self::$model;
 
         return (string) $modelClass::count();
     }
