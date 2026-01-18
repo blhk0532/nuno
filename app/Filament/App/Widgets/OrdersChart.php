@@ -18,6 +18,11 @@ protected static bool $isDiscovered = false;
         return 'line';
     }
 
+        protected function getMaxHeight(): ?string
+    {
+        return '500';
+    }
+
     protected function getData(): array
     {
         $labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];

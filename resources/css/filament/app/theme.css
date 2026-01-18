@@ -174,3 +174,35 @@ a.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-
 div.logo-before{
    display:none!important;
 }
+
+
+#app-wirechat-widget {
+    position: relative!important;
+}
+#app-wirechat-widget .filament-widgets-widget {
+    height: calc(100vh - 4rem)!important;
+    max-height: calc(100vh - 4rem)!important;
+}
+
+.fi-pagination.fi-simple{
+    display: flex;
+    justify-content: end;
+
+}
+
+/*
+
+.fi-header.fi-header-has-breadcrumbs{
+    display:none!important;
+}
+
+header.fi-header.fi-header-has-breadcrumbs{
+    display:none!important;
+}
+
+*/
+
+div.fi-sc-tabs{
+        position: absolute;
+    top: 7rem;
+}

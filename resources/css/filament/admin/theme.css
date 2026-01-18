@@ -93,14 +93,7 @@
 }
 
 .fi-btn.fi-color-primary {
-    background-image: linear-gradient(
-        to bottom right,
-        var(--primary-500),
-        var(--primary-900)
-    ) !important;
-    box-shadow:
-        0 4px 6px -1px #0000001a,
-        0 2px 4px -2px #0000001a !important;
+    background-size: 200% auto !important;
 }
 
 .fi-btn.fi-color-primary {

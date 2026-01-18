@@ -37,6 +37,11 @@
         {{-- Loading Banner --}}
         <div wire:loading.delay.shortest
              wire:target="setFont,setLayout,setColor,setFontSize,setDensity"
+                        style="max-height:0rem; overflow:hidden;max-height: 0rem;
+    overflow: hidden;
+    position: absolute;
+    visibility: hidden;
+    display: none;"
              class="bg-primary-500 text-white px-4 py-3 rounded-lg mb-4 flex items-center gap-2">
             <svg class="animate-spin fi-size-lg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>

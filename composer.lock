@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "acad1011f582ae15d1e9ff2e57673415",
+    "content-hash": "b6c95b60ce3f7b1f3510d2652a34793e",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
-            "version": "v1.6.1",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/achyutkneupane/filament-log-viewer.git",
-                "reference": "259a46ca5fa3d9a0e4aa0f0e604a4ee50100d054"
+                "reference": "d133c4e533cd23dd259f4bd522c83b3bf0e735aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/achyutkneupane/filament-log-viewer/zipball/259a46ca5fa3d9a0e4aa0f0e604a4ee50100d054",
-                "reference": "259a46ca5fa3d9a0e4aa0f0e604a4ee50100d054",
+                "url": "https://api.github.com/repos/achyutkneupane/filament-log-viewer/zipball/d133c4e533cd23dd259f4bd522c83b3bf0e735aa",
+                "reference": "d133c4e533cd23dd259f4bd522c83b3bf0e735aa",
                 "shasum": ""
             },
             "require": {
@@ -69,12 +69,16 @@
             ],
             "support": {
                 "issues": "https://github.com/achyutkneupane/filament-log-viewer/issues",
-                "source": "https://github.com/achyutkneupane/filament-log-viewer/tree/v1.6.1"
+                "source": "https://github.com/achyutkneupane/filament-log-viewer/tree/v1.7.0"
             },
             "funding": [
                 {
                     "url": "https://www.buymeacoffee.com/achyutn",
                     "type": "buy_me_a_coffee"
+                },
+                {
+                    "url": "https://buymemomo.com/achyut",
+                    "type": "custom"
                 },
                 {
                     "url": "https://github.com/achyutkneupane",
@@ -85,7 +89,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2025-12-02T16:40:14+00:00"
+            "time": "2026-01-17T12:13:44+00:00"
         },
         {
             "name": "adultdate/filament-booking",
@@ -905,29 +909,29 @@
         },
         {
             "name": "awcodes/filament-badgeable-column",
-            "version": "v3.0.1",
+            "version": "v3.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/awcodes/filament-badgeable-column.git",
-                "reference": "c2c9d1c38f6059f38b4d0f756fbfacd4865afb2f"
+                "reference": "b6f2bd982fc25ee0092f36a4f4407a2e17471272"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/awcodes/filament-badgeable-column/zipball/c2c9d1c38f6059f38b4d0f756fbfacd4865afb2f",
-                "reference": "c2c9d1c38f6059f38b4d0f756fbfacd4865afb2f",
+                "url": "https://api.github.com/repos/awcodes/filament-badgeable-column/zipball/b6f2bd982fc25ee0092f36a4f4407a2e17471272",
+                "reference": "b6f2bd982fc25ee0092f36a4f4407a2e17471272",
                 "shasum": ""
             },
             "require": {
-                "filament/filament": "^4.0",
+                "filament/filament": "^4.0|^5.0",
                 "php": "^8.2",
                 "spatie/laravel-package-tools": "^1.15"
             },
             "require-dev": {
                 "laravel/pint": "^1.0",
                 "orchestra/testbench": "^9.0|^10.0",
-                "pestphp/pest": "^3.7",
-                "pestphp/pest-plugin-laravel": "^3.0",
-                "pestphp/pest-plugin-livewire": "^3.0",
+                "pestphp/pest": "^3.0|^4.3",
+                "pestphp/pest-plugin-laravel": "^3.0|^4.0",
+                "pestphp/pest-plugin-livewire": "^3.0|^4.0",
                 "rector/rector": "^2.0",
                 "spatie/laravel-ray": "^1.26"
             },
@@ -966,7 +970,7 @@
             ],
             "support": {
                 "issues": "https://github.com/awcodes/filament-badgeable-column/issues",
-                "source": "https://github.com/awcodes/filament-badgeable-column/tree/v3.0.1"
+                "source": "https://github.com/awcodes/filament-badgeable-column/tree/v3.1.0"
             },
             "funding": [
                 {
@@ -974,7 +978,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-11-17T18:33:17+00:00"
+            "time": "2026-01-16T21:40:38+00:00"
         },
         {
             "name": "awcodes/overlook",
@@ -18304,20 +18308,20 @@
         },
         {
             "name": "shuvroroy/filament-spatie-laravel-backup",
-            "version": "v3.2.0",
+            "version": "v3.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shuvroroy/filament-spatie-laravel-backup.git",
-                "reference": "d6c5b9c0c893be159ffcc59e4d0288b2a574e17b"
+                "reference": "e9a360bfa20efb6c3824288d8d3f2529307ec252"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shuvroroy/filament-spatie-laravel-backup/zipball/d6c5b9c0c893be159ffcc59e4d0288b2a574e17b",
-                "reference": "d6c5b9c0c893be159ffcc59e4d0288b2a574e17b",
+                "url": "https://api.github.com/repos/shuvroroy/filament-spatie-laravel-backup/zipball/e9a360bfa20efb6c3824288d8d3f2529307ec252",
+                "reference": "e9a360bfa20efb6c3824288d8d3f2529307ec252",
                 "shasum": ""
             },
             "require": {
-                "filament/filament": "^4.0",
+                "filament/filament": "^4.0|^5.0",
                 "php": "^8.2",
                 "spatie/laravel-backup": "^8.0|^9.0",
                 "spatie/laravel-package-tools": "^1.9"
@@ -18368,7 +18372,7 @@
             ],
             "support": {
                 "issues": "https://github.com/shuvroroy/filament-spatie-laravel-backup/issues",
-                "source": "https://github.com/shuvroroy/filament-spatie-laravel-backup/tree/v3.2.0"
+                "source": "https://github.com/shuvroroy/filament-spatie-laravel-backup/tree/v3.3.0"
             },
             "funding": [
                 {
@@ -18376,7 +18380,7 @@
                     "type": "buy_me_a_coffee"
                 }
             ],
-            "time": "2025-12-03T05:22:28+00:00"
+            "time": "2026-01-17T04:50:15+00:00"
         },
         {
             "name": "spatie/db-dumper",
@@ -21302,21 +21306,26 @@
         },
         {
             "name": "stechstudio/filament-impersonate",
-            "version": "4.0.2",
+            "version": "4.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stechstudio/filament-impersonate.git",
-                "reference": "5596d85d358c0f4660c64de86746af9cdfc780f9"
+                "reference": "bd2fccc7b0c12c04045e4402ce416aa5f59b5cca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stechstudio/filament-impersonate/zipball/5596d85d358c0f4660c64de86746af9cdfc780f9",
-                "reference": "5596d85d358c0f4660c64de86746af9cdfc780f9",
+                "url": "https://api.github.com/repos/stechstudio/filament-impersonate/zipball/bd2fccc7b0c12c04045e4402ce416aa5f59b5cca",
+                "reference": "bd2fccc7b0c12c04045e4402ce416aa5f59b5cca",
                 "shasum": ""
             },
             "require": {
-                "filament/filament": "^4.0",
+                "filament/filament": "^4.0|^5.0",
                 "lab404/laravel-impersonate": "^1.7"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^3.0",
+                "pestphp/pest-plugin-laravel": "^3.0"
             },
             "type": "library",
             "extra": {
@@ -21338,9 +21347,9 @@
             "description": "A Filament package to impersonate your users.",
             "support": {
                 "issues": "https://github.com/stechstudio/filament-impersonate/issues",
-                "source": "https://github.com/stechstudio/filament-impersonate/tree/4.0.2"
+                "source": "https://github.com/stechstudio/filament-impersonate/tree/4.1.2"
             },
-            "time": "2025-12-29T15:39:47+00:00"
+            "time": "2026-01-16T23:18:37+00:00"
         },
         {
             "name": "still-code/laravel-umami",
@@ -28736,12 +28745,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "95fda149b750941a5d7bd292e712107ca3227a04"
+                "reference": "57ac71b06405e32e77d960bb8490683138573f04"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/95fda149b750941a5d7bd292e712107ca3227a04",
-                "reference": "95fda149b750941a5d7bd292e712107ca3227a04",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/57ac71b06405e32e77d960bb8490683138573f04",
+                "reference": "57ac71b06405e32e77d960bb8490683138573f04",
                 "shasum": ""
             },
             "conflict": {
@@ -28837,7 +28846,7 @@
                 "bytefury/crater": "<6.0.2",
                 "cachethq/cachet": "<2.5.1",
                 "cadmium-org/cadmium-cms": "<=0.4.9",
-                "cakephp/cakephp": "<3.10.3|>=4,<4.0.10|>=4.1,<4.1.4|>=4.2,<4.2.12|>=4.3,<4.3.11|>=4.4,<4.4.10",
+                "cakephp/cakephp": "<3.10.3|>=4,<4.0.10|>=4.1,<4.1.4|>=4.2,<4.2.12|>=4.3,<4.3.11|>=4.4,<4.4.10|>=5.2.10,<5.2.12|==5.3",
                 "cakephp/database": ">=4.2,<4.2.12|>=4.3,<4.3.11|>=4.4,<4.4.10",
                 "cardgate/magento2": "<2.0.33",
                 "cardgate/woocommerce": "<=3.1.15",
@@ -29740,7 +29749,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-01-15T23:06:28+00:00"
+            "time": "2026-01-16T21:05:58+00:00"
         },
         {
             "name": "spatie/backtrace",

@@ -50,16 +50,16 @@ const mainNavItems: NavItem[] = [
 ];
 
 const footerNavItems: NavItem[] = [
-//    {
-//        title: 'ND Application',
-//        href: 'https://ndsth.com/nds/app',
-//        icon: LayoutGrid,
-//    },
-//    {
-//        title: 'Administration',
-//        href: 'https://ndsth.com/nds/admin',
-//        icon: LayoutGrid,
-//    },
+    {
+        title: 'NDS App',
+        href: 'https://ndsth.com/nds/app',
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Admin',
+        href: 'https://ndsth.com/nds/admin',
+        icon: LayoutGrid,
+    },
 ];
 
 export function AppSidebar() {

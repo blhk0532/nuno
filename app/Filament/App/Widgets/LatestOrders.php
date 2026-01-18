@@ -16,7 +16,7 @@ class LatestOrders extends BaseWidget
 protected static bool $isDiscovered = false;
     protected static ?string $heading = 'Senaste Bokningar';
 
-    protected static ?int $sort = 12;
+    protected static ?int $sort = 0;
 
     public function table(Table $table): Table
     {

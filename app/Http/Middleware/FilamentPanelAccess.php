@@ -39,7 +39,7 @@ if (($i = array_search('nds', $segments)) !== false) {
 
 
         if (! $this->checkPanelAccess($panelId) && $panelId === 'app') {
-            return redirect('/login')->with('error', 'Unauthorized access');
+            return redirect('/')->with('error', 'Unauthorized access');
         }
 
         if (! $this->checkPanelAccess($panelId) && $panelId !== 'app') {

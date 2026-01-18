@@ -13,7 +13,15 @@ class CustomersChart extends ChartWidget
 
     protected static ?int $sort = 12;
 
+    /// protected int|string|array $columnSpan = 'full';
+
+
     protected static bool $isDiscovered = false;
+
+    protected function getMaxHeight(): ?string
+    {
+        return '500';
+    }
 
     protected function getType(): string
     {

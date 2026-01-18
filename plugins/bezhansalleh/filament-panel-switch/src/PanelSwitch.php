@@ -40,7 +40,7 @@ final class PanelSwitch extends Component
 
     protected bool $renderIconAsImage = false;
 
-    protected string|Closure $modalHeading = 'Switch Panels';
+    protected string|Closure $modalHeading = '≽ ^⎚ ˕ ⎚^ ≼ ';
 
     protected string $renderHook = 'panels::global-search.after';
 
@@ -63,6 +63,21 @@ final class PanelSwitch extends Component
         });
 
         $static->configure();
+
+        $static->modalHeading(function () {
+            $nowSweden = now('Europe/Stockholm');
+            $timeSweden = $nowSweden->format('H:i');
+            $nowThailand = now('Asia/Bangkok');
+            $timeThailand = $nowThailand->format('H:i');
+            $weekdayTH = $nowThailand->locale('th')->dayName;
+            $dayTH = $nowThailand->day;
+            $monthTH = $nowThailand->locale('th')->monthName;
+            $yearTH = $nowThailand->year + 543;
+            $bangkokTH = 'กรุงเทพมหานคร';
+            $stockholmSv = 'Stockholm';
+            $nds = 'นอร์ดิกดิจิทัล';
+            return "{$nds}";
+        });
 
         if (count($static->getPanels()) < 2) {
             $static->visible(false);

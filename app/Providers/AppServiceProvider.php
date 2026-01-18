@@ -26,6 +26,14 @@ final class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->app->bind(\Filament\Auth\Http\Responses\Contracts\LoginResponse::class, function () {
+            return new class implements \Filament\Auth\Http\Responses\Contracts\LoginResponse {
+                public function toResponse($request) {
+                    return redirect()->to('/nds/app');
+                }
+            };
+        });
+
         $this->bootModelsDefaults();
         $this->bootPasswordDefaults();
 

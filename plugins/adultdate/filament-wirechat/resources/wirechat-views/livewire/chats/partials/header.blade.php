@@ -1,14 +1,26 @@
 @use("Adultdate\Wirechat\Facades\Wirechat")
+<style>
+    h1.fi-header-heading {
+display:none!important;
+}
 
-<header class="px-3 z-10 sticky top-0 w-full py-2 " dusk="header">
+
+div.w-full.h-full {
+  border-radius: 0px!important;
+  padding: 0px!important;
+}
+
+</style>
+<header class="px-3 z-10 sticky top-0 w-full py-2" dusk="header">
 
 
     {{-- heading/name and Icon --}}
-    <section class=" justify-between flex items-center   pb-2">
+    <section class=" justify-between flex items-center p-4">
 
         @if (isset($heading))
             <div class="flex items-center gap-2 truncate  " wire:ignore>
                 <h2 class=" text-2xl font-bold dark:text-white"  dusk="heading">{{$heading}}</h2>
+
             </div>
         @endif
 
@@ -38,7 +50,7 @@
 
 
             {{-- Close X Button - Only show in sidebar modal, not on dashboard widget --}}
-            <button 
+            <button
                 x-show="$el.closest('.chats-sidebar-modal-widget') !== null"
                 x-on:click="$dispatch('close-modal', { id: 'chats-sidebar' })"
                 class="flex items-center focus:outline-hidden"
@@ -51,7 +63,7 @@
                 </svg>
             </button>
 
-             
+
             {{-- Only show if is not widget --}}
             @if ($redirectToHomeAction)
             <a id="redirect-button" href="{{ config('wirechat.home_route', '/') }}" class="flex items-center">

@@ -1,5 +1,5 @@
 <x-filament-widgets::widget>
-    <div style="min-height: calc(100vh - 4rem); max-height: calc(100vh - 4rem); height: calc(100vh - 4rem); overflow: hidden;">
+    <div id="app-wirechat-widget" style="min-height: calc(100vh - 4rem); max-height: calc(100vh - 4rem); height: calc(100vh - 4rem); overflow: hidden;">
         <livewire:filament-wirechat.widget :panel="\Filament\Facades\Filament::getCurrentPanel()?->getId()" />
     </div>
     <style>

@@ -20,7 +20,7 @@
         "andreiio/blade-remix-icon": "^3.8",
         "anish/text-input-entry": "^1.0",
         "asmit/resized-column": "^1.1",
-        "awcodes/filament-badgeable-column": "^3.0.1",
+        "awcodes/filament-badgeable-column": "^3.1.0",
         "awcodes/overlook": "^3.0.3",
         "bezhansalleh/filament-exceptions": "@dev",
         "bezhansalleh/filament-panel-switch": "@dev",
@@ -87,13 +87,13 @@
         "secondnetwork/blade-tabler-icons": "^3.36.1",
         "shreejan/actionable-column": "^1.0",
         "shreejan/dash-arrange": "@dev",
-        "shuvroroy/filament-spatie-laravel-backup": "^3.2",
+        "shuvroroy/filament-spatie-laravel-backup": "^3.3",
         "spatie/laravel-google-calendar": "@dev",
         "spatie/laravel-model-states": "^2.12.2",
         "spiral/roadrunner-cli": "^2.7.2",
         "spiral/roadrunner-http": "^3.6.0",
         "statikbe/laravel-filament-chained-translation-manager": "^4.2.1",
-        "stechstudio/filament-impersonate": "^4.0.2",
+        "stechstudio/filament-impersonate": "^4.1.2",
         "still-code/laravel-umami": "^5.0.3",
         "tapp/filament-maillog": "^2.0.1",
         "usamamuneerchaudhary/filament-notifier": "^1.2",
@@ -128,7 +128,7 @@
                 "symlink": true
             }
         },
-                {
+        {
             "type": "path",
             "url": "plugins/joaopaulolndev/filament-world-clock",
             "options": {

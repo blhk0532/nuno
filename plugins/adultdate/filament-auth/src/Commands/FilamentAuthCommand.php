@@ -681,7 +681,7 @@ class AppPanelProvider extends PanelProvider
                     ->label('Switch View')
                     ->icon('heroicon-o-arrow-path-rounded-square')
                     ->color('gray')
-                    ->modalHeading('Switch Panels')
+                    ->modalHeading('≽ ^⎚ ˕ ⎚^ ≼ ')
                     ->modalSubmitAction(false)
                     ->modalCancelAction(false)
                     ->sort(-1)

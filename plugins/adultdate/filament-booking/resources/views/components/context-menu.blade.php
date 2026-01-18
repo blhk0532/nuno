@@ -20,7 +20,7 @@
     <div x-bind="menu"
          x-transition:enter-start="fi-opacity-0" x-transition:leave-end="fi-opacity-0"
         @class([
-           "fi-dropdown-panel absolute w-screen max-w-xs divide-y divide-gray-100 rounded-lg bg-white shadow-lg ring-1 ring-gray-950/5 transition dark:divide-white/5 dark:bg-gray-800 dark:ring-white/10",
+           "fi-dropdown-panel absolute w-screen max-w-xs divide-y divide-gray-100 rounded-lg bg-white shadow-lg ring-1 ring-gray-950/5 transition dark:divide-white/5 dark:bg-gray-800 dark:ring-white/10 hidden",
        ])
     >
         {{--        <div class="w-full flex items-center justify-center p-2">{{generate_loading_indicator_html()}}</div>--}}

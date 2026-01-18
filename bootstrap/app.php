@@ -37,6 +37,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->group('inertia', [
             HandleInertiaRequests::class,
         ]);
+
+        $middleware->redirectGuestsTo(fn () => route('login'));
+        $middleware->redirectUsersTo('/nds/app');
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

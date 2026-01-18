@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\Response as BaseResponse;
 
 final readonly class SessionController
 {
@@ -22,7 +23,7 @@ final readonly class SessionController
         ]);
     }
 
-    public function store(CreateSessionRequest $request): RedirectResponse
+    public function store(CreateSessionRequest $request): BaseResponse
     {
         $user = $request->validateCredentials();
 
@@ -39,7 +40,7 @@ final readonly class SessionController
 
         $request->session()->regenerate();
 
-        return redirect()->intended('/nds/app');
+        return Inertia::location('/nds/app');
     }
 
     public function destroy(Request $request): RedirectResponse

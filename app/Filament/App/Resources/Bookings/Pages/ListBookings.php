@@ -17,24 +17,24 @@ class ListBookings extends ListRecords
     protected function getActions(): array
     {
         return [
-            CreateAction::make(),
+            CreateAction::make()
+                ->label('Ny Bokning')
+                ->url(fn () => BookingResource::getUrl('create')),
         ];
     }
 
     public function getTabs(): array
     {
         return [
-            null => Tab::make('Show All'),
-            'booked' => Tab::make()->query(fn ($query) => $query->where('status', 'booked')),
-            'confirmed' => Tab::make()->query(fn ($query) => $query->where('status', 'confirmed')),
-            'processing' => Tab::make()->query(fn ($query) => $query->where('status', 'processing')),
-            'cancelled' => Tab::make()->query(fn ($query) => $query->where('status', 'cancelled')),
-            'updated' => Tab::make()->query(fn ($query) => $query->where('status', 'updated')),
-            'completed' => Tab::make()->query(fn ($query) => $query->where('status', 'completed')),
+            null => Tab::make('Visa Alla'),
+            'bokad' => Tab::make()->query(fn ($query) => $query->where('status', 'booked')),
+            'avbokad' => Tab::make()->query(fn ($query) => $query->where('status', 'cancelled')),
+            'bekräftad' => Tab::make()->query(fn ($query) => $query->where('status', 'confirmed')),
+            'genomförd' => Tab::make()->query(fn ($query) => $query->where('status', 'completed')),
         ];
     }
 
-    protected function getHeaderWidgets(): array
+    protected function getFooterWidgets(): array
     {
         return BookingResource::getWidgets();
     }

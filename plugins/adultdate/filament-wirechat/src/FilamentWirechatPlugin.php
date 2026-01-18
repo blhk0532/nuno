@@ -14,6 +14,13 @@ use Filament\Panel;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
+use App\Filament\Booking\Pages\GoogleCalendar;
+use App\Filament\Booking\Pages\InertiaCalendar;
+use Illuminate\Support\ServiceProvider;
+use Filament\Support\Facades\FilamentView;
+use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
+use App\Filament\Booking\Clusters\Services\Resources\Bookings\Pages\DashboardBokning;
+use App\Filament\Booking\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppDashboardBooking;
 
 class FilamentWirechatPlugin implements Plugin
 {
@@ -111,7 +118,44 @@ class FilamentWirechatPlugin implements Plugin
 
     public function boot(Panel $panel): void
     {
-        //
+        // Open sidebar on all pages by default
+        FilamentView::registerRenderHook(
+            PanelsRenderHook::BODY_END,
+            fn (): string => <<<HTML
+<script>
+    document.addEventListener('alpine:init', () => {
+        if (Alpine.store('sidebar')) {
+            Alpine.store('sidebar').open();
+        }
+    });
+</script>
+HTML
+        );
+
+        // Close sidebar on specific pages
+        FilamentView::registerRenderHook(
+        PanelsRenderHook::BODY_END,
+        fn (): string => <<<HTML
+<script>
+    document.addEventListener('alpine:init', () => {
+        if (Alpine.store('sidebar')) {
+            Alpine.store('sidebar').close();
+        }
+    });
+</script>
+HTML,
+        scopes: [
+                DashboardBooking::class,
+                GoogleCalendar::class,
+                DashboardBokning::class,
+                InertiaCalendar::class,
+                AppDashboardBooking::class,
+                ChatDashboard::class,
+                ChatsPage::class,
+                ChatPage::class,
+                FullWidthChatPage::class,
+            ],
+        );
     }
 
     protected function registerRenderHooks(Panel $panel): void

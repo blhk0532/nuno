@@ -4,7 +4,7 @@
 
 
     {{-- heading/name and Icon --}}
-    <section class=" justify-between flex items-center   pb-2">
+    <section class=" justify-between flex items-center p-4">
 
         @if (isset($heading))
             <div class="flex items-center gap-2 truncate  " wire:ignore>
@@ -16,7 +16,7 @@
         <div class="flex gap-x-3 items-center  ">
 
             {{-- Close X Button - Only show in sidebar modal, not on dashboard widget --}}
-            <button 
+            <button
                 x-show="$el.closest('.chats-sidebar-modal-widget') !== null"
                 x-on:click="$dispatch('close-modal', { id: 'chats-sidebar' })"
                 class="flex items-center focus:outline-hidden"

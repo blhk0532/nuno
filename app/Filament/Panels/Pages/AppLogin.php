@@ -126,7 +126,7 @@ class AppLogin extends Login
 
         session()->regenerate();
 
-        return app(LoginResponse::class);
+        $this->redirect('/nds/app');
     }
 
     protected function getRateLimitedNotification(TooManyRequestsException $exception): ?Notification

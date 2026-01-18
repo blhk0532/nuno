@@ -7,6 +7,7 @@ use App\Http\Middleware\FilamentPanelAccess;
 use App\Filament\App\Resources\Bookings\Pages\DashboardBooking;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use AdultDate\FilamentWirechat\Filament\Pages\ChatDashboard;
+use AdultDate\FilamentWirechat\Filament\Pages\ChatPage;
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use App\Filament\App\Pages\AppDashboard;
 use App\Filament\App\Pages\Tenancy\EditTeamProfile;
@@ -33,7 +34,7 @@ use Filament\Support\Colors\Color;
 use Hydrat\TableLayoutToggle\TableLayoutTogglePlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Gate;
@@ -43,8 +44,10 @@ use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use App\Filament\App\Resources\Bookings\Pages\DashboardBokning;
 use App\Filament\App\Pages\TeamInvitationAccept;
+use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 use Filament\Facades\Filament;
-
+use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
+use Filament\View\PanelsRenderHook;
 class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -77,8 +80,6 @@ class AppPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverWidgets(in: app_path('Filament/App/Widgets'), for: 'App\\Filament\\App\\Widgets')
             ->pages([
-                AppDashboard::class,
-            //    DashboardBokning::class,
                 ChatDashboard::class,
             ])
             ->widgets([
@@ -86,10 +87,10 @@ class AppPanelProvider extends PanelProvider
                 //    Widgets\FilamentInfoWidget::class,
             ])
             ->resources([
-                BookingDataLeadResource::class,
+            //    BookingDataLeadResource::class,
             ])
             ->middleware([
-                 EncryptCookies::class,
+                EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
                 StartSession::class,
                 AuthenticateSession::class,
@@ -115,6 +116,9 @@ class AppPanelProvider extends PanelProvider
                 //    FilamentShieldPlugin::make(),
             ])
             ->plugins([
+                FilamentApexChartsPlugin::make()
+            ])
+            ->plugins([
                 TableLayoutTogglePlugin::make()
                     ->setDefaultLayout('grid') // default layout for user seeing the table for the first time
                     ->persistLayoutUsing(
@@ -128,6 +132,8 @@ class AppPanelProvider extends PanelProvider
                     ->listLayoutButtonIcon('heroicon-o-list-bullet')
                     ->gridLayoutButtonIcon('heroicon-o-squares-2x2'),
             ])
+            ->plugin(FilamentUiSwitcherPlugin::make()
+                ->iconRenderHook(PanelsRenderHook::TOPBAR_LOGO_AFTER))
             ->plugins([
                 FilamentIconPickerPlugin::make(),
                 FilamentBookingPlugin::make(),
@@ -164,7 +170,8 @@ class AppPanelProvider extends PanelProvider
                 'wirechat' => Action::make('wirechat')
                     ->label(fn (): string => __('Chats'))
                     ->url(fn (): string => ChatDashboard::getUrl())
-                    ->icon('heroicon-m-chat-bubble-left-right'),
+                    ->icon('heroicon-m-chat-bubble-left-right')
+                    ->visible(fn () => Filament::getTenant() !== null),
                 'profile' => Action::make('profile')
                     ->label(fn (): string => __('Profile'))
                     ->url(fn (): string => EditProfilePage::getUrl())
