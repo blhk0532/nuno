@@ -13,9 +13,9 @@ final class InertiaCalendar extends Page
 {
     protected string $view = 'filament.booking.pages.inertia-calendar';
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-m-clipboard-document-check';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-calendar-days';
 
-    protected static ?string $navigationLabel = 'Bokning';
+    protected static ?string $navigationLabel = 'NDS Bokning';
 
     protected static ?string $title = '';
 
@@ -31,5 +31,17 @@ final class InertiaCalendar extends Page
     public function getMaxContentWidth(): Width
     {
         return Width::Full;
+    }
+
+
+
+   public static function getNavigationBadge(): ?string
+    {
+        return now()->timezone('Europe/Stockholm')->format('H:i');
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'success';
     }
 }

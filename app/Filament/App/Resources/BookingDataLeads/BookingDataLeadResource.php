@@ -24,7 +24,7 @@ final class BookingDataLeadResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = 'heroicon-m-user-group';
 
-    protected static ?string $navigationLabel = 'Leads';
+    protected static ?string $navigationLabel = 'Nummer Listor';
 
     protected static bool $isScopedToTenant = false;
 

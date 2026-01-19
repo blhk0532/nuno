@@ -156,6 +156,27 @@ HTML,
                 FullWidthChatPage::class,
             ],
         );
+
+        // Close sidebar on specific pages
+        FilamentView::registerRenderHook(
+        PanelsRenderHook::STYLES_AFTER,
+        fn (): string => <<<HTML
+<style>
+    .fi-main.fi-width-full {
+        padding: 0rem !important;
+    }
+    .fi-page-header-main-ctn {
+        padding: 0rem !important;
+    }
+</style>
+HTML,
+        scopes: [
+                ChatDashboard::class,
+                ChatsPage::class,
+                ChatPage::class,
+                FullWidthChatPage::class,
+            ],
+        );
     }
 
     protected function registerRenderHooks(Panel $panel): void

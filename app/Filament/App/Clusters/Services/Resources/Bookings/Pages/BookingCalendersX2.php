@@ -20,7 +20,7 @@ use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Str;
 use UnitEnum;
 
-final class DashboardBokning extends BaseDashboard
+final class BookingCalendersX2 extends BaseDashboard
 {
     use HasFiltersForm;
 
@@ -30,9 +30,9 @@ final class DashboardBokning extends BaseDashboard
 
     protected static ?string $title = '';
 
-    protected static string $routePath = 'nds-kalender-x3';
+    protected static string $routePath = 'nds-kalender-x2';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 2;
 
     //  protected static ?string $slug = 'dashboard';
 
@@ -47,12 +47,12 @@ final class DashboardBokning extends BaseDashboard
 
     public static function getNavigationLabel(): string
     {
-        return ''.Str::ucfirst('NDS Kalender x3') ?? 'NDS Kalender x3';
+        return ''.Str::ucfirst('NDS Kalender x2') ?? 'NDS Kalender x2';
     }
 
     public static function getNavigationBadge(): ?string
     {
-        return 'x3';
+        return 'x2';
 
     }
 
@@ -61,15 +61,17 @@ final class DashboardBokning extends BaseDashboard
         return 'gray';
     }
 
-        public static function getNavigationSort(): ?int
+
+    public static function getNavigationSort(): ?int
     {
-        return 3;
+        return 2;
     }
 
     public static function getSort(): ?int
     {
-        return 3;
+        return 2;
     }
+
 
     public function filtersForm(Schema $schema): Schema
     {
@@ -100,18 +102,8 @@ final class DashboardBokning extends BaseDashboard
                             ->afterStateUpdated(function ($state) {
                                 $this->dispatch('refreshCalendar');
                             }),
-                        Select::make('booking_calendars_3')
-                            ->options($calendarOptions)
-                            ->label('#3 ◴ Tekniker')
-                            ->placeholder('Select Tekniker for Calendar 3')
-                            ->searchable()
-                            ->live()
-                            ->default($calendarIds[2] ?? null)
-                            ->afterStateUpdated(function ($state) {
-                                $this->dispatch('refreshCalendar');
-                            }),
                     ])
-                    ->columns(3)
+                    ->columns(2)
                     ->columnSpanFull(),
             ]);
     }
@@ -128,17 +120,17 @@ final class DashboardBokning extends BaseDashboard
 
     public function getHeaderWidgetsColumns(): int|array
     {
-        return 3;
+        return 2;
     }
 
     public function getWidgetsColumns(): int|array
     {
-        return 3;
+        return 2;
     }
 
     public function getColumns(): int|array
     {
-        return 3;
+        return 2;
     }
 
     public function getHeaderWidgets(): array
@@ -153,7 +145,6 @@ final class DashboardBokning extends BaseDashboard
         return [
             MultiCalendar1::class,
             MultiCalendar2::class,
-            MultiCalendar3::class,
 
         ];
     }

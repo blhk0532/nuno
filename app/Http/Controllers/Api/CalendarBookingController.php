@@ -65,10 +65,17 @@ final class CalendarBookingController extends Controller
         $bookings = $query->get();
 
         // Get DailyLocation events as all-day events
-        $dailyLocations = DailyLocation::query()
+        $dailyLocationsQuery = DailyLocation::query()
             ->with(['serviceUser'])
-            ->whereBetween('date', [$start->toDateString(), $end->toDateString()])
-            ->get();
+            ->whereBetween('date', [$start->toDateString(), $end->toDateString()]);
+
+        // Filter daily locations by service_user_id if provided
+        if ($request->has('resource_id') || $request->has('service_user_id')) {
+            $userId = $request->input('resource_id') ?? $request->input('service_user_id');
+            $dailyLocationsQuery->where('service_user_id', $userId);
+        }
+
+        $dailyLocations = $dailyLocationsQuery->get();
 
         $bookingEvents = $bookings->map(function (Booking $booking) {
             $event = [
@@ -132,7 +139,50 @@ final class CalendarBookingController extends Controller
             return $event;
         })->toArray();
 
-        return array_merge($bookingEvents, $locationEvents);
+        // Get service periods
+        $servicePeriods = BookingServicePeriod::query()
+            ->with(['serviceUser'])
+            ->whereBetween('service_date', [$start->toDateString(), $end->toDateString()])
+            ->get();
+
+        if ($request->has('resource_id') || $request->has('service_user_id')) {
+            $userId = $request->input('resource_id') ?? $request->input('service_user_id');
+            $servicePeriods = $servicePeriods->where('service_user_id', $userId);
+        }
+
+        $servicePeriodsEvents = $servicePeriods->map(function (BookingServicePeriod $period) {
+            $startDateTime = Carbon::parse($period->service_date->toDateString() . ' ' . ($period->start_time ?? '00:00'));
+            $endDateTime = Carbon::parse($period->service_date->toDateString() . ' ' . ($period->end_time ?? '23:59'));
+
+            $event = [
+                'id' => 'service-period-' . $period->id,
+                'title' => $period->period_type ? ucfirst($period->period_type) : 'Service Period',
+                'start' => $startDateTime->toIso8601String(),
+                'end' => $endDateTime->toIso8601String(),
+                'backgroundColor' => $this->getServicePeriodColor($period->period_type),
+                'borderColor' => $this->getServicePeriodBorderColor($period->period_type),
+                'textColor' => '#ffffff',
+                'extendedProps' => [
+                    'type' => 'service_period',
+                    'period_type' => $period->period_type,
+                    'service_user_id' => $period->service_user_id,
+                    'service_user_name' => $period->serviceUser?->name,
+                    'service_location' => $period->service_location,
+                    'service_date' => $period->service_date?->toDateString(),
+                    'start_time' => $period->start_time,
+                    'end_time' => $period->end_time,
+                    'booking_service_period_id' => $period->id,
+                ],
+            ];
+
+            if ($period->service_user_id) {
+                $event['resourceId'] = (string) $period->service_user_id;
+            }
+
+            return $event;
+        })->toArray();
+
+        return array_merge($bookingEvents, $locationEvents, $servicePeriodsEvents);
     }
 
     public function store(StoreBookingRequest $request): JsonResponse
@@ -177,6 +227,14 @@ final class CalendarBookingController extends Controller
 
     public function update(UpdateBookingRequest $request, Booking $booking): JsonResponse
     {
+        // Check authorization
+        if (!$this->canEditBooking($booking)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to edit this booking'
+            ], 403);
+        }
+
         $validated = $request->validated();
 
         try {
@@ -214,6 +272,14 @@ final class CalendarBookingController extends Controller
 
     public function destroy(Booking $booking): JsonResponse
     {
+        // Check authorization
+        if (!$this->canEditBooking($booking)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to delete this booking'
+            ], 403);
+        }
+
         try {
             $booking->delete();
 
@@ -232,6 +298,14 @@ final class CalendarBookingController extends Controller
 
     public function move(Request $request, Booking $booking): JsonResponse
     {
+        // Check authorization
+        if (!$this->canEditBooking($booking)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to move this booking'
+            ], 403);
+        }
+
         $validated = $request->validate([
             'start' => 'required|date',
             'end' => 'nullable|date',
@@ -278,6 +352,14 @@ final class CalendarBookingController extends Controller
 
     public function resize(Request $request, Booking $booking): JsonResponse
     {
+        // Check authorization
+        if (!$this->canEditBooking($booking)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to resize this booking'
+            ], 403);
+        }
+
         $validated = $request->validate([
             'end' => 'required|date',
         ]);
@@ -307,6 +389,32 @@ final class CalendarBookingController extends Controller
                 'message' => 'Failed to resize booking: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    private function canEditBooking(Booking $booking): bool
+    {
+        $user = Auth::user();
+        
+        if (!$user) {
+            return false;
+        }
+
+        // Admin, super, super_admin, or superadmin can edit any booking
+        if (in_array($user->role, ['admin', 'super', 'super_admin', 'superadmin'], true)) {
+            return true;
+        }
+
+        // Manager role can edit any booking
+        if ($user->role === 'manager') {
+            return true;
+        }
+
+        // Event creator (booking_user_id) can edit their own booking
+        if ($booking->booking_user_id === $user->id) {
+            return true;
+        }
+
+        return false;
     }
 
     private function generateBookingNumber(): string
@@ -382,6 +490,26 @@ final class CalendarBookingController extends Controller
             'cancelled' => '#dc2626',
             'completed' => '#4b5563',
             default => '#1d4ed8',
+        };
+    }
+
+    private function getServicePeriodColor(?string $periodType): string
+    {
+        return match ($periodType) {
+            'unavailable' => '#8b5cf6', // purple
+            'available' => '#06b6d4', // cyan
+            'blocked' => '#f59e0b', // amber
+            default => '#6b7280', // gray
+        };
+    }
+
+    private function getServicePeriodBorderColor(?string $periodType): string
+    {
+        return match ($periodType) {
+            'unavailable' => '#7c3aed',
+            'available' => '#0891b2',
+            'blocked' => '#d97706',
+            default => '#4b5563',
         };
     }
 }

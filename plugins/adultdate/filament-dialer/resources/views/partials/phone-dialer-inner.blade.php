@@ -1,8 +1,10 @@
 <style>
 
 </style>
-<div class="flex flex-col gap-6" >
-    <div class="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-6">
+<div class="flex flex-col gap-6 mt-6" style="background: #d0d0d1ab 10%;
+  padding: 1rem;
+  border-radius: 1rem;">
+    <div class="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-6" style="background: #18181b;">
         <div class="flex items-center justify-between mb-2 h-2">
             @if ($status !== 'idle')
                 <span class="inline-flex items-center gap-1.5 text-xs {{ $status === 'calling' ? 'text-green-600 dark:text-green-400' : 'text-gray-500 dark:text-gray-400' }}">
@@ -31,9 +33,10 @@
             <input
                 type="text"
                 wire:model="phoneNumber"
-                placeholder="Telefonnummer"
-                class="w-full text-2xl text-center bg-transparent border-b-2 border-gray-300 dark:border-gray-600 focus:border-primary-500 focus:outline-none py-2 dark:text-white transition-colors"
+                placeholder=""
                 readonly
+                class="w-full text-2xl text-center bg-transparent py-2 dark:text-white transition-colors cursor-default caret-transparent outline-none focus:outline-none"
+
             />
         </div>
     </div>

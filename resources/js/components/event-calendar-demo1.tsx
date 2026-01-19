@@ -15,6 +15,10 @@ export function EventCalendarDemo1() {
         calendars: [],
     });
     const [firstTechnician, setFirstTechnician] = useState<any>(null);
+    const [showNewClientForm, setShowNewClientForm] = useState(false);
+    const [newClient, setNewClient] = useState({ name: '', email: '', phone: '' });
+    const [newClientErrors, setNewClientErrors] = useState<string[]>([]);
+    const [newClientProcessing, setNewClientProcessing] = useState(false);
     const [errors, setErrors] = useState<string[]>([]);
     const [successMessage, setSuccessMessage] = useState<string>('');
 
@@ -41,7 +45,25 @@ export function EventCalendarDemo1() {
         service_note: '',
     });
 
-    // Load dropdown data on component mount
+    // Load first technician ASAP to show calendar quickly
+    useEffect(() => {
+        const loadFirstTechnician = async () => {
+            try {
+                const resourcesRes = await fetch('/calendar/resources');
+                const resources = await resourcesRes.json();
+
+                if (resources && resources.length > 0) {
+                    setFirstTechnician(resources[0]);
+                }
+            } catch (error) {
+                console.error('Error loading technicians:', error);
+            }
+        };
+
+        loadFirstTechnician();
+    }, []);
+
+    // Load dropdown data separately (doesn't block calendar display)
     useEffect(() => {
         const loadDropdownData = async () => {
             try {
@@ -51,24 +73,21 @@ export function EventCalendarDemo1() {
                     locationsRes,
                     usersRes,
                     calendarsRes,
-                    resourcesRes,
                 ] = await Promise.all([
                     fetch('/api/calendar/clients'),
                     fetch('/api/calendar/services'),
                     fetch('/api/calendar/locations'),
                     fetch('/api/calendar/service-users'),
                     fetch('/api/calendar/calendars'),
-                    fetch('/calendar/resources'),
                 ]);
 
-                const [clients, services, locations, serviceUsers, calendars, resources] =
+                const [clients, services, locations, serviceUsers, calendars] =
                     await Promise.all([
                         clientsRes.json(),
                         servicesRes.json(),
                         locationsRes.json(),
                         usersRes.json(),
                         calendarsRes.json(),
-                        resourcesRes.json(),
                     ]);
 
                 setDropdownData({
@@ -78,11 +97,6 @@ export function EventCalendarDemo1() {
                     serviceUsers,
                     calendars,
                 });
-
-                // Set first technician
-                if (resources && resources.length > 0) {
-                    setFirstTechnician(resources[0]);
-                }
             } catch (error) {
                 console.error('Error loading dropdown data:', error);
             }
@@ -336,50 +350,67 @@ export function EventCalendarDemo1() {
 
     return (
         <>
-            <EventCalendar
-                className="mx-auto my-10 max-w-300"
-                editable
-                selectable
-                droppable
-                nowIndicator
-                navLinks
-                locale="sv"
-                initialView="timeGridWeek"
-                firstDay={1}
-                timeZone="Europe/Stockholm"
-                events={firstTechnician ? `/api/calendar/bookings?service_user_id=${firstTechnician.id}` : "/api/calendar/bookings"}
-                resources="/calendar/resources"
-                select={handleDateSelect}
-                eventClick={handleEventClick}
-                eventDrop={handleEventDrop}
-                eventResize={handleEventResize}
-                headerToolbar={{
-                    left: '',
-                    center: '',
-                    right: '',
-                }}
-                slotMinTime="07:00:00"
-                slotMaxTime="17:00:00"
-                slotDuration="01:00:00"
-                weekends={true}
-                addButton={{
-                    text: firstTechnician ? `Boka ${firstTechnician.title}` : 'Ny Bokning',
-                    click() {
-                        setIsEditMode(false);
-                        setSelectedSlot({
-                            start: new Date(),
-                            end: new Date(Date.now() + 60 * 60 * 1000), // +1 hour
-                            allDay: false,
-                        });
-                        setShowBookingModal(true);
-                    },
-                }}
-            />
+            {!firstTechnician ? (
+                <div className="mx-auto my-10 max-w-300 flex items-center justify-center h-96">
+                    <div className="text-center">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-black dark:border-white mx-auto mb-4"></div>
+                                      <svg version="1.2" id="nordic-logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 336" width="200" height="34" fill="currentColor">
+    <g><path fillRule="evenodd" className="s0" d="m1245.5 13.5q39 0 78 0 0.25 104-0.5 208-7.73 69.72-72.5 96.5-81.51 23.59-131.5-44.5-35.41-60.78 1-121 47.62-63.63 125.5-45 0-47 0-94zm-73 200q4.85 39.91 45 39.5 31.97-6.41 35-39-5.71-41.96-48-39.5-29.03 8.55-32 39z"></path></g>
+    <g><path fillRule="evenodd" className="s0" d="m655.5 101.5q73.88-5.44 112.5 57 31.23 64.88-11 123-49.57 55.58-121.5 35.5-62.5-23.77-74.5-89.5-6.8-72.15 53.5-111.5 19.47-10.74 41-14.5zm-10 79.5q-23.59 23.82-7.5 53.5 21.72 25.85 52.5 11.5 20.62-12.99 19.5-37.5-7.55-39.17-47.5-36-9.15 2.65-17 8.5z"></path></g>
+    <g><path fillRule="evenodd" className="s0" d="m1623.5 101.5q54.97-5.93 94 32.5-24.5 24.5-49 49-1.5 1-3 0-19.76-16.75-44-7-27.69 16.05-20.5 47.5 15.61 36.43 53.5 24.5 7.07-3.08 12.5-8.5 25.25 25.25 50.5 50.5-54.66 49.83-124 23-54.24-26.7-64.5-86.5-5.65-83.98 70.5-118.5 12.06-3.76 24-6.5z"></path></g>
+    <g><path fillRule="evenodd" className="s0" d="m381.5 106.5q59 0 118 0 0 105 0 210-42 0-84 0 0-63 0-126-27 0-54 0 0 63 0 126-43 0-86 0-0.25-52 0.5-104 53.05-52.8 105.5-106z"></path></g>
+    <g><path fillRule="evenodd" className="s0" d="m944.5 106.5q50 0 100 0 0 42 0 84-60 0-120 0 0 63 0 126-43 0-86 0-0.25-52 0.5-104 53.05-52.8 105.5-106z"></path></g>
+    <g><path fillRule="evenodd" className="s0" d="m1385.5 106.5q42 0 84 0 0 105 0 210-42 0-84 0 0-105 0-210z"></path></g>
+</svg>
+                        <p className="mt-2 text-gray-600">Laddar kalender...</p>
+                    </div>
+                </div>
+            ) : (
+                <EventCalendar
+                    className="mx-auto my-10 max-w-300"
+                    editable
+                    selectable
+                    droppable
+                    nowIndicator
+                    navLinks
+                    locale="sv"
+                    initialView="timeGridWeek"
+                    firstDay={1}
+                    timeZone="Europe/Stockholm"
+                    events={`/api/calendar/bookings?service_user_id=${firstTechnician.id}`}
+                    resources="/calendar/resources"
+                    select={handleDateSelect}
+                    eventClick={handleEventClick}
+                    eventDrop={handleEventDrop}
+                    eventResize={handleEventResize}
+                    headerToolbar={{
+                        left: '',
+                        center: '',
+                        right: '',
+                    }}
+                    slotMinTime="07:00:00"
+                    slotMaxTime="17:00:00"
+                    slotDuration="01:00:00"
+                    weekends={true}
+                    addButton={{
+                        text: `${firstTechnician.title}`,
+                        click() {
+                            setIsEditMode(false);
+                            setSelectedSlot({
+                                start: new Date(),
+                                end: new Date(Date.now() + 60 * 60 * 1000), // +1 hour
+                                allDay: false,
+                            });
+                            setShowBookingModal(true);
+                        },
+                    }}
+                />
+            )}
 
             {/* Booking Modal */}
             {showBookingModal && (
-                <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center bg-black">
-                    <div className="max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-lg bg-white p-6">
+                <div className="bg-opacity-50 fixed inset-0 z-50 flex items-center justify-center">
+                    <div className="fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg sm:max-w-[550px]">
                         <h2 className="mb-4 text-xl font-bold">
                             {isEditMode ? 'Redigera Bokning' : 'Ny Bokning'}
                         </h2>
@@ -491,28 +522,87 @@ export function EventCalendarDemo1() {
                                     <label className="mb-1 block text-sm font-medium text-gray-700">
                                         Kund
                                     </label>
-                                    <select
-                                        value={data.booking_client_id}
-                                        onChange={(e) =>
-                                            setData(
-                                                'booking_client_id',
-                                                e.target.value,
-                                            )
-                                        }
-                                        className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                                    >
-                                        <option value="">Välj kund</option>
-                                        {dropdownData.clients.map(
-                                            (client: any) => (
-                                                <option
-                                                    key={client.id}
-                                                    value={client.id}
-                                                >
-                                                    {client.name}
-                                                </option>
-                                            ),
-                                        )}
-                                    </select>
+
+                                    <div className="flex items-center space-x-3">
+                                        <select
+                                            value={data.booking_client_id}
+                                            onChange={(e) =>
+                                                setData(
+                                                    'booking_client_id',
+                                                    e.target.value,
+                                                )
+                                            }
+                                            className="w-full rounded-md border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                                        >
+                                            <option value="">Välj kund</option>
+                                            {dropdownData.clients.map((client: any) => (
+                                                <option key={client.id} value={client.id}>{client.name}</option>
+                                            ))}
+                                        </select>
+
+                                        <button type="button" className="text-sm text-blue-600 hover:underline" onClick={() => { setShowNewClientForm((s) => !s); setNewClientErrors([]); }}>
+                                            Lägg till ny kund
+                                        </button>
+                                    </div>
+
+                                    {showNewClientForm && (
+                                        <div className="mt-3 space-y-2 rounded-md border border-gray-200 p-3">
+                                            {newClientErrors.length > 0 && (
+                                                <div className="rounded-md bg-red-50 p-2 text-sm text-red-700">
+                                                    {newClientErrors.map((err, idx) => (
+                                                        <div key={idx}>{err}</div>
+                                                    ))}
+                                                </div>
+                                            )}
+
+                                            <input type="text" placeholder="Namn" value={newClient.name} onChange={(e) => setNewClient((c) => ({ ...c, name: e.target.value }))} className="w-full rounded-md border border-gray-300 px-3 py-2" />
+                                            <input type="email" placeholder="E-post (valfritt)" value={newClient.email} onChange={(e) => setNewClient((c) => ({ ...c, email: e.target.value }))} className="w-full rounded-md border border-gray-300 px-3 py-2" />
+                                            <input type="text" placeholder="Telefon (valfritt)" value={newClient.phone} onChange={(e) => setNewClient((c) => ({ ...c, phone: e.target.value }))} className="w-full rounded-md border border-gray-300 px-3 py-2" />
+
+                                            <div className="flex justify-end">
+                                                <button type="button" onClick={() => { setShowNewClientForm(false); setNewClient({ name: '', email: '', phone: '' }); setNewClientErrors([]); }} className="mr-2 rounded-md bg-gray-200 px-3 py-1 text-sm">Avbryt</button>
+
+                                                <button type="button" disabled={newClientProcessing} onClick={async () => {
+                                                    setNewClientErrors([]);
+                                                    setNewClientProcessing(true);
+                                                    try {
+                                                        const res = await fetch('/api/calendar/clients', {
+                                                            method: 'POST',
+                                                            headers: {
+                                                                'Content-Type': 'application/json',
+                                                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '',
+                                                            },
+                                                            body: JSON.stringify(newClient),
+                                                        });
+                                                        const payload = await res.json();
+                                                        if (!res.ok) {
+                                                            if (payload.errors) {
+                                                                const errs = Object.values(payload.errors).flat();
+                                                                setNewClientErrors(errs as string[]);
+                                                            } else if (payload.message) {
+                                                                setNewClientErrors([payload.message]);
+                                                            } else {
+                                                                setNewClientErrors(['Ett fel uppstod.']);
+                                                            }
+                                                            setNewClientProcessing(false);
+                                                            return;
+                                                        }
+
+                                                        // success: add to dropdown and select
+                                                        setDropdownData((prev: any) => ({ ...prev, clients: [payload, ...prev.clients] }));
+                                                        setData('booking_client_id', payload.id);
+                                                        setShowNewClientForm(false);
+                                                        setNewClient({ name: '', email: '', phone: '' });
+                                                    } catch (err) {
+                                                        console.error('Error creating client', err);
+                                                        setNewClientErrors(['Ett fel uppstod.']);
+                                                    } finally {
+                                                        setNewClientProcessing(false);
+                                                    }
+                                                }} className="rounded-md bg-blue-600 px-3 py-1 text-white disabled:opacity-50 text-sm">{newClientProcessing ? 'Sparar...' : 'Skapa kund'}</button>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div>

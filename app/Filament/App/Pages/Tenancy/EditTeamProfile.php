@@ -4,6 +4,7 @@ namespace App\Filament\App\Pages\Tenancy;
 
 use App\Models\Team;
 use Closure;
+use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\TextInput;
 use Filament\Pages\Tenancy\EditTenantProfile;
@@ -24,6 +25,10 @@ class EditTeamProfile extends EditTenantProfile
         return $schema
             ->schema([
                 TextInput::make('name'),
+                FileUpload::make('avatar')
+                    ->image()
+                    ->directory('team-avatars')
+                    ->disk('public'),
                 Repeater::make('teamInvitations')
                     ->relationship('teamInvitations')
                     ->simple(

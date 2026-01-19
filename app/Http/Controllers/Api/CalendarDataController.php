@@ -42,6 +42,28 @@ final class CalendarDataController extends Controller
         return response()->json($clients);
     }
 
+    public function store(Request $request): JsonResponse
+    {
+        $validated = $request->validate([
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'phone' => ['nullable', 'string', 'max:50'],
+            'address' => ['nullable', 'string', 'max:255'],
+            'city' => ['nullable', 'string', 'max:255'],
+        ]);
+
+        $client = Client::create($validated);
+
+        return response()->json([
+            'id' => $client->id,
+            'name' => $client->name,
+            'email' => $client->email,
+            'phone' => $client->phone,
+            'address' => $client->address,
+            'city' => $client->city,
+        ], 201);
+    }
+
     public function services(Request $request): JsonResponse
     {
         $services = Service::query()

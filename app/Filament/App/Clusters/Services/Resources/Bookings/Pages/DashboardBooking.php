@@ -30,9 +30,9 @@ final class DashboardBooking extends BaseDashboard
 
     protected static ?string $title = '';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 1;
 
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 1;
 
     protected static string $routePath = 'nds-kalender-x1';
 
@@ -64,12 +64,12 @@ final class DashboardBooking extends BaseDashboard
 
     public static function getNavigationSort(): ?int
     {
-        return 2;
+        return 1;
     }
 
     public static function getSort(): ?int
     {
-        return 2;
+        return 1;
     }
 
     public function mount(): void

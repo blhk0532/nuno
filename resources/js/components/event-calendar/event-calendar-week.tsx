@@ -261,7 +261,7 @@ export function EventCalendarWeek({ events, currentDate }: CalendarWeekProps) {
           All Day
         </div>
         <div className="relative flex-1">
-          <div className="flex h-[32px]">
+          <div className="flex daily-location-events">
             {weekDays.map((day, dayIndex) => {
               const dateKey = format(day, 'yyyy-MM-dd');
               const dayAllDayEvents = allDayEventsByDay[dateKey] || [];
@@ -277,12 +277,11 @@ export function EventCalendarWeek({ events, currentDate }: CalendarWeekProps) {
                   )}
                 >
                   {hasEvents && (
-                    <div className="flex flex-wrap gap-0.5 mb-1 text-center truncate max-w-full w-full">
+                    <div className="flex flex-wrap gap-0.5 mb-1 text-center truncate max-w-full w-full justify-center">
                       {dayAllDayEvents.slice(0, 2).map((event) => (
                         <div
                           key={event.id}
-                          className="bg-muted text-muted-foreground rounded px-1 pb-1.5 pt-1.5 text-sm truncate max-w-full font-bold w-full"
-                          title={event.location || event.title}
+                                                  className="bg-muted text-muted-foreground rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold  pl-2 pr-2 w-full"
                         >
                           {event.location || event.title}
                         </div>

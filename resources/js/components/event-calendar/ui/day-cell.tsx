@@ -97,11 +97,11 @@ export function DayCell({
         <div className="item flex flex-1 flex-col gap-1 overflow-hidden">
           {/* All-day events */}
           {allDayEvents.length > 0 && (
-            <div className="flex flex-wrap gap-0.5 mb-1 text-center truncate max-w-full w-full">
+            <div className="flex flex-wrap gap-0.5 mb-1 text-center truncate max-w-full w-full justify-center justify-center">
               {allDayEvents.slice(0, 2).map((event) => (
                 <div
                   key={event.id}
-                  className="bg-muted text-muted-foreground rounded px-1 pb-1.5 pt-1.5 text-sm truncate max-w-full font-bold w-full"
+                                          className="bg-muted text-muted-foreground rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold  pl-2 pr-2 w-full"
                   title={event.location || event.title}
                 >
                   {event.location || event.title}

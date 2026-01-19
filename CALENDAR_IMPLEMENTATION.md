@@ -38,6 +38,7 @@ A comprehensive calendar booking system with full CRUD operations, drag-and-drop
 #### Dropdown Data
 
 - `GET /api/calendar/clients` - Get clients for dropdown
+- `POST /api/calendar/clients` - Create a new client (used by quick-add in booking modal)
 - `GET /api/calendar/services` - Get services for dropdown
 - `GET /api/calendar/locations` - Get locations for dropdown
 - `GET /api/calendar/service-users` - Get service users/technicians

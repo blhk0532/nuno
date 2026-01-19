@@ -18,7 +18,14 @@ class AutoDialerPage extends Page
 
     protected static ?int $navigationSort = 20;
 
+     protected static bool $isDiscovered = false;
+
     protected string $view = 'filament-dialer::pages.autodialer';
+
+   public static function shouldRegisterSpotlight(): bool
+    {
+        return false;
+    }
 
     public function getMaxWidth(): string
     {
@@ -27,6 +34,6 @@ class AutoDialerPage extends Page
 
     public static function canAccess(): bool
     {
-        return Auth::check();
+        return false;
     }
 }

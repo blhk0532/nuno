@@ -245,3 +245,24 @@ form.fi-modal-window.fi-modal-window-has-close-btn.fi-modal-window-has-content.f
    min-width: 868px!important;
 }
 }
+
+.fi-sidebar-nav{
+    padding-top: 1.2rem;
+}
+
+.filament-fullcalendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard.fc-liquid-hack{
+  min-height: 636px;
+}
+
+.fi-modal-icon-bg{
+    margin-top:2rem!important;
+}
+
+.fi-avatar.fi-size-md.fi-tenant-avatar{
+overflow: hidden;
+width: 24px;
+  height: 24px;
+}
+
+
+

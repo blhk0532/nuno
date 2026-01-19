@@ -17,7 +17,7 @@ const blockTouchResizerClass = 'absolute size-2 border border-(--fc-event-color)
 const rowTouchResizerClass = `${blockTouchResizerClass} top-1/2 -mt-1`
 const columnTouchResizerClass = `${blockTouchResizerClass} left-1/2 -ml-1`
 
-const tallDayCellBottomClass = 'min-h-4'
+const tallDayCellBottomClass = 'min-h-4 hidden'
 const getShortDayCellBottomClass = (data: DayCellData) => cn(
   !data.isNarrow && 'min-h-px'
 )
@@ -46,7 +46,7 @@ const dayRowCommonClasses: CalendarOptions = {
   ),
   listItemEventTitleClass: (data) => cn(
     data.isNarrow ? 'px-0.5' : 'px-1',
-    'font-bold whitespace-nowrap overflow-hidden shrink-100',
+    'font-bold whitespace-nowrap overflow-hidden shrink-100 py-1 px-1',
   ),
 
   /* Day Row > Row Event
@@ -188,7 +188,7 @@ export function EventCalendarViews({
         )}
         rowEventTitleClass={(data) => cn(
           'shrink-100',
-          data.isNarrow ? 'px-0.5' : 'px-1',
+          data.isNarrow ? 'px-1 py-1 font-bold' : 'px-1 py-1 font-bold',
         )}
 
         /* Column Event
@@ -225,7 +225,7 @@ export function EventCalendarViews({
         )}
         columnEventTitleClass={(data) => cn(
           'shrink-1',
-          !data.isShort && (data.isNarrow ? 'py-0.5' : 'py-1'),
+          !data.isShort && (data.isNarrow ? 'px-1 py-1 font-bold' : 'px-1 py-1 font-bold'),
         )}
 
         /* More-Link

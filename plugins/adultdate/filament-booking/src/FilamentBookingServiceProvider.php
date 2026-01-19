@@ -110,6 +110,7 @@ final class FilamentBookingServiceProvider extends PackageServiceProvider
                 'adultdate.filament-booking.filament.widgets.booking-calendar',
                 \Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\BookingCalendar::class
             );
+        //    \Livewire\Livewire::component('filament.app.pages.chat-dashboard', \App\Filament\App\Pages\AppChatDashboard::class);
             \Livewire\Livewire::component('adultdate.filament-booking.filament.widgets.event-calendar', \Adultdate\FilamentBooking\Filament\Widgets\EventCalendar::class);
             \Livewire\Livewire::component('adultdate.filament-booking.filament.clusters.services.resources.bookings.widgets.multi-calendar1', \Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar1::class);
             \Livewire\Livewire::component('adultdate.filament-booking.filament.clusters.services.resources.bookings.widgets.multi-calendar2', \Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar2::class);
@@ -159,6 +160,14 @@ final class FilamentBookingServiceProvider extends PackageServiceProvider
                 Filament::registerResources([
                     \Adultdate\FilamentBooking\Filament\Resources\BookingCalendars\BookingCalendarResource::class,
                 ]);
+
+                // Ensure the app-level chat dashboard page is registered so the
+                // navigation item and route `filament.app.pages.chat-dashboard` exist.
+                if (class_exists(\App\Filament\App\Pages\AppChatDashboard::class)) {
+                    Filament::registerPages([
+                        \App\Filament\App\Pages\AppChatDashboard::class,
+                    ]);
+                }
             });
         }
 
@@ -183,6 +192,14 @@ final class FilamentBookingServiceProvider extends PackageServiceProvider
             \Livewire\Livewire::component(
                 'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar3',
                 \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar3::class
+            );
+            \Livewire\Livewire::component(
+                'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar4',
+                \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar4::class
+            );
+            \Livewire\Livewire::component(
+                'filament.app.pages.chat-dashboard',
+                \App\Filament\App\Pages\AppChatDashboard::class
             );
         }
     }

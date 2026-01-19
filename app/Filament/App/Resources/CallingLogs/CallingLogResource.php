@@ -20,7 +20,7 @@ final class CallingLogResource extends Resource
 {
     protected static ?string $model = CallingLog::class;
 
-    protected static ?string $navigationLabel = 'Samtal';
+    protected static ?string $navigationLabel = 'Samtal Historik';
 
     protected static ?int $navigationSort = 10;
 
@@ -56,6 +56,13 @@ final class CallingLogResource extends Resource
             'edit' => EditCallingLog::route('/{record}/edit'),
         ];
     }
+
+        public static function getNavigationBadge(): ?string
+    {
+        return '0';
+
+    }
+
 
 
 }

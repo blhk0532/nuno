@@ -41,11 +41,11 @@ final class AppDashboard extends BaseDashboard
 
     //    protected static string | UnitEnum | null $navigationGroup = 'Mina Sidor';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 1;
 
-    protected static ?int $sort = 0;
+    protected static ?int $sort = 1;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-m-identification';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-user-circle';
 
     // Prevent this app-level Dashboard from being auto-discovered so that
     // the explicit `AdminDashboard` can be registered as the admin panel root.
@@ -74,17 +74,17 @@ final class AppDashboard extends BaseDashboard
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-m-identification';
+        return 'heroicon-s-user-circle';
     }
 
     public static function getNavigationSort(): ?int
     {
-        return 2;
+        return 1;
     }
 
     public static function getSort(): ?int
     {
-        return 2;
+        return 1;
     }
 
     public function filtersForm(Schema $schema): Schema
@@ -100,25 +100,7 @@ final class AppDashboard extends BaseDashboard
                             ->searchable()
                             ->default('all')
                             ->reactive()
-                            ->afterStateUpdated(function () {
-                                $this->dispatch('refreshCalendar');
-                            }),
-                        Select::make('show_all_bookings')
-                            ->options([true => 'Ja', false => 'Nej'])
-                            ->label('Filtrera Bokningar')
-                            ->placeholder('Endast mina bok?')
-                            ->searchable()
-                            ->reactive()
-                            ->afterStateUpdated(function () {
-                                $this->dispatch('refreshCalendar');
-                            }),
-                        Select::make('show_all_day_events')
-                            ->options([true => 'Ja', false => 'Nej'])
-                            ->label('Visa heldags händelser')
-                            ->placeholder('Visa heldags?')
-                            ->default(true)
-                            ->searchable()
-                            ->reactive()
+                            ->columnSpan(2)
                             ->afterStateUpdated(function () {
                                 $this->dispatch('refreshCalendar');
                             }),
@@ -128,7 +110,7 @@ final class AppDashboard extends BaseDashboard
                             ->minDate(fn (Get $get) => $get('startDate') ?: now())
                             ->maxDate(now()),
                     ])
-                    ->columns(5)
+                    ->columns(4)
                     ->columnSpanFull(),
             ]);
     }
@@ -174,6 +156,6 @@ final class AppDashboard extends BaseDashboard
 
     protected function getHeaderTitle(): string
     {
-        return false;
+        return '';
     }
 }

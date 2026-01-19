@@ -271,7 +271,7 @@ export function EventCalendarDays({
           All Day
         </div>
         <div className="relative flex-1">
-          <div className="flex h-[32px]">
+          <div className="flex daily-location-events">
             {weekDays.map((day, dayIndex) => {
               const dateKey = format(day, 'yyyy-MM-dd');
               const dayAllDayEvents = allDayEventsByDay[dateKey] || [];
@@ -292,7 +292,7 @@ export function EventCalendarDays({
                       {dayAllDayEvents.slice(0, 2).map((event) => (
                         <div
                           key={event.id}
-                          className="bg-muted text-muted-foreground rounded px-1 pb-1.5 pt-1.5 text-sm truncate max-w-full font-bold w-full"
+                          className="bg-muted text-muted-foreground rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold  pl-2 pr-2 w-full"
                           title={event.location || event.title}
                         >
                           {event.location || event.title}

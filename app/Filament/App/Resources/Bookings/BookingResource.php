@@ -29,11 +29,11 @@ final class BookingResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'number';
 
-    protected static ?string $navigationLabel = 'Bokning';
+    protected static ?string $navigationLabel = 'Mina Bokningar';
 
     protected static string|UnitEnum|null $navigationGroup = 'Mina Sidor';
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-clipboard-document-check';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-calendar-days';
 
     protected static ?int $navigationSort = 1;
 

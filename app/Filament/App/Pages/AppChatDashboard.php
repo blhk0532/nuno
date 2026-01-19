@@ -8,6 +8,7 @@ use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use UnitEnum;
 
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseCache;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseExceptions;
@@ -22,13 +23,15 @@ class AppChatDashboard extends BaseDashboard
 {
     protected static ?string $title = '';
 
-    protected static ?string $slug = 'chat-dashboard';
+    protected static ?string $slug = 'wirechat';
 
     protected string $view = 'filament.app.chat-dashboard';
 
+    protected static ?string $navigationLabel = 'Meddelanden';
 
+     protected static string | UnitEnum | null $navigationGroup = 'Mina Sidor';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 20;
 
     protected static ?int $sort = 0;
 
@@ -67,37 +70,32 @@ class AppChatDashboard extends BaseDashboard
 
     public static function shouldRegisterNavigation(): bool
     {
-        return true;
+        return false;
     }
 
     public static function getNavigationLabel(): string
     {
-        return ''.Str::ucfirst(Auth::user()->name) ?? 'User';
+        return 'Meddelanden';
     }
 
     public static function getNavigationBadge(): ?string
     {
-        return now()->timezone('Asia/Bangkok')->format('H:i');
+        return 0;
 
-    }
-
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return 'gray';
     }
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-s-squares-plus';
+        return 'heroicon-s-chat-bubble-oval-left-ellipsis';
     }
 
     public static function getNavigationSort(): ?int
     {
-        return 2;
+        return 20;
     }
 
     public static function getSort(): ?int
     {
-        return 2;
+        return 20;
     }
 }

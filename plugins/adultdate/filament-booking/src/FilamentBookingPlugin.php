@@ -20,10 +20,11 @@ use Adultdate\FilamentBooking\Filament\Widgets\CustomersChart;
 use Adultdate\FilamentBooking\Filament\Widgets\LatestOrders;
 use Adultdate\FilamentBooking\Filament\Widgets\OrdersChart;
 use Adultdate\FilamentBooking\Filament\Widgets\StatsOverviewWidget;
-use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppDashboardBokning;
 use App\Filament\App\Pages\InertiaCalendar as AppInertiaCalendar;
-use App\Filament\Booking\Clusters\Services\Resources\Bookings\Pages\DashboardBokning;
-use App\Filament\Booking\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppDashboardBooking;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppDashboardBooking;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX2;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX4;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBokning;
 use App\Filament\Booking\Pages\GoogleCalendar;
 use App\Filament\Booking\Pages\InertiaCalendar;
 use Closure;
@@ -144,12 +145,12 @@ HTML
 HTML,
             scopes: [
                 DashboardBooking::class,
-                GoogleCalendar::class,
                 DashboardBokning::class,
+                GoogleCalendar::class,
                 InertiaCalendar::class,
-                AppDashboardBooking::class,
                 AppInertiaCalendar::class,
-                AppDashboardBokning::class,
+                BookingCalendersX2::class,
+                BookingCalendersX4::class,
             ],
         );
     }

@@ -293,7 +293,8 @@ final class AdminPanelProvider extends PanelProvider
                     ->excludeResources([
                         \AdultDate\FilamentWirechat\Filament\Resources\Conversations\ConversationResource::class,
                         \AdultDate\FilamentWirechat\Filament\Resources\Messages\MessageResource::class,
-                    ]),
+                    ])
+                    ->showSidebar(false),
             ])
             ->unsavedChangesAlerts()
             ->passwordReset()

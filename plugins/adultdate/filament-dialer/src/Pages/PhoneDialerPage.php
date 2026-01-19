@@ -22,6 +22,11 @@ class PhoneDialerPage extends Page
 
     protected string $view = 'filament-dialer::pages.phone-dialer';
 
+   public static function shouldRegisterSpotlight(): bool
+    {
+        return false;
+    }
+
     public function getMaxWidth(): string
     {
         return '5xl';
@@ -29,6 +34,6 @@ class PhoneDialerPage extends Page
 
     public static function canAccess(): bool
     {
-        return Auth::check();
+        return false;
     }
 }

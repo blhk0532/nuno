@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Collection;
+use Filament\Models\Contracts\HasAvatar;
 
 /**
  * @property int $id
@@ -18,6 +18,7 @@ use Illuminate\Support\Collection;
  * @property string $name
  * @property string $slug
  * @property string $ulid
+ * @property string|null $avatar
  * @property bool $personal_team
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -31,6 +32,7 @@ use Illuminate\Support\Collection;
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team query()
+ * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereAvatar($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereId($value)
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team whereName($value)
@@ -44,7 +46,7 @@ use Illuminate\Support\Collection;
  */
 #[ObservedBy(TeamObserver::class)]
 #[UsePolicy(TeamPolicy::class)]
-class Team extends Model
+class Team extends Model implements HasAvatar
 {
     protected $fillable = [
         'user_id',
@@ -52,6 +54,7 @@ class Team extends Model
         'slug',
         'personal_team',
         'ulid',
+        'avatar',
     ];
 
     protected static function boot(): void
@@ -111,5 +114,14 @@ class Team extends Model
         return [
             'personal_team' => 'boolean',
         ];
+    }
+
+    public function getFilamentAvatarUrl(): ?string
+    {
+        if ($this->avatar && \Illuminate\Support\Facades\Storage::disk('public')->exists($this->avatar)) {
+            return \Illuminate\Support\Facades\Storage::disk('public')->url($this->avatar);
+        }
+
+        return null;
     }
 }

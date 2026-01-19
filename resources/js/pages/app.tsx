@@ -17,7 +17,7 @@ const formatTime = (date: Date) =>
 
 const transformBookingToEvent = (booking: any): Events => {
   const isAllDay = booking.allDay === true || booking.type === 'location' || booking.eventsType === 'location';
-  
+
   let startDate: Date;
   let endDate: Date;
   let startTime: string;
@@ -198,12 +198,12 @@ export default function ShadcnEventCalendar() {
       </AppLayout>
     );
   }
- 
+
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="NDS Calendar" />
-      <div className="w-full max-w-[100%]">
-        <div className="bg-transparent rounded-lg max-h-[90vh] min-h-[90vh] p-0">
+      <div className="w-full max-w-[100%] max-h-[96vh] min-h-[96vh]">
+        <div className="bg-transparent rounded-lg p-0">
           <EventCalendar
             events={events}
             initialDate={new Date()}

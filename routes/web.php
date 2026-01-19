@@ -59,6 +59,7 @@ Route::middleware(['web', 'inertia', 'auth', 'verified'])->group(function (): vo
 
         // API routes for calendar data
         Route::get('clients', [CalendarDataController::class, 'clients']);
+        Route::post('clients', [CalendarDataController::class, 'store']);
         Route::get('services', [CalendarDataController::class, 'services']);
         Route::get('locations', [CalendarDataController::class, 'locations']);
         Route::get('service-users', [CalendarDataController::class, 'serviceUsers']);
@@ -122,4 +123,19 @@ Route::middleware('auth')->group(function (): void {
 
     // Session...
     Route::post('logout', [SessionController::class, 'destroy'])->name('logout');
+
+    // Back-compat: provide named routes for the chat dashboard so Filament
+    // navigation does not throw when a page is referenced but not registered.
+    Route::get('filament/app/chat-dashboard', function () {
+        // This is a safe fallback; when the actual chat dashboard page is available
+        // Filament will provide the correct route and override this. For now we
+        // redirect to the app dashboard to avoid exceptions in the sidebar.
+        return redirect()->route('dashboard');
+    })->name('filament.app.pages.chat-dashboard');
+
+    Route::get('filament/admin/chat-dashboard', function () {
+        // Fallback for the admin panel chat dashboard nav item. Redirect to
+        // the admin dashboard to keep navigation stable.
+        return redirect()->route('dashboard');
+    })->name('filament.admin.pages.chat-dashboard');
 });

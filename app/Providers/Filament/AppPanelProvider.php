@@ -7,9 +7,10 @@ namespace App\Providers\Filament;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use AdultDate\FilamentWirechat\Filament\Pages\ChatDashboard;
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
-use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBokning as AppBookingMultiCalendar;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppBookingSinleCalendar;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX2;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX4;
 use App\Filament\App\Pages\InertiaCalendar;
 use App\Filament\App\Pages\TeamInvitationAccept;
 use App\Filament\App\Pages\Tenancy\EditTeamProfile;
@@ -49,6 +50,8 @@ use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
+use AdultDate\FilamentDialer\FilamentDialerPlugin;
+use Illuminate\Support\Facades\Auth;
 
 final class AppPanelProvider extends PanelProvider
 {
@@ -81,9 +84,10 @@ final class AppPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverWidgets(in: app_path('Filament/App/Widgets'), for: 'App\\Filament\\App\\Widgets')
+            ->profile(null)
             ->navigationGroups([
                 NavigationGroup::make('Kalendrar')
-                    ->icon('heroicon-m-calendar-days'),
+                    ->icon('heroicon-c-squares-plus'),
                 NavigationGroup::make('Mina Sidor')
                     ->icon('heroicon-o-identification'),
             ])
@@ -92,6 +96,8 @@ final class AppPanelProvider extends PanelProvider
                 InertiaCalendar::class,
                 AppBookingSinleCalendar::class,
                 AppBookingMultiCalendar::class,
+                BookingCalendersX2::class,
+                BookingCalendersX4::class,
             ])
             ->widgets([
                 //    Widgets\AccountWidget::class,
@@ -116,6 +122,7 @@ final class AppPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
+                FilamentDialerPlugin::make(),
                 FilamentErrorPagesPlugin::make()
                     ->routes([
                         'nds/*',
@@ -143,8 +150,11 @@ final class AppPanelProvider extends PanelProvider
                     ->listLayoutButtonIcon('heroicon-o-list-bullet')
                     ->gridLayoutButtonIcon('heroicon-o-squares-2x2'),
             ])
-            ->plugin(FilamentUiSwitcherPlugin::make()
-                ->iconRenderHook(PanelsRenderHook::TOPBAR_LOGO_AFTER))
+
+            ->renderHook(
+                PanelsRenderHook::TOPBAR_LOGO_AFTER,
+                fn () => view('filament.app.calendar-icon-topbar')
+            )
             ->plugins([
                 FilamentIconPickerPlugin::make(),
                 FilamentBookingPlugin::make(),
@@ -178,15 +188,14 @@ final class AppPanelProvider extends PanelProvider
             ])
 
             ->userMenuItems([
-                'wirechat' => Action::make('wirechat')
-                    ->label(fn (): string => __('Chats'))
-                    ->url(fn (): string => ChatDashboard::getUrl())
-                    ->icon('heroicon-m-chat-bubble-left-right')
-                    ->visible(fn () => Filament::getTenant() !== null),
                 'profile' => Action::make('profile')
-                    ->label(fn (): string => __('Profile'))
+                    ->label(Auth::user()?->name())
                     ->url(fn (): string => EditProfilePage::getUrl())
-                    ->icon('heroicon-m-user-circle'),
+                    ->icon('heroicon-o-identification'),
+                'wirechat' => Action::make('chats')
+                    ->label('Chats')
+                    ->url(fn (): string => ChatDashboard::getUrl())
+                    ->icon('heroicon-o-chat-bubble-left-right'),
 
             ])
 

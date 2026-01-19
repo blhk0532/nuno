@@ -70,7 +70,7 @@ class BookingDashboard extends BaseDashboard
 
     public static function getNavigationIcon(): ?string
     {
-        return 'heroicon-c-clipboard-document-check';
+        return 'heroicon-c-calendar-days';
     }
 
 

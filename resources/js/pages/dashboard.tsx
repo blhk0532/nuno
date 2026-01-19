@@ -47,7 +47,6 @@ export default function Dashboard() {
                 </div>
 
                     <div className="relative max-h-[560px] flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 dark:border-sidebar-border">
-                        <EventCalendarDemo />
                     </div>
             </div>
         </div>

@@ -73,7 +73,7 @@ final class FilamentDialerPlugin implements Plugin
     {
         if ($this->showPhoneIcon) {
             $panel->renderHook(
-                PanelsRenderHook::GLOBAL_SEARCH_AFTER,
+                PanelsRenderHook::TOPBAR_LOGO_AFTER,
                 fn (): string => Blade::render('@livewire(\'filament-dialer.phone-icon-button\', [], key(\'phone-icon-button\'))')
             );
         }
@@ -84,7 +84,7 @@ final class FilamentDialerPlugin implements Plugin
                 fn (): string => Blade::render('
                     <x-filament::modal id="phone-dialer-sidebar" slide-over>
                         <x-slot name="heading">
-                            Phone Dialer
+                            [AVSTÄNGD]
                         </x-slot>
                         @livewire(\'filament-dialer.phone-dialer-sidebar\', [])
                     </x-filament::modal>

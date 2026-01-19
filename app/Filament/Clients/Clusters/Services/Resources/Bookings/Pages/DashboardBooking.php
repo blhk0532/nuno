@@ -100,16 +100,6 @@ public function getMaxContentWidth(): Width
                             ->afterStateUpdated(function () {
                                 $this->dispatch('refreshCalendar');
                             }),
-                        Select::make('show_all_day_events')
-                            ->options([true => 'Ja', false => 'Nej'])
-                            ->label('Visa heldags händelser')
-                            ->placeholder('Visa heldags?')
-                            ->default(true)
-                            ->searchable()
-                            ->reactive()
-                            ->afterStateUpdated(function () {
-                                $this->dispatch('refreshCalendar');
-                            }),
 
 
                         DatePicker::make('startDate')
@@ -118,7 +108,7 @@ public function getMaxContentWidth(): Width
                             ->minDate(fn (Get $get) => $get('startDate') ?: now())
                             ->maxDate(now()),
                     ])
-                    ->columns(4)
+                    ->columns(3)
                     ->columnSpanFull(),
             ]);
     }
