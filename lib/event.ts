@@ -492,7 +492,7 @@ export function getCategoryLabel(categoryValue: string) {
  */
 export const COLOR_CLASSES = {
   blue: {
-    bg: 'bg-blue-700 hover:bg-blue-800',
+    bg: 'bg-blue-700/80 hover:bg-blue-800/90',
     border: 'border-blue-800 hover:border-blue-700',
     text: 'text-blue-800 hover:text-blue-700',
     badge: {
@@ -501,7 +501,7 @@ export const COLOR_CLASSES = {
     },
   },
   red: {
-    bg: 'bg-red-700 hover:bg-red-800',
+    bg: 'bg-red-700/80 hover:bg-red-800/90',
     border: 'border-red-800 hover:border-red-700',
     text: 'text-red-800 hover:text-red-700',
     badge: {
@@ -510,7 +510,7 @@ export const COLOR_CLASSES = {
     },
   },
   lime: {
-    bg: 'bg-lime-700 hover:bg-lime-800',
+    bg: 'bg-lime-700/80 hover:bg-lime-800/90',
     border: 'border-lime-800 hover:border-lime-700',
     text: 'text-lime-800 hover:text-lime-700',
     badge: {
@@ -519,7 +519,7 @@ export const COLOR_CLASSES = {
     },
   },
   green: {
-    bg: 'bg-green-700 hover:bg-green-800',
+    bg: 'bg-green-700/80 hover:bg-green-800/90',
     border: 'border-green-800 hover:border-green-700',
     text: 'text-green-800 hover:text-green-700',
     badge: {
@@ -528,7 +528,7 @@ export const COLOR_CLASSES = {
     },
   },
   amber: {
-    bg: 'bg-amber-700 hover:bg-amber-800',
+    bg: 'bg-amber-700/80 hover:bg-amber-800/90',
     border: 'border-amber-800 hover:border-amber-700',
     text: 'text-amber-800 hover:text-amber-700',
     badge: {
@@ -537,7 +537,7 @@ export const COLOR_CLASSES = {
     },
   },
   yellow: {
-    bg: 'bg-yellow-700 hover:bg-yellow-800',
+    bg: 'bg-yellow-700/80 hover:bg-yellow-800/90',
     border: 'border-yellow-800 hover:border-yellow-700',
     text: 'text-yellow-800 hover:text-yellow-700',
     badge: {
@@ -546,7 +546,7 @@ export const COLOR_CLASSES = {
     },
   },
   purple: {
-    bg: 'bg-purple-700 hover:bg-purple-800',
+    bg: 'bg-purple-700/80 hover:bg-purple-800/90',
     border: 'border-purple-800 hover:border-purple-700',
     text: 'text-purple-800 hover:text-purple-700',
     badge: {
@@ -555,7 +555,7 @@ export const COLOR_CLASSES = {
     },
   },
   pink: {
-    bg: 'bg-pink-700 hover:bg-pink-800',
+    bg: 'bg-pink-700/80 hover:bg-pink-800/90',
     border: 'border-pink-800 hover:border-pink-700',
     text: 'text-pink-800 hover:text-pink-700',
     badge: {
@@ -564,7 +564,7 @@ export const COLOR_CLASSES = {
     },
   },
   indigo: {
-    bg: 'bg-indigo-700 hover:bg-indigo-800',
+    bg: 'bg-indigo-700/80 hover:bg-indigo-800/90',
     border: 'border-indigo-800 hover:border-indigo-700',
     text: 'text-indigo-800 hover:text-indigo-700',
     badge: {
@@ -573,7 +573,7 @@ export const COLOR_CLASSES = {
     },
   },
   teal: {
-    bg: 'bg-teal-700 hover:bg-teal-800',
+    bg: 'bg-teal-700/80 hover:bg-teal-800/90',
     border: 'border-teal-800 hover:border-teal-700',
     text: 'text-teal-800 hover:text-teal-700',
     badge: {
@@ -597,16 +597,33 @@ export const COLOR_CLASSES = {
 export type ColorName = keyof typeof COLOR_CLASSES;
 
 /**
- * Gets color classes for a given color name
+ * Gets color classes for a given color name or arbitrary color value
  * @memberof CalendarUI
- * @param {string} color - Color name (e.g., 'blue', 'red')
+ * @param {string} color - Color name (e.g., 'blue', 'red') or arbitrary color value (e.g., '#FF0000', 'rgb(255,0,0)')
  * @returns {Object} Color classes for the specified color
  *
  * @example
  * const colorClasses = getColorClasses('blue');
+ * const customClasses = getColorClasses('#FF0000');
  */
-export const getColorClasses = (color: string) =>
-  COLOR_CLASSES[color as ColorName] || COLOR_CLASSES.blue;
+export const getColorClasses = (color: string) => {
+  // Check if it's a predefined color name
+  if (COLOR_CLASSES[color as ColorName]) {
+    return COLOR_CLASSES[color as ColorName];
+  }
+
+  // If not a predefined color, treat as arbitrary color value
+  // Generate classes with opacity for better visual consistency
+  return {
+    bg: `bg-[${color}] bg-opacity-80 hover:bg-opacity-90`,
+    border: `border-white/20 hover:border-white/30`,
+    text: 'text-white hover:text-white',
+    badge: {
+      bg: `bg-[${color}]/20 dark:bg-[${color}]/30`,
+      text: `text-[${color}] dark:text-[${color}]/90`,
+    },
+  };
+};
 
 /**
  * Retrieves a localization object based on the provided language code.

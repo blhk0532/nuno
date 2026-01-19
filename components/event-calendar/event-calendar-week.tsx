@@ -34,15 +34,15 @@ const MULTI_DAY_ROW_HEIGHT = 64;
 
 const getLocationDisplay = (event: Events): string => {
   if (!event.location) return event.title;
-  
+
   const technicianName = event.technicianName || '';
   if (!technicianName) return event.location;
-  
+
   // Get first and last letter of technician name
   const firstLetter = technicianName.charAt(0).toUpperCase();
   const lastLetter = technicianName.charAt(technicianName.length - 1).toUpperCase();
   const initials = `${firstLetter}${lastLetter}`;
-  
+
   return `${initials} @ ${event.location}`;
 };
 const DAYS_IN_WEEK = 7;

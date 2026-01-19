@@ -10,15 +10,15 @@ import { getColorClasses } from '@/lib/event';
 
 const getLocationDisplay = (event: Events): string => {
   if (!event.location) return event.title;
-  
+
   const technicianName = event.technicianName || '';
   if (!technicianName) return event.location;
-  
+
   // Get first and last letter of technician name
   const firstLetter = technicianName.charAt(0).toUpperCase();
   const lastLetter = technicianName.charAt(technicianName.length - 1).toUpperCase();
   const initials = `${firstLetter}${lastLetter}`;
-  
+
   return `${initials} @ ${event.location}`;
 };
 
@@ -115,7 +115,7 @@ export function DayCell({
               {allDayEvents.slice(0, 2).map((event) => (
                 <div
                   key={event.id}
-                  className="bg-muted text-muted-foreground rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold  pl-2 pr-2 w-full"
+                          className="bg-muted rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold  pl-2 pr-2 w-full text-[#434343] dark:text-[#d3d3d3]"
                   title={getLocationDisplay(event)}
                 >
                   {getLocationDisplay(event)}

@@ -10,15 +10,15 @@ import { getColorClasses } from '@/lib/event';
 
 const getLocationDisplay = (event: Events): string => {
   if (!event.location) return event.title;
-  
+
   const technicianName = event.technicianName || '';
   if (!technicianName) return event.location;
-  
+
   // Get first and last letter of technician name
   const firstLetter = technicianName.charAt(0).toUpperCase();
   const lastLetter = technicianName.charAt(technicianName.length - 1).toUpperCase();
   const initials = `${firstLetter}${lastLetter}`;
-  
+
   return `${initials} @ ${event.location}`;
 };
   date: Date;

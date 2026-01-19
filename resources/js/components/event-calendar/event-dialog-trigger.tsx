@@ -2,7 +2,7 @@ import { EventPosition, Events } from '@/types/event';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
 import { calculateDuration, formatTimeDisplay } from '@/lib/date';
-import { getColorClasses } from '@/lib/event';
+import { getColorClasses, COLOR_CLASSES } from '@/lib/event';
 import { AnimatePresence, motion } from 'framer-motion';
 
 type EventDialogTriggerProps = {
@@ -25,12 +25,25 @@ export const EventDialogTrigger = ({
   rightOffset,
   onClick,
 }: EventDialogTriggerProps) => {
-  const { bg } = getColorClasses(event.color);
+  const colorClasses = getColorClasses(event.color);
+  const isArbitraryColor = !Object.keys(COLOR_CLASSES).includes(event.color);
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
     onClick(event, position, leftOffset, rightOffset);
   };
+
+  // For arbitrary colors, use inline styles instead of Tailwind classes
+  const buttonStyle = isArbitraryColor ? {
+    backgroundColor: event.color,
+    opacity: 0.8,
+  } : {};
+
+  const buttonHoverStyle = isArbitraryColor ? {
+    backgroundColor: event.color,
+    opacity: 0.9,
+  } : {};
 
   return (
     <AnimatePresence>
@@ -50,11 +63,22 @@ export const EventDialogTrigger = ({
       >
         <Button
           className={cn(
-            'group absolute flex h-full w-full cursor-pointer flex-col items-start justify-start gap-0 overflow-hidden rounded bg-transparent p-2 text-white hover:bg-transparent',
+            'group absolute flex h-full w-full cursor-pointer flex-col items-start justify-start gap-0 overflow-hidden rounded p-2 text-white',
             'border-2 border-white dark:border-white shadow-sm',
-            'transition-colors',
-            bg,
+            'transition-all duration-200',
+            isArbitraryColor ? '' : colorClasses.bg,
           )}
+          style={buttonStyle}
+          onMouseEnter={(e) => {
+            if (isArbitraryColor) {
+              Object.assign(e.currentTarget.style, buttonHoverStyle);
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (isArbitraryColor) {
+              Object.assign(e.currentTarget.style, buttonStyle);
+            }
+          }}
           onClick={handleClick}
         >
           <div className="text-xs font-medium sm:truncate">{event.title}</div>

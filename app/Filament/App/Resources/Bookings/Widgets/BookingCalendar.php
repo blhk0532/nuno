@@ -483,6 +483,44 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
             }
         }
 
+        if ($record instanceof BookingServicePeriod) {
+            try {
+                $tz = config('app.timezone');
+                $start = isset($event['start']) ? Carbon::parse($event['start'], $tz) : null;
+                $end = isset($event['end']) ? Carbon::parse($event['end'], $tz) : null;
+
+                if ($start) {
+                    $record->service_date = $start->format('Y-m-d');
+                    $record->start_time = $start->format('H:i');
+                    $record->starts_at = $start;
+                }
+
+                if ($end) {
+                    $record->end_time = $end->format('H:i');
+                    $record->ends_at = $end;
+                }
+
+                $record->save();
+
+                Notification::make()
+                    ->title('Blocking period duration updated')
+                    ->success()
+                    ->send();
+
+                $this->refreshRecords();
+
+                return false;
+            } catch (\Throwable $e) {
+                logger()->error('Error persisting resized blocking period', ['err' => $e->getMessage()]);
+                Notification::make()
+                    ->title('Failed to update blocking period')
+                    ->danger()
+                    ->send();
+
+                return false;
+            }
+        }
+
         // Fallback: delegate to legacy handler which mounts edit modal
         $this->onEventResizeLegacy($event, $oldEvent, $relatedEvents, $startDelta, $endDelta);
 

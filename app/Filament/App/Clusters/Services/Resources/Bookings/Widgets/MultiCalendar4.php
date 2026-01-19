@@ -444,6 +444,10 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
             $record = Booking::find($event['id'] ?? null);
         }
 
+        if (! $record) {
+            $record = BookingServicePeriod::find($event['id'] ?? null);
+        }
+
         if ($record instanceof Booking) {
             try {
                 $tz = config('app.timezone');
@@ -489,6 +493,44 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                 logger()->error('Error persisting resized booking', ['err' => $e->getMessage()]);
                 Notification::make()
                     ->title('Failed to update booking')
+                    ->danger()
+                    ->send();
+
+                return false;
+            }
+        }
+
+        if ($record instanceof BookingServicePeriod) {
+            try {
+                $tz = config('app.timezone');
+                $start = isset($event['start']) ? Carbon::parse($event['start'], $tz) : null;
+                $end = isset($event['end']) ? Carbon::parse($event['end'], $tz) : null;
+
+                if ($start) {
+                    $record->service_date = $start->format('Y-m-d');
+                    $record->start_time = $start->format('H:i');
+                    $record->starts_at = $start;
+                }
+
+                if ($end) {
+                    $record->end_time = $end->format('H:i');
+                    $record->ends_at = $end;
+                }
+
+                $record->save();
+
+                Notification::make()
+                    ->title('Blocking period duration updated')
+                    ->success()
+                    ->send();
+
+                $this->refreshRecords();
+
+                return false;
+            } catch (Throwable $e) {
+                logger()->error('Error persisting resized blocking period', ['err' => $e->getMessage()]);
+                Notification::make()
+                    ->title('Failed to update blocking period')
                     ->danger()
                     ->send();
 
