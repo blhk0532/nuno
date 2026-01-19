@@ -1,3 +1,4 @@
+<div style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; margin-right: 8px;">
 <x-filament::icon-button
     icon="heroicon-o-phone-arrow-up-right"
     class="fi-color fi-text-color-500 hover:fi-text-color-500 dark:fi-text-color-400 dark:hover:fi-text-color-300 fi-icon-btn fi-size-md shrink-0 grow-0 text-gray-700 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-300"
@@ -6,3 +7,4 @@
     wire:key="phone-icon-button"
     action="open-modal"
 />
+</div>
