@@ -31,7 +31,7 @@
         <div class="fi-filament-info-widget-links">
             <x-filament::link
                 color="gray"
-                href="https://filamentphp.com/docs"
+                href="https://ndsth.com"
                 :icon="\Filament\Support\Icons\Heroicon::BookOpen"
                 :icon-alias="\Filament\View\PanelsIconAlias::WIDGETS_FILAMENT_INFO_OPEN_DOCUMENTATION_BUTTON"
                 rel="noopener noreferrer"

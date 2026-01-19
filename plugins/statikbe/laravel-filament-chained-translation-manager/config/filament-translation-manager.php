@@ -51,7 +51,7 @@ return [
      |
      | You can specify the order in which navigation items are listed.
      | Accepts integer value according to Filament documentation.
-     | (visit: https://filamentphp.com/docs/4.x/navigation/overview#sorting-navigation-items)
+     | (visit: https://ndsth.com/4.x/navigation/overview#sorting-navigation-items)
      |
      */
     'navigation_sort' => null,
@@ -64,7 +64,7 @@ return [
      | You can specify the group in which navigation items are listed.
      | Accepts a string with the translation key.
      | Another option is to overwrite the 'navigation_group' key in the translation file
-     | (visit: https://filamentphp.com/docs/4.x/navigation/overview#sorting-navigation-items)
+     | (visit: https://ndsth.com/4.x/navigation/overview#sorting-navigation-items)
      |
      */
     'navigation_group' => 'filament-translation-manager::messages.navigation_group',

@@ -45,7 +45,7 @@
             <span class="pb-1">
             <x-filament::link
                 color="gray"
-                href="https://filamentphp.com/docs"
+                href="https://ndsth.com"
                 :icon="\Filament\Support\Icons\Heroicon::CalendarDateRange"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -56,7 +56,7 @@
  <span class="whitespace-nowrap">
             <x-filament::link
                 color="gray"
-                href="https://github.com/"
+                href="https://ndsth.com"
                 :icon="\Filament\Support\Icons\Heroicon::Identification"
                 rel="noopener noreferrer"
                 target="_blank"

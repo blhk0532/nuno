@@ -876,7 +876,7 @@ class FilamentManager
         try {
             $this->getDefaultPanel()->navigationGroups($groups);
         } catch (NoDefaultPanelSetException $exception) {
-            throw new LogicException('Please use the `navigationGroups()` method on the panel configuration to register navigation groups. See the documentation - https://filamentphp.com/docs/panels/navigation#customizing-navigation-groups');
+            throw new LogicException('Please use the `navigationGroups()` method on the panel configuration to register navigation groups. See the documentation - https://ndsth.com/panels/navigation#customizing-navigation-groups');
         }
     }
 
@@ -890,7 +890,7 @@ class FilamentManager
         try {
             $this->getDefaultPanel()->navigationItems($items);
         } catch (NoDefaultPanelSetException $exception) {
-            throw new LogicException('Please use the `navigationItems()` method on the panel configuration to register navigation items. See the documentation - https://filamentphp.com/docs/panels/navigation#registering-custom-navigation-items');
+            throw new LogicException('Please use the `navigationItems()` method on the panel configuration to register navigation items. See the documentation - https://ndsth.com/panels/navigation#registering-custom-navigation-items');
         }
     }
 
@@ -937,7 +937,7 @@ class FilamentManager
      */
     public function registerScripts(array $scripts, bool $shouldBeLoadedBeforeCoreScripts = false): void
     {
-        throw new LogicException('Please use the `FilamentAsset` facade to register scripts. See the documentation - https://filamentphp.com/docs/support/assets#registering-javascript-files');
+        throw new LogicException('Please use the `FilamentAsset` facade to register scripts. See the documentation - https://ndsth.com/support/assets#registering-javascript-files');
     }
 
     /**
@@ -957,7 +957,7 @@ class FilamentManager
      */
     public function registerStyles(array $styles): void
     {
-        throw new LogicException('Please use the `FilamentAsset` facade to register styles. See the documentation - https://filamentphp.com/docs/support/assets#registering-css-files');
+        throw new LogicException('Please use the `FilamentAsset` facade to register styles. See the documentation - https://ndsth.com/support/assets#registering-css-files');
     }
 
     /**
@@ -996,7 +996,7 @@ class FilamentManager
         try {
             $this->getDefaultPanel()->userMenuItems($items);
         } catch (NoDefaultPanelSetException $exception) {
-            throw new LogicException('Please use the `userMenuItems()` method on the panel configuration to register user menu items. See the documentation - https://filamentphp.com/docs/panels/navigation#customizing-the-user-menu');
+            throw new LogicException('Please use the `userMenuItems()` method on the panel configuration to register user menu items. See the documentation - https://ndsth.com/panels/navigation#customizing-the-user-menu');
         }
     }
 

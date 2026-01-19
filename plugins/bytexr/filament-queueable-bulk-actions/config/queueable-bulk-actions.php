@@ -20,7 +20,7 @@ return [
     /**
      * Where to render notification components.
      *
-     * More information: https://filamentphp.com/docs/4.x/advanced/render-hooks
+     * More information: https://ndsth.com/4.x/advanced/render-hooks
      */
     'render_hook' => Filament\Tables\View\TablesRenderHook::TOOLBAR_BEFORE,
 
@@ -45,7 +45,7 @@ return [
     /**
      * Default colors used to display notifications and statuses. Uses filament colors.
      *
-     * More information: https://filamentphp.com/docs/3.x/support/colors
+     * More information: https://ndsth.com/3.x/support/colors
      */
     'colors' => [
         \Bytexr\QueueableBulkActions\Enums\StatusEnum::QUEUED->value => 'gray',
