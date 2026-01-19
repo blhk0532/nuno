@@ -311,7 +311,7 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
         ]);
 
         $timezone = config('app.timezone');
-        $startDate = Carbon::parse($start, $timezone);
+        $startDate = $allDay ? Carbon::parse($start) : Carbon::parse($start, $timezone);
 
         $startVal = $start;
         $endVal = $end;
@@ -425,6 +425,10 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
 
         if (! $record) {
             $record = Booking::find($event['id'] ?? null);
+        }
+
+        if (! $record) {
+            $record = BookingServicePeriod::find($event['id'] ?? null);
         }
 
         if ($record instanceof Booking) {
@@ -1356,8 +1360,7 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
                     }
                 } else {
                     // All-day click for creating location
-                    $timezone = config('app.timezone');
-                    $startDate = Carbon::parse($start, $timezone);
+                    $startDate = Carbon::parse($start);
                     $this->mountAction('createDailyLocation', [
                         'date' => $startDate->format('Y-m-d'),
                         'service_date' => $startDate->format('Y-m-d'),

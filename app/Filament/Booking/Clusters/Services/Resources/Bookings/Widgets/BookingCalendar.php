@@ -321,7 +321,7 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
         ]);
 
         $timezone = config('app.timezone');
-        $startDate = Carbon::parse($start, $timezone);
+        $startDate = $allDay ? Carbon::parse($start) : Carbon::parse($start, $timezone);
 
         $startVal = $start;
         $endVal = $end;
@@ -614,12 +614,11 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
             ->model(DailyLocation::class)
             ->schema($this->getFormLocation())
             ->fillForm(function (array $arguments) {
-                $data = $arguments['data'] ?? [];
                 $serviceUserId = $this->getSelectedServiceUserId();
 
                 return [
-                    'date' => $data['date_val'] ?? $data['service_date'] ?? $data['date'] ?? now()->format('Y-m-d'),
-                    'service_user_id' => $data['service_user_id'] ?? $serviceUserId,
+                    'date' => $arguments['date'] ?? now()->format('Y-m-d'),
+                    'service_user_id' => $arguments['service_user_id'] ?? $serviceUserId,
                     'created_by' => Auth::id(),
                 ];
             })
@@ -745,7 +744,7 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
             ->fillForm(function (array $arguments) {
                 $data = $arguments['data'] ?? [];
                 $defaults = $this->getDefaultFormData();
-                $merged = array_merge($defaults, $data);
+                $merged = array_merge($defaults, $data, $arguments);
                 $user = Auth::user();
                 $roleValue = $user && $user->role instanceof \UnitEnum ? $user->role->value : (string) $user->role;
                 $isAdmin = in_array($roleValue, ['admin', 'super', 'super_admin'], true);

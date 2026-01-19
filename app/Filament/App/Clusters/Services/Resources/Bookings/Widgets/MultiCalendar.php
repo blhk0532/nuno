@@ -326,7 +326,7 @@ final class MultiCalendar extends FullCalendarWidget implements HasCalendar
         ]);
 
         $timezone = config('app.timezone');
-        $startDate = Carbon::parse($start, $timezone);
+        $startDate = $allDay ? Carbon::parse($start) : Carbon::parse($start, $timezone);
 
         $startVal = $start;
         $endVal = $end;
@@ -1370,7 +1370,7 @@ final class MultiCalendar extends FullCalendarWidget implements HasCalendar
                 } else {
                     // All-day click for creating location
                     $timezone = config('app.timezone');
-                    $startDate = Carbon::parse($start, $timezone);
+                    $startDate = $allDay ? Carbon::parse($start) : Carbon::parse($start, $timezone);
                     $this->mountAction('createDailyLocation', [
                         'date' => $startDate->format('Y-m-d'),
                         'service_date' => $startDate->format('Y-m-d'),

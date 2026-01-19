@@ -33,8 +33,8 @@ final class CalendarSettingsPage extends Page implements HasForms
         $settings = CalendarSettings::firstOrCreate(
             ['user_id' => Auth::id()],
             [
-                'opening_hour_start' => '09:00',
-                'opening_hour_end' => '17:00',
+                'opening_hour_start' => '07:00',
+                'opening_hour_end' => '19:00',
                 'calendar_timezone' => 'Europe/Stockholm',
             ]
         );

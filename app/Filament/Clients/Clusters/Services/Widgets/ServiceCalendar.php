@@ -193,7 +193,7 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
         ]);
 
         $timezone = config('app.timezone');
-        $startDate = Carbon::parse($start, $timezone);
+        $startDate = $allDay ? Carbon::parse($start) : Carbon::parse($start, $timezone);
 
         $startVal = $start;
         $endVal = $end;

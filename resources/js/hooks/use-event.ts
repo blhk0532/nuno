@@ -27,7 +27,7 @@ const DEFAULT_VIEW_CONFIGS: CalendarViewConfigs = {
     showCurrentTimeIndicator: true,
     showHoverTimeIndicator: true,
     enableTimeSlotClick: true,
-    enableTimeBlockClick: false,
+    enableTimeBlockClick: true,
     expandMultiDayEvents: true,
   },
   week: {
@@ -274,9 +274,9 @@ export const useEventCalendarStore = create<EventCalendarState>()(
     }),
     {
       name: 'event-calendar',
-      version: 1,
+      version: 2,
       migrate: (persistedState: any, version: number) => {
-        if (version === 0) {
+        if (version === 0 || version === 1) {
           persistedState.firstDayOfWeek = 1;
         }
         return persistedState;

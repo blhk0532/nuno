@@ -13,6 +13,7 @@ use Filament\Tables\Grouping\Group;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
+use Adultdate\FilamentBooking\Enums\BookingState;
 use Guava\FilamentIconSelectColumn\Tables\Columns\IconSelectColumn;
 
 class BookingsTable
@@ -42,13 +43,11 @@ class BookingsTable
                             ->money(),
                     ]),
             IconSelectColumn::make('state')
-        ->options([
-            'opt1' => 'Option 1',
-            'opt2' => 'Option 2',
-        ])
+        ->options(BookingState::toOptions())
         ->icons([
-            'opt1' => 'heroicon-o-check',
-            'opt2' => 'heroicon-o-x-mark',
+            \Adultdate\FilamentBooking\Enums\Pending::class => 'heroicon-o-clock',
+            \Adultdate\FilamentBooking\Enums\Paid::class => 'heroicon-o-check-circle',
+            \Adultdate\FilamentBooking\Enums\Failed::class => 'heroicon-o-x-circle',
         ]),
                 TextColumn::make('created_at')
                     ->label('Booking date')

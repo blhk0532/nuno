@@ -272,7 +272,7 @@ export function EventCalendarDemo5() {
           slotMaxTime="17:00:00"
           slotDuration="01:00:00"
           weekends={true}
-          addButton={{ text: `Boka ${fifthTechnician.title}`, click() { setIsEditMode(false); setSelectedSlot({ start: new Date(), end: new Date(Date.now() + 60 * 60 * 1000), allDay: false }); setShowBookingModal(true); } }}
+          addButton={{ text: `${fifthTechnician.title}`, click() { setIsEditMode(false); setSelectedSlot({ start: new Date(), end: new Date(Date.now() + 60 * 60 * 1000), allDay: false }); setShowBookingModal(true); } }}
         />
       )}
 

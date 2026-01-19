@@ -26,7 +26,7 @@ const DEFAULT_VIEW_CONFIGS: CalendarViewConfigs = {
     showCurrentTimeIndicator: true,
     showHoverTimeIndicator: true,
     enableTimeSlotClick: true,
-    enableTimeBlockClick: false,
+    enableTimeBlockClick: true,
     expandMultiDayEvents: true,
   },
   week: {
