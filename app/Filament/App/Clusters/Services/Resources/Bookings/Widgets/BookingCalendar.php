@@ -1875,8 +1875,9 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
     protected function getSelectedCalendarId(): ?int
     {
         $filters = $this->pageFilters ?? [];
+        $calendarId = $filters['booking_calendars'] ?? null;
 
-        return $filters['booking_calendars'] ?? null;
+        return $calendarId !== null ? (int) $calendarId : null;
     }
 
     protected function getDefaultCalendarId(): ?int
