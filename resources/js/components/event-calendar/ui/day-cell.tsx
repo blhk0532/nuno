@@ -8,6 +8,20 @@ import { format, isSameDay, isSameMonth, Locale } from 'date-fns';
 import { Events, MonthViewConfig, TimeFormatType } from '@/types/event';
 import { getColorClasses } from '@/lib/event';
 
+const getLocationDisplay = (event: Events): string => {
+  if (!event.location) return event.title;
+  
+  const technicianName = event.technicianName || '';
+  if (!technicianName) return event.location;
+  
+  // Get first and last letter of technician name
+  const firstLetter = technicianName.charAt(0).toUpperCase();
+  const lastLetter = technicianName.charAt(technicianName.length - 1).toUpperCase();
+  const initials = `${firstLetter}${lastLetter}`;
+  
+  return `${initials} @ ${event.location}`;
+};
+
 interface DayCellProps {
   date: Date;
   baseDate: Date;
@@ -101,10 +115,10 @@ export function DayCell({
               {allDayEvents.slice(0, 2).map((event) => (
                 <div
                   key={event.id}
-                                          className="bg-muted text-muted-foreground rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold  pl-2 pr-2 w-full"
-                  title={event.location || event.title}
+                  className="bg-muted text-muted-foreground rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold  pl-2 pr-2 w-full"
+                  title={getLocationDisplay(event)}
                 >
-                  {event.location || event.title}
+                  {getLocationDisplay(event)}
                 </div>
               ))}
               {allDayEvents.length > 2 && (
@@ -120,8 +134,9 @@ export function DayCell({
             <button
               className={cn(
                 'relative z-0 flex cursor-pointer flex-col justify-start text-left',
-                'rounded p-1 text-xs',
+                'rounded p-2 text-xs',
                 'transition-colors hover:opacity-90',
+                'border-2 border-gray-400 dark:border-gray-500 shadow-sm mb-1',
                 colorClasses?.bg ?? 'bg-primary',
               )}
               onClick={(e) => {

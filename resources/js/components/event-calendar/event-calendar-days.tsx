@@ -31,6 +31,20 @@ const START_HOUR = 7; // 08:00
 const END_HOUR = 17; // 18:00
 const MULTI_DAY_ROW_HEIGHT = 65;
 
+const getLocationDisplay = (event: Events): string => {
+  if (!event.location) return event.title;
+  
+  const technicianName = event.technicianName || '';
+  if (!technicianName) return event.location;
+  
+  // Get first and last letter of technician name
+  const firstLetter = technicianName.charAt(0).toUpperCase();
+  const lastLetter = technicianName.charAt(technicianName.length - 1).toUpperCase();
+  const initials = `${firstLetter}${lastLetter}`;
+  
+  return `${initials} @ ${event.location}`;
+};
+
 interface CalendarDayViewProps {
   events: Events[];
   currentDate: Date;
@@ -293,9 +307,9 @@ export function EventCalendarDays({
                         <div
                           key={event.id}
                           className="bg-muted text-muted-foreground rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold  pl-2 pr-2 w-full"
-                          title={event.location || event.title}
+                          title={getLocationDisplay(event)}
                         >
-                          {event.location || event.title}
+                          {getLocationDisplay(event)}
                         </div>
                       ))}
                       {dayAllDayEvents.length > 2 && (

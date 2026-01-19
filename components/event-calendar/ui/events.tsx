@@ -79,6 +79,8 @@ export const EventCard = ({
         'group/event relative z-0 flex h-auto w-full flex-col items-start justify-start gap-3 px-4 py-3 text-left text-white hover:cursor-pointer',
         'transition-all duration-200',
         'focus-visible:ring-ring last:border-b-0 focus-visible:ring-1 focus-visible:ring-offset-0',
+        'rounded-md border-2 border-gray-400 dark:border-gray-500 shadow-sm',
+        'mb-2',
         bg,
       )}
       onClick={() => onClick(event)}
@@ -128,7 +130,7 @@ export const EventGroup = memo(
       className="gap-0 overflow-hidden rounded-md py-0"
       data-testid={`event-group-${timeKey}`}
     >
-      <div className="gap-1.3 flex flex-col gap-2">
+      <div className="gap-1.3 flex flex-col gap-1">
         {events.map((event) => (
           <EventCard
             key={event.id}

@@ -51,7 +51,7 @@ export const EventDialogTrigger = ({
         <Button
           className={cn(
             'group absolute flex h-full w-full cursor-pointer flex-col items-start justify-start gap-0 overflow-hidden rounded bg-transparent p-2 text-white hover:bg-transparent',
-            'border-none shadow-none ring-0 focus:ring-0 focus:outline-none',
+            'border-2 border-white dark:border-white shadow-sm',
             'transition-colors',
             bg,
           )}

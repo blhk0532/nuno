@@ -35,7 +35,7 @@ const DEFAULT_VIEW_CONFIGS: CalendarViewConfigs = {
     showCurrentTimeIndicator: true,
     showHoverTimeIndicator: true,
     enableTimeSlotClick: true,
-    enableTimeBlockClick: false,
+    enableTimeBlockClick: true,
     expandMultiDayEvents: true,
   },
   month: {
@@ -110,7 +110,7 @@ export const useEventCalendarStore = create<EventCalendarState>()(
   persist(
     (set, get) => ({
       selectedEvent: null,
-      currentView: CalendarViewType.DAY,
+      currentView: CalendarViewType.WEEK,
       viewMode: ViewModeType.CALENDAR,
       timeFormat: TimeFormatType.HOUR_24,
       locale: 'en-US',
