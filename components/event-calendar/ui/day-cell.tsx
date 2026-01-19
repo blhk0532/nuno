@@ -56,6 +56,7 @@ export function DayCell({
   const _isFocused = focusedDate && isSameDay(date, focusedDate);
   const shouldRenderEvents = isWithinMonth && dayEvents.length > 0;
   const colorClasses = firstEvent ? getColorClasses(firstEvent.color) : null;
+  const isHexColor = firstEvent && firstEvent.color && firstEvent.color.startsWith('#');
   return (
     <div
       data-date={dateKey}
@@ -112,8 +113,12 @@ export function DayCell({
                 'rounded p-2 text-xs',
                 'transition-colors hover:opacity-90',
                 'border-2 border-gray-400 dark:border-gray-500 shadow-sm mb-1',
-                colorClasses?.bg ?? 'bg-primary',
+                !isHexColor ? (colorClasses?.bg ?? 'bg-primary') : '',
               )}
+              style={isHexColor ? {
+                backgroundColor: firstEvent.color,
+                opacity: 0.8,
+              } : {}}
               onClick={(e) => {
                 e.stopPropagation();
                 onOpenEvent(firstEvent);

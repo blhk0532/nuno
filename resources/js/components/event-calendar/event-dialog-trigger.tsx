@@ -25,8 +25,10 @@ export const EventDialogTrigger = ({
   rightOffset,
   onClick,
 }: EventDialogTriggerProps) => {
+  console.log('EventDialogTrigger called with event:', event);
+  console.log('Event color:', event.color);
   const colorClasses = getColorClasses(event.color);
-  const isArbitraryColor = !Object.keys(COLOR_CLASSES).includes(event.color);
+  const isHexColor = event.color && event.color.startsWith('#');
 
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -34,15 +36,15 @@ export const EventDialogTrigger = ({
     onClick(event, position, leftOffset, rightOffset);
   };
 
-  // For arbitrary colors, use inline styles instead of Tailwind classes
-  const buttonStyle = isArbitraryColor ? {
+  // For hex colors, use inline styles instead of Tailwind classes
+  const buttonStyle = isHexColor ? {
     backgroundColor: event.color,
     opacity: 0.8,
   } : {};
 
-  const buttonHoverStyle = isArbitraryColor ? {
+  const buttonHoverStyle = isHexColor ? {
     backgroundColor: event.color,
-    opacity: 0.9,
+    opacity: 0.8,
   } : {};
 
   return (
@@ -62,29 +64,39 @@ export const EventDialogTrigger = ({
         }}
       >
         <Button
+          variant="ghost"
           className={cn(
-            'group absolute flex h-full w-full cursor-pointer flex-col items-start justify-start gap-0 overflow-hidden rounded p-2 text-white',
-            'border-2 border-white dark:border-white shadow-sm',
+            'group absolute flex h-full w-full cursor-pointer flex-col items-start justify-start gap-0 overflow-hidden rounded p-2 text-white shadow-sm',
+            'border-2 border-white dark:border-gray-800',
             'transition-all duration-200',
-            isArbitraryColor ? '' : colorClasses.bg,
+            !isHexColor ? colorClasses.bg : '',
           )}
-          style={buttonStyle}
+          style={isHexColor ? {
+            backgroundColor: event.color,
+            opacity: 0.8,
+          } : {}}
           onMouseEnter={(e) => {
-            if (isArbitraryColor) {
-              Object.assign(e.currentTarget.style, buttonHoverStyle);
+            if (isHexColor) {
+              Object.assign(e.currentTarget.style, {
+                backgroundColor: event.color,
+                opacity: 0.9,
+              });
             }
           }}
           onMouseLeave={(e) => {
-            if (isArbitraryColor) {
-              Object.assign(e.currentTarget.style, buttonStyle);
+            if (isHexColor) {
+              Object.assign(e.currentTarget.style, {
+                backgroundColor: event.color,
+                opacity: 0.8,
+              });
             }
           }}
           onClick={handleClick}
         >
-          <div className="text-xs font-medium sm:truncate">{event.title}</div>
+          <div className="text-xs font-medium sm:truncate hidden">{event.title}</div>
           <div className="text-xs sm:truncate">
-            {formatTimeDisplay(event.startTime, '12')} -{' '}
-            {formatTimeDisplay(event.endTime, '12')}
+            {formatTimeDisplay(event.startTime, '24')} -{' '}
+            {formatTimeDisplay(event.endTime, '24')}
           </div>
           {position?.height && position.height > 40 && (
             <div className="mt-1 text-xs sm:truncate">

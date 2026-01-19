@@ -20,6 +20,7 @@ class BookingServicePeriod extends Model
         'end_time',
         'period_type',
         'created_by',
+        'color',
     ];
 
     /**

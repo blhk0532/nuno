@@ -631,14 +631,15 @@ export const getColorClasses = (color: string) => {
   }
 
   // If not a predefined color, treat as arbitrary color value
-  // Generate classes with opacity for better visual consistency
+  // For hex colors and other arbitrary colors, return minimal classes
+  // The EventDialogTrigger will handle styling with inline styles
   return {
-    bg: `bg-[${color}] bg-opacity-80 hover:bg-opacity-90`,
-    border: `border-white/20 hover:border-white/30`,
+    bg: '',
+    border: 'border-white/20 hover:border-white/30',
     text: 'text-white hover:text-white',
     badge: {
-      bg: `bg-[${color}]/20 dark:bg-[${color}]/30`,
-      text: `text-[${color}] dark:text-[${color}]/90`,
+      bg: '',
+      text: '',
     },
   };
 };

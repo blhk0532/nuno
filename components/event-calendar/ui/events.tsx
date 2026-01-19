@@ -71,6 +71,8 @@ export const EventCard = ({
   onClick: (event: Events) => void;
 }) => {
   const { bg, badge } = getColorClasses(event.color);
+  const isHexColor = event.color && event.color.startsWith('#');
+
   return (
     <Button
       key={event.id}
@@ -81,8 +83,12 @@ export const EventCard = ({
         'focus-visible:ring-ring last:border-b-0 focus-visible:ring-1 focus-visible:ring-offset-0',
         'rounded-md border-2 border-gray-400 dark:border-gray-500 shadow-sm',
         'mb-2',
-        bg,
+        !isHexColor ? bg : '',
       )}
+      style={isHexColor ? {
+        backgroundColor: event.color,
+        opacity: 0.8,
+      } : {}}
       onClick={() => onClick(event)}
     >
       <div className="flex w-full items-start justify-between gap-2 group-hover/event:opacity-50">

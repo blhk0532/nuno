@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use Adultdate\FilamentBooking\Enums\BookingStatus;
+use Adultdate\FilamentBooking\Models\Booking\DailyLocation;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\StoreBookingRequest;
 use App\Http\Requests\Api\UpdateBookingRequest;
-use Adultdate\FilamentBooking\Enums\BookingStatus;
 use App\Models\Booking;
-use App\Models\BookingCalendar;
-use App\Models\User;
 use App\Models\BookingServicePeriod;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
@@ -18,7 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use Adultdate\FilamentBooking\Models\Booking\DailyLocation;
+use Throwable;
 
 final class CalendarBookingController extends Controller
 {
@@ -30,6 +29,212 @@ final class CalendarBookingController extends Controller
     public function publicIndex(Request $request): JsonResponse
     {
         return response()->json($this->buildBookingEvents($request));
+    }
+
+    public function store(StoreBookingRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+
+        try {
+            $bookingData = array_merge([
+                'number' => $this->generateBookingNumber(),
+                'booking_user_id' => Auth::id(),
+                'status' => $validated['status'] ?? 'booked',
+                'is_active' => true,
+                'currency' => 'SEK',
+            ], $validated);
+
+            // Create starts_at and ends_at datetime fields
+            if (isset($bookingData['service_date']) && isset($bookingData['start_time'])) {
+                $bookingData['starts_at'] = Carbon::parse($bookingData['service_date'].' '.$bookingData['start_time']);
+            }
+            if (isset($bookingData['service_date']) && isset($bookingData['end_time'])) {
+                $bookingData['ends_at'] = Carbon::parse($bookingData['service_date'].' '.$bookingData['end_time']);
+            }
+
+            $booking = Booking::create($bookingData);
+
+            // Load relationships for response
+            $booking->load(['client', 'service', 'serviceUser', 'location']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking created successfully',
+                'data' => $this->formatBookingForCalendar($booking),
+            ], 201);
+
+        } catch (Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to create booking: '.$e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function update(UpdateBookingRequest $request, Booking $booking): JsonResponse
+    {
+        // Check authorization
+        if (! $this->canEditBooking($booking)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to edit this booking',
+            ], 403);
+        }
+
+        $validated = $request->validated();
+
+        try {
+            // Update starts_at and ends_at if date/time changed
+            if (isset($validated['service_date']) || isset($validated['start_time'])) {
+                $serviceDate = $validated['service_date'] ?? $booking->service_date;
+                $startTime = $validated['start_time'] ?? $booking->start_time;
+                $validated['starts_at'] = Carbon::parse($serviceDate.' '.$startTime);
+            }
+
+            if (isset($validated['service_date']) || isset($validated['end_time'])) {
+                $serviceDate = $validated['service_date'] ?? $booking->service_date;
+                $endTime = $validated['end_time'] ?? $booking->end_time;
+                $validated['ends_at'] = Carbon::parse($serviceDate.' '.$endTime);
+            }
+
+            $booking->update($validated);
+
+            // Load relationships for response
+            $booking->load(['client', 'service', 'serviceUser', 'location']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking updated successfully',
+                'data' => $this->formatBookingForCalendar($booking),
+            ]);
+
+        } catch (Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update booking: '.$e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function destroy(Booking $booking): JsonResponse
+    {
+        // Check authorization
+        if (! $this->canEditBooking($booking)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to delete this booking',
+            ], 403);
+        }
+
+        try {
+            $booking->delete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking deleted successfully',
+            ]);
+
+        } catch (Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to delete booking: '.$e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function move(Request $request, Booking $booking): JsonResponse
+    {
+        // Check authorization
+        if (! $this->canEditBooking($booking)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to move this booking',
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'start' => 'required|date',
+            'end' => 'nullable|date',
+            'resource_id' => 'nullable|integer|exists:users,id',
+        ]);
+
+        try {
+            $start = Carbon::parse($validated['start']);
+            $end = $validated['end'] ? Carbon::parse($validated['end']) : null;
+
+            $updateData = [
+                'service_date' => $start->toDateString(),
+                'start_time' => $start->toTimeString(),
+                'starts_at' => $start,
+            ];
+
+            if ($end) {
+                $updateData['end_time'] = $end->toTimeString();
+                $updateData['ends_at'] = $end;
+            }
+
+            if (isset($validated['resource_id'])) {
+                $updateData['service_user_id'] = $validated['resource_id'];
+            }
+
+            $booking->update($updateData);
+
+            // Load relationships for response
+            $booking->load(['client', 'service', 'serviceUser', 'location']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking moved successfully',
+                'data' => $this->formatBookingForCalendar($booking),
+            ]);
+
+        } catch (Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to move booking: '.$e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function resize(Request $request, Booking $booking): JsonResponse
+    {
+        // Check authorization
+        if (! $this->canEditBooking($booking)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized to resize this booking',
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'end' => 'required|date',
+        ]);
+
+        try {
+            $end = Carbon::parse($validated['end']);
+
+            $updateData = [
+                'end_time' => $end->toTimeString(),
+                'ends_at' => $end,
+            ];
+
+            $booking->update($updateData);
+
+            // Load relationships for response
+            $booking->load(['client', 'service', 'serviceUser', 'location']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Booking duration updated successfully',
+                'data' => $this->formatBookingForCalendar($booking),
+            ]);
+
+        } catch (Throwable $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to resize booking: '.$e->getMessage(),
+            ], 500);
+        }
     }
 
     private function buildBookingEvents(Request $request): array
@@ -82,7 +287,8 @@ final class CalendarBookingController extends Controller
                 'id' => $booking->id,
                 'title' => $booking->number,
                 'start' => $booking->starts_at?->toIso8601String() ?? $booking->service_date?->toDateString(),
-                'backgroundColor' => $this->getEventColor($booking->status),
+                'color' => $booking->color ?: $this->getEventColor($booking->status),
+                'backgroundColor' => $booking->color ?: $this->getEventColor($booking->status),
                 'borderColor' => $this->getEventBorderColor($booking->status),
                 'extendedProps' => [
                     'type' => 'booking',
@@ -115,7 +321,7 @@ final class CalendarBookingController extends Controller
 
         $locationEvents = $dailyLocations->map(function (DailyLocation $location) {
             $event = [
-                'id' => 'location-' . $location->id,
+                'id' => 'location-'.$location->id,
                 'title' => $location->location ?: ($location->serviceUser?->name ?? 'Location'),
                 'start' => $location->date?->toDateString(),
                 'allDay' => true,
@@ -151,16 +357,16 @@ final class CalendarBookingController extends Controller
         }
 
         $servicePeriodsEvents = $servicePeriods->map(function (BookingServicePeriod $period) {
-            $startDateTime = Carbon::parse($period->service_date->toDateString() . ' ' . ($period->start_time ?? '00:00'));
-            $endDateTime = Carbon::parse($period->service_date->toDateString() . ' ' . ($period->end_time ?? '23:59'));
+            $startDateTime = Carbon::parse($period->service_date->toDateString().' '.($period->start_time ?? '00:00'));
+            $endDateTime = Carbon::parse($period->service_date->toDateString().' '.($period->end_time ?? '23:59'));
 
             $event = [
-                'id' => 'service-period-' . $period->id,
+                'id' => 'service-period-'.$period->id,
                 'title' => $period->period_type ? ucfirst($period->period_type) : 'Service Period',
                 'start' => $startDateTime->toIso8601String(),
                 'end' => $endDateTime->toIso8601String(),
-                'backgroundColor' => $this->getServicePeriodColor($period->period_type),
-                'borderColor' => $this->getServicePeriodBorderColor($period->period_type),
+                'backgroundColor' => $period->color ?: $this->getServicePeriodColor($period->period_type),
+                'borderColor' => $period->color ? $this->adjustColorBrightness($period->color, -20) : $this->getServicePeriodBorderColor($period->period_type),
                 'textColor' => '#ffffff',
                 'extendedProps' => [
                     'type' => 'service_period',
@@ -172,6 +378,7 @@ final class CalendarBookingController extends Controller
                     'start_time' => $period->start_time,
                     'end_time' => $period->end_time,
                     'booking_service_period_id' => $period->id,
+                    'color' => $period->color,
                 ],
             ];
 
@@ -185,217 +392,11 @@ final class CalendarBookingController extends Controller
         return array_merge($bookingEvents, $locationEvents, $servicePeriodsEvents);
     }
 
-    public function store(StoreBookingRequest $request): JsonResponse
-    {
-        $validated = $request->validated();
-
-        try {
-            $bookingData = array_merge([
-                'number' => $this->generateBookingNumber(),
-                'booking_user_id' => Auth::id(),
-                'status' => $validated['status'] ?? 'booked',
-                'is_active' => true,
-                'currency' => 'SEK',
-            ], $validated);
-
-            // Create starts_at and ends_at datetime fields
-            if (isset($bookingData['service_date']) && isset($bookingData['start_time'])) {
-                $bookingData['starts_at'] = Carbon::parse($bookingData['service_date'] . ' ' . $bookingData['start_time']);
-            }
-            if (isset($bookingData['service_date']) && isset($bookingData['end_time'])) {
-                $bookingData['ends_at'] = Carbon::parse($bookingData['service_date'] . ' ' . $bookingData['end_time']);
-            }
-
-            $booking = Booking::create($bookingData);
-
-            // Load relationships for response
-            $booking->load(['client', 'service', 'serviceUser', 'location']);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Booking created successfully',
-                'data' => $this->formatBookingForCalendar($booking)
-            ], 201);
-
-        } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to create booking: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function update(UpdateBookingRequest $request, Booking $booking): JsonResponse
-    {
-        // Check authorization
-        if (!$this->canEditBooking($booking)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized to edit this booking'
-            ], 403);
-        }
-
-        $validated = $request->validated();
-
-        try {
-            // Update starts_at and ends_at if date/time changed
-            if (isset($validated['service_date']) || isset($validated['start_time'])) {
-                $serviceDate = $validated['service_date'] ?? $booking->service_date;
-                $startTime = $validated['start_time'] ?? $booking->start_time;
-                $validated['starts_at'] = Carbon::parse($serviceDate . ' ' . $startTime);
-            }
-
-            if (isset($validated['service_date']) || isset($validated['end_time'])) {
-                $serviceDate = $validated['service_date'] ?? $booking->service_date;
-                $endTime = $validated['end_time'] ?? $booking->end_time;
-                $validated['ends_at'] = Carbon::parse($serviceDate . ' ' . $endTime);
-            }
-
-            $booking->update($validated);
-
-            // Load relationships for response
-            $booking->load(['client', 'service', 'serviceUser', 'location']);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Booking updated successfully',
-                'data' => $this->formatBookingForCalendar($booking)
-            ]);
-
-        } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update booking: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function destroy(Booking $booking): JsonResponse
-    {
-        // Check authorization
-        if (!$this->canEditBooking($booking)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized to delete this booking'
-            ], 403);
-        }
-
-        try {
-            $booking->delete();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Booking deleted successfully'
-            ]);
-
-        } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to delete booking: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function move(Request $request, Booking $booking): JsonResponse
-    {
-        // Check authorization
-        if (!$this->canEditBooking($booking)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized to move this booking'
-            ], 403);
-        }
-
-        $validated = $request->validate([
-            'start' => 'required|date',
-            'end' => 'nullable|date',
-            'resource_id' => 'nullable|integer|exists:users,id',
-        ]);
-
-        try {
-            $start = Carbon::parse($validated['start']);
-            $end = $validated['end'] ? Carbon::parse($validated['end']) : null;
-
-            $updateData = [
-                'service_date' => $start->toDateString(),
-                'start_time' => $start->toTimeString(),
-                'starts_at' => $start,
-            ];
-
-            if ($end) {
-                $updateData['end_time'] = $end->toTimeString();
-                $updateData['ends_at'] = $end;
-            }
-
-            if (isset($validated['resource_id'])) {
-                $updateData['service_user_id'] = $validated['resource_id'];
-            }
-
-            $booking->update($updateData);
-
-            // Load relationships for response
-            $booking->load(['client', 'service', 'serviceUser', 'location']);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Booking moved successfully',
-                'data' => $this->formatBookingForCalendar($booking)
-            ]);
-
-        } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to move booking: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
-    public function resize(Request $request, Booking $booking): JsonResponse
-    {
-        // Check authorization
-        if (!$this->canEditBooking($booking)) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Unauthorized to resize this booking'
-            ], 403);
-        }
-
-        $validated = $request->validate([
-            'end' => 'required|date',
-        ]);
-
-        try {
-            $end = Carbon::parse($validated['end']);
-
-            $updateData = [
-                'end_time' => $end->toTimeString(),
-                'ends_at' => $end,
-            ];
-
-            $booking->update($updateData);
-
-            // Load relationships for response
-            $booking->load(['client', 'service', 'serviceUser', 'location']);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Booking duration updated successfully',
-                'data' => $this->formatBookingForCalendar($booking)
-            ]);
-
-        } catch (\Throwable $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to resize booking: ' . $e->getMessage()
-            ], 500);
-        }
-    }
-
     private function canEditBooking(Booking $booking): bool
     {
         $user = Auth::user();
-        
-        if (!$user) {
+
+        if (! $user) {
             return false;
         }
 
@@ -419,7 +420,7 @@ final class CalendarBookingController extends Controller
 
     private function generateBookingNumber(): string
     {
-        return 'BK-' . now()->format('Ymd') . '-' . Str::upper(Str::random(6));
+        return 'BK-'.now()->format('Ymd').'-'.Str::upper(Str::random(6));
     }
 
     private function formatBookingForCalendar(Booking $booking): array
@@ -472,6 +473,7 @@ final class CalendarBookingController extends Controller
     private function getEventColor(BookingStatus|string|null $status): string
     {
         $value = $status instanceof BookingStatus ? $status->value : $status;
+
         return match ($value) {
             'confirmed' => '#10b981', // green
             'booked' => '#3b82f6', // blue
@@ -484,6 +486,7 @@ final class CalendarBookingController extends Controller
     private function getEventBorderColor(BookingStatus|string|null $status): string
     {
         $value = $status instanceof BookingStatus ? $status->value : $status;
+
         return match ($value) {
             'confirmed' => '#059669',
             'booked' => '#1d4ed8',
@@ -503,13 +506,22 @@ final class CalendarBookingController extends Controller
         };
     }
 
-    private function getServicePeriodBorderColor(?string $periodType): string
+    private function adjustColorBrightness(string $hex, int $steps): string
     {
-        return match ($periodType) {
-            'unavailable' => '#7c3aed',
-            'available' => '#0891b2',
-            'blocked' => '#d97706',
-            default => '#4b5563',
-        };
+        // Remove # if present
+        $hex = mb_ltrim($hex, '#');
+
+        // Convert to RGB
+        $r = hexdec(mb_substr($hex, 0, 2));
+        $g = hexdec(mb_substr($hex, 2, 2));
+        $b = hexdec(mb_substr($hex, 4, 2));
+
+        // Adjust brightness
+        $r = max(0, min(255, $r + $steps));
+        $g = max(0, min(255, $g + $steps));
+        $b = max(0, min(255, $b + $steps));
+
+        // Convert back to hex
+        return sprintf('#%02x%02x%02x', $r, $g, $b);
     }
 }

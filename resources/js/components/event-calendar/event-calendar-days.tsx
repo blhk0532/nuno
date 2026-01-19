@@ -295,8 +295,8 @@ export function EventCalendarDays({
                 <div
                   key={`all-day-cell-${dayIndex}`}
                   className={cn(
-                    'relative flex items-center justify-center border-r px-1 last:border-r-0',
-                    todayIndex === dayIndex && 'bg-primary/10',
+                    'relative table items-center justify-center border-r px-1 last:border-r-0',
+                    todayIndex === dayIndex && 'today',
                     'flex-none',
                   )}
                   style={{ width: `${dayWidthPercent}%` }}

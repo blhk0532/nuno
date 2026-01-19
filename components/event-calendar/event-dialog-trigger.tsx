@@ -26,6 +26,8 @@ export const EventDialogTrigger = ({
   onClick,
 }: EventDialogTriggerProps) => {
   const { bg } = getColorClasses(event.color);
+  const isHexColor = event.color && event.color.startsWith('#');
+
   const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
@@ -53,8 +55,12 @@ export const EventDialogTrigger = ({
             'group absolute flex h-full w-full cursor-pointer flex-col items-start justify-start gap-0 overflow-hidden rounded bg-transparent p-2 text-white hover:bg-transparent',
             'border-2 border-gray-400 dark:border-gray-500 shadow-sm',
             'transition-colors',
-            bg,
+            !isHexColor ? bg : '',
           )}
+          style={isHexColor ? {
+            backgroundColor: event.color,
+            opacity: 0.8,
+          } : {}}
           onClick={handleClick}
         >
           <div className="text-xs font-medium sm:truncate">{event.title}</div>

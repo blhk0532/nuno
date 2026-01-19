@@ -28,7 +28,7 @@ const dayRowCommonClasses: CalendarOptions = {
   ----------------------------------------------------------------------------------------------- */
 
   listItemEventClass: (data) => cn(
-    'mb-px p-px rounded-sm',
+    'mb-px p-px rounded-sm hidden',
     data.isNarrow ? 'mx-px' : 'mx-0.5',
   ),
   listItemEventBeforeClass: (data) => cn(

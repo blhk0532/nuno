@@ -250,6 +250,40 @@ export function EventCalendarDemo1() {
         }
     }, []);
 
+    const eventClassNames = useCallback((arg: any) => {
+        const eventType = arg.event.extendedProps?.type;
+        const view = arg.view.type;
+        
+        const classes = [];
+        
+        // Add type-specific class
+        if (eventType === 'booking') {
+            classes.push('calendar-booking-event');
+        } else if (eventType === 'location') {
+            classes.push('calendar-location-event');
+        }
+        
+        // Add view-specific class
+        if (view === 'dayGridMonth') {
+            classes.push('month-view-event');
+        }
+        
+        return classes;
+    }, []);
+
+    const eventContent = useCallback((arg: any) => {
+        const view = arg.view.type;
+        const eventType = arg.event.extendedProps?.type;
+        
+        // In month view, hide booking events (only show location all-day events)
+        if (view === 'dayGridMonth' && eventType === 'booking') {
+            return { domNodes: [] };
+        }
+        
+        // For all other cases, use default rendering
+        return true;
+    }, []);
+
     const handleSubmit = useCallback(
         async (e: React.FormEvent) => {
             e.preventDefault();
@@ -366,45 +400,55 @@ export function EventCalendarDemo1() {
                     </div>
                 </div>
             ) : (
-                <EventCalendar
-                    className="mx-auto my-10 max-w-300"
-                    editable
-                    selectable
-                    droppable
-                    nowIndicator
-                    navLinks
-                    locale="sv"
-                    initialView="timeGridWeek"
-                    firstDay={1}
-                    timeZone="Europe/Stockholm"
-                    events={`/api/calendar/bookings?service_user_id=${firstTechnician.id}`}
-                    resources="/calendar/resources"
-                    select={handleDateSelect}
-                    eventClick={handleEventClick}
-                    eventDrop={handleEventDrop}
-                    eventResize={handleEventResize}
-                    headerToolbar={{
-                        left: '',
-                        center: '',
-                        right: '',
-                    }}
-                    slotMinTime="07:00:00"
-                    slotMaxTime="17:00:00"
-                    slotDuration="01:00:00"
-                    weekends={true}
-                    addButton={{
-                        text: `${firstTechnician.title}`,
-                        click() {
-                            setIsEditMode(false);
-                            setSelectedSlot({
-                                start: new Date(),
-                                end: new Date(Date.now() + 60 * 60 * 1000), // +1 hour
-                                allDay: false,
-                            });
-                            setShowBookingModal(true);
-                        },
-                    }}
-                />
+                <>
+                    <style>{`
+                        /* Hide booking events in month view */
+                        .fc-daygrid .calendar-booking-event.month-view-event {
+                            display: none !important;
+                        }
+                    `}</style>
+                    <EventCalendar
+                        className="mx-auto my-10 max-w-300"
+                        editable
+                        selectable
+                        droppable
+                        nowIndicator
+                        navLinks
+                        locale="sv"
+                        initialView="timeGridWeek"
+                        firstDay={1}
+                        timeZone="Europe/Stockholm"
+                        events={`/api/calendar/bookings?service_user_id=${firstTechnician.id}`}
+                        resources="/calendar/resources"
+                        select={handleDateSelect}
+                        eventClick={handleEventClick}
+                        eventDrop={handleEventDrop}
+                        eventResize={handleEventResize}
+                        eventClassNames={eventClassNames}
+                        eventContent={eventContent}
+                        headerToolbar={{
+                            left: '',
+                            center: '',
+                            right: '',
+                        }}
+                        slotMinTime="07:00:00"
+                        slotMaxTime="17:00:00"
+                        slotDuration="01:00:00"
+                        weekends={true}
+                        addButton={{
+                            text: `${firstTechnician.title}`,
+                            click() {
+                                setIsEditMode(false);
+                                setSelectedSlot({
+                                    start: new Date(),
+                                    end: new Date(Date.now() + 60 * 60 * 1000), // +1 hour
+                                    allDay: false,
+                                });
+                                setShowBookingModal(true);
+                            },
+                        }}
+                    />
+                </>
             )}
 
             {/* Booking Modal */}

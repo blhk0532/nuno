@@ -60,6 +60,8 @@ export function DayCell({
   const _isFocused = focusedDate && isSameDay(date, focusedDate);
   const shouldRenderEvents = isWithinMonth && (regularEvents.length > 0 || allDayEvents.length > 0);
   const colorClasses = firstEvent ? getColorClasses(firstEvent.color) : null;
+  const isHexColor = firstEvent && firstEvent.color && firstEvent.color.startsWith('#');
+
   return (
     <div
       data-date={dateKey}
@@ -136,15 +138,19 @@ export function DayCell({
                 'relative z-0 flex cursor-pointer flex-col justify-start text-left',
                 'rounded p-2 text-xs',
                 'transition-colors hover:opacity-90',
-                'border-2 border-gray-400 dark:border-gray-500 shadow-sm mb-1',
-                colorClasses?.bg ?? 'bg-primary',
+                'shadow-sm mb-1',
+                !isHexColor ? (colorClasses?.bg ?? 'bg-primary') : '',
               )}
+              style={isHexColor ? {
+                backgroundColor: firstEvent.color,
+                opacity: 0.8,
+              } : {}}
               onClick={(e) => {
                 e.stopPropagation();
                 onOpenEvent(firstEvent);
               }}
             >
-              <span className="truncate font-medium text-white">
+              <span className="truncate font-medium text-white hidden">
                 {firstEvent.title}
               </span>
               <div className="hidden items-center truncate text-white sm:flex">

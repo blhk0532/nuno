@@ -13,6 +13,7 @@ import { useDayEventPositions } from '@/lib/event';
 import { TimeColumn } from './ui/time-column';
 import { useEventCalendarStore } from '@/hooks/use-event';
 import { useShallow } from 'zustand/shallow';
+import { useFilteredEvents } from '@/lib/event';
 
 const HOUR_HEIGHT = 64; // Height in pixels for 1 hour
 const START_HOUR = 0; // 00:00
@@ -55,8 +56,24 @@ export function EventCalendarDay({ events, currentDate }: CalendarDayProps) {
     });
   }, [events, currentDate]);
 
+  // Separate all-day events from regular events
+  const { singleDayEvents, allDayEvents } = useMemo(() => {
+    const regular: Events[] = [];
+    const allDay: Events[] = [];
+
+    filteredEvents.forEach((event) => {
+      if (event.isAllDay) {
+        allDay.push(event);
+      } else {
+        regular.push(event);
+      }
+    });
+
+    return { singleDayEvents: regular, allDayEvents: allDay };
+  }, [filteredEvents]);
+
   const timeSlots = useMemo(() => generateTimeSlots(START_HOUR, END_HOUR), []);
-  const eventsPositions = useDayEventPositions(events, HOUR_HEIGHT);
+  const eventsPositions = useDayEventPositions(singleDayEvents, HOUR_HEIGHT);
 
   const handleTimeHover = useCallback((hour: number) => {
     setHoverPosition((prev) => ({ ...prev, hour, minute: 0, dayIndex: -1 }));
@@ -99,6 +116,32 @@ export function EventCalendarDay({ events, currentDate }: CalendarDayProps) {
 
   return (
     <div className="flex h-[760px] flex-col py-3">
+      {/* All-day events section */}
+      {allDayEvents.length > 0 && (
+        <div className="bg-background border-border mb-2 flex border-b px-4">
+          <div className="flex h-[32px] w-13 items-center justify-center text-xs font-medium text-muted-foreground">
+            All Day
+          </div>
+          <div className="relative flex-1">
+            <div className="flex flex-wrap gap-0.5 mb-1 text-center truncate max-w-full w-full justify-center">
+              {allDayEvents.slice(0, 2).map((event) => (
+                <div
+                  key={event.id}
+                  className="bg-muted rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold pl-2 pr-2 w-full text-[#434343] dark:text-[#d3d3d3]"
+                  title={event.title}
+                >
+                  {event.title}
+                </div>
+              ))}
+              {allDayEvents.length > 2 && (
+                <div className="text-muted-foreground text-xs">
+                  +{allDayEvents.length - 2}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
       <ScrollArea className="h-full w-full rounded-md px-4">
         <div className="relative mt-2 mb-2">
           <div className="absolute left-0 z-10 w-13">
@@ -139,7 +182,7 @@ export function EventCalendarDay({ events, currentDate }: CalendarDayProps) {
                 className={cn('border-border h-16 border-t')}
               />
             ))}
-            {filteredEvents.map((event) => {
+            {singleDayEvents.map((event) => {
               const position = eventsPositions[event.id];
               if (!position) return null;
 
