@@ -283,6 +283,7 @@ final class AdminPanelProvider extends PanelProvider
                     ]),
             ])
             ->plugin(FilamentUiSwitcherPlugin::make()
+             ->withModeSwitcher()
                 ->iconRenderHook(PanelsRenderHook::USER_MENU_BEFORE))
             ->unsavedChangesAlerts()
             ->passwordReset()

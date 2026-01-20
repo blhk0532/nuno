@@ -265,14 +265,6 @@ width: 24px;
 }
 
 
-div.fi-dropdown.fi-tenant-menu{
-    z-index: 10000!important;
-    position: absolute;
-    bottom: 1rem;
-    left:1rem;
-    margin:0rem;
-    width:auto;
-}
 
 .fc-y2.fc-Y2.fc-gI.fc-Es {
   display: none!important;
