@@ -1,5 +1,6 @@
 @import '../../../../vendor/filament/filament/resources/css/theme.css';
 
+@import '../../../../plugins/adultdate/filament-dialer/resources/css/theme.css';
 
 
 @source '../../../../app/Filament/App/**/*';
@@ -281,4 +282,12 @@ width: 24px;
 }
 .bg-gray-700{
     background-color: #111111!important;
+}
+
+div.filament-fullcalendar.filament-fullcalendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard{
+        min-height: 676px;
+}
+div.filament-fullcalendar {
+     min-height: 676px!important;
+    max-height: 720px !important;
 }

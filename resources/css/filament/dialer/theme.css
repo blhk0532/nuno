@@ -5,6 +5,8 @@
 @import '../../../../vendor/bezhansalleh/filament-panel-switch/resources/css/panel-switch.css';
 @source '../../../../vendor/bezhansalleh/filament-panel-switch/resources/views/**/*.blade.php';
 
+@import '../../../../plugins/adultdate/filament-dialer/resources/css/theme.css';
+
 @source '../../../../app/Filament/Dialer/**/*';
 @source '../../../../resources/views/filament/dialer/**/*';
 

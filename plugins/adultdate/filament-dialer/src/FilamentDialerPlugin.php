@@ -71,18 +71,30 @@ final class FilamentDialerPlugin implements Plugin
 
     private function registerRenderHooks(Panel $panel): void
     {
-        if ($this->showPhoneIcon) {
-            $panel->renderHook(
+
+        $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layout', 'sidebar');
+        if ($anderia === 'sidebar-no-topbar' && $this->showPhoneIcon){
+        $panel->renderHook(
+                PanelsRenderHook::SIDEBAR_LOGO_AFTER,
+                fn (): string => Blade::render('@livewire(\'filament-dialer.phone-icon-button\', [], key(\'phone-icon-button\'))')
+        );
+        }
+        if ($anderia !== 'sidebar-no-topbar' && $this->showPhoneIcon) {
+                    $panel->renderHook(
+                PanelsRenderHook::SIDEBAR_LOGO_AFTER,
+                fn (): string => Blade::render('@livewire(\'filament-dialer.phone-icon-button\', [], key(\'phone-icon-button\'))')
+        );
+        $panel->renderHook(
                 PanelsRenderHook::TOPBAR_LOGO_AFTER,
                 fn (): string => Blade::render('@livewire(\'filament-dialer.phone-icon-button\', [], key(\'phone-icon-button\'))')
-            );
+        );
         }
 
         if ($this->showSidebar) {
             $panel->renderHook(
                 PanelsRenderHook::PAGE_END,
                 fn (): string => Blade::render('
-                    <x-filament::modal id="phone-dialer-sidebar" slide-over>
+                    <x-filament::modal id="phone-dialer-sidebar" slide-over class="fi-modal-slide-over-left">
                         <x-slot name="heading">
                             [AVSTÄNGD]
                         </x-slot>

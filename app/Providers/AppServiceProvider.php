@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Fortify\Contracts\LoginResponse;
-
+use Filament\View\PanelsRenderHook;
 final class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
@@ -77,7 +77,7 @@ final class AppServiceProvider extends ServiceProvider
                 ])
                 ->icons([
                     'admin' => 'heroicon-o-shield-check',
-                    'app' => 'heroicon-s-squares-plus',
+                    'app' => 'heroicon-o-user-circle',
                     'booking' => 'heroicon-c-clipboard-document-check',
                     'calendar' => 'heroicon-s-calendar-days',
                     'chat' => 'heroicon-m-chat-bubble-bottom-center-text',
@@ -110,7 +110,7 @@ final class AppServiceProvider extends ServiceProvider
                     'user' => 'heroicon-s-user-group',
                 ])
                 ->iconSize(20)
-                ->renderHook('panels::global-search.after')
+                ->renderHook(PanelsRenderHook::USER_MENU_BEFORE)
                 ->sort('asc');
 
             $user = Auth::user();

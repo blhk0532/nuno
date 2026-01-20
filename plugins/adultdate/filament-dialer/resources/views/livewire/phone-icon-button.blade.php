@@ -1,10 +1,41 @@
-<div style="width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; margin-right: 8px;">
+@php
+$isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
+$anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layout', 'sidebar');
+@endphp
+<div class="fi-no-database">
+<div>
+<div class="fi-modal-trigger">
 <x-filament::icon-button
-    icon="heroicon-o-phone-arrow-up-right"
-    class="fi-color fi-text-color-500 hover:fi-text-color-500 dark:fi-text-color-400 dark:hover:fi-text-color-300 fi-icon-btn fi-size-md shrink-0 grow-0 text-gray-700 hover:text-gray-500 dark:text-gray-500 dark:hover:text-gray-300"
+    @if($anderia === 'sidebar-no-topbar')
+    class="fi-sidebar-database-notifications-btn"
+    @else
+    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
+    @endif
     tooltip="Phone Dialer"
     x-on:click.prevent="$dispatch('open-modal', { id: 'phone-dialer-sidebar' })"
     wire:key="phone-icon-button"
     action="open-modal"
 />
+
+        <x-filament::icon
+            icon="heroicon-o-phone-arrow-up-right"
+            class="fi-icon fi-size-lg"
+        />
+
+    @if($anderia === 'sidebar-no-topbar')
+        <span
+
+                x-show="$store.sidebar.isOpen"
+                x-transition:enter="fi-transition-enter"
+                x-transition:enter-start="fi-transition-enter-start"
+                x-transition:enter-end="fi-transition-enter-end"
+
+            class="fi-sidebar-database-notifications-btn-label"
+        >
+
+        </span>
+     @endif
+</button>
+ </div>
+</div>
 </div>

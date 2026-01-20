@@ -1936,7 +1936,6 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
 
         return $value ? (int) $value : null;
     }
-    }
 
     protected function getDefaultCalendarId(): ?int
     {

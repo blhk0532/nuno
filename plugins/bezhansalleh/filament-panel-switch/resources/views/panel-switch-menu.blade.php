@@ -1,3 +1,7 @@
+@php
+$isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
+$anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layout', 'sidebar');
+@endphp
 @if ($isSimple)
     <x-filament::dropdown teleport placement="bottom-end">
         <x-slot name="trigger">
@@ -49,14 +53,30 @@
     icon-alias="panels::panel-switch-modern-icon"
     icon-size="lg"
     @click="$dispatch('open-modal', { id: 'panel-switch' })"
-   class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
+    @if($anderia === 'sidebar-no-topbar')
+    class="fi-sidebar-database-notifications-btn"
+    @else
+    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
+    @endif
 >
         <x-filament::icon
             icon="heroicon-o-shield-check"
             class="fi-icon fi-size-lg"
         />
 
+  @if($anderia === 'sidebar-no-topbar')
+    <span
 
+            x-show="$store.sidebar.isOpen"
+            x-transition:enter="fi-transition-enter"
+            x-transition:enter-start="fi-transition-enter-start"
+            x-transition:enter-end="fi-transition-enter-end"
+
+        class="fi-sidebar-database-notifications-btn-label"
+    >
+    Panels
+    </span>
+ @endif
 
 
 </button>

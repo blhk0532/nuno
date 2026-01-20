@@ -1,19 +1,3 @@
-<style>
-.fi-sidebar-database-notifications-btn{
-justify-content: center;
-    align-items: center;
-    column-gap: calc(var(--spacing)*3);
-    border-radius: var(--radius-lg);
-    width: 100%;
-    padding: calc(var(--spacing)*2);
-    text-align: start;
-    --tw-outline-style: none;
-    outline-style: none;
-    display: flex;
-    position: relative;
-    padding: 8px;
-}
-</style>
 
 @php
 $isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();

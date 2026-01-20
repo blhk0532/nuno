@@ -153,7 +153,7 @@ final class AppPanelProvider extends PanelProvider
             ])
 
             ->renderHook(
-                PanelsRenderHook::TOPBAR_LOGO_AFTER,
+                PanelsRenderHook::USER_MENU_BEFORE,
                 fn () => view('filament.app.calendar-icon-topbar')
             )
             ->plugins([
