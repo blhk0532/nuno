@@ -506,6 +506,16 @@ final class CalendarBookingController extends Controller
         };
     }
 
+    private function getServicePeriodBorderColor(?string $periodType): string
+    {
+        return match ($periodType) {
+            'unavailable' => '#6d28d9', // darker purple
+            'available' => '#0891b2', // darker cyan
+            'blocked' => '#d97706', // darker amber
+            default => '#4b5563', // darker gray
+        };
+    }
+
     private function adjustColorBrightness(string $hex, int $steps): string
     {
         // Remove # if present
