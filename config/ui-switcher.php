@@ -17,7 +17,7 @@ return [
     | 2. Add HasUiPreferences trait to your User model
     | 3. Add 'ui_preferences' => 'array' to your User model's $casts
     */
-    'driver' => env('UI_SWITCHER_DRIVER', 'session'),
+    'driver' => env('UI_SWITCHER_DRIVER', 'database'),
 
     /*
     |--------------------------------------------------------------------------
@@ -39,7 +39,7 @@ return [
     */
     'defaults' => [
         'font' => 'Inter',
-        'color' => '#6366f1',
+        'color' => '#f97316',
         'layout' => 'sidebar',
         'font_size' => 18,
         'density' => 'default',
@@ -51,7 +51,7 @@ return [
     |--------------------------------------------------------------------------
     | Default Icon.
     */
-    'icon' => 'heroicon-o-squares-plus',
+    'icon' => 'heroicon-o-swatch',
 
     /*
     |--------------------------------------------------------------------------
@@ -61,8 +61,6 @@ return [
     | All fonts must be available on Google Fonts.
     */
     'fonts' => [
-        'Inter',
-        'Poppins',
         'Public Sans',
         'DM Sans',
         'Nunito Sans',
@@ -75,12 +73,16 @@ return [
     |--------------------------------------------------------------------------
     | Colors shown in the color picker.
     */
-    'custom_colors' => [
-        '#6366f1', '#3b82f6', '#0ea5e9', '#10b981',
-        '#22c55e', '#84cc16', '#eab308', '#f59e0b',
-        '#f97316', '#ef4444', '#ec4899', '#8b5cf6',
-        '#0ae72f', '#a80000', '#f7f6fa', '#262829',
-    ],
+'custom_colors' => [
+    '#ffffff', // White
+    '#6b7280', // Gray — Muted
+    '#000000', // Black
+    '#2563eb', // Blue — Primary
+    '#16a34a', // Green — Success
+    '#dc2626', // Red — Danger
+    '#eab308', // Yellow — Warning
+    '#f97316', // Orange — Warning / Accent (Strong)
+],
 
     /*
     |--------------------------------------------------------------------------

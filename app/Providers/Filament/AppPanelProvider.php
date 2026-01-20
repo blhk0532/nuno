@@ -52,6 +52,7 @@ use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use AdultDate\FilamentDialer\FilamentDialerPlugin;
 use Illuminate\Support\Facades\Auth;
+use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
 
 final class AppPanelProvider extends PanelProvider
 {
@@ -178,15 +179,6 @@ final class AppPanelProvider extends PanelProvider
                     ->shouldShowBrowserSessionsForm()
                     ->shouldShowAvatarForm(true, 'attachments'),
             ])
-            ->plugins([
-                FilamentWirechatPlugin::make()
-                    ->onlyPages([])
-                    ->excludeResources([
-                        \AdultDate\FilamentWirechat\Filament\Resources\Conversations\ConversationResource::class,
-                        \AdultDate\FilamentWirechat\Filament\Resources\Messages\MessageResource::class,
-                    ]),
-            ])
-
             ->userMenuItems([
                 'profile' => Action::make('profile')
                     ->label(Auth::user()?->name())
@@ -225,6 +217,17 @@ final class AppPanelProvider extends PanelProvider
                             ->themeToggle()
                             ->renderHook(AuthDesignerRenderHook::CardBefore, fn () => view('filament.logo-auth'))
                     )
-            );
+            )
+                        ->plugins([
+                FilamentWirechatPlugin::make()
+                    ->onlyPages([])
+                    ->excludeResources([
+                        \AdultDate\FilamentWirechat\Filament\Resources\Conversations\ConversationResource::class,
+                        \AdultDate\FilamentWirechat\Filament\Resources\Messages\MessageResource::class,
+                    ]),
+            ])
+            ->plugin(FilamentUiSwitcherPlugin::make()
+                      ->withModeSwitcher()
+                ->iconRenderHook(PanelsRenderHook::USER_MENU_BEFORE));
     }
 }

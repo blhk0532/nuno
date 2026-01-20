@@ -1,15 +1,72 @@
-<x-filament::icon-button
+<style>
+.fi-sidebar-database-notifications-btn{
+justify-content: center;
+    align-items: center;
+    column-gap: calc(var(--spacing)*3);
+    border-radius: var(--radius-lg);
+    width: 100%;
+    padding: calc(var(--spacing)*2);
+    text-align: start;
+    --tw-outline-style: none;
+    outline-style: none;
+    display: flex;
+    position: relative;
+    padding: 8px;
+}
+</style>
+
+@php
+$isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
+$anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layout', 'sidebar');
+@endphp
+<div class="fi-no-database">
+<div>
+<div class="fi-modal-trigger">
+<button
     icon="heroicon-o-chat-bubble-left-right"
+    @if($anderia === 'sidebar-no-topbar')
+    class="fi-sidebar-database-notifications-btn"
+    @else
+    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
+    @endif
     tooltip="Chats"
     color="gray"
     size="lg"
-    :badge-color="$this->unreadCount > 0 ? 'danger' : null"
+
     x-on:click.prevent="$dispatch('open-modal', { id: 'chats-sidebar' })"
     wire:key="chats-icon-button-{{ $this->unreadCount }}"
 >
+
+        <x-filament::icon
+            icon="heroicon-o-chat-bubble-left-right"
+            class="fi-icon fi-size-lg"
+        />
+
+  @if($anderia === 'sidebar-no-topbar')
+    <span
+
+            x-show="$store.sidebar.isOpen"
+            x-transition:enter="fi-transition-enter"
+            x-transition:enter-start="fi-transition-enter-start"
+            x-transition:enter-end="fi-transition-enter-end"
+
+        class="fi-sidebar-database-notifications-btn-label"
+    >
+    Chat
+    </span>
+ @endif
+
+@php
+// dd($anderia);
+@endphp
     @if($this->unreadCount > 0)
         <x-slot name="badge fi-badge fi-size-xs fi-color fi-color-primary fi-text-color-700 dark:fi-text-color-400">
             {{ $this->unreadCount > 99 ? '99+' : $this->unreadCount }}
         </x-slot>
     @endif
-</x-filament::icon-button>
+
+
+</button>
+</div>
+</div>
+</div>

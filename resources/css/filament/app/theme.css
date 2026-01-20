@@ -251,7 +251,7 @@ form.fi-modal-window.fi-modal-window-has-close-btn.fi-modal-window-has-content.f
 }
 
 .filament-fullcalendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard.fc-liquid-hack{
-  min-height: 636px;
+  min-height: 630px;
 }
 
 div.fi-modal-icon-bg{
@@ -279,4 +279,14 @@ div.fi-dropdown.fi-tenant-menu{
 }
 .items-center.hover\:bg-foreground\/5.mb-px.p-px.rounded-sm.mx-px {
   display: none !important;
+}
+
+.bg-gray-100{
+    background-color: #2b2b2b!important;
+}
+.bg-gray-200{
+    background-color: #2b2b2b!important;
+}
+.bg-gray-700{
+    background-color: #111111!important;
 }

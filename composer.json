@@ -75,15 +75,14 @@
         "marjose123/filament-lockscreen": ">=3.3",
         "mokhosh/filament-rating": "^2.0",
         "mwguerra/filemanager": "@dev",
-        "n3xt0r/filament-passport-ui": "^2.0",
+        "n3xt0r/filament-passport-ui": "^2.1",
         "n3xt0r/laravel-passport-authorization-core": "^1.2.4",
         "nunomaduro/essentials": "^1.0.1",
-        "openplain/filament-shadcn-theme": "@dev",
         "owenvoke/blade-fontawesome": "^3.0",
         "pxlrbt/filament-excel": "@dev",
         "pxlrbt/filament-spotlight": "@dev",
         "relaticle/flowforge": "@dev",
-        "rickdbcn/filament-email": "^2.1",
+        "rickdbcn/filament-email": "^2.2",
         "secondnetwork/blade-tabler-icons": "^3.36.1",
         "shreejan/actionable-column": "^1.0",
         "shreejan/dash-arrange": "@dev",
@@ -95,7 +94,7 @@
         "statikbe/laravel-filament-chained-translation-manager": "^4.2.1",
         "stechstudio/filament-impersonate": "^4.1.2",
         "still-code/laravel-umami": "^5.0.3",
-        "tapp/filament-maillog": "^2.0.1",
+        "tapp/filament-maillog": "^2.0.2",
         "usamamuneerchaudhary/filament-notifier": "^1.2",
         "wallacemartinss/filament-icon-picker": "@dev",
         "wallacemartinss/filament-whatsapp-conector": "@dev",
@@ -107,7 +106,7 @@
         "fakerphp/faker": "^1.24.1",
         "fruitcake/laravel-debugbar": "^3.16.3",
         "laradumps/laradumps": "^5.0.1",
-        "larastan/larastan": "^3.8.1",
+        "larastan/larastan": "^3.9.0",
         "laravel/boost": "^1.8.10",
         "laravel/pail": "^1.2.4",
         "laravel/pint": "^1.27.0",
@@ -117,10 +116,17 @@
         "pestphp/pest-plugin-browser": "^4.2.1",
         "pestphp/pest-plugin-laravel": "^4.0.0",
         "pestphp/pest-plugin-type-coverage": "^4.0.3",
-        "rector/rector": "^2.3.1",
+        "rector/rector": "^2.3.2",
         "roave/security-advisories": "dev-latest"
     },
     "repositories": [
+        {
+            "type": "path",
+            "url": "plugins/andreia/filament-ui-switcher",
+            "options": {
+                "symlink": true
+            }
+        },
         {
             "type": "path",
             "url": "plugins/devonab/filament-easy-footer",

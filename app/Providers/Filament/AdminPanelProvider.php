@@ -24,6 +24,7 @@ use Adultdate\FilamentBooking\Filament\Widgets\LatestOrders;
 use Adultdate\FilamentBooking\Filament\Widgets\OrdersChart;
 use Adultdate\FilamentBooking\Filament\Widgets\StatsOverviewWidget;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
+use AdultDate\FilamentWirechat\Filament\Pages\ChatDashboard;
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use App\Http\Middleware\FilamentPanelAccess;
 use App\Models\User;
@@ -73,6 +74,7 @@ use Filament\View\PanelsRenderHook;
 use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 
 use App\Filament\Admin\Widgets\AccountInfoStackWidget;
 
@@ -141,8 +143,6 @@ final class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
-            ->plugin(FilamentUiSwitcherPlugin::make()
-                ->iconRenderHook(PanelsRenderHook::TOPBAR_LOGO_AFTER))
             ->plugins([
                 FilamentApexChartsPlugin::make(),
                 FilamentEvolutionPlugin::make(),
@@ -218,7 +218,6 @@ final class AdminPanelProvider extends PanelProvider
                     ->shouldRegisterNavigation(false)
                     ->shouldShowEmailForm()
                     ->shouldShowLocaleForm(options: [
-                        'pt_BR' => __('🇧🇷 Portuguese'),
                         'en' => __('🇺🇸 English'),
                         'es' => __('🇪🇸 Spanish'),
                     ])
@@ -256,22 +255,10 @@ final class AdminPanelProvider extends PanelProvider
                     ->gridLayoutButtonIcon('heroicon-o-squares-2x2'),
             ])
             ->userMenuItems([
-                Action::make('switch_panels')
-                    ->label('Switch View')
-                    ->icon('heroicon-o-arrow-path-rounded-square')
-                    ->color('gray')
-                    ->modalHeading('≽ ^⎚ ˕ ⎚^ ≼ ')
-                    ->modalSubmitAction(false)
-                    ->modalCancelAction(false)
-                    ->sort(1)
-                    ->modalContent(function () {
-                        $user = Auth::user();
-                        $panels = collect(filament()->getPanels())->filter(function ($panel) use ($user) {
-                            return $user instanceof User && $user->canAccessPanel($panel);
-                        });
-
-                        return view('switch-panels-modal', ['panels' => $panels]);
-                    }),
+                'profile' => Action::make('profile')
+                    ->label(fn() => Auth::user()->getNdsUserName())
+                    ->url(fn (): string => EditProfilePage::getUrl())
+                    ->icon('heroicon-o-user-circle'),
                 Action::make('sanctum')
                     ->label(trans('Auth Tokens'))
                     ->url('/nds/admin/' . config('filament-sanctum.navigation.slug'))
@@ -288,14 +275,15 @@ final class AdminPanelProvider extends PanelProvider
                     ->navigationBadgeColor('success')           // string|array|Closure|null
             )
             ->plugins([
-                FilamentWireChatPlugin::make()
+                FilamentWirechatPlugin::make()
                     ->onlyPages([])
                     ->excludeResources([
                         \AdultDate\FilamentWirechat\Filament\Resources\Conversations\ConversationResource::class,
                         \AdultDate\FilamentWirechat\Filament\Resources\Messages\MessageResource::class,
-                    ])
-                    ->showSidebar(false),
+                    ]),
             ])
+            ->plugin(FilamentUiSwitcherPlugin::make()
+                ->iconRenderHook(PanelsRenderHook::USER_MENU_BEFORE))
             ->unsavedChangesAlerts()
             ->passwordReset()
             ->databaseNotifications()

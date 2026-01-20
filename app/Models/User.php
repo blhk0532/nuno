@@ -42,7 +42,7 @@ use Laravel\Passport\PersonalAccessTokenResult;
 use Laravel\Passport\Contracts\ScopeAuthorizable;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Activitylog\LogOptions;
-
+use Andreia\FilamentUiSwitcher\Models\Traits\HasUiPreferences;
 
 /**
  * @property int $id
@@ -105,6 +105,7 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
     use Notifiable;
     use TwoFactorAuthenticatable;
     use LogsActivity;
+    use HasUiPreferences;
 
     protected $accessToken;
 
@@ -386,6 +387,7 @@ public function withAccessToken(?ScopeAuthorizable $accessToken): static
             'password' => 'hashed',
             'status' => 'boolean',
             'custom_fields' => 'array',
+            'ui_preferences' => 'array',
         ];
     }
 
@@ -402,5 +404,10 @@ public function withAccessToken(?ScopeAuthorizable $accessToken): static
     public function canBeImpersonated(): bool
     {
         return auth()->user()->role === 'super';
+    }
+
+        public function getNdsUserName(): string
+    {
+        return auth()->user()->name;
     }
 }

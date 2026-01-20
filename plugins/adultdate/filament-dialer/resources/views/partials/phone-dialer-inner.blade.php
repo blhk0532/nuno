@@ -19,7 +19,7 @@
                         <span>Call ended</span>
                     @else
                         <x-filament::icon icon="heroicon-o-pencil" class="w-3 h-3" />
-                        <span>Editing</span>
+                        <span>...</span>
                     @endif
                 </span>
             @else
@@ -30,14 +30,14 @@
             @endif
         </div>
         <div class="text-center">
-            <input
-                type="text"
-                wire:model="phoneNumber"
-                placeholder=""
-                readonly
-                class="w-full text-2xl text-center bg-transparent py-2 dark:text-white transition-colors cursor-default caret-transparent outline-none focus:outline-none"
+<input
+  type="text"
+  wire:model="phoneNumber"
+  readonly
+  class="w-full text-2xl text-center bg-transparent py-2 text-white dark:text-gray-500 transition-colors
+         cursor-default caret-transparent outline-none focus:outline-none"
+/>
 
-            />
         </div>
     </div>
 
@@ -45,7 +45,7 @@
         @for ($i = 1; $i <= 9; $i++)
             <button
                 wire:click="append('{{ $i }}')"
-                class="aspect-square rounded-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white text-2xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+                class="aspect-square rounded-full bg-gray-300 dark:bg-gray-800 text-gray-900 dark:text-white text-2xl font-semibold hover:bg-gray-300 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
             >
                 {{ $i }}
             </button>
@@ -53,21 +53,21 @@
 
         <button
             wire:click="append('+')"
-            class="aspect-square rounded-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white text-2xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            class="aspect-square rounded-full bg-gray-300 dark:bg-gray-800 text-gray-900 dark:text-white text-2xl font-semibold hover:bg-gray-300 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
         >
             +
         </button>
 
         <button
             wire:click="append('0')"
-            class="aspect-square rounded-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white text-2xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            class="aspect-square rounded-full bg-gray-300 dark:bg-gray-800 text-gray-900 dark:text-white text-2xl font-semibold hover:bg-gray-300 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
         >
             0
         </button>
 
         <button
             wire:click="append('#')"
-            class="aspect-square rounded-full bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-white text-2xl font-semibold hover:bg-gray-200 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            class="aspect-square rounded-full bg-gray-300 dark:bg-gray-800 text-gray-900 dark:text-white text-2xl font-semibold hover:bg-gray-300 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
         >
             #
         </button>
@@ -77,7 +77,7 @@
         @if (!empty($phoneNumber))
             <button
                 wire:click="backspace"
-                class="p-4 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+                class="p-4 aspect-square rounded-full bg-gray-300 dark:bg-gray-800 text-gray-900 dark:text-white text-2xl font-semibold hover:bg-gray-300 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
                 title="Delete last digit"
             >
                 <x-filament::icon icon="heroicon-o-backspace" class="w-6 h-6" />
@@ -86,7 +86,7 @@
 
         <button
             wire:click="clear"
-            class="p-4 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            class="p-4 aspect-square rounded-full bg-gray-300 dark:bg-gray-800 text-gray-900 dark:text-white text-2xl font-semibold hover:bg-gray-300 dark:hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
             title="Clear"
         >
             <x-filament::icon icon="heroicon-o-x-circle" class="w-6 h-6" />
@@ -113,7 +113,7 @@
 
         <button
             wire:click="toggleMute"
-            class="p-4 rounded-full {{ $muted ? 'bg-primary-500 text-white' : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300' }} hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
+            class="p-4 rounded-full {{ $muted ? 'bg-primary-500 text-white' : 'bg-gray-300 dark:bg-gray-800 text-gray-900 dark:text-gray-300' }} hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all"
             title="{{ $muted ? 'Unmute' : 'Mute' }}"
         >
             @if ($muted)

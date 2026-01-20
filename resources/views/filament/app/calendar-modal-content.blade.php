@@ -9,7 +9,7 @@
     </div>
 
     <!-- Calendar -->
-    <div class="border border-gray-300 dark:border-gray-700 rounded-lg overflow-hidden" style="height: 700px;">
+    <div class="calendar-widget-wrapper">
         @livewire(\App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\BookingCalendar::class, ['lazy' => false, 'pageFilters' => ['booking_calendars' => $selectedCalendar]])
     </div>
 </div>

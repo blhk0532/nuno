@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b6c95b60ce3f7b1f3510d2652a34793e",
+    "content-hash": "774ea2f06cd2962ddf92b7708c00d04d",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -623,17 +623,11 @@
         },
         {
             "name": "andreia/filament-ui-switcher",
-            "version": "v1.0.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/andreia/filament-ui-switcher.git",
-                "reference": "94a4e71a14401c244e848e4405e860d06a96c7d8"
-            },
+            "version": "dev-main",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/andreia/filament-ui-switcher/zipball/94a4e71a14401c244e848e4405e860d06a96c7d8",
-                "reference": "94a4e71a14401c244e848e4405e860d06a96c7d8",
-                "shasum": ""
+                "type": "path",
+                "url": "plugins/andreia/filament-ui-switcher",
+                "reference": "827c022b93ef5ff20b85707545492a6b21e8b05d"
             },
             "require": {
                 "filament/filament": "^4.1",
@@ -659,7 +653,11 @@
                     "Andreia\\FilamentUiSwitcher\\": "src"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Andreia\\FilamentUiSwitcher\\Tests\\": "tests"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -673,19 +671,22 @@
             "description": "Add a modal with options to switch between different UI layouts and styles (colors, fonts, font sizes).",
             "homepage": "https://github.com/andreia/filament-ui-switcher",
             "keywords": [
+                "UI",
                 "customization",
                 "dashboard",
                 "filament",
                 "laravel",
                 "layout",
-                "switcher",
-                "ui"
+                "switcher"
             ],
             "support": {
                 "issues": "https://github.com/andreia/filament-ui-switcher/issues",
                 "source": "https://github.com/andreia/filament-ui-switcher"
             },
-            "time": "2025-11-24T20:35:20+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": true
+            }
         },
         {
             "name": "andreiio/blade-remix-icon",
@@ -1905,16 +1906,16 @@
         },
         {
             "name": "blade-ui-kit/blade-icons",
-            "version": "1.8.0",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/driesvints/blade-icons.git",
-                "reference": "7b743f27476acb2ed04cb518213d78abe096e814"
+                "reference": "47e7b6f43250e6404e4224db8229219cd42b543c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/driesvints/blade-icons/zipball/7b743f27476acb2ed04cb518213d78abe096e814",
-                "reference": "7b743f27476acb2ed04cb518213d78abe096e814",
+                "url": "https://api.github.com/repos/driesvints/blade-icons/zipball/47e7b6f43250e6404e4224db8229219cd42b543c",
+                "reference": "47e7b6f43250e6404e4224db8229219cd42b543c",
                 "shasum": ""
             },
             "require": {
@@ -1961,7 +1962,7 @@
                 }
             ],
             "description": "A package to easily make use of icons in your Laravel Blade views.",
-            "homepage": "https://github.com/blade-ui-kit/blade-icons",
+            "homepage": "https://github.com/driesvints/blade-icons",
             "keywords": [
                 "blade",
                 "icons",
@@ -1969,8 +1970,8 @@
                 "svg"
             ],
             "support": {
-                "issues": "https://github.com/blade-ui-kit/blade-icons/issues",
-                "source": "https://github.com/blade-ui-kit/blade-icons"
+                "issues": "https://github.com/driesvints/blade-icons/issues",
+                "source": "https://github.com/driesvints/blade-icons"
             },
             "funding": [
                 {
@@ -1982,7 +1983,7 @@
                     "type": "paypal"
                 }
             ],
-            "time": "2025-02-13T20:35:06+00:00"
+            "time": "2026-01-20T09:46:32+00:00"
         },
         {
             "name": "brick/math",
@@ -5707,16 +5708,16 @@
         },
         {
             "name": "giggsey/libphonenumber-for-php-lite",
-            "version": "9.0.21",
+            "version": "9.0.22",
             "source": {
                 "type": "git",
                 "url": "https://github.com/giggsey/libphonenumber-for-php-lite.git",
-                "reference": "ab593d0ced185c149459d283a770d842662dd54e"
+                "reference": "f7fbfd48dc7bc7039214533d11b0e3bc07e9a3d0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php-lite/zipball/ab593d0ced185c149459d283a770d842662dd54e",
-                "reference": "ab593d0ced185c149459d283a770d842662dd54e",
+                "url": "https://api.github.com/repos/giggsey/libphonenumber-for-php-lite/zipball/f7fbfd48dc7bc7039214533d11b0e3bc07e9a3d0",
+                "reference": "f7fbfd48dc7bc7039214533d11b0e3bc07e9a3d0",
                 "shasum": ""
             },
             "require": {
@@ -5781,7 +5782,7 @@
                 "issues": "https://github.com/giggsey/libphonenumber-for-php-lite/issues",
                 "source": "https://github.com/giggsey/libphonenumber-for-php-lite"
             },
-            "time": "2025-12-18T14:36:21+00:00"
+            "time": "2026-01-19T09:27:39+00:00"
         },
         {
             "name": "google/apiclient",
@@ -5854,16 +5855,16 @@
         },
         {
             "name": "google/apiclient-services",
-            "version": "v0.428.0",
+            "version": "v0.429.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-api-php-client-services.git",
-                "reference": "94a3c50a80a36cafb76e32fb76b8007e9f572deb"
+                "reference": "9dd334c8e6d3f25f91efcab86454c6bc0bc928c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/94a3c50a80a36cafb76e32fb76b8007e9f572deb",
-                "reference": "94a3c50a80a36cafb76e32fb76b8007e9f572deb",
+                "url": "https://api.github.com/repos/googleapis/google-api-php-client-services/zipball/9dd334c8e6d3f25f91efcab86454c6bc0bc928c1",
+                "reference": "9dd334c8e6d3f25f91efcab86454c6bc0bc928c1",
                 "shasum": ""
             },
             "require": {
@@ -5892,9 +5893,9 @@
             ],
             "support": {
                 "issues": "https://github.com/googleapis/google-api-php-client-services/issues",
-                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.428.0"
+                "source": "https://github.com/googleapis/google-api-php-client-services/tree/v0.429.0"
             },
-            "time": "2026-01-12T00:58:26+00:00"
+            "time": "2026-01-19T01:08:26+00:00"
         },
         {
             "name": "google/auth",
@@ -11796,16 +11797,16 @@
         },
         {
             "name": "n3xt0r/filament-passport-ui",
-            "version": "2.0.0",
+            "version": "2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/N3XT0R/filament-passport-ui.git",
-                "reference": "6427abf71645a8f55a76ca48c42b9e2253b2cfe5"
+                "reference": "425b30a8fcd9b71052a73d14e87afd9d9caff871"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/N3XT0R/filament-passport-ui/zipball/6427abf71645a8f55a76ca48c42b9e2253b2cfe5",
-                "reference": "6427abf71645a8f55a76ca48c42b9e2253b2cfe5",
+                "url": "https://api.github.com/repos/N3XT0R/filament-passport-ui/zipball/425b30a8fcd9b71052a73d14e87afd9d9caff871",
+                "reference": "425b30a8fcd9b71052a73d14e87afd9d9caff871",
                 "shasum": ""
             },
             "require": {
@@ -11886,7 +11887,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-09T23:46:08+00:00"
+            "time": "2026-01-18T12:12:13+00:00"
         },
         {
             "name": "n3xt0r/laravel-passport-authorization-core",
@@ -12681,57 +12682,6 @@
                 }
             ],
             "time": "2025-11-20T02:34:59+00:00"
-        },
-        {
-            "name": "openplain/filament-shadcn-theme",
-            "version": "dev-main",
-            "dist": {
-                "type": "path",
-                "url": "plugins/openplain/filament-shadcn-theme",
-                "reference": "312999c46a5dde4cdf56e6baecee854c72291e3f"
-            },
-            "require": {
-                "filament/filament": "^4.0",
-                "php": "^8.1"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Openplain\\FilamentShadcnTheme\\FilamentShadcnThemeServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Openplain\\FilamentShadcnTheme\\": "src"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Openplain",
-                    "email": "hello@openplain.dev"
-                }
-            ],
-            "description": "Shadcn UI theme for Filament - Beautiful color themes with the iconic Shadcn design system",
-            "homepage": "https://github.com/openplain/filament-shadcn-theme",
-            "keywords": [
-                "colors",
-                "dark-mode",
-                "filament",
-                "filament-theme",
-                "light-mode",
-                "shadcn",
-                "shadcn-ui",
-                "theme"
-            ],
-            "transport-options": {
-                "symlink": true,
-                "relative": true
-            }
         },
         {
             "name": "openspout/openspout",
@@ -16778,20 +16728,20 @@
         },
         {
             "name": "rickdbcn/filament-email",
-            "version": "v2.1.0",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/RickDBCN/filament-email.git",
-                "reference": "59df11e1ca658db09c73cceabfb5c39bf6e2f15c"
+                "reference": "40a7243da2b76488285d1c2db6e7964601a5e168"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/RickDBCN/filament-email/zipball/59df11e1ca658db09c73cceabfb5c39bf6e2f15c",
-                "reference": "59df11e1ca658db09c73cceabfb5c39bf6e2f15c",
+                "url": "https://api.github.com/repos/RickDBCN/filament-email/zipball/40a7243da2b76488285d1c2db6e7964601a5e168",
+                "reference": "40a7243da2b76488285d1c2db6e7964601a5e168",
                 "shasum": ""
             },
             "require": {
-                "filament/filament": "^4.0",
+                "filament/filament": "^4.0|^5.0",
                 "illuminate/contracts": "^11.0|^12.0",
                 "laravel/framework": "^11.0|^12.0",
                 "malzariey/filament-daterangepicker-filter": "^4.0",
@@ -16845,9 +16795,9 @@
             ],
             "support": {
                 "issues": "https://github.com/RickDBCN/filament-email/issues",
-                "source": "https://github.com/RickDBCN/filament-email/tree/v2.1.0"
+                "source": "https://github.com/RickDBCN/filament-email/tree/v2.2.0"
             },
-            "time": "2025-10-09T10:31:36+00:00"
+            "time": "2026-01-19T19:42:21+00:00"
         },
         {
             "name": "roadrunner-php/roadrunner-api-dto",
@@ -18899,16 +18849,16 @@
         },
         {
             "name": "spatie/laravel-data",
-            "version": "4.18.0",
+            "version": "4.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-data.git",
-                "reference": "c10784f1133d540a702bd6db36ed659f4bc0606a"
+                "reference": "33ea9c6359015415bc46138eb256051ceff24a2e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-data/zipball/c10784f1133d540a702bd6db36ed659f4bc0606a",
-                "reference": "c10784f1133d540a702bd6db36ed659f4bc0606a",
+                "url": "https://api.github.com/repos/spatie/laravel-data/zipball/33ea9c6359015415bc46138eb256051ceff24a2e",
+                "reference": "33ea9c6359015415bc46138eb256051ceff24a2e",
                 "shasum": ""
             },
             "require": {
@@ -18925,13 +18875,12 @@
                 "livewire/livewire": "^3.0",
                 "mockery/mockery": "^1.6",
                 "nesbot/carbon": "^2.63|^3.0",
-                "orchestra/testbench": "^8.0|^9.0|^10.0",
-                "pestphp/pest": "^2.31|^3.0",
-                "pestphp/pest-plugin-laravel": "^2.0|^3.0",
-                "pestphp/pest-plugin-livewire": "^2.1|^3.0",
+                "orchestra/testbench": "^8.37.0|^9.16|^10.9",
+                "pestphp/pest": "^2.36|^3.8|^4.3",
+                "pestphp/pest-plugin-laravel": "^2.4|^3.0|^4.0",
+                "pestphp/pest-plugin-livewire": "^2.1|^3.0|^4.0",
                 "phpbench/phpbench": "^1.2",
                 "phpstan/extension-installer": "^1.1",
-                "phpunit/phpunit": "^10.0|^11.0|^12.0",
                 "spatie/invade": "^1.0",
                 "spatie/laravel-typescript-transformer": "^2.5",
                 "spatie/pest-plugin-snapshots": "^2.1",
@@ -18970,7 +18919,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-data/issues",
-                "source": "https://github.com/spatie/laravel-data/tree/4.18.0"
+                "source": "https://github.com/spatie/laravel-data/tree/4.19.0"
             },
             "funding": [
                 {
@@ -18978,7 +18927,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-10-16T16:44:07+00:00"
+            "time": "2026-01-19T09:47:31+00:00"
         },
         {
             "name": "spatie/laravel-google-calendar",
@@ -24564,20 +24513,21 @@
         },
         {
             "name": "tapp/filament-maillog",
-            "version": "v2.0.1",
+            "version": "v2.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/TappNetwork/filament-maillog.git",
-                "reference": "a1136cdc028922a538d999571f6dac345b731656"
+                "reference": "81d6c0d6a0bc584bd5c0f8710bd88e7cba1302e6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/TappNetwork/filament-maillog/zipball/a1136cdc028922a538d999571f6dac345b731656",
-                "reference": "a1136cdc028922a538d999571f6dac345b731656",
+                "url": "https://api.github.com/repos/TappNetwork/filament-maillog/zipball/81d6c0d6a0bc584bd5c0f8710bd88e7cba1302e6",
+                "reference": "81d6c0d6a0bc584bd5c0f8710bd88e7cba1302e6",
                 "shasum": ""
             },
             "require": {
                 "aws/aws-php-sns-message-validator": "^1.10",
+                "filament/filament": "^5.0|^4.0",
                 "illuminate/contracts": "^10.0||^11.0||^12.0",
                 "php": "^8.2",
                 "spatie/laravel-package-tools": "^1.16"
@@ -24636,7 +24586,7 @@
             ],
             "support": {
                 "issues": "https://github.com/TappNetwork/filament-maillog/issues",
-                "source": "https://github.com/TappNetwork/filament-maillog/tree/v2.0.1"
+                "source": "https://github.com/TappNetwork/filament-maillog/tree/v2.0.2"
             },
             "funding": [
                 {
@@ -24644,7 +24594,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-17T10:52:32+00:00"
+            "time": "2026-01-20T02:26:07+00:00"
         },
         {
             "name": "theseer/tokenizer",
@@ -27432,16 +27382,16 @@
         },
         {
             "name": "larastan/larastan",
-            "version": "v3.8.1",
+            "version": "v3.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/larastan/larastan.git",
-                "reference": "ff3725291bc4c7e6032b5a54776e3e5104c86db9"
+                "reference": "82c18890d0d5b012bc39a3432531e5b6cd1b4b3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/larastan/larastan/zipball/ff3725291bc4c7e6032b5a54776e3e5104c86db9",
-                "reference": "ff3725291bc4c7e6032b5a54776e3e5104c86db9",
+                "url": "https://api.github.com/repos/larastan/larastan/zipball/82c18890d0d5b012bc39a3432531e5b6cd1b4b3a",
+                "reference": "82c18890d0d5b012bc39a3432531e5b6cd1b4b3a",
                 "shasum": ""
             },
             "require": {
@@ -27510,7 +27460,7 @@
             ],
             "support": {
                 "issues": "https://github.com/larastan/larastan/issues",
-                "source": "https://github.com/larastan/larastan/tree/v3.8.1"
+                "source": "https://github.com/larastan/larastan/tree/v3.9.0"
             },
             "funding": [
                 {
@@ -27518,7 +27468,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-11T16:37:35+00:00"
+            "time": "2026-01-17T23:00:37+00:00"
         },
         {
             "name": "laravel/boost",
@@ -28556,11 +28506,11 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "2.1.33",
+            "version": "2.1.34",
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9e800e6bee7d5bd02784d4c6069b48032d16224f",
-                "reference": "9e800e6bee7d5bd02784d4c6069b48032d16224f",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/070ba754a949fcade788e16e8dc5a5935b7cf2ee",
+                "reference": "070ba754a949fcade788e16e8dc5a5935b7cf2ee",
                 "shasum": ""
             },
             "require": {
@@ -28605,25 +28555,25 @@
                     "type": "github"
                 }
             ],
-            "time": "2025-12-05T10:24:31+00:00"
+            "time": "2026-01-19T19:52:16+00:00"
         },
         {
             "name": "rector/rector",
-            "version": "2.3.1",
+            "version": "2.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rectorphp/rector.git",
-                "reference": "9afc1bb43571b25629f353c61a9315b5ef31383a"
+                "reference": "07cbbe28bd60251b96b18d42e514779b0e2faa83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rectorphp/rector/zipball/9afc1bb43571b25629f353c61a9315b5ef31383a",
-                "reference": "9afc1bb43571b25629f353c61a9315b5ef31383a",
+                "url": "https://api.github.com/repos/rectorphp/rector/zipball/07cbbe28bd60251b96b18d42e514779b0e2faa83",
+                "reference": "07cbbe28bd60251b96b18d42e514779b0e2faa83",
                 "shasum": ""
             },
             "require": {
                 "php": "^7.4|^8.0",
-                "phpstan/phpstan": "^2.1.33"
+                "phpstan/phpstan": "^2.1.34"
             },
             "conflict": {
                 "rector/rector-doctrine": "*",
@@ -28657,7 +28607,7 @@
             ],
             "support": {
                 "issues": "https://github.com/rectorphp/rector/issues",
-                "source": "https://github.com/rectorphp/rector/tree/2.3.1"
+                "source": "https://github.com/rectorphp/rector/tree/2.3.2"
             },
             "funding": [
                 {
@@ -28665,7 +28615,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-01-13T15:13:58+00:00"
+            "time": "2026-01-20T01:11:51+00:00"
         },
         {
             "name": "revolt/event-loop",
@@ -29962,7 +29912,6 @@
         "leandrocfe/filament-apex-charts": 20,
         "livewire/blaze": 10,
         "mwguerra/filemanager": 20,
-        "openplain/filament-shadcn-theme": 20,
         "pxlrbt/filament-excel": 20,
         "pxlrbt/filament-spotlight": 20,
         "relaticle/flowforge": 20,

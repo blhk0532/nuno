@@ -1,3 +1,8 @@
+@php
+$isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
+$anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layout', 'sidebar');
+@endphp
+
 <div x-data="{
         reloadPage: false,
         closeAndReload() {
@@ -11,7 +16,35 @@
      }"
      x-on:reload-page.window="closeAndReload()">
 
-    {{-- Cog icon in topbar --}}
+    <button
+        wire:click="toggle"
+    @if($anderia === 'sidebar-no-topbar')
+    class="fi-sidebar-database-notifications-btn"
+    @else
+    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
+    @endif
+        aria-label="{{ __('filament-ui-switcher::filament-ui-switcher.button.aria_label') }}"
+    >
+        <x-filament::icon
+            icon="{{ $this->icon }}"
+            class="fi-icon fi-size-lg"
+        />
+
+  @if($anderia === 'sidebar-no-topbar')
+    <span
+
+            x-show="$store.sidebar.isOpen"
+            x-transition:enter="fi-transition-enter"
+            x-transition:enter-start="fi-transition-enter-start"
+            x-transition:enter-end="fi-transition-enter-end"
+
+        class="fi-sidebar-database-notifications-btn-label"
+    >
+    Style
+    </span>
+ @endif
+
+    </button>
 
 
     {{-- Slideover Modal --}}
@@ -28,27 +61,15 @@
             <div class="flex items-center gap-2">
                 <x-filament::icon
                     icon="{{ $this->icon }}"
-                    class="fi-size-lg"
+                    class="h-6 w-6"
                 />
                 <span class="text-lg font-semibold">{{ __('filament-ui-switcher::filament-ui-switcher.modal.heading') }}</span>
             </div>
         </x-slot>
+@php
+//dd($this);
+@endphp
 
-        {{-- Loading Banner --}}
-        <div wire:loading.delay.shortest
-             wire:target="setFont,setLayout,setColor,setFontSize,setDensity"
-                        style="max-height:0rem; overflow:hidden;max-height: 0rem;
-    overflow: hidden;
-    position: absolute;
-    visibility: hidden;
-    display: none;"
-             class="bg-primary-500 text-white px-4 py-3 rounded-lg mb-4 flex items-center gap-2">
-            <svg class="animate-spin fi-size-lg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-            </svg>
-            <span class="font-medium">{{ __('filament-ui-switcher::filament-ui-switcher.loading.message') }}</span>
-        </div>
 
         <div class="space-y-8 py-4">
             {{-- Mode Switcher (Optional) --}}
@@ -74,7 +95,7 @@
                 <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
                     <span class="flex items-center gap-2">
                         <x-filament::icon
-                            icon="heroicon-o-squares-2x2"
+                            icon="heroicon-o-tv"
                             class="h-4 w-4"
                         />
                         {{ __('filament-ui-switcher::filament-ui-switcher.layout.heading') }}
@@ -236,3 +257,4 @@
         </div>
     </x-filament::modal>
 </div>
+

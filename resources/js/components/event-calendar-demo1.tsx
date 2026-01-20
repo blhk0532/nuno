@@ -253,33 +253,33 @@ export function EventCalendarDemo1() {
     const eventClassNames = useCallback((arg: any) => {
         const eventType = arg.event.extendedProps?.type;
         const view = arg.view.type;
-        
+
         const classes = [];
-        
+
         // Add type-specific class
         if (eventType === 'booking') {
             classes.push('calendar-booking-event');
         } else if (eventType === 'location') {
             classes.push('calendar-location-event');
         }
-        
+
         // Add view-specific class
         if (view === 'dayGridMonth') {
             classes.push('month-view-event');
         }
-        
+
         return classes;
     }, []);
 
     const eventContent = useCallback((arg: any) => {
         const view = arg.view.type;
         const eventType = arg.event.extendedProps?.type;
-        
+
         // In month view, hide booking events (only show location all-day events)
         if (view === 'dayGridMonth' && eventType === 'booking') {
             return { domNodes: [] };
         }
-        
+
         // For all other cases, use default rendering
         return true;
     }, []);
