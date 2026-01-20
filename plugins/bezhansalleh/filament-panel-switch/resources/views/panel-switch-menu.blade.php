@@ -43,15 +43,23 @@
     $currentPanelLabel = $labels[$currentPanel->getId()] ?? str($currentPanel->getId())->ucfirst();
 @endphp
 
-<x-filament::icon-button
+<button
     x-data="{}"
     icon="heroicon-o-shield-check"
     icon-alias="panels::panel-switch-modern-icon"
     icon-size="lg"
     @click="$dispatch('open-modal', { id: 'panel-switch' })"
-    :label="$heading"
-   class="shrink-0 grow-0 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-400 fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
-/>
+   class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
+>
+        <x-filament::icon
+            icon="heroicon-o-shield-check"
+            class="fi-icon fi-size-lg"
+        />
+
+
+
+
+</button>
 
 <x-filament::modal
     id="panel-switch"
@@ -72,7 +80,7 @@
                 href="{{ $url }}"
                 class="flex flex-col items-center justify-start flex-1 hover:cursor-pointer group panel-switch-card"
             >
-                <div
+                <div style="width: 64px; height: 64px;"
                     @class([
                         'p-2 bg-white rounded-lg shadow-md dark:bg-gray-800 panel-switch-card-section',
                         'group-hover:ring-2 group-hover:ring-primary-600' => $id !== $currentPanel->getId(),
@@ -89,7 +97,7 @@
                         @php
                             $iconName = $icons[$id] ?? 'heroicon-s-square-2-stack';
                         @endphp
-                        @svg($iconName, 'text-primary-600 panel-switch-card-icon w-12 h-12')
+                        @svg($iconName, '')
                     @endif
                 </div>
                 <span

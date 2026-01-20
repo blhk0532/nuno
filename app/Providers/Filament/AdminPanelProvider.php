@@ -256,7 +256,7 @@ final class AdminPanelProvider extends PanelProvider
             ])
             ->userMenuItems([
                 'profile' => Action::make('profile')
-                    ->label(fn() => Auth::user()->getNdsUserName())
+                    ->label(fn() => Str::ucfirst(Auth::user()->getNdsUserName()))
                     ->url(fn (): string => EditProfilePage::getUrl())
                     ->icon('heroicon-o-user-circle'),
                 Action::make('sanctum')

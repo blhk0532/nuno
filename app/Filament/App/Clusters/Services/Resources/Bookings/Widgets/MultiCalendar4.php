@@ -1932,7 +1932,10 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
     {
         $filters = $this->pageFilters ?? [];
 
-        return $filters['booking_calendars_3'] ?? null;
+        $value = $filters['booking_calendars_4'] ?? null;
+
+        return $value ? (int) $value : null;
+    }
     }
 
     protected function getDefaultCalendarId(): ?int

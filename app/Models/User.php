@@ -120,6 +120,7 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
         'locale',
         'theme_color',
         'current_team_id',
+        'role',
     ];
 
     protected $hidden = [

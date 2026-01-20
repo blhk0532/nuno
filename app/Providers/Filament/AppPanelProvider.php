@@ -53,7 +53,7 @@ use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 use AdultDate\FilamentDialer\FilamentDialerPlugin;
 use Illuminate\Support\Facades\Auth;
 use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
-
+use Illuminate\Support\Str;
 final class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -181,11 +181,11 @@ final class AppPanelProvider extends PanelProvider
             ])
             ->userMenuItems([
                 'profile' => Action::make('profile')
-                    ->label(Auth::user()?->name())
+                    ->label(fn() => Str::ucfirst(Auth::user()->getNdsUserName()))
                     ->url(fn (): string => EditProfilePage::getUrl())
-                    ->icon('heroicon-o-identification'),
+                    ->icon('heroicon-o-user-circle'),
                 'wirechat' => Action::make('chats')
-                    ->label('Chats')
+                    ->label('Chat')
                     ->url(fn (): string => ChatDashboard::getUrl())
                     ->icon('heroicon-o-chat-bubble-left-right'),
 

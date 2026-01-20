@@ -34,15 +34,14 @@ if (($i = array_search('nds', $segments)) !== false) {
 }
 
         logger()->info("requestPath:: {$requestPath}");
-
-        logger()->info("User ID:: {$user->id} with Role:: {$user->role} accesesPanel:: '{$panelId}'");
+    //    logger()->info("User ID:: {$user->id} with Role:: {$user->role} accesesPanel:: '{$panelId}'");
 
 
         if (! $this->checkPanelAccess($panelId) && $panelId === 'app') {
             return redirect('/')->with('error', 'Unauthorized access');
         }
 
-        if (! $this->checkPanelAccess($panelId) && $panelId !== 'app') {
+        if (! $this->checkPanelAccess($panelId) && $panelId !== 'app' && $user->role !== 'super') {
             abort(403, 'Not authorized to access ' . $panelId . ' panel');
         }
 
@@ -52,7 +51,7 @@ if (($i = array_search('nds', $segments)) !== false) {
     public function checkPanelAccess($panelId): bool
     {
 
-        logger()->info("panelId:: {$panelId}");
+    //    logger()->info("panelId:: {$panelId}");
 
         $user = Auth::user();
 

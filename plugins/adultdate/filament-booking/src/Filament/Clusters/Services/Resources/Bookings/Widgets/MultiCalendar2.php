@@ -1837,7 +1837,10 @@ public Model|int|string|null $record;
     protected function getSelectedCalendarId(): ?int
     {
         $filters = $this->pageFilters ?? [];
-        return $filters['booking_calendars_2'] ?? null;
+
+        $value = $filters['booking_calendars_2'] ?? null;
+
+        return $value ? (int) $value : null;
     }
 
     protected function getDefaultCalendarId(): ?int

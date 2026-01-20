@@ -24,7 +24,8 @@ class UsersRelationManager extends RelationManager
             ->headerActions([
                 AttachAction::make()
                     ->recordSelectOptionsQuery(fn (Builder $query) => $query->where('users.id', '!=', $this->ownerRecord->user_id))
-                    ->preloadRecordSelect(),
+                    ->preloadRecordSelect()
+                    ->multiple(),
             ])
             ->recordActions([
                 DetachAction::make(),
