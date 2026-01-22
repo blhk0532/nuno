@@ -32,6 +32,7 @@
         <div class="text-center">
 <input
   type="text"
+  style="caret-color: transparent;"
   wire:model="phoneNumber"
   readonly
   class="w-full text-2xl text-center bg-transparent py-2 text-white dark:text-gray-500 transition-colors

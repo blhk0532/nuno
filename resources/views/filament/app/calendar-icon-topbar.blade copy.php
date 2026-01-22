@@ -2,15 +2,12 @@
 $isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
 $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layout', 'sidebar');
 @endphp
-<div class="fi-no-database" x-data>
+<div class="fi-no-database">
 <div>
 <div class="fi-modal-trigger">
 <button
     color="gray"
-    icon="heroicon-o-calendar-days"
     icon-size="lg"
-    label="Kalender"
-    x-show="$store.sidebar.isOpen && {{ $anderia === 'sidebar-no-topbar' }}"
     @if($anderia === 'sidebar-no-topbar')
     class="fi-sidebar-database-notifications-btn"
     @else
@@ -42,10 +39,9 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
 </div>
 </div>
 
-<x-filament::modal id="calendar-modal" class="calendar-modal" slide-over width="3xl">
+<x-filament::modal id="calendar-modal" class="calendar-modal" slide-over width="screen">
     <x-slot name="heading">
         Booking Calendar
     </x-slot>
-     @livewire('calendar-icon-modal')
-
+    @livewire('calendar-icon-modal')
 </x-filament::modal>

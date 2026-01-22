@@ -72,22 +72,19 @@ final class FilamentDialerPlugin implements Plugin
     private function registerRenderHooks(Panel $panel): void
     {
 
-        $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layout', 'sidebar');
-        if ($anderia === 'sidebar-no-topbar' && $this->showPhoneIcon){
-        $panel->renderHook(
+
+
+        if ($this->showPhoneIcon) {
+            $panel->renderHook(
                 PanelsRenderHook::SIDEBAR_LOGO_AFTER,
                 fn (): string => Blade::render('@livewire(\'filament-dialer.phone-icon-button\', [], key(\'phone-icon-button\'))')
-        );
+            );
         }
-        if ($anderia !== 'sidebar-no-topbar' && $this->showPhoneIcon) {
-                    $panel->renderHook(
-                PanelsRenderHook::SIDEBAR_LOGO_AFTER,
-                fn (): string => Blade::render('@livewire(\'filament-dialer.phone-icon-button\', [], key(\'phone-icon-button\'))')
-        );
-        $panel->renderHook(
+                if ($this->showPhoneIcon) {
+            $panel->renderHook(
                 PanelsRenderHook::TOPBAR_LOGO_AFTER,
                 fn (): string => Blade::render('@livewire(\'filament-dialer.phone-icon-button\', [], key(\'phone-icon-button\'))')
-        );
+            );
         }
 
         if ($this->showSidebar) {

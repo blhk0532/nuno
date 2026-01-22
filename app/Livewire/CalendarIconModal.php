@@ -20,6 +20,13 @@ final class CalendarIconModal extends Component
         }
     }
 
+    public function updatedSelectedCalendar($value): void
+    {
+        // Dispatch a browser event so Alpine can trigger a resize,
+        // ensuring FullCalendar recalculates its width in the modal.
+        $this->dispatch('calendar-resize');
+    }
+
     public function render()
     {
         return view('livewire.calendar-icon-modal');

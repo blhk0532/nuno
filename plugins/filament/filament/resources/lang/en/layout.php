@@ -37,15 +37,15 @@ return [
         'theme_switcher' => [
 
             'dark' => [
-                'label' => 'Enable dark theme',
+                'label' => 'Dark mode',
             ],
 
             'light' => [
-                'label' => 'Enable light theme',
+                'label' => 'Light mode',
             ],
 
             'system' => [
-                'label' => 'Enable system theme',
+                'label' => 'System theme',
             ],
 
         ],

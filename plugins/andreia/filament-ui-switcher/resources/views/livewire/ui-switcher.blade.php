@@ -18,6 +18,7 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
 
     <button
         wire:click="toggle"
+        x-show="$store.sidebar.isOpen"
     @if($anderia === 'sidebar-no-topbar')
     class="fi-sidebar-database-notifications-btn"
     @else
@@ -40,7 +41,7 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
 
         class="fi-sidebar-database-notifications-btn-label"
     >
-    Style
+    Layout Styles
     </span>
  @endif
 
@@ -109,9 +110,9 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
                         type="button"
                         class="relative flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all hover:border-primary-400 hover:shadow-md {{ $layout === 'sidebar' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 ring-2 ring-primary-200 dark:ring-primary-800' : 'border-gray-200 dark:border-gray-700' }}">
                         <div class="flex flex-col gap-0.5 mb-2">
-                            <div class="w-14 h-1 rounded bg-gray-400 dark:bg-gray-500"></div>
+                            <div class="w-14 h-1 rounded bg-gray-300 dark:bg-gray-700"></div>
                             <div class="flex gap-0.5">
-                                <div class="w-3.5 h-7 rounded bg-gray-400 dark:bg-gray-500"></div>
+                                <div class="w-3.5 h-7 rounded bg-gray-300 dark:bg-gray-300"></div>
                                 <div class="w-10 h-7 rounded bg-gray-300 dark:bg-gray-600"></div>
                             </div>
                         </div>
@@ -123,9 +124,9 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
                         type="button"
                         class="relative flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all hover:border-primary-400 {{ $layout === 'sidebar-collapsed' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700' }}">
                         <div class="flex flex-col gap-0.5 mb-2">
-                            <div class="w-14 h-1 rounded bg-gray-400 dark:bg-gray-500"></div>
+                            <div class="w-14 h-1 rounded bg-gray-300 dark:bg-gray-700"></div>
                             <div class="flex gap-0.5">
-                                <div class="w-1.5 h-7 rounded bg-gray-400 dark:bg-gray-500"></div>
+                                <div class="w-2 h-7 rounded bg-gray-300 dark:bg-gray-700"></div>
                                 <div class="w-12 h-7 rounded bg-gray-300 dark:bg-gray-600"></div>
                             </div>
                         </div>
@@ -137,7 +138,7 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
                         type="button"
                         class="relative flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all hover:border-primary-400 {{ $layout === 'sidebar-no-topbar' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700' }}">
                         <div class="flex gap-0.5 mb-2">
-                            <div class="w-3.5 h-8 rounded bg-gray-400 dark:bg-gray-500"></div>
+                            <div class="w-3.5 h-8 rounded bg-gray-300 dark:bg-gray-700"></div>
                             <div class="w-10 h-8 rounded bg-gray-300 dark:bg-gray-600"></div>
                         </div>
                         <span class="text-xs font-medium text-center leading-tight">{{ __('filament-ui-switcher::filament-ui-switcher.layout.no_topbar') }}</span>
@@ -148,8 +149,8 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
                         type="button"
                         class="relative flex flex-col items-center justify-center p-4 rounded-lg border-2 transition-all hover:border-primary-400 {{ $layout === 'topbar' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20' : 'border-gray-200 dark:border-gray-700' }}">
                         <div class="flex flex-col gap-0.5 mb-2">
-                            <div class="w-14 h-1.5 rounded bg-gray-400 dark:bg-gray-500"></div>
-                            <div class="w-14 h-6.5 rounded bg-gray-300 dark:bg-gray-600"></div>
+                            <div class="w-12 h-2 rounded bg-gray-300 dark:bg-gray-700"></div>
+                            <div class="w-12 h-8 rounded bg-gray-300 dark:bg-gray-600"></div>
                         </div>
                         <span class="text-xs font-medium">{{ __('filament-ui-switcher::filament-ui-switcher.layout.topbar') }}</span>
                     </button>

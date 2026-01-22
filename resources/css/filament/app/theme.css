@@ -1,8 +1,5 @@
 @import '../../../../vendor/filament/filament/resources/css/theme.css';
 
-@import '../../../../plugins/adultdate/filament-dialer/resources/css/theme.css';
-
-
 @source '../../../../app/Filament/App/**/*';
 @source '../../../../resources/views/components/**/*';
 @source '../../../../resources/views/filament/app/**/*';
@@ -23,6 +20,13 @@
 @source '../../../../vendor/bezhansalleh/filament-panel-switch/resources/views/**/*.blade.php';
 
 @source '../../../../vendor/cmsmaxinc/filament-error-pages/resources/**/*.blade.php';
+
+@import '../../../../plugins/adultdate/filament-dialer/resources/css/theme.css';
+
+/* Prevent layout shift when modals toggle page scroll */
+html, body {
+    scrollbar-gutter: stable both-edges;
+}
 
 ::-webkit-scrollbar {
     width: .56vw !important;
@@ -285,9 +289,37 @@ width: 24px;
 }
 
 div.filament-fullcalendar.filament-fullcalendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard{
-        min-height: 676px;
+    max-height: 735px !important;
+        min-width: 500px!important;
+        width: 100% !important;
 }
 div.filament-fullcalendar {
-     min-height: 676px!important;
+        max-height: 735px !important;
     max-height: 720px !important;
+    min-width: 500px!important;
+    width: 100% !important;
+}
+.calendar-modal{
+       max-height: 735px !important;
+}
+
+.calendar-widget-wrapper {
+width: 100% !important;
+  height: 100% !important;
+ max-height: 694px;
+  overflow: auto !important;
+  background: transparent;
+  /*
+  border: 2px solid #80808080;
+  */
+  border-radius: 12px;
+}
+
+.calendar-widget-wrapper > div {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.left-side-topicons{
+    margin: 0 10px;
 }

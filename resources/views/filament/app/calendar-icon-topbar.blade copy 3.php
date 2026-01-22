@@ -1,21 +1,18 @@
 @php
 $isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
 $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layout', 'sidebar');
+$buttonClass = $anderia === 'sidebar-no-topbar' ? 'fi-sidebar-database-notifications-btn' : 'fi-icon-btn fi-size-md fi-topbar-database-notifications-btn';
 @endphp
 <div class="fi-no-database" x-data>
 <div>
 <div class="fi-modal-trigger">
-<button
+<x-filament::button
     color="gray"
     icon="heroicon-o-calendar-days"
     icon-size="lg"
-    label="Kalender"
-    x-show="$store.sidebar.isOpen && {{ $anderia === 'sidebar-no-topbar' }}"
-    @if($anderia === 'sidebar-no-topbar')
-    class="fi-sidebar-database-notifications-btn"
-    @else
-    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
-    @endif
+    label="{{ __('Calendar') }}"
+    x-show="$store.sidebar.isOpen"
+    class="{{ $buttonClass }}"
     wire:click="$dispatch('open-modal', { id: 'calendar-modal' })"
 >
 
@@ -32,17 +29,17 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
             x-transition:enter-start="fi-transition-enter-start"
             x-transition:enter-end="fi-transition-enter-end"
 
-        class="fi-sidebar-database-notifications-btn-label"
+        class="fi-sidebar-database-notifications-btn-label hidden"
     >
     Kalender
     </span>
  @endif
-</button>
+</x-filament::button>
  </div>
 </div>
 </div>
 
-<x-filament::modal id="calendar-modal" class="calendar-modal" slide-over width="3xl">
+<x-filament::modal id="calendar-modal" class="calendar-modal fi-modal-slide-over-left" slide-over width="3xl">
     <x-slot name="heading">
         Booking Calendar
     </x-slot>

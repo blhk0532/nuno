@@ -110,7 +110,7 @@ final class AppServiceProvider extends ServiceProvider
                     'user' => 'heroicon-s-user-group',
                 ])
                 ->iconSize(20)
-                ->renderHook(PanelsRenderHook::USER_MENU_BEFORE)
+                ->renderHook(PanelsRenderHook::TOPBAR_LOGO_BEFORE)
                 ->sort('asc');
 
             $user = Auth::user();

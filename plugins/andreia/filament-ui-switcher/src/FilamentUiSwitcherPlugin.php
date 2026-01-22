@@ -9,6 +9,7 @@ use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\View\PanelsRenderHook;
 use Illuminate\Support\Facades\Blade;
+use Andreia\FilamentUiSwitcher\Support\UiPreferenceManager;
 
 class FilamentUiSwitcherPlugin implements Plugin
 {
@@ -28,7 +29,18 @@ class FilamentUiSwitcherPlugin implements Plugin
 
     public function iconRenderHook(string $hook): static
     {
-        $this->iconRenderHook = $hook;
+
+
+        $this->iconRenderHook = PanelsRenderHook::USER_MENU_BEFORE;
+
+        return $this;
+    }
+
+    public function setRenderHook(): static
+    {
+
+
+            $this->iconRenderHook = PanelsRenderHook::USER_MENU_BEFORE;
 
         return $this;
     }
@@ -57,7 +69,7 @@ class FilamentUiSwitcherPlugin implements Plugin
         // Livewire component is registered in ServiceProvider, so it's available here
         // Pass the mode switcher configuration to the component
         $panel->renderHook(
-            $this->iconRenderHook,
+            PanelsRenderHook::USER_MENU_BEFORE,
             fn (): string => Blade::render('@livewire(\'filament-ui-switcher\', [\'hasModeSwitcher\' => '.($this->hasModeSwitcher ? 'true' : 'false').'])'),
         );
 

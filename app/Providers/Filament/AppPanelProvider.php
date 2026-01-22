@@ -54,6 +54,8 @@ use AdultDate\FilamentDialer\FilamentDialerPlugin;
 use Illuminate\Support\Facades\Auth;
 use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
 use Illuminate\Support\Str;
+use Andreia\FilamentUiSwitcher\Support\UiPreferenceManager;
+
 final class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -123,7 +125,6 @@ final class AppPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
-                FilamentDialerPlugin::make(),
                 FilamentErrorPagesPlugin::make()
                     ->routes([
                         'nds/*',
@@ -151,14 +152,8 @@ final class AppPanelProvider extends PanelProvider
                     ->listLayoutButtonIcon('heroicon-o-list-bullet')
                     ->gridLayoutButtonIcon('heroicon-o-squares-2x2'),
             ])
-
-            ->renderHook(
-                PanelsRenderHook::USER_MENU_BEFORE,
-                fn () => view('filament.app.calendar-icon-topbar')
-            )
             ->plugins([
                 FilamentIconPickerPlugin::make(),
-                FilamentBookingPlugin::make(),
                 FilamentEditProfilePlugin::make()
                     ->slug('my-profile')
                     ->setTitle(__('My Profile'))
@@ -218,7 +213,7 @@ final class AppPanelProvider extends PanelProvider
                             ->renderHook(AuthDesignerRenderHook::CardBefore, fn () => view('filament.logo-auth'))
                     )
             )
-                        ->plugins([
+            ->plugins([
                 FilamentWirechatPlugin::make()
                     ->onlyPages([])
                     ->excludeResources([
@@ -226,8 +221,16 @@ final class AppPanelProvider extends PanelProvider
                         \AdultDate\FilamentWirechat\Filament\Resources\Messages\MessageResource::class,
                     ]),
             ])
+
+
             ->plugin(FilamentUiSwitcherPlugin::make()
-                      ->withModeSwitcher()
-                ->iconRenderHook(PanelsRenderHook::USER_MENU_BEFORE));
+                ->withModeSwitcher())
+
+            ->plugins([
+                FilamentBookingPlugin::make(),
+                FilamentDialerPlugin::make(),
+
+            ]);
+
     }
 }

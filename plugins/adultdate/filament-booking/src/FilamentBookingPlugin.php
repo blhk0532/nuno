@@ -153,6 +153,17 @@ HTML,
                 BookingCalendersX4::class,
             ],
         );
+
+            FilamentView::registerRenderHook(
+                PanelsRenderHook::TOPBAR_LOGO_AFTER,
+                fn () => view('filament.app.calendar-icon-topbar')
+            );
+
+            FilamentView::registerRenderHook(
+                PanelsRenderHook::SIDEBAR_LOGO_AFTER,
+                fn () => view('filament.app.calendar-icon-topbar')
+            );
+
     }
 
     public function plugins(array $plugins, bool $merge = true): static

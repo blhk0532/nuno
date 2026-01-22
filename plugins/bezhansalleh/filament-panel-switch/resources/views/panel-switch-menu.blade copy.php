@@ -45,42 +45,32 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
     </style>
 @php
     $currentPanelLabel = $labels[$currentPanel->getId()] ?? str($currentPanel->getId())->ucfirst();
+    $panelSwitchClass = $anderia === 'sidebar-no-topbar' ? 'fi-sidebar-database-notifications-btn' : 'fi-icon-btn fi-size-md fi-topbar-database-notifications-btn left-side-topicons';
 @endphp
 
-<button
-    x-data="{}"
+@if($anderia === 'sidebar-no-topbar')
+<x-filament::button
     icon="heroicon-o-shield-check"
     icon-alias="panels::panel-switch-modern-icon"
     icon-size="lg"
-    x-show="$store.sidebar.isOpen && {{ $anderia === 'sidebar-no-topbar' }}"
-    @click="$dispatch('open-modal', { id: 'panel-switch' })"
-    @if($anderia === 'sidebar-no-topbar')
+    x-show="$store.sidebar.isOpen"
     class="fi-sidebar-database-notifications-btn"
-    @else
-    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn ml-1"
-    @endif
+    wire:click="$dispatch('open-modal', { id: 'panel-switch' })"
 >
-        <x-filament::icon
-            icon="heroicon-o-shield-check"
-            class="fi-icon fi-size-lg"
-        />
-
-  @if($anderia === 'sidebar-no-topbar')
-    <span
-
-            x-show="$store.sidebar.isOpen"
-            x-transition:enter="fi-transition-enter"
-            x-transition:enter-start="fi-transition-enter-start"
-            x-transition:enter-end="fi-transition-enter-end"
-
-        class="fi-sidebar-database-notifications-btn-label hidden"
-    >
+    <span x-show="$store.sidebar.isOpen" class="fi-sidebar-database-notifications-btn-label hidden">
     Switch Panels
     </span>
- @endif
-
-
-</button>
+</x-filament::button>
+@else
+<x-filament::button
+    icon="heroicon-o-shield-check"
+    icon-alias="panels::panel-switch-modern-icon"
+    icon-size="lg"
+    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn left-side-topicons"
+    wire:click="$dispatch('open-modal', { id: 'panel-switch' })"
+>
+</x-filament::button>
+@endif
 
 <x-filament::modal
     id="panel-switch"

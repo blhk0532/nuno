@@ -14,9 +14,6 @@
             <x-filament::actions :actions="$this->getCachedHeaderActions()" class="shrink-0" />
         </div>
 
-        {{-- Ensure the built Alpine component is available (fallback to public/vendor) --}}
-        <script defer src="{{ asset('vendor/adultdate/filament-booking/filament-fullcalendar.js') }}"></script>
-
         <div wire:ignore x-load
             x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('filament-fullcalendar-alpine', 'adultdate/filament-booking') }}"
             x-ignore x-data="fullcalendar({

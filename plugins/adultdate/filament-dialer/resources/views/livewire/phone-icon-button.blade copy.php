@@ -9,7 +9,7 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
     @if($anderia === 'sidebar-no-topbar')
     class="fi-sidebar-database-notifications-btn"
     @else
-    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn ml-1 mr-2"
+    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
     @endif
     tooltip="Phone Dialer"
     x-on:click.prevent="$dispatch('open-modal', { id: 'phone-dialer-sidebar' })"

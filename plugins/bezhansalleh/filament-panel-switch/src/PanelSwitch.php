@@ -13,6 +13,7 @@ use Filament\Support\Facades\FilamentView;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use League\Uri\Uri;
+use Filament\View\PanelsRenderHook;
 
 final class PanelSwitch extends Component
 {
@@ -90,8 +91,32 @@ final class PanelSwitch extends Component
     {
         $static = static::make();
 
+
         FilamentView::registerRenderHook(
             name: $static->getRenderHook(),
+            hook: function () use ($static) {
+
+                if (! $static->isVisible()) {
+                    return '';
+                }
+
+                return view('filament-panel-switch::panel-switch-menu', [
+                    'currentPanel' => $static->getCurrentPanel(),
+                    'heading' => $static->getModalHeading(),
+                    'icons' => $static->getIcons(),
+                    'iconSize' => $static->getIconSize(),
+                    'isSimple' => $static->isSimple(),
+                    'isSlideOver' => $static->isModalSlideOver(),
+                    'labels' => $static->getLabels(),
+                    'modalWidth' => $static->getModalWidth(),
+                    'panels' => $static->getPanels(),
+                    'renderIconAsImage' => $static->getRenderIconAsImage(),
+                ]);
+            },
+        );
+
+        FilamentView::registerRenderHook(
+            name: PanelsRenderHook::SIDEBAR_LOGO_AFTER,
             hook: function () use ($static) {
 
                 if (! $static->isVisible()) {

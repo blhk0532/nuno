@@ -36,7 +36,7 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
 
         class="fi-sidebar-database-notifications-btn-label"
     >
-    Chat
+    Meddelanden
     </span>
  @endif
 
