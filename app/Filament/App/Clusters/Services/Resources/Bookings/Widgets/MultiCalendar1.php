@@ -121,6 +121,11 @@ final class MultiCalendar1 extends FullCalendarWidget implements HasCalendar
         ];
     }
 
+    public function getHeader(): string
+    {
+        return 'header';
+    }
+
     public function getHeadingActions(): array
     {
         return [

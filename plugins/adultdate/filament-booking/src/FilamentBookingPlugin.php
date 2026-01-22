@@ -155,14 +155,14 @@ HTML,
         );
 
             FilamentView::registerRenderHook(
-                PanelsRenderHook::TOPBAR_LOGO_AFTER,
+                PanelsRenderHook::USER_MENU_BEFORE,
                 fn () => view('filament.app.calendar-icon-topbar')
             );
 
-            FilamentView::registerRenderHook(
-                PanelsRenderHook::SIDEBAR_LOGO_AFTER,
-                fn () => view('filament.app.calendar-icon-topbar')
-            );
+        //    FilamentView::registerRenderHook(
+        //        PanelsRenderHook::SIDEBAR_LOGO_AFTER,
+        //        fn () => view('filament.app.calendar-icon-topbar')
+        //    );
 
     }
 

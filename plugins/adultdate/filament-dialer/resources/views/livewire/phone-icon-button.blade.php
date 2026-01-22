@@ -7,7 +7,8 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
 <div class="fi-modal-trigger">
 <button
     @if($anderia === 'sidebar-no-topbar')
-    class="fi-sidebar-database-notifications-btn"
+    class="fi-sidebar-database-notifications-btn mr-2"
+    x-show="$store.sidebar.isOpen"
     @else
     class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn ml-1 mr-2"
     @endif
@@ -30,7 +31,7 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
                 x-transition:enter-start="fi-transition-enter-start"
                 x-transition:enter-end="fi-transition-enter-end"
 
-            class="fi-sidebar-database-notifications-btn-label"
+            class="fi-sidebar-database-notifications-btn-label hidden"
         >
 
         </span>

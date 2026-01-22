@@ -93,7 +93,7 @@ final class FilamentDialerPlugin implements Plugin
                 fn (): string => Blade::render('
                     <x-filament::modal id="phone-dialer-sidebar" slide-over class="fi-modal-slide-over-left">
                         <x-slot name="heading">
-                            [AVSTÄNGD]
+
                         </x-slot>
                         @livewire(\'filament-dialer.phone-dialer-sidebar\', [])
                     </x-filament::modal>

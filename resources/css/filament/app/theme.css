@@ -48,6 +48,11 @@ html, body {
     background: #ffffff !important;
 }
 
+/* Left slide modal */
+.fi-modal-slide-over-left {
+    --tw-translate-x: -100%;
+}
+
 ::-webkit-scrollbar-thumb:active {
     background: #000000 !important;
 }
@@ -290,13 +295,11 @@ width: 24px;
 
 div.filament-fullcalendar.filament-fullcalendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard{
     max-height: 735px !important;
-        min-width: 500px!important;
         width: 100% !important;
 }
 div.filament-fullcalendar {
         max-height: 735px !important;
     max-height: 720px !important;
-    min-width: 500px!important;
     width: 100% !important;
 }
 .calendar-modal{
@@ -322,4 +325,17 @@ width: 100% !important;
 
 .left-side-topicons{
     margin: 0 10px;
+}
+  /*
+.fi-modal-window.fi-modal-window-has-close-btn.fi-modal-window-has-content.fi-align-start.fi-width-3xl{
+    min-width: 900px!important;
+}
+*/
+
+#calendar-modal{
+    position:absolute;
+}
+
+.fi-section{
+    --tw-ring-color:transparent!important;
 }

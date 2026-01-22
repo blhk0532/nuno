@@ -1,6 +1,7 @@
 @php
 $isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
 $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layout', 'sidebar');
+$aSiderbar = $anderia === 'sidebar-no-topbar' ? true : false;
 @endphp
 <div class="fi-no-database" x-data>
 <div>
@@ -10,7 +11,6 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
     icon="heroicon-o-calendar-days"
     icon-size="lg"
     label="Kalender"
-    x-show="$store.sidebar.isOpen && {{ $anderia === 'sidebar-no-topbar' }}"
     @if($anderia === 'sidebar-no-topbar')
     class="fi-sidebar-database-notifications-btn"
     @else
@@ -23,8 +23,14 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
             icon="heroicon-o-calendar-days"
             class="fi-icon fi-size-lg"
         />
+@php
+// dd($anderia);
+@endphp
 
-          @if($anderia === 'sidebar-no-topbar')
+  @if($anderia === 'sidebar-no-topbar')
+
+
+
     <span
 
             x-show="$store.sidebar.isOpen"
@@ -34,9 +40,10 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
 
         class="fi-sidebar-database-notifications-btn-label"
     >
-    Kalender
+    NDS Kalender
     </span>
- @endif
+@endif
+
 </button>
  </div>
 </div>

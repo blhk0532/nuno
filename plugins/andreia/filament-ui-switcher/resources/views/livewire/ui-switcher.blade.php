@@ -18,17 +18,17 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
 
     <button
         wire:click="toggle"
-        x-show="$store.sidebar.isOpen"
     @if($anderia === 'sidebar-no-topbar')
     class="fi-sidebar-database-notifications-btn"
+    x-show="$store.sidebar.isOpen"
     @else
-    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
+    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn mr-2"
     @endif
         aria-label="{{ __('filament-ui-switcher::filament-ui-switcher.button.aria_label') }}"
     >
         <x-filament::icon
             icon="{{ $this->icon }}"
-            class="fi-icon fi-size-lg"
+            class="fi-icon fi-size-md"
         />
 
   @if($anderia === 'sidebar-no-topbar')
@@ -39,7 +39,7 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
             x-transition:enter-start="fi-transition-enter-start"
             x-transition:enter-end="fi-transition-enter-end"
 
-        class="fi-sidebar-database-notifications-btn-label"
+        class="fi-sidebar-database-notifications-btn-label hidden"
     >
     Layout Styles
     </span>
@@ -53,8 +53,9 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
         id="ui-switcher-modal"
         slide-over
         close-button
-        width="md"
+        width="sm"
         :visible="$open"
+        class="fi-modal-slide-over-left"
         x-on:close-modal.window="if ($event.detail.id === 'ui-switcher-modal') { $wire.set('open', false) }"
         x-on:modal-closed.window="if ($event.detail.id === 'ui-switcher-modal') { $wire.set('open', false) }"
     >
@@ -177,7 +178,7 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
                                 wire:loading.class="opacity-50"
                                 wire:target="setColor"
                                 type="button"
-                                class="relative w-10 h-10 rounded-lg transition-all hover:scale-110 {{ $primaryColor === $color ? 'border-gray-900 dark:border-gray-100 shadow-lg ring-2 ring-offset-2 ring-gray-400' : 'border-transparent' }}"
+                                class="relative w-6 h-6 rounded-lg transition-all hover:scale-110 {{ $primaryColor === $color ? 'border-gray-900 dark:border-gray-100 shadow-lg ring-2 ring-offset-2 ring-gray-400' : 'border-transparent' }}"
                                 style="background-color: {{ $color }}">
                                 @if($primaryColor === $color)
                                     <svg class="absolute inset-0 m-auto w-6 h-6 text-white drop-shadow-lg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">

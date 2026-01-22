@@ -11,6 +11,7 @@ use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBokning
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppBookingSinleCalendar;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX2;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX4;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX6;
 use App\Filament\App\Pages\InertiaCalendar;
 use App\Filament\App\Pages\TeamInvitationAccept;
 use App\Filament\App\Pages\Tenancy\EditTeamProfile;
@@ -101,6 +102,7 @@ final class AppPanelProvider extends PanelProvider
                 AppBookingMultiCalendar::class,
                 BookingCalendersX2::class,
                 BookingCalendersX4::class,
+                BookingCalendersX6::class,
             ])
             ->widgets([
                 //    Widgets\AccountWidget::class,
@@ -213,6 +215,11 @@ final class AppPanelProvider extends PanelProvider
                             ->renderHook(AuthDesignerRenderHook::CardBefore, fn () => view('filament.logo-auth'))
                     )
             )
+                        ->plugins([
+                FilamentBookingPlugin::make(),
+                FilamentDialerPlugin::make(),
+
+            ])
             ->plugins([
                 FilamentWirechatPlugin::make()
                     ->onlyPages([])
@@ -222,15 +229,8 @@ final class AppPanelProvider extends PanelProvider
                     ]),
             ])
 
-
-            ->plugin(FilamentUiSwitcherPlugin::make()
-                ->withModeSwitcher())
-
-            ->plugins([
-                FilamentBookingPlugin::make(),
-                FilamentDialerPlugin::make(),
-
-            ]);
+                        ->plugin(FilamentUiSwitcherPlugin::make()
+                ->withModeSwitcher());
 
     }
 }

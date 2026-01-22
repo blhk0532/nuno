@@ -49,17 +49,18 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
 @php
     $currentPanelLabel = $labels[$currentPanel->getId()] ?? str($currentPanel->getId())->ucfirst();
 @endphp
+
 <button
     x-data="{}"
     icon="heroicon-o-shield-check"
     icon-alias="panels::panel-switch-modern-icon"
     icon-size="lg"
+    x-show="$store.sidebar.isOpen && {{ $anderia === 'sidebar-no-topbar' }}"
     @click="$dispatch('open-modal', { id: 'panel-switch' })"
     @if($anderia === 'sidebar-no-topbar')
     class="fi-sidebar-database-notifications-btn"
-    x-show="$store.sidebar.isOpen"
     @else
-    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
+    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn ml-1"
     @endif
 >
         <x-filament::icon
@@ -93,9 +94,8 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
     :heading="$heading"
     teleport="body"
     display-classes="block"
-    width="sm"
     class="panel-switch-modal fi-modal-slide-over-left"
-style="max-width: 348px;"
+style="width: 348px;"
 >
     <div
         class="panel-switch-grid"

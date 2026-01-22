@@ -12,7 +12,7 @@ section.fi-section{
 </style>
 <div class="w-full">
     <!-- Techniker Filter -->
-    <div class="mb-4">
+    <div class="m-2">
         <select wire:model.live="selectedCalendar" class="fi-input block w-full">
             @foreach(\App\Models\BookingCalendar::with('owner')->get() as $calendar)
                 <option value="{{ $calendar->id }}">{{ $calendar->owner?->name ?? $calendar->name }}</option>

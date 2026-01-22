@@ -7,7 +7,7 @@
 
               <x-slot name="heading">
 
-
+   {{ $this->getHeading() }}
             </x-slot>
 
         <div class="flex justify-end flex-1 mb-4">

@@ -41,6 +41,7 @@ use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -51,7 +52,7 @@ use Illuminate\Support\Str;
 use Throwable;
 use UnitEnum;
 
-final class BookingCalendar extends FullCalendarWidget implements HasCalendar
+final class MultiCalendar6 extends FullCalendarWidget implements HasCalendar
 {
     use CanBeConfigured, CanRefreshCalendar, HasOptions, HasSchema, InteractsWithCalendar, InteractsWithEventRecord, InteractsWithEvents, InteractsWithPageFilters, InteractsWithRawJS, InteractsWithRecords {
         // Prefer the contract-compatible refreshRecords (chainable) from CanRefreshCalendar
@@ -97,15 +98,16 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
     //    protected bool $dateClickEnabled = true;
     //    protected bool $dateSelectEnabled = true;
 
-    protected static ?int $sort = -1;
+    protected static ?int $sort = 6;
 
-    protected string $view = 'adultdate/filament-booking::service-periods-fullcalendar';
-
-    protected int|string|array $columnSpan = 'full';
+    protected string $view = 'adultdate/filament-booking::multi-fullcalendar';
+    // protected int | string | array $columnSpan = 3;
 
     public function getHeading(): string|Htmlable
     {
-        return '';
+        $technician = $this->selectedTechnician ? \App\Models\BookingCalendar::with('owner')->find($this->selectedTechnician)?->owner?->name : 'All Tekniker';
+
+        return '#6 ◴ '.$technician;
     }
 
     public function getFooterActions(): array
@@ -119,8 +121,7 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
         ];
     }
 
-
-        public function getHeaderActions(): array
+    public function getHeadingActions(): array
     {
         return [
             Action::make('create')
@@ -250,14 +251,16 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
             'initialView' => 'timeGridWeek',
             // Start week on Monday (0 = Sunday, 1 = Monday)
             'firstDay' => 1,
+            'dayCount' => 5,
+            'weekends' => false,
             'dayHeaderFormat' => [
                 'weekday' => 'short',
                 'day' => 'numeric',
             ],
             'headerToolbar' => [
-                'start' => 'prev,today,next',
+                'start' => 'prev,next',
                 'center' => 'title',
-                'end' => 'dayGridMonth,timeGridWeek,timeGridDay',
+                'end' => 'timeGridWeek,timeGridDay',
             ],
             'nowIndicator' => true,
             'selectable' => true,
@@ -270,29 +273,22 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
             'eventDrop' => 'onEventDrop',
             'timeZone' => 'Europe/Stockholm',
             'now' => now()->setTimezone('Europe/Stockholm')->addHour()->toISOString(),
-            'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
-            'slotMaxTime' => $openingEnd ? $openingEnd : '18:00:00',
+            'slotMinTime' => '07:00:00',
+            'slotMaxTime' => '17:00:00',
             'views' => [
                 'timeGridDay' => [
                     'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
                     'slotMaxTime' => $openingEnd ? $openingEnd : '18:00:00',
                 ],
                 'timeGridWeek' => [
-                    'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
-                    'slotMaxTime' => $openingEnd ? $openingEnd : '18:00:00',
+                    'slotMinTime' => '07:00:00',
+                    'slotMaxTime' => '17:00:00',
                 ],
                 'timeGridMonth' => [
                     'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
                     'slotMaxTime' => $openingEnd ? $openingEnd : '18:00:00',
                 ],
-                'resourceTimelineFourDays' => [
-                    'type' => 'resourceTimeline',
-                    'duration' => ['days' => 4],
-                    'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
-                    'slotMaxTime' => $openingEnd ? $openingEnd : '18:00:00',
-                ],
             ],
-            'resources' => $this->getResources(),
         ];
     }
 
@@ -448,6 +444,10 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
             $record = Booking::find($event['id'] ?? null);
         }
 
+        if (! $record) {
+            $record = BookingServicePeriod::find($event['id'] ?? null);
+        }
+
         if ($record instanceof Booking) {
             try {
                 $tz = config('app.timezone');
@@ -493,6 +493,44 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
                 logger()->error('Error persisting resized booking', ['err' => $e->getMessage()]);
                 Notification::make()
                     ->title('Failed to update booking')
+                    ->danger()
+                    ->send();
+
+                return false;
+            }
+        }
+
+        if ($record instanceof BookingServicePeriod) {
+            try {
+                $tz = config('app.timezone');
+                $start = isset($event['start']) ? Carbon::parse($event['start'], $tz) : null;
+                $end = isset($event['end']) ? Carbon::parse($event['end'], $tz) : null;
+
+                if ($start) {
+                    $record->service_date = $start->format('Y-m-d');
+                    $record->start_time = $start->format('H:i');
+                    $record->starts_at = $start;
+                }
+
+                if ($end) {
+                    $record->end_time = $end->format('H:i');
+                    $record->ends_at = $end;
+                }
+
+                $record->save();
+
+                Notification::make()
+                    ->title('Blocking period duration updated')
+                    ->success()
+                    ->send();
+
+                $this->refreshRecords();
+
+                return false;
+            } catch (Throwable $e) {
+                logger()->error('Error persisting resized blocking period', ['err' => $e->getMessage()]);
+                Notification::make()
+                    ->title('Failed to update blocking period')
                     ->danger()
                     ->send();
 
@@ -1646,10 +1684,10 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
         $end = $info->end->toMutable()->endOfDay();
 
         $filters = $this->pageFilters;
-        $selectedCalendarId = $filters['booking_calendars'] ?? null;
+        $selectedCalendarId = $filters['booking_calendars_2'] ?? null;
 
         $serviceUserId = null;
-        if ($selectedCalendarId && $selectedCalendarId !== 'all') {
+        if ($selectedCalendarId) {
             $calendar = \App\Models\BookingCalendar::find($selectedCalendarId);
             $serviceUserId = $calendar?->owner_id;
         }
@@ -1733,6 +1771,7 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
 
     public function refreshCalendar()
     {
+        $this->selectedTechnician = $this->pageFilters['booking_calendars_2'] ?? null;
         $this->refreshRecords();
     }
 
@@ -1761,11 +1800,17 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
 
     public function mount(): void
     {
+        $this->selectedTechnician = $this->pageFilters['booking_calendars_2'] ?? null;
         $this->eventClickEnabled = true;
         //    $this->dateClickEnabled = true;
         $this->eventDragEnabled = true;
         $this->eventResizeEnabled = true;
         $this->dateSelectEnabled = true;
+    }
+
+    public function getView(): string
+    {
+        return 'adultdate/filament-booking::calendar-widget';
     }
 
     protected function getEloquentQuery(): Builder
@@ -1786,7 +1831,7 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
         ];
     }
 
-    protected function isAdmin(\Illuminate\Contracts\Auth\Authenticatable $user): bool
+    protected function isAdmin(Model|Authenticatable $user): bool
     {
         // If it's an Admin model, always return true
         if ($user instanceof \App\Models\Admin) {
@@ -1873,7 +1918,7 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
     protected function getSelectedServiceUserId(): ?int
     {
         $filters = $this->pageFilters ?? [];
-        $selectedCalendarId = $filters['booking_calendars'] ?? null;
+        $selectedCalendarId = $filters['booking_calendars_2'] ?? null;
 
         if ($selectedCalendarId) {
             $calendar = \App\Models\BookingCalendar::find($selectedCalendarId);
@@ -1887,9 +1932,10 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
     protected function getSelectedCalendarId(): ?int
     {
         $filters = $this->pageFilters ?? [];
-        $calendarId = $filters['booking_calendars'] ?? null;
 
-        return $calendarId !== null ? (int) $calendarId : null;
+        $value = $filters['booking_calendars_2'] ?? null;
+
+        return $value ? (int) $value : null;
     }
 
     protected function getDefaultCalendarId(): ?int
@@ -1903,38 +1949,5 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
         $calendar = \App\Models\BookingCalendar::where('owner_id', $serviceUserId)->first();
 
         return $calendar ? $calendar->id : null;
-    }
-
-    protected function getResources(): array
-    {
-        $filters = $this->pageFilters ?? [];
-        $resources = [];
-
-        // Check for selected calendars in filters (e.g., booking_calendars_1, booking_calendars_2, etc.)
-        for ($i = 1; $i <= 10; $i++) { // Assuming up to 10 possible filters
-            $key = "booking_calendars_{$i}";
-            if (isset($filters[$key]) && $filters[$key]) {
-                $calendar = \App\Models\BookingCalendar::find($filters[$key]);
-                if ($calendar) {
-                    $resources[] = [
-                        'id' => $calendar->id,
-                        'title' => $calendar->name,
-                    ];
-                }
-            }
-        }
-
-        // If no filters selected, use default or all available
-        if (empty($resources)) {
-            $defaultCalendars = \App\Models\BookingCalendar::limit(5)->get(); // Or some logic to get defaults
-            foreach ($defaultCalendars as $calendar) {
-                $resources[] = [
-                    'id' => $calendar->id,
-                    'title' => $calendar->name,
-                ];
-            }
-        }
-
-        return $resources;
     }
 }
