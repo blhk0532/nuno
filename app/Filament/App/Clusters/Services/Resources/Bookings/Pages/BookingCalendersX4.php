@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Filament\App\Clusters\Services\Resources\Bookings\Pages;
 
-use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar1;
-use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar2;
-use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar3;
-use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar4;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendarX1;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendarX2;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendarX3;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendarX4;
 use App\Models\BookingCalendar as BookingCalendarModel;
 use BackedEnum;
 use Closure;
@@ -162,10 +162,10 @@ final class BookingCalendersX4 extends BaseDashboard
     public function getWidgets(): array
     {
         return [
-            MultiCalendar1::class,
-            MultiCalendar2::class,
-            MultiCalendar3::class,
-            MultiCalendar4::class,
+            MultiCalendarX1::class,
+            MultiCalendarX2::class,
+            MultiCalendarX3::class,
+            MultiCalendarX4::class,
         ];
     }
 }

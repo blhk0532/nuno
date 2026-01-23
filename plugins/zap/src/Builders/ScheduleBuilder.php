@@ -354,7 +354,7 @@ class ScheduleBuilder
     /**
      * Add working hours only rule.
      */
-    public function workingHoursOnly(string $start = '09:00', string $end = '17:00'): self
+    public function workingHoursOnly(string $start = '07:00', string $end = '20:00'): self
     {
         return $this->withRule('working_hours', compact('start', 'end'));
     }

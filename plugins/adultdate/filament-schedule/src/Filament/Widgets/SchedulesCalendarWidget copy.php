@@ -178,7 +178,7 @@ class SchedulesCalendarWidget extends FullCalendarWidget implements HasCalendar
 
                     // Default times if not provided
                     if (! isset($data['start_time']) || blank($data['start_time'])) {
-                        $data['start_time'] = '09:00';
+                        $data['start_time'] = '07:00';
                     }
 
                     if (! isset($data['end_time']) || blank($data['end_time'])) {
@@ -213,7 +213,7 @@ class SchedulesCalendarWidget extends FullCalendarWidget implements HasCalendar
                         $endTime = $p['end_time'];
                     } else {
                         $date = $data['start_date'] ?? now()->format('Y-m-d');
-                        $startTime = $data['start_time'] ?? '09:00';
+                        $startTime = $data['start_time'] ?? '07:00';
                         $endTime = $data['end_time'] ?? \Carbon\Carbon::createFromFormat('H:i', $startTime)->addHour()->format('H:i');
                     }
 

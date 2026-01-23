@@ -2,7 +2,7 @@
 
 namespace App\Filament\Imports\Shop;
 
-use App\Models\Shop\Category;
+use App\Models\Category;
 use Filament\Actions\Imports\ImportColumn;
 use Filament\Actions\Imports\Importer;
 use Filament\Actions\Imports\Models\Import;

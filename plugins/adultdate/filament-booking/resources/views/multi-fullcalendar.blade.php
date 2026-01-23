@@ -33,16 +33,14 @@
    padding:4px 12px;
 }
 .fc .fc-toolbar-title {
-    font-size: 1em!important;
+    font-size: 1rem!important;
     margin: 0px;
     max-width: 200px;
+    padding: 0px 2px;
     display: flex;
     overflow: hidden;
     text-overflow: clip;
     max-height: 24px;
-    position: absolute;
-    top: -36px;
-    right: 0px;
 }
 .get-heading {
 
@@ -72,7 +70,7 @@
                 eventContent: {!! htmlspecialchars($this->eventContent(), ENT_COMPAT) !!},
                 eventDidMount: {!! htmlspecialchars($this->eventDidMount(), ENT_COMPAT) !!},
                 eventWillUnmount: {!! htmlspecialchars($this->eventWillUnmount(), ENT_COMPAT) !!},
-            })" class="filament-fullcalendar" data-filament-fullcalendar="true"></div>
+            })" class="filament-fullcalendar {{ $this->getCalendarClass() }}" data-filament-fullcalendar="true"></div>
     </x-filament::section>
 
     <x-filament-actions::modals />

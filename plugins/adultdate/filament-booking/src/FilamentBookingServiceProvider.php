@@ -118,6 +118,7 @@ final class FilamentBookingServiceProvider extends PackageServiceProvider
             \Livewire\Livewire::component('adultdate.filament-booking.filament.clusters.services.resources.bookings.widgets.multi-calendar4', \Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar4::class);
             \Livewire\Livewire::component('adultdate.filament-booking.filament.clusters.services.resources.bookings.widgets.multi-calendar5', \Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar5::class);
             \Livewire\Livewire::component('adultdate.filament-booking.filament.clusters.services.resources.bookings.widgets.multi-calendar6', \Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar6::class);
+            \Livewire\Livewire::component('app.filament.app.clusters.services.resources.bookings.widgets.single-calendars', \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\SingleCalendars::class);
         }
 
         FilamentAsset::register(
@@ -180,7 +181,6 @@ final class FilamentBookingServiceProvider extends PackageServiceProvider
                 'app.filament.app.clusters.services.resources.bookings.widgets.booking-calendar',
                 \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\BookingCalendar::class
             );
-
             \Livewire\Livewire::component(
                 'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar1',
                 \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar1::class
@@ -207,9 +207,39 @@ final class FilamentBookingServiceProvider extends PackageServiceProvider
                 'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar6',
                 \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar6::class
             );
+                        \Livewire\Livewire::component(
+                'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar-x1',
+                \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendarX1::class
+            );
+
+            \Livewire\Livewire::component(
+                'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar-x2',
+                \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendarX2::class
+            );
+
+            \Livewire\Livewire::component(
+                'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar-x3',
+                \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendarX3::class
+            );
+            \Livewire\Livewire::component(
+                'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar-x4',
+                \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendarX4::class
+            );
+            \Livewire\Livewire::component(
+                'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar-x5',
+                \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendarX5::class
+            );
+            \Livewire\Livewire::component(
+                'app.filament.app.clusters.services.resources.bookings.widgets.multi-calendar-x6',
+                \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendarX6::class
+            );
             \Livewire\Livewire::component(
                 'filament.app.pages.chat-dashboard',
                 \App\Filament\App\Pages\AppChatDashboard::class
+            );
+            \Livewire\Livewire::component(
+                'filament.app.pages.ring-lista',
+                \App\Filament\App\Pages\AppRingLista::class
             );
         }
     }

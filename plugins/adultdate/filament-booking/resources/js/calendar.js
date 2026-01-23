@@ -32,7 +32,7 @@ export default function calendar({
         init: function () {
             const ec = this.mountCalendar()
 
-            window.addEventListener('calendar--refresh', () => {
+            this.$wire.on('calendar--refresh', () => {
                 ec.refetchEvents()
             })
 

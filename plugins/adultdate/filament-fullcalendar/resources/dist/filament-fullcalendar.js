@@ -2752,8 +2752,8 @@ function Os(t, e, o) {
   o ? t[e] && (t[e] = t[e].filter((M) => M !== o)) : delete t[e];
 }
 const ls = {
-  startTime: "09:00",
-  endTime: "17:00",
+  startTime: "07:00",
+  endTime: "20:00",
   daysOfWeek: [1, 2, 3, 4, 5],
   display: "inverse-background",
   classNames: "fc-non-business",

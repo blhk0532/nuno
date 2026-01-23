@@ -119,18 +119,6 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
         ];
     }
 
-
-        public function getHeaderActions(): array
-    {
-        return [
-            Action::make('create')
-                ->requiresConfirmation(true)
-                ->action(function (array $arguments) {
-                    dd('Admin action called', $arguments);
-                }),
-        ];
-    }
-
     public function editServicePeriodAction(): Action
     {
         return Action::make('editServicePeriod')

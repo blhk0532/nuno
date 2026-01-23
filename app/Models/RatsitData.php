@@ -14,6 +14,8 @@ class RatsitData extends Model
 
     protected $table = 'ratsit_data';
 
+       protected static bool $isScopedToTenant = false;
+
     protected $guarded = [];
 
     protected $casts = [

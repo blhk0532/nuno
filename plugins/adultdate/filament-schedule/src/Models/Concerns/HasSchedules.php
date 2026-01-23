@@ -274,8 +274,8 @@ trait HasSchedules
      */
     public function getAvailableSlots(
         string $date,
-        string $dayStart = '09:00',
-        string $dayEnd = '17:00',
+        string $dayStart = '07:00',
+        string $dayEnd = '20:00',
         int $slotDuration = 60,
         ?int $bufferMinutes = null
     ): array {
@@ -546,8 +546,8 @@ trait HasSchedules
     public function getNextAvailableSlot(
         ?string $afterDate = null,
         int $duration = 60,
-        string $dayStart = '09:00',
-        string $dayEnd = '17:00',
+        string $dayStart = '07:00',
+        string $dayEnd = '20:00',
         ?int $bufferMinutes = null
     ): ?array {
         trigger_error(

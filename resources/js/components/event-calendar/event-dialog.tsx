@@ -24,7 +24,7 @@ import { useShallow } from 'zustand/shallow';
 import { getLocaleFromCode } from '@/lib/event';
 import type { CalendarCategoryOption } from '@/types/event';
 
-const DEFAULT_START_TIME = '09:00';
+const DEFAULT_START_TIME = '07:00';
 const DEFAULT_END_TIME = '10:00';
 const DEFAULT_COLOR = 'bg-red-600';
 const DEFAULT_CATEGORY = '';

@@ -23,6 +23,8 @@
 
 @import '../../../../plugins/adultdate/filament-dialer/resources/css/theme.css';
 
+
+
 /* Prevent layout shift when modals toggle page scroll */
 html, body {
     scrollbar-gutter: stable both-edges;
@@ -261,7 +263,7 @@ form.fi-modal-window.fi-modal-window-has-close-btn.fi-modal-window-has-content.f
 }
 
 .filament-fullcalendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard.fc-liquid-hack{
-  min-height: 630px;
+  min-height: 700px;
 }
 
 div.fi-modal-icon-bg{
@@ -294,22 +296,17 @@ width: 24px;
 }
 
 div.filament-fullcalendar.filament-fullcalendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard{
-    max-height: 735px !important;
         width: 100% !important;
 }
-div.filament-fullcalendar {
-        max-height: 735px !important;
-    max-height: 720px !important;
-    width: 100% !important;
-}
-.calendar-modal{
-       max-height: 735px !important;
+div.filament-fullcalendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard.fc-liquid-hack {
+    min-height: 777px;
+    max-height: 777px;
+    height: 777px;
 }
 
 .calendar-widget-wrapper {
 width: 100% !important;
   height: 100% !important;
- max-height: 694px;
   overflow: auto !important;
   background: transparent;
   /*
@@ -339,3 +336,7 @@ width: 100% !important;
 .fi-section{
     --tw-ring-color:transparent!important;
 }
+.filament-fullcalendar{
+    overflow: hidden!important;
+}
+

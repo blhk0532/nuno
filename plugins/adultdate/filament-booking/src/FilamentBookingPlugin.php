@@ -24,7 +24,11 @@ use App\Filament\App\Pages\InertiaCalendar as AppInertiaCalendar;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppDashboardBooking;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX2;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX4;
+use App\Filament\Booking\Pages\InertiaCalendar as AppBookingInertiaCalendar;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBokning;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\MultiCalendars3;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\SingleCalendar;
+
 use App\Filament\Booking\Pages\GoogleCalendar;
 use App\Filament\Booking\Pages\InertiaCalendar;
 use Closure;
@@ -151,6 +155,7 @@ HTML,
                 AppInertiaCalendar::class,
                 BookingCalendersX2::class,
                 BookingCalendersX4::class,
+                MultiCalendars3::class,
             ],
         );
 

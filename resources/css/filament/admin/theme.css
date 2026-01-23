@@ -185,3 +185,9 @@ div.filament-world-clock-content-city-hour {
 div.filament-world-clock-content {
     gap:1rem!important;
 }
+
+div.filament-fullcalendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard.fc-liquid-hack {
+    min-height: 777px;
+    max-height: 777px;
+    height: 777px;
+}

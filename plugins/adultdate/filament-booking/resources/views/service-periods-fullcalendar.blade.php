@@ -1,7 +1,9 @@
 @php
     $plugin = \Adultdate\FilamentBooking\FilamentBookingPlugin::get();
 @endphp
+<style>
 
+</style>
 <x-filament-widgets::widget>
     <x-filament::section>
 

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Filament\App\Clusters\Services\Resources\Bookings\Widgets;
 
 use Adultdate\FilamentBooking\Concerns\CanRefreshCalendar;
@@ -11,12 +9,15 @@ use Adultdate\FilamentBooking\Concerns\InteractsWithCalendar;
 use Adultdate\FilamentBooking\Concerns\InteractsWithEventRecord;
 use Adultdate\FilamentBooking\Contracts\HasCalendar;
 use Adultdate\FilamentBooking\Enums\BookingStatus;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Schemas\BookingForm;
 use Adultdate\FilamentBooking\Filament\Widgets\Concerns\CanBeConfigured;
 use Adultdate\FilamentBooking\Filament\Widgets\Concerns\InteractsWithEvents;
 use Adultdate\FilamentBooking\Filament\Widgets\Concerns\InteractsWithRawJS;
 use Adultdate\FilamentBooking\Filament\Widgets\Concerns\InteractsWithRecords;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Adultdate\FilamentBooking\Filament\Widgets\FullCalendarWidget;
 use Adultdate\FilamentBooking\Models\Booking\Booking;
+use Adultdate\FilamentBooking\Models\Booking\BookingLocation;
 use Adultdate\FilamentBooking\Models\Booking\Client;
 use Adultdate\FilamentBooking\Models\Booking\DailyLocation;
 use Adultdate\FilamentBooking\Models\Booking\Service;
@@ -24,36 +25,57 @@ use Adultdate\FilamentBooking\Models\BookingServicePeriod;
 use Adultdate\FilamentBooking\Models\CalendarSettings;
 use Adultdate\FilamentBooking\ValueObjects\EventResizeInfo;
 use Adultdate\FilamentBooking\ValueObjects\FetchInfo;
-use App\Filament\App\Clusters\Services\Resources\Bookings\Schemas\BookingForm;
 use App\Models\User;
+use App\UserRole;
 use Carbon\Carbon;
-use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Repeater\TableColumn;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Notifications\Notification;
-use Filament\Schemas\Components\Group;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Utilities\Set;
-use Filament\Widgets\Concerns\InteractsWithPageFilters;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Contracts\Support\Htmlable;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use Throwable;
-use UnitEnum;
+use Filament\Schemas\Components\Utilities\Set;
+use Illuminate\Support\HtmlString;
 
-final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
+class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
 {
+    public ?int $recordId = null;
+
+    public $selectedTechnician4 = 'all';
+
+public ?array $lastMountedData = null;
+
+public Model|int|string|null $record;
+
+    public ?Model $eventRecord = null;
+
+    public Model|string|null $model = null;
+
+    protected $settings;
+
+    protected $listeners = ['refreshCalendar' => 'refreshCalendar'];
+
+    //    protected bool $eventDragEnabled = true;
+    //    protected bool $eventResizeEnabled = true;
+    //    protected bool $dateClickEnabled = true;
+    //    protected bool $dateSelectEnabled = true;
+
+    protected static ?int $sort = -1;
+
     use CanBeConfigured, CanRefreshCalendar, HasOptions, HasSchema, InteractsWithCalendar, InteractsWithEventRecord, InteractsWithEvents, InteractsWithPageFilters, InteractsWithRawJS, InteractsWithRecords {
         // Prefer the contract-compatible refreshRecords (chainable) from CanRefreshCalendar
         CanRefreshCalendar::refreshRecords insteadof InteractsWithEvents;
@@ -77,37 +99,20 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
         InteractsWithEvents::refreshRecords insteadof InteractsWithCalendar;
     }
 
-    public ?int $recordId = null;
-
-    public ?array $lastMountedData = null;
-
-    public Model|int|string|null $record;
-
-    public ?Model $eventRecord = null;
-
-    public Model|string|null $model = null;
-
-    public ?array $calendarData = null;
-
-    protected $settings;
-
-    protected $listeners = ['refreshCalendar' => 'refreshCalendar'];
-
-    //    protected bool $eventDragEnabled = true;
-    //    protected bool $eventResizeEnabled = true;
-    //    protected bool $dateClickEnabled = true;
-    //    protected bool $dateSelectEnabled = true;
-
-    protected static ?int $sort = -1;
-
     protected string $view = 'adultdate/filament-booking::multi-fullcalendar';
     // protected int | string | array $columnSpan = 3;
 
     public function getHeading(): string|Htmlable
     {
-        $technician = $this->selectedTechnician ? \App\Models\BookingCalendar::with('owner')->find($this->selectedTechnician)?->owner?->name : 'All Tekniker';
+        return new HtmlString(view('filament.widgets.multi-calendar4-header', [
+            'calendars' => \App\Models\BookingCalendar::all()->pluck('name', 'id'),
+            'selectedTechnician4' => $this->selectedTechnician4,
+        ])->render());
+    }
 
-        return '#4 ◴ '.$technician;
+    public function updatedSelectedTechnician4(): void
+    {
+        $this->dispatch('filament-fullcalendar--refresh');
     }
 
     public function getFooterActions(): array
@@ -161,7 +166,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                     BookingServicePeriod::whereKey($id)->update($data);
                 }
                 $this->refreshRecords();
-                Notification::make()
+                \Filament\Notifications\Notification::make()
                     ->title('Period updated successfully')
                     ->success()
                     ->send();
@@ -169,7 +174,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
             ->modalSubmitActionLabel('Update')
             ->modalCancelActionLabel('Cancel')
             ->extraModalFooterActions([
-                Action::make('deleteFromModal')
+                \Filament\Actions\Action::make('deleteFromModal')
                     ->label('Delete')
                     ->color('danger')
                     ->requiresConfirmation()
@@ -182,7 +187,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                             BookingServicePeriod::whereKey($id)->delete();
                         }
                         $this->refreshRecords();
-                        Notification::make()
+                        \Filament\Notifications\Notification::make()
                             ->title('Period deleted successfully')
                             ->success()
                             ->send();
@@ -205,7 +210,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                     BookingServicePeriod::whereKey($id)->delete();
                 }
                 $this->refreshRecords();
-                Notification::make()
+                \Filament\Notifications\Notification::make()
                     ->title('Period deleted successfully')
                     ->success()
                     ->send();
@@ -235,6 +240,11 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
     public function getEventRecord(): ?Model
     {
         return $this->record instanceof Model ? $this->record : null;
+    }
+
+    protected function getEloquentQuery(): Builder
+    {
+        return $this->getModel()::query();
     }
 
     public function config(): array
@@ -274,7 +284,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
             'timeZone' => 'Europe/Stockholm',
             'now' => now()->setTimezone('Europe/Stockholm')->addHour()->toISOString(),
             'slotMinTime' => '07:00:00',
-            'slotMaxTime' => '17:00:00',
+            'slotMaxTime' => '20:00:00',
             'views' => [
                 'timeGridDay' => [
                     'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
@@ -282,7 +292,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                 ],
                 'timeGridWeek' => [
                     'slotMinTime' => '07:00:00',
-                    'slotMaxTime' => '17:00:00',
+                    'slotMaxTime' => '20:00:00',
                 ],
                 'timeGridMonth' => [
                     'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
@@ -294,7 +304,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
 
     public function onDateClick(string $date, bool $allDay, ?array $view, ?array $resource): void
     {
-        $startDate = Carbon::parse($date);
+        $startDate = \Carbon\Carbon::parse($date);
 
         $action = $this->resolveDateSelectAction($allDay, $view);
 
@@ -302,7 +312,6 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
             $this->mountAction('createDailyLocation', [
                 'date' => $startDate->format('Y-m-d'),
             ]);
-
             return;
         }
 
@@ -344,7 +353,6 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
             $this->mountAction('createDailyLocation', [
                 'date' => $dateVal->format('Y-m-d'),
             ]);
-
             return;
         }
 
@@ -444,10 +452,6 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
             $record = Booking::find($event['id'] ?? null);
         }
 
-        if (! $record) {
-            $record = BookingServicePeriod::find($event['id'] ?? null);
-        }
-
         if ($record instanceof Booking) {
             try {
                 $tz = config('app.timezone');
@@ -489,51 +493,12 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                 // bundle currently shipped with this plugin (which treats
                 // `true` as a revert signal).
                 return false;
-            } catch (Throwable $e) {
+            } catch (\Throwable $e) {
                 logger()->error('Error persisting resized booking', ['err' => $e->getMessage()]);
                 Notification::make()
                     ->title('Failed to update booking')
                     ->danger()
                     ->send();
-
-                return false;
-            }
-        }
-
-        if ($record instanceof BookingServicePeriod) {
-            try {
-                $tz = config('app.timezone');
-                $start = isset($event['start']) ? Carbon::parse($event['start'], $tz) : null;
-                $end = isset($event['end']) ? Carbon::parse($event['end'], $tz) : null;
-
-                if ($start) {
-                    $record->service_date = $start->format('Y-m-d');
-                    $record->start_time = $start->format('H:i');
-                    $record->starts_at = $start;
-                }
-
-                if ($end) {
-                    $record->end_time = $end->format('H:i');
-                    $record->ends_at = $end;
-                }
-
-                $record->save();
-
-                Notification::make()
-                    ->title('Blocking period duration updated')
-                    ->success()
-                    ->send();
-
-                $this->refreshRecords();
-
-                return false;
-            } catch (Throwable $e) {
-                logger()->error('Error persisting resized blocking period', ['err' => $e->getMessage()]);
-                Notification::make()
-                    ->title('Failed to update blocking period')
-                    ->danger()
-                    ->send();
-
                 return false;
             }
         }
@@ -543,6 +508,8 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
 
         return false;
     }
+
+    public ?array $calendarData = null;
 
     public function adminAction(): Action
     {
@@ -563,7 +530,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                     ->color('success')
                     ->icon('heroicon-o-calendar-days')
                     ->action(function () {
-                        $startDate = Carbon::parse($this->calendarData['start'])->format('Y-m-d');
+                        $startDate = \Carbon\Carbon::parse($this->calendarData['start'])->format('Y-m-d');
                         $startVal = $this->calendarData['start_val'];
                         $endVal = $this->calendarData['end_val'];
                         $dateVal = $this->calendarData['date_val'];
@@ -571,18 +538,18 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                         $timeStamp = time();
                         $dateStamp = date('Ymd', $timeStamp);
                         $startStamp = date('Ymd', strtotime($startDate));
-                        $bookingNumber = Str::upper(Auth::user()->name).$timeStamp;
+                        $bookingNumber = Str::upper(Auth::user()->name) . $timeStamp;
                         if ($this->calendarData['allDay']) {
                             $startTime = '00:00';
                             $endTime = '23:59';
                         } else {
-                            $startTime = Carbon::parse($this->calendarData['start_val'])->format('H:i');
-                            $endTime = Carbon::parse($this->calendarData['end_val'])->format('H:i');
+                            $startTime = \Carbon\Carbon::parse($this->calendarData['start_val'])->format('H:i');
+                            $endTime = \Carbon\Carbon::parse($this->calendarData['end_val'])->format('H:i');
                         }
                         if ($endTime === $startTime) {
-                            $startDate = Carbon::parse($dateVal)->format('Y-m-d');
-                            $startTime = Carbon::parse($startVal)->format('H:i');
-                            $endTime = Carbon::parse($endVal)->format('H:i');
+                            $startDate = \Carbon\Carbon::parse($dateVal)->format('Y-m-d');
+                            $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
+                            $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
                         }
                         $data = ['number' => $bookingNumber, 'notes' => '', 'service_user_id' => $serviceUserId, 'booking_client_id' => null, 'booking_calendar_id' => $this->calendarData['booking_calendar_id'] ?? null, 'date' => $startDate, 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate, 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: B BOOK DATA', $data);
@@ -596,7 +563,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                     ->color('primary')
                     ->icon('heroicon-o-map-pin')
                     ->action(function () {
-                        $startDate = Carbon::parse($this->calendarData['start'])->format('Y-m-d');
+                        $startDate = \Carbon\Carbon::parse($this->calendarData['start'])->format('Y-m-d');
                         $startVal = $this->calendarData['start_val'];
                         $endVal = $this->calendarData['end_val'];
                         $dateVal = $this->calendarData['date_val'];
@@ -604,13 +571,13 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                             $startTime = '00:00';
                             $endTime = '23:59';
                         } else {
-                            $startTime = Carbon::parse($this->calendarData['start'])->format('H:i');
-                            $endTime = Carbon::parse($this->calendarData['end'])->format('H:i');
+                            $startTime = \Carbon\Carbon::parse($this->calendarData['start'])->format('H:i');
+                            $endTime = \Carbon\Carbon::parse($this->calendarData['end'])->format('H:i');
                         }
                         if ($endTime === $startTime) {
-                            $startDate = Carbon::parse($dateVal)->format('Y-m-d');
-                            $startTime = Carbon::parse($startVal)->format('H:i');
-                            $endTime = Carbon::parse($endVal)->format('H:i');
+                            $startDate = \Carbon\Carbon::parse($dateVal)->format('Y-m-d');
+                            $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
+                            $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
                         }
                         $data = ['date' => $startDate, 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate, 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: LOCATION DATA', $data);
@@ -624,16 +591,16 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                     ->color('danger')
                     ->icon('heroicon-o-clock')
                     ->action(function () {
-                        $startDate = Carbon::parse($this->calendarData['start'])->format('Y-m-d');
-                        $startTime = Carbon::parse($this->calendarData['start'])->format('H:i');
-                        $endTime = Carbon::parse($this->calendarData['end'])->format('H:i');
+                        $startDate = \Carbon\Carbon::parse($this->calendarData['start'])->format('Y-m-d');
+                        $startTime = \Carbon\Carbon::parse($this->calendarData['start'])->format('H:i');
+                        $endTime = \Carbon\Carbon::parse($this->calendarData['end'])->format('H:i');
                         $startVal = $this->calendarData['start_val'];
                         $endVal = $this->calendarData['end_val'];
                         $dateVal = $this->calendarData['date_val'];
                         if ($endTime === $startTime) {
-                            $startDate = Carbon::parse($dateVal)->format('Y-m-d');
-                            $startTime = Carbon::parse($startVal)->format('H:i');
-                            $endTime = Carbon::parse($endVal)->format('H:i');
+                            $startDate = \Carbon\Carbon::parse($dateVal)->format('Y-m-d');
+                            $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
+                            $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
                         }
                         $data = ['date' => $startDate, 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate, 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: BLOCK PERIOD DATA', $data);
@@ -642,12 +609,12 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                         $this->dispatch('sync-action-modals', ['id' => $this->getId(), 'newActionNestingIndex' => $newIndex]);
                     }),
 
-                Action::make('close')
-                    ->label('')
-                    ->color('gray')
-                    ->icon('heroicon-o-x-circle')
-                    ->close(true)
-                    ->action(function () {}),
+                 Action::make('close')
+                 ->label('')
+                 ->color('gray')
+                 ->icon('heroicon-o-x-circle')
+                 ->close(true)
+                 ->action(function () { }),
 
             ]);
     }
@@ -676,7 +643,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                 $data['created_by'] = Auth::id();
                 DailyLocation::updateOrCreate(['date' => $data['date'], 'service_user_id' => $data['service_user_id']], $data);
                 $this->refreshRecords();
-                Notification::make()
+                \Filament\Notifications\Notification::make()
                     ->title('Location saved successfully')
                     ->success()
                     ->send();
@@ -710,7 +677,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                     DailyLocation::whereKey($id)->update($data);
                 }
                 $this->refreshRecords();
-                Notification::make()
+                \Filament\Notifications\Notification::make()
                     ->title('Location updated successfully')
                     ->success()
                     ->send();
@@ -718,7 +685,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
             ->modalSubmitActionLabel('Update')
             ->extraModalFooterActions(function (array $arguments) {
                 $id = $arguments['data']['id'] ?? null;
-                if (! $id) {
+                if (!$id) {
                     return [];
                 }
 
@@ -730,7 +697,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                         ->action(function () use ($id) {
                             DailyLocation::whereKey($id)->delete();
                             $this->refreshRecords();
-                            Notification::make()
+                            \Filament\Notifications\Notification::make()
                                 ->title('Location deleted successfully')
                                 ->success()
                                 ->send();
@@ -775,7 +742,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                     $data
                 );
                 $this->refreshRecords();
-                Notification::make()
+                \Filament\Notifications\Notification::make()
                     ->title('Period saved successfully')
                     ->success()
                     ->send();
@@ -796,26 +763,25 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                 $defaults = $this->getDefaultFormData();
                 $merged = array_merge($defaults, $data);
                 $user = Auth::user();
-                $roleValue = $user && $user->role instanceof UnitEnum ? $user->role->value : (string) $user->role;
+                $roleValue = $user && $user->role instanceof \UnitEnum ? $user->role->value : (string) $user->role;
                 $isAdmin = in_array($roleValue, ['admin', 'super', 'super_admin'], true);
                 // Preserve service_user_id from data if provided (from calendar context), otherwise use current user
-                if (! isset($merged['service_user_id']) || empty($merged['service_user_id'])) {
+                if (!isset($merged['service_user_id']) || empty($merged['service_user_id'])) {
                     $merged['service_user_id'] = Auth::id();
                 }
-
                 return $merged;
             })
             ->schema($this->getFormSchema())
             ->action(function (array $data) {
                 // Ensure number exists
-                if (! isset($data['number']) || empty($data['number'])) {
+                if (!isset($data['number']) || empty($data['number'])) {
                     $data['number'] = $this->generateNumber();
                 }
 
                 // Always set booking_calendar_id from selected or default if missing or null
-                if (! isset($data['booking_calendar_id']) || empty($data['booking_calendar_id'])) {
+                if (!isset($data['booking_calendar_id']) || empty($data['booking_calendar_id'])) {
                     $calendarId = method_exists($this, 'getSelectedCalendarId') ? $this->getSelectedCalendarId() : null;
-                    if (! $calendarId && method_exists($this, 'getDefaultCalendarId')) {
+                    if (!$calendarId && method_exists($this, 'getDefaultCalendarId')) {
                         $calendarId = $this->getDefaultCalendarId();
                     }
                     $data['booking_calendar_id'] = $calendarId;
@@ -827,17 +793,17 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
 
                 // Build proper starts_at and ends_at from service_date + times
                 if (isset($data['service_date']) && isset($data['start_time'])) {
-                    $startDateTime = Carbon::parse($data['service_date'].' '.$data['start_time']);
+                    $startDateTime = \Carbon\Carbon::parse($data['service_date'] . ' ' . $data['start_time']);
                     $data['starts_at'] = $startDateTime->toDateTimeString();
                 }
                 if (isset($data['service_date']) && isset($data['end_time'])) {
-                    $endDateTime = Carbon::parse($data['service_date'].' '.$data['end_time']);
+                    $endDateTime = \Carbon\Carbon::parse($data['service_date'] . ' ' . $data['end_time']);
                     $data['ends_at'] = $endDateTime->toDateTimeString();
                 }
 
                 logger()->info('BookingCalendarWidget: BEFORE Booking::create()', [
                     'booking_calendar_id' => $data['booking_calendar_id'] ?? 'NOT SET',
-                    'full_data' => $data,
+                    'full_data' => $data
                 ]);
                 $booking = Booking::create($data);
                 logger()->info('BookingCalendarWidget: AFTER Booking::create()', [
@@ -862,7 +828,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                 // The Observer will handle Google Calendar sync and WhatsApp notification automatically
 
                 $this->refreshRecords();
-                Notification::make()
+                \Filament\Notifications\Notification::make()
                     ->title('Booking created successfully')
                     ->success()
                     ->send();
@@ -899,7 +865,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                     ->action(function () use ($widget) {
                         $widget->record->delete();
                         $widget->refreshRecords();
-                        Notification::make()
+                        \Filament\Notifications\Notification::make()
                             ->title('Service period deleted successfully')
                             ->success()
                             ->send();
@@ -924,8 +890,8 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                         return null;
                     }
                     try {
-                        return Carbon::parse($raw)->format('H:i');
-                    } catch (Throwable $e) {
+                        return \Carbon\Carbon::parse($raw)->format('H:i');
+                    } catch (\Throwable $e) {
                         // Fallback: take first 5 characters if looks like HH:MM
                         return preg_match('/^(\d{2}:\d{2})/', (string) $raw, $m) ? $m[1] : (string) $raw;
                     }
@@ -939,9 +905,9 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                 $serviceUser = data_get($data, 'service_user') ?: ($data['service_user_name'] ?? data_get($data, 'extendedProps.service_user'));
                 if (! $serviceUser && ! empty($data['service_user_id'])) {
                     try {
-                        $svcUser = User::find($data['service_user_id']);
+                        $svcUser = \App\Models\User::find($data['service_user_id']);
                         $serviceUser = $svcUser?->name ?: $serviceUser;
-                    } catch (Throwable $e) {
+                    } catch (\Throwable $e) {
                         // ignore
                     }
                 }
@@ -953,7 +919,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                 }
 
                 if ($start) {
-                    return $bookingUser ? "{$prefix}{$start} — {$bookingUser}" : ($prefix ? mb_trim($prefix) : $start);
+                    return $bookingUser ? "{$prefix}{$start} — {$bookingUser}" : ($prefix ? trim($prefix) : $start);
                 }
 
                 return 'Manage Update Booking';
@@ -977,7 +943,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                         }
                         $name = $it['booking_service_name'] ?? $it['service_name'] ?? $it['name'] ?? null;
                         if (! $name && isset($it['booking_service_id'])) {
-                            $svc = Service::find($it['booking_service_id']);
+                            $svc = \Adultdate\FilamentBooking\Models\Booking\Service::find($it['booking_service_id']);
                             $name = $svc?->name;
                         }
                         $qty = isset($it['qty']) ? (int) $it['qty'] : (isset($it['quantity']) ? (int) $it['quantity'] : 1);
@@ -1046,6 +1012,8 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                         $newIndex = max(0, count($this->mountedActions) - 1);
                         $this->dispatch('sync-action-modals', id: $this->getId(), newActionNestingIndex: $newIndex);
                     }),
+
+
 
             ]);
     }
@@ -1144,11 +1112,11 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
     {
         logger()->info('zzz: onEventClick', ['events' => $event]);
 
-        $title = $event['title'] ?? null;
-        $start = $event['start'] ?? null;
-        $end = $event['end'] ?? null;
-        $view = $event['view'] ?? null;
-        $resource = $event['resource'] ?? null;
+         $title = $event['title'] ?? null;
+         $start = $event['start'] ?? null;
+         $end = $event['end'] ?? null;
+         $view = $event['view'] ?? null;
+         $resource = $event['resource'] ?? null;
         // logger()->info('zzz: onEventClick', ['events' => $start . ' ' . $end . ' ' . ($allDay ? 'allDay' : 'notAllDay')]);
 
         $allDay = (bool) ($event['allDay']);
@@ -1171,9 +1139,8 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                 $recId = $event['extendedProps']['booking_id'] ?? null;
                 logger()->info('BookingCalendarWidget: Blocking period click', ['recId' => $recId]);
 
-                if (! $recId) {
+                if (!$recId) {
                     logger()->error('BookingCalendarWidget: No record ID found for blocking period');
-
                     return;
                 }
 
@@ -1183,13 +1150,12 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                     // Directly query the record instead of using resolveRecord
                     $this->record = BookingServicePeriod::find($recId);
 
-                    if (! $this->record) {
+                    if (!$this->record) {
                         logger()->error('BookingCalendarWidget: Record not found', ['id' => $recId]);
-                        Notification::make()
+                        \Filament\Notifications\Notification::make()
                             ->title('Period not found')
                             ->danger()
                             ->send();
-
                         return;
                     }
 
@@ -1199,27 +1165,25 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                         $payload = $this->record->toArray();
                     } else {
                         logger()->error('BookingCalendarWidget: Record is not a valid Model instance', ['record' => $this->record]);
-                        Notification::make()
+                        \Filament\Notifications\Notification::make()
                             ->title('Invalid record type')
                             ->danger()
                             ->send();
-
                         return;
                     }
 
                     $user = Auth::user();
-                    if (! $user) {
+                    if (!$user) {
                         logger()->error('BookingCalendarWidget: No authenticated user');
-                        Notification::make()
+                        \Filament\Notifications\Notification::make()
                             ->title('Authentication required')
                             ->danger()
                             ->send();
-
                         return;
                     }
 
                     $userRole = $user->role;
-                    if ($userRole instanceof UnitEnum) {
+                    if ($userRole instanceof \UnitEnum) {
                         $roleValue = $userRole->value;
                     } else {
                         $roleValue = (string) $userRole;
@@ -1241,18 +1205,18 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                         logger()->info('BookingCalendarWidget: User does not have permission to edit blocking period', [
                             'userRole' => $roleValue,
                         ]);
-                        Notification::make()
+                        \Filament\Notifications\Notification::make()
                             ->title('Permission denied')
                             ->body('You do not have permission to edit this period')
                             ->warning()
                             ->send();
                     }
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     logger()->error('BookingCalendarWidget: Exception in blocking case', [
                         'message' => $e->getMessage(),
                         'trace' => $e->getTraceAsString(),
                     ]);
-                    Notification::make()
+                    \Filament\Notifications\Notification::make()
                         ->title('Error loading period')
                         ->body($e->getMessage())
                         ->danger()
@@ -1266,8 +1230,8 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                     try {
                         $this->model = DailyLocation::class;
                         $this->record = DailyLocation::find($recId);
-                        if (! $this->record) {
-                            throw new Exception("Location record not found: {$recId}");
+                        if (!$this->record) {
+                            throw new \Exception("Location record not found: {$recId}");
                         }
                         if ($this->record instanceof Model) {
                             $this->eventRecord = $this->record;
@@ -1275,31 +1239,30 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                             $payload = $this->record->toArray();
                         }
                         $user = Auth::user();
-                        if (! $user) {
+                        if (!$user) {
                             logger()->error('BookingCalendarWidget: No authenticated user for location');
-                            Notification::make()
+                            \Filament\Notifications\Notification::make()
                                 ->title('Authentication required')
                                 ->danger()
                                 ->send();
-
                             return;
                         }
 
+                    $userRole = $user->role;
+                    if ($userRole instanceof \UnitEnum) {
+                        $roleValue = $userRole->value;
+                    } else {
+                        $roleValue = (string) $userRole;
+                    }
+
+                    $canEdit = in_array($roleValue, ['admin', 'super', 'super_admin'], true);
+
+                    // For bookings we mount the booking `options` action below
+                    // based on the user's permissions; do not mount the
+                    // service-period editor here (copy/paste leftover).
+
                         $userRole = $user->role;
-                        if ($userRole instanceof UnitEnum) {
-                            $roleValue = $userRole->value;
-                        } else {
-                            $roleValue = (string) $userRole;
-                        }
-
-                        $canEdit = in_array($roleValue, ['admin', 'super', 'super_admin'], true);
-
-                        // For bookings we mount the booking `options` action below
-                        // based on the user's permissions; do not mount the
-                        // service-period editor here (copy/paste leftover).
-
-                        $userRole = $user->role;
-                        if ($userRole instanceof UnitEnum) {
+                        if ($userRole instanceof \UnitEnum) {
                             $roleValue = $userRole->value;
                         } else {
                             $roleValue = (string) $userRole;
@@ -1317,12 +1280,12 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                                 'data' => $payload,
                             ]);
                         }
-                    } catch (Exception $e) {
+                    } catch (\Exception $e) {
                         \Illuminate\Support\Facades\Log::error('BookingCalendarWidget: Location error', [
                             'error' => $e->getMessage(),
                             'recId' => $recId,
                         ]);
-                        Notification::make()
+                        \Filament\Notifications\Notification::make()
                             ->title('Error loading location')
                             ->body($e->getMessage())
                             ->danger()
@@ -1333,13 +1296,13 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
 
             case 'booking':
             default:
-                if (! $allDay) {
+                if (!$allDay) {
                     $recId = $event['id'] ?? null;
                     try {
                         $this->model = Booking::class;
                         $this->record = Booking::find($recId);
-                        if (! $this->record) {
-                            throw new Exception("Booking record not found: {$recId}");
+                        if (!$this->record) {
+                            throw new \Exception("Booking record not found: {$recId}");
                         }
                         if ($this->record instanceof Model) {
                             $this->eventRecord = $this->record;
@@ -1352,44 +1315,44 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                             $payload['address'] = $this->record->client?->address ?? ($payload['address'] ?? null);
                             $payload['phone'] = $this->record->client?->phone ?? ($payload['phone'] ?? null);
                         }
-                        $payload['service_date'] = $this->record->service_date?->format('Y-m-d') ?? ($payload['service_date'] ?? null);
-                        // Ensure booking user name is available for the modal header
-                        $payload['booking_user_name'] = $this->record->bookingUser?->name ?? ($payload['booking_user_name'] ?? null);
+                            $payload['service_date'] = $this->record->service_date?->format('Y-m-d') ?? ($payload['service_date'] ?? null);
+                            // Ensure booking user name is available for the modal header
+                            $payload['booking_user_name'] = $this->record->bookingUser?->name ?? ($payload['booking_user_name'] ?? null);
                         $booking = $this->record;
                         $user = Auth::user();
 
-                        if (! $user) {
+                        if (!$user) {
                             logger()->error('BookingCalendarWidget: No authenticated user for booking');
-                            Notification::make()
+                            \Filament\Notifications\Notification::make()
                                 ->title('Authentication required')
                                 ->danger()
                                 ->send();
-
                             return;
                         }
 
+
+                    $userRole = $user->role;
+                    if ($userRole instanceof \UnitEnum) {
+                        $roleValue = $userRole->value;
+                    } else {
+                        $roleValue = (string) $userRole;
+                    }
+
+                    // Intentionally do not mount the service-period editor here.
+                    // Booking-specific actions are mounted further below
+                    // (see the $action = $canEdit ? 'options' : '' logic).
+
                         $userRole = $user->role;
-                        if ($userRole instanceof UnitEnum) {
+                        if ($userRole instanceof \UnitEnum) {
                             $roleValue = $userRole->value;
                         } else {
                             $roleValue = (string) $userRole;
                         }
 
-                        // Intentionally do not mount the service-period editor here.
-                        // Booking-specific actions are mounted further below
-                        // (see the $action = $canEdit ? 'options' : '' logic).
-
-                        $userRole = $user->role;
-                        if ($userRole instanceof UnitEnum) {
-                            $roleValue = $userRole->value;
-                        } else {
-                            $roleValue = (string) $userRole;
-                        }
-
-                        $canEdit = $user->id === $booking->booking_user_id || in_array($roleValue, ['admin', 'super', 'super_admin'], true);
+                        $canEdit = $user->id == $booking->booking_user_id || in_array($roleValue, ['admin', 'super', 'super_admin'], true);
                         \Illuminate\Support\Facades\Log::info('BookingCalendarWidget: Booking click', [
                             'canEdit' => $canEdit,
-                            'isBookingOwner' => $user->id === $booking->booking_user_id,
+                            'isBookingOwner' => $user->id == $booking->booking_user_id,
                             'userRole' => $roleValue,
                             'recordId' => $recId,
                         ]);
@@ -1400,12 +1363,12 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                                 'data' => $payload,
                             ]);
                         }
-                    } catch (Exception $e) {
+                    } catch (\Exception $e) {
                         \Illuminate\Support\Facades\Log::error('BookingCalendarWidget: Booking error', [
                             'error' => $e->getMessage(),
                             'recId' => $recId,
                         ]);
-                        Notification::make()
+                        \Filament\Notifications\Notification::make()
                             ->title('Error loading booking')
                             ->body($e->getMessage())
                             ->danger()
@@ -1413,7 +1376,8 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                     }
                 } else {
                     // All-day click for creating location
-                    $startDate = Carbon::parse($start);
+                    $timezone = config('app.timezone');
+                    $startDate = $allDay ? Carbon::parse($start) : Carbon::parse($start, $timezone);
                     $this->mountAction('createDailyLocation', [
                         'date' => $startDate->format('Y-m-d'),
                         'service_date' => $startDate->format('Y-m-d'),
@@ -1436,26 +1400,24 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
         ]);
 
         // Only allow admins to drag and drop
-        if (! Auth::check()) {
+        if (!Auth::check()) {
             logger('BookingCalendarWidget: Not authenticated');
             $this->dispatch('notify', 'error', 'You must be authenticated to modify events.');
-
             return;
         }
 
         $user = Auth::user();
         logger('BookingCalendarWidget: User authenticated', ['user_id' => $user->id, 'user_class' => get_class($user)]);
         $userRole = $user->role;
-        if ($userRole instanceof UnitEnum) {
+        if ($userRole instanceof \UnitEnum) {
             $roleValue = $userRole->value;
         } else {
             $roleValue = (string) $userRole;
         }
 
-        if (! in_array($roleValue, ['admin', 'super', 'super_admin'], true)) {
+        if (!in_array($roleValue, ['admin', 'super', 'super_admin'], true)) {
             logger('BookingCalendarWidget: Insufficient permissions', ['role' => $roleValue]);
             $this->dispatch('notify', 'error', 'You do not have permission to modify events.');
-
             return;
         }
 
@@ -1477,7 +1439,6 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
                 // Timed events cannot be dropped to all-day row
                 if ($allDay) {
                     $this->dispatch('notify', 'error', 'Timed events cannot be moved to the all-day row.');
-
                     return;
                 }
                 $startTime = $start->format('H:i:s');
@@ -1486,9 +1447,8 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
 
             case 'location':
                 // Location events are always all-day and should stay that way
-                if (! $allDay) {
+                if (!$allDay) {
                     $this->dispatch('notify', 'error', 'Location events can only be moved within the all-day row.');
-
                     return;
                 }
                 $startTime = null;
@@ -1497,7 +1457,6 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
 
             default:
                 $this->dispatch('notify', 'error', 'Unknown event type.');
-
                 return;
         }
 
@@ -1577,6 +1536,39 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
         $this->eventDropped((string) $id, (string) $start, $end ? (string) $end : null, (string) $type, (bool) $allDay);
     }
 
+    protected function getDateClickContextMenuActions(): array
+    {
+        $user = Auth::user();
+
+        if (! $user || ! $this->isAdmin($user)) {
+            return [];
+        }
+
+        return [
+            $this->adminAction(),
+        ];
+    }
+
+    protected function isAdmin(Model|Authenticatable $user): bool
+    {
+        // If it's an Admin model, always return true
+        if ($user instanceof \App\Models\Admin) {
+            return true;
+        }
+
+        // For User model, check the role attribute
+        $userRole = $user->role;
+
+        // Handle enum instances
+        if ($userRole instanceof \UnitEnum) {
+            $roleValue = $userRole->value;
+        } else {
+            $roleValue = (string) $userRole;
+        }
+
+        return in_array($roleValue, ['admin', 'super', 'super_admin'], true);
+    }
+
     public function resolveDateSelectAction(bool $allDay, ?array $view): string
     {
         $user = Auth::user();
@@ -1586,7 +1578,6 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
             if ($allDay) {
                 return 'createDailyLocation';
             }
-
             return 'admin';
         }
 
@@ -1677,179 +1668,6 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
         ];
     }
 
-    public function getEvents(FetchInfo $info): Collection|array|Builder
-    {
-        $start = $info->start->toMutable()->startOfDay();
-        $end = $info->end->toMutable()->endOfDay();
-
-        $filters = $this->pageFilters;
-        $selectedCalendarId = $filters['booking_calendars_3'] ?? null;
-
-        $serviceUserId = null;
-        if ($selectedCalendarId) {
-            $calendar = \App\Models\BookingCalendar::find($selectedCalendarId);
-            $serviceUserId = $calendar?->owner_id;
-        }
-
-        $blockingPeriods = BookingServicePeriod::query()
-            ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
-            ->where('period_type', '=', 'unavailable')
-            ->get();
-
-        $blockingEvents = $blockingPeriods->map(fn (BookingServicePeriod $blockingPeriod) => $blockingPeriod->toCalendarEvent())->toArray();
-
-        $bookings = Booking::query()
-            ->with(['client', 'service', 'serviceUser', 'bookingUser', 'location'])
-            ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
-            ->where(function ($query) use ($start, $end) {
-                $query->whereBetween('service_date', [$start->toDateString(), $end->toDateString()])
-                    ->when(
-                        Schema::hasColumn('booking_bookings', 'starts_at'),
-                        fn ($q) => $q->orWhereBetween('starts_at', [$start, $end]),
-                    );
-            })
-            ->where('is_active', true)
-            ->get();
-
-        // Transform bookings to calendar events
-        $bookingEvents = $bookings->map(fn (Booking $booking) => $booking->toCalendarEvent())->toArray();
-
-        // Also include DailyLocation entries as all-day events on calendar
-        $dailyLocations = DailyLocation::query()
-            ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
-            ->whereBetween('date', [$start, $end])
-            ->with(['serviceUser'])
-            ->get();
-
-        $locationEvents = $dailyLocations->map(function (DailyLocation $loc) {
-            $title = $loc->location ?: ($loc->serviceUser?->name ?? 'Location');
-
-            return [
-                'id' => $loc->id,
-                'title' => $title,
-                'eventsType' => 'location',
-                'type' => 'location',
-                'start' => $loc->date?->toDateString(),
-                'number' => 0,
-                'allDay' => true,
-                'backgroundColor' => '#f3f4f6',
-                'borderColor' => 'transparent',
-                'textColor' => '#111827',
-                'extendedProps' => [
-                    'is_location' => true,
-                    'type' => 'location',
-                    'daily_location_id' => $loc->id,
-                    'service_user_id' => $loc->service_user_id,
-                    'location' => $loc->location,
-                ],
-            ];
-        })->toArray();
-
-        return collect(array_merge($bookingEvents, $locationEvents, $blockingEvents));
-    }
-
-    public function fetchEvents(array $info): array
-    {
-        // FullCalendar may send `start`/`end` without `startStr`/`endStr`; ensure both for FetchInfo VO.
-        $info['startStr'] ??= $info['start'] ?? null;
-        $info['endStr'] ??= $info['end'] ?? null;
-
-        if (! ($info['startStr'] && $info['endStr'])) {
-            return [];
-        }
-
-        return $this->getEventsJs($info);
-    }
-
-    public function getDateSelectContextMenuActions(): array
-    {
-        return [
-            $this->adminAction(),
-        ];
-    }
-
-    public function refreshCalendar()
-    {
-        $this->selectedTechnician = $this->pageFilters['booking_calendars_3'] ?? null;
-        $this->refreshRecords();
-    }
-
-    public function onEventResizeLegacy(array $event, array $oldEvent, array $relatedEvents, array $startDelta, array $endDelta): bool
-    {
-        if ($this->getModel()) {
-            $this->record = $this->resolveRecord($event['id']);
-        }
-
-        // Handle the resize by updating the booking
-        if ($this->record instanceof Booking) {
-            $endDeltaMs = $endDelta['milliseconds'] ?? 0;
-            $newEnd = Carbon::parse($oldEvent['end'])->addMilliseconds($endDeltaMs);
-
-            $this->record->forceFill([
-                'ends_at' => $newEnd,
-            ])->save();
-
-            $this->refreshRecords();
-
-            return true;
-        }
-
-        return false;
-    }
-
-    public function mount(): void
-    {
-        $this->selectedTechnician = $this->pageFilters['booking_calendars_3'] ?? null;
-        $this->eventClickEnabled = true;
-        //    $this->dateClickEnabled = true;
-        $this->eventDragEnabled = true;
-        $this->eventResizeEnabled = true;
-        $this->dateSelectEnabled = true;
-    }
-
-    public function getView(): string
-    {
-        return 'adultdate/filament-booking::calendar-widget';
-    }
-
-    protected function getEloquentQuery(): Builder
-    {
-        return $this->getModel()::query();
-    }
-
-    protected function getDateClickContextMenuActions(): array
-    {
-        $user = Auth::user();
-
-        if (! $user || ! $this->isAdmin($user)) {
-            return [];
-        }
-
-        return [
-            $this->adminAction(),
-        ];
-    }
-
-    protected function isAdmin(Model|Authenticatable $user): bool
-    {
-        // If it's an Admin model, always return true
-        if ($user instanceof \App\Models\Admin) {
-            return true;
-        }
-
-        // For User model, check the role attribute
-        $userRole = $user->role;
-
-        // Handle enum instances
-        if ($userRole instanceof UnitEnum) {
-            $roleValue = $userRole->value;
-        } else {
-            $roleValue = (string) $userRole;
-        }
-
-        return in_array($roleValue, ['admin', 'super', 'super_admin'], true);
-    }
-
     protected function getCalendarItemsRepeater(): Repeater
     {
         return Repeater::make('items')
@@ -1914,14 +1732,107 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
         return 'BK-'.now()->format('Ymd').'-'.Str::upper(Str::random(6));
     }
 
+    public function getEvents(FetchInfo $info): Collection|array|Builder
+    {
+        $start = $info->start->toMutable()->startOfDay();
+        $end = $info->end->toMutable()->endOfDay();
+
+        $selectedCalendarId = $this->selectedTechnician4;
+
+        $serviceUserId = null;
+        if ($selectedCalendarId && $selectedCalendarId !== 'all') {
+            $calendar = \App\Models\BookingCalendar::find($selectedCalendarId);
+            $serviceUserId = $calendar?->owner_id;
+        }
+
+        $blockingPeriods = BookingServicePeriod::query()
+            ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
+            ->where('period_type', '=', 'unavailable')
+            ->get();
+
+        $blockingEvents = $blockingPeriods->map(fn (BookingServicePeriod $blockingPeriod) => $blockingPeriod->toCalendarEvent())->toArray();
+
+        $bookings = Booking::query()
+            ->with(['client', 'service', 'serviceUser', 'bookingUser', 'location'])
+            ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
+            ->where(function ($query) use ($start, $end) {
+                $query->whereBetween('service_date', [$start->toDateString(), $end->toDateString()])
+                    ->when(
+                        Schema::hasColumn('booking_bookings', 'starts_at'),
+                        fn ($q) => $q->orWhereBetween('starts_at', [$start, $end]),
+                    );
+            })
+            ->where('is_active', true)
+            ->get();
+
+        // Transform bookings to calendar events
+        $bookingEvents = $bookings->map(fn (Booking $booking) => $booking->toCalendarEvent())->toArray();
+
+        // Also include DailyLocation entries as all-day events on calendar
+        $dailyLocations = DailyLocation::query()
+            ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
+            ->whereBetween('date', [$start, $end])
+            ->with(['serviceUser'])
+            ->get();
+
+        $locationEvents = $dailyLocations->map(function (DailyLocation $loc) {
+            $title = $loc->location ?: ($loc->serviceUser?->name ?? 'Location');
+            return [
+                'id' => $loc->id,
+                'title' => $title,
+                'eventsType' => 'location',
+                'type' => 'location',
+                'start' => $loc->date?->toDateString(),
+                'number' => 0,
+                'allDay' => true,
+                'backgroundColor' => '#f3f4f6',
+                'borderColor' => 'transparent',
+                'textColor' => '#111827',
+                'extendedProps' => [
+                    'is_location' => true,
+                    'type' => 'location',
+                    'daily_location_id' => $loc->id,
+                    'service_user_id' => $loc->service_user_id,
+                    'location' => $loc->location,
+                ],
+            ];
+        })->toArray();
+
+        return collect(array_merge($bookingEvents, $locationEvents, $blockingEvents));
+    }
+
+    public function fetchEvents(array $info): array
+    {
+        // FullCalendar may send `start`/`end` without `startStr`/`endStr`; ensure both for FetchInfo VO.
+        $info['startStr'] ??= $info['start'] ?? null;
+        $info['endStr'] ??= $info['end'] ?? null;
+
+        if (! ($info['startStr'] && $info['endStr'])) {
+            return [];
+        }
+
+        return $this->getEventsJs($info);
+    }
+
+    public function getDateSelectContextMenuActions(): array
+    {
+        return [
+            $this->adminAction(),
+        ];
+    }
+
+    public function refreshCalendar()
+    {
+        $this->selectedTechnician4 = $this->pageFilters['booking_calendars_4'] ?? null;
+        $this->refreshRecords();
+    }
+
     protected function getSelectedServiceUserId(): ?int
     {
-        $filters = $this->pageFilters ?? [];
-        $selectedCalendarId = $filters['booking_calendars_3'] ?? null;
+        $selectedCalendarId = $this->selectedTechnician4;
 
-        if ($selectedCalendarId) {
+        if ($selectedCalendarId && $selectedCalendarId !== 'all') {
             $calendar = \App\Models\BookingCalendar::find($selectedCalendarId);
-
             return $calendar?->owner_id;
         }
 
@@ -1932,7 +1843,7 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
     {
         $filters = $this->pageFilters ?? [];
 
-        $value = $filters['booking_calendars_4'] ?? null;
+        $value = $filters['booking_calendars_1'] ?? null;
 
         return $value ? (int) $value : null;
     }
@@ -1940,13 +1851,57 @@ final class MultiCalendar4 extends FullCalendarWidget implements HasCalendar
     protected function getDefaultCalendarId(): ?int
     {
         $serviceUserId = $this->getSelectedServiceUserId();
-        if (! $serviceUserId) {
+        if (!$serviceUserId) {
             return null;
         }
         logger()->info('GOOGLE CALENDAR', ['service_user_id' => $serviceUserId]);
         // Find a calendar owned by the selected service user
         $calendar = \App\Models\BookingCalendar::where('owner_id', $serviceUserId)->first();
-
         return $calendar ? $calendar->id : null;
     }
+
+    public function onEventResizeLegacy(array $event, array $oldEvent, array $relatedEvents, array $startDelta, array $endDelta): bool
+    {
+        if ($this->getModel()) {
+            $this->record = $this->resolveRecord($event['id']);
+        }
+
+        // Handle the resize by updating the booking
+        if ($this->record instanceof Booking) {
+            $endDeltaMs = $endDelta['milliseconds'] ?? 0;
+            $newEnd = Carbon::parse($oldEvent['end'])->addMilliseconds($endDeltaMs);
+
+            $this->record->forceFill([
+                'ends_at' => $newEnd,
+            ])->save();
+
+            $this->refreshRecords();
+            return true;
+        }
+
+        return false;
+    }
+
+    public function mount(): void
+    {
+        $calendars = \App\Models\BookingCalendar::all()->pluck('name', 'id');
+        $calendarIds = $calendars->keys();
+        $this->selectedTechnician4 = $calendarIds->get(3) ?? 'all';
+        $this->eventClickEnabled = true;
+    //    $this->dateClickEnabled = true;
+        $this->eventDragEnabled = true;
+        $this->eventResizeEnabled = true;
+        $this->dateSelectEnabled = true;
+    }
+
+    public function getCalendarClass(): string
+    {
+        return 'calendar-4';
+    }
+
+    public function getView(): string
+    {
+        return 'adultdate/filament-booking::calendar-widget';
+    }
+
 }

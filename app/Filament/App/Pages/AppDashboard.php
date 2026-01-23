@@ -8,18 +8,21 @@ use App\Filament\Admin\Widgets\AccountInfoStackWidget;
 use App\Filament\Admin\Widgets\WorldClockWidget;
 use App\Filament\App\Resources\Bookings\Widgets\BookingCalendar;
 use App\Models\BookingCalendar as BookingCalendarModel;
+use Filament\Pages\Page as BasePage;
+use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use BackedEnum;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Pages\Dashboard as BaseDashboard;
-use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
+use Filament\Panel;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use UnitEnum;
-
+use Wallacemartinss\FilamentIconPicker\Enums\Remix;
+use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseCache;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseExceptions;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseQueues;
@@ -29,31 +32,38 @@ use UnitEnum;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseSlowRequests;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseUsage;
 
-final class AppDashboard extends BaseDashboard
+final class AppDashboard extends BasePage
 {
     use HasFiltersForm;
 
     protected static ?string $title = '';
 
-    protected static ?string $slug = 'dashboard';
+    protected static ?string $slug = 'user';
 
-    protected string $view = 'filament.app.dashboard';
+  //  protected string $view = 'filament.app.dashboard';
 
-    //    protected static string | UnitEnum | null $navigationGroup = 'Mina Sidor';
 
     protected static ?int $navigationSort = 1;
 
     protected static ?int $sort = 1;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-user-circle';
+     protected static string | UnitEnum | null $navigationGroup = ' ';
+
+    protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedUserCircle;
+    protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidUserCircle;
 
     // Prevent this app-level Dashboard from being auto-discovered so that
     // the explicit `AdminDashboard` can be registered as the admin panel root.
-    protected static bool $isDiscovered = true;
+    protected static bool $isDiscovered = false;
 
     public static function shouldRegisterNavigation(): bool
     {
         return true;
+    }
+
+        public static function getSlug(?Panel $panel = null): string
+        {
+            return 'user';
     }
 
     public static function getNavigationLabel(): string
@@ -72,19 +82,14 @@ final class AppDashboard extends BaseDashboard
         return 'success';
     }
 
-    public static function getNavigationIcon(): ?string
-    {
-        return 'heroicon-s-user-circle';
-    }
-
     public static function getNavigationSort(): ?int
     {
-        return 1;
+        return 10;
     }
 
     public static function getSort(): ?int
     {
-        return 1;
+        return 10;
     }
 
     public function filtersForm(Schema $schema): Schema

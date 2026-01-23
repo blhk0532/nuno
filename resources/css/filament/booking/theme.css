@@ -177,3 +177,10 @@ a.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-
 div.logo-before{
    display:none!important;
 }
+
+div.filament-fullcalendar {
+min-height: 777px;
+    max-height: 777px;
+    height: 777px;
+}
+

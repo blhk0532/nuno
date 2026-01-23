@@ -40,8 +40,8 @@ final class CalendarSettingsPage extends Page implements HasForms
         );
 
         $this->form->fill([
-            'opening_hour_start' => $settings->opening_hour_start?->format('H:i') ?? '09:00',
-            'opening_hour_end' => $settings->opening_hour_end?->format('H:i') ?? '17:00',
+            'opening_hour_start' => $settings->opening_hour_start?->format('H:i') ?? '07:00',
+            'opening_hour_end' => $settings->opening_hour_end?->format('H:i') ?? '20:00',
         ]);
     }
 
@@ -72,14 +72,14 @@ final class CalendarSettingsPage extends Page implements HasForms
                 ->required()
                 ->native(false)
                 ->seconds(false)
-                ->default('09:00'),
+                ->default('07:00'),
 
             TimePicker::make('opening_hour_end')
                 ->label('Öppettid Slut')
                 ->required()
                 ->native(false)
                 ->seconds(false)
-                ->default('17:00')
+                ->default('20:00')
                 ->rule('after:opening_hour_start'),
         ];
     }

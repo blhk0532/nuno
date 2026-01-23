@@ -7,16 +7,20 @@ namespace App\Providers\Filament;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
 use AdultDate\FilamentWirechat\Filament\Pages\ChatDashboard;
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
-use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBokning as AppBookingMultiCalendar;
-use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\DashboardBooking as AppBookingSinleCalendar;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\MultiCalendars3 as AppBookingMultiCalendar;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\SingleCalendar as AppBookingSinleCalendar;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX2;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX4;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX6;
 use App\Filament\App\Pages\InertiaCalendar;
+use App\Filament\App\Pages\AppRingLista;
+use App\Filament\App\Pages\Dashboard;
 use App\Filament\App\Pages\TeamInvitationAccept;
 use App\Filament\App\Pages\Tenancy\EditTeamProfile;
 use App\Filament\App\Pages\Tenancy\RegisterTeam;
 use App\Filament\App\Resources\BookingDataLeads\BookingDataLeadResource;
+// use App\Filament\Data\Resources\RatsitDatas\RatsitDataResource;
+use App\Filament\App\Widgets\RatsitDataStatsWidget;
 use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\CurrentTenant;
 use App\Http\Middleware\FilamentPanelAccess;
@@ -56,7 +60,7 @@ use Illuminate\Support\Facades\Auth;
 use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
 use Illuminate\Support\Str;
 use Andreia\FilamentUiSwitcher\Support\UiPreferenceManager;
-
+use App\Filament\App\Pages\AppDashboard;
 final class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -73,10 +77,11 @@ final class AppPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->databaseTransactions()
             ->databaseNotificationsPolling('30s')
-            ->tenant(Team::class, slugAttribute: 'slug')
+            ->tenant(Team::class, slugAttribute: 'slug', ownershipRelationship: null)
             ->tenantRoutePrefix('team')
             ->tenantRegistration(RegisterTeam::class)
             ->tenantProfile(EditTeamProfile::class)
+            ->homeUrl(fn () => Dashboard::getUrl())
             ->sidebarCollapsibleOnDesktop(true)
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->favicon(fn () => asset('favicon.svg'))
@@ -92,24 +97,32 @@ final class AppPanelProvider extends PanelProvider
             ->navigationGroups([
                 NavigationGroup::make('Kalendrar')
                     ->icon('heroicon-c-squares-plus'),
+                NavigationGroup::make('Bokningar Admin')
+                    ->icon('heroicon-o-document-text'),
                 NavigationGroup::make('Mina Sidor')
-                    ->icon('heroicon-o-identification'),
+                    ->icon('heroicon-m-identification'),
             ])
             ->pages([
+                AppDashboard::class,
                 ChatDashboard::class,
                 InertiaCalendar::class,
                 AppBookingSinleCalendar::class,
                 AppBookingMultiCalendar::class,
-                BookingCalendersX2::class,
-                BookingCalendersX4::class,
-                BookingCalendersX6::class,
+            //    AppRingLista::class,
+            //    BookingCalendersX2::class,
+            //    BookingCalendersX4::class,
+            //    BookingCalendersX2::class,
+            //    BookingCalendersX4::class,
+            //    BookingCalendersX6::class,
             ])
             ->widgets([
                 //    Widgets\AccountWidget::class,
                 //    Widgets\FilamentInfoWidget::class,
+                //   RatsitDataStatsWidget::class,
             ])
             ->resources([
                 //    BookingDataLeadResource::class,
+                // RatsitDataResource::class,
             ])
             ->middleware([
                 EncryptCookies::class,

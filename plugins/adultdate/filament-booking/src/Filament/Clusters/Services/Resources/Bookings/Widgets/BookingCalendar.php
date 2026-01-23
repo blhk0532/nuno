@@ -100,7 +100,7 @@ class BookingCalendar extends FullCalendarWidget implements HasCalendar
 
     public function getHeading(): string|Htmlable
     {
-        return 'Calenar';
+        return 'bk';
     }
 
     public function getFooterActions(): array

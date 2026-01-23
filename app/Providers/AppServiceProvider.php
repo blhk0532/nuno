@@ -78,24 +78,24 @@ final class AppServiceProvider extends ServiceProvider
                 ->icons([
                     'admin' => 'heroicon-o-shield-check',
                     'app' => 'heroicon-o-user-circle',
-                    'booking' => 'heroicon-c-clipboard-document-check',
-                    'calendar' => 'heroicon-s-calendar-days',
-                    'chat' => 'heroicon-m-chat-bubble-bottom-center-text',
-                    'clients' => 'heroicon-c-user-plus',
+                    'booking' => 'heroicon-o-clipboard-document-check',
+                    'calendar' => 'heroicon-o-calendar-days',
+                    'chat' => 'heroicon-o-chat-bubble-left-right',
+                    'clients' => 'heroicon-o-user-plus',
                     'content' => 'heroicon-s-pencil-square',
-                    'data' => 'heroicon-s-cloud-arrow-down',
+                    'data' => 'heroicon-o-list-bullet',
                     'dev' => 'heroicon-m-beaker',
-                    'dialer' => 'heroicon-c-phone-arrow-up-right',
+                    'dialer' => 'heroicon-o-phone-arrow-up-right',
                     'email' => 'heroicon-m-at-symbol',
                     'files' => 'heroicon-m-server-stack',
                     'finance' => 'heroicon-c-currency-dollar',
                     'locale' => 'heroicon-m-globe-alt',
                     'manager' => 'heroicon-m-users',
                     'notify' => 'heroicon-m-megaphone',
-                    'oauth' => 'heroicon-m-lock-closed',
+                    'oauth' => 'heroicon-m-lock-open',
                     'partner' => 'heroicon-c-chart-pie',
                     'plugins' => 'heroicon-m-puzzle-piece',
-                    'private' => 'heroicon-m-server-stack',
+                    'private' => 'heroicon-m-lock-closed',
                     'product' => 'heroicon-m-shopping-bag',
                     'queue' => 'heroicon-c-queue-list',
                     'script' => 'heroicon-c-command-line',
@@ -125,14 +125,20 @@ final class AppServiceProvider extends ServiceProvider
             } elseif ($user?->role && $user?->role === 'service') {
                 $panels = ['service'];
             } elseif ($user?->role && $user?->role === 'user') {
-                $panels = ['app',
+                $panels = [
+                    'app',
                     'dialer',
                     'chat',
                     'email'];
             } elseif ($user?->role && $user?->role === 'booking') {
-                $panels = ['app',
-                    'dialer',
+                $panels = [
+                    'app',
+                    'booking',
+                    'calendar',
                     'chat',
+                    'clients',
+                    'data',
+                    'dialer',
                     'email'];
             } elseif ($user?->role && $user?->role === 'manager') {
                 $panels = ['app', 'booking', 'manager', 'dialer', 'stats', 'email', 'queue', 'chat'];

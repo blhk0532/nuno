@@ -22,15 +22,15 @@ final class BookingDataLeadResource extends Resource
 {
     protected static ?string $model = BookingDataLead::class;
 
-    protected static string|BackedEnum|null $navigationIcon = 'heroicon-m-user-group';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-queue-list';
 
-    protected static ?string $navigationLabel = 'Nummer Listor';
+    protected static ?string $navigationLabel = 'Samtalskö';
 
     protected static bool $isScopedToTenant = false;
 
-    protected static UnitEnum|string|null $navigationGroup = 'Mina Sidor';
+    protected static UnitEnum|string|null $navigationGroup = '';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema
     {
@@ -55,6 +55,11 @@ final class BookingDataLeadResource extends Resource
             'view' => ViewBookingDataLead::route('/{record}'),
             'edit' => EditBookingDataLead::route('/{record}/edit'),
         ];
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'danger';
     }
 
     public static function getNavigationBadge(): ?string

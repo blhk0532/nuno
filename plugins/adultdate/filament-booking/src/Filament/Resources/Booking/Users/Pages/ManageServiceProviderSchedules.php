@@ -118,12 +118,12 @@ class ManageServiceProviderSchedules extends Page implements HasForms, HasTable
                 ->required(),
             TimePicker::make('start_time')
                 ->required()
-                ->default('09:00')
+                ->default('07:00')
                 ->seconds(false)
                 ->minutesStep(15),
             TimePicker::make('end_time')
                 ->required()
-                ->default('17:00')
+                ->default('20:00')
                 ->seconds(false)
                 ->minutesStep(15),
             DatePicker::make('start_date')

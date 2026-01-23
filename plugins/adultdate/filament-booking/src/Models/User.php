@@ -17,7 +17,7 @@ class User extends Authenticatable
 
     /**
      * @method array getBookableSlots(string $date, int $slotDuration = 60, ?int $bufferMinutes = null)
-     * @method array getAvailableSlots(string $date, string $dayStart = '09:00', string $dayEnd = '17:00', int $slotDuration = 60, ?int $bufferMinutes = null)
+     * @method array getAvailableSlots(string $date, string $dayStart = '07:00', string $dayEnd = '20:00', int $slotDuration = 60, ?int $bufferMinutes = null)
      */
 
     /**

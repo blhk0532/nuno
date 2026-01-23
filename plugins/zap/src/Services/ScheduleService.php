@@ -145,8 +145,8 @@ class ScheduleService
     public function getAvailableSlots(
         Model $schedulable,
         string $date,
-        string $startTime = '09:00',
-        string $endTime = '17:00',
+        string $startTime = '07:00',
+        string $endTime = '20:00',
         int $slotDuration = 60,
         ?int $bufferMinutes = null
     ): array {

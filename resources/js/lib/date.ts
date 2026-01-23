@@ -198,9 +198,9 @@ export const generateTimeSlots = (
  * @returns {number | string} Duration in hours (if format='hours') or smart string (e.g. "30m" or "1h 30m")
  *
  * @example
- * calculateDuration('09:00', '09:45', 'auto'); // "45m"
- * calculateDuration('09:00', '10:30', 'auto'); // "1h 30m"
- * calculateDuration('09:00', '12:30'); // 3.5 (default format='hours')
+ * calculateDuration('07:00', '09:45', 'auto'); // "45m"
+ * calculateDuration('07:00', '10:30', 'auto'); // "1h 30m"
+ * calculateDuration('07:00', '12:30'); // 3.5 (default format='hours')
  */
 export const calculateDuration = (
   startTime: string,
@@ -280,8 +280,8 @@ export const addMinutesToTime = (
  * @returns {boolean} True if end time is after start time
  *
  * @example
- * validateTimeOrder('09:00', '12:00'); // true
- * validateTimeOrder('12:00', '09:00'); // false
+ * validateTimeOrder('07:00', '12:00'); // true
+ * validateTimeOrder('12:00', '07:00'); // false
  */
 export const validateTimeOrder = (
   startTime: string,
@@ -305,7 +305,7 @@ export const validateTimeOrder = (
  *
  * @example
  * // Same-day time comparison
- * validateDateTimeOrder(today, today, '09:00', '12:00'); // true
+ * validateDateTimeOrder(today, today, '07:00', '12:00'); // true
  */
 export const validateDateTimeOrder = (
   startDate: Date,

@@ -269,7 +269,7 @@ export function EventCalendarDemo6() {
           eventResize={handleEventResize}
           headerToolbar={{ left: '', center: '', right: '' }}
           slotMinTime="07:00:00"
-          slotMaxTime="17:00:00"
+          slotMaxTime="20:00:00"
           slotDuration="01:00:00"
           weekends={true}
           addButton={{ text: `${sixthTechnician.title}`, click() { setIsEditMode(false); setSelectedSlot({ start: new Date(), end: new Date(Date.now() + 60 * 60 * 1000), allDay: false }); setShowBookingModal(true); } }}

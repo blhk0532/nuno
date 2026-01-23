@@ -141,7 +141,7 @@ Sample locations and schedules have been created:
 - Gothenburg - Central
 - Malmö - South
 
-Each location has schedules for the next 14 weekdays (Monday-Friday, 08:00-17:00).
+Each location has schedules for the next 14 weekdays (Monday-Friday, 08:00-20:00).
 
 ## Next Steps
 1. Test the calendar interface in the browser

@@ -28,7 +28,7 @@ export interface BookingFormData {
 export function BookingForm({ onSubmit, loading = false }: BookingFormProps) {
   const [formData, setFormData] = useState<BookingFormData>({
     service_date: new Date().toISOString().split('T')[0],
-    start_time: '09:00',
+    start_time: '07:00',
     end_time: '10:00',
     status: 'booked',
   });

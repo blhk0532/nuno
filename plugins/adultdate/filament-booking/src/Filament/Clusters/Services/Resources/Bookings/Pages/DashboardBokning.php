@@ -81,6 +81,7 @@ class DashboardBokning extends BaseDashboard
                             ->placeholder('Select Tekniker for Calendar 1')
                             ->searchable()
                             ->live()
+                            ->columnSpan(3)
                             ->default($calendarIds[0] ?? null)
                             ->afterStateUpdated(function ($state) {
                                 $this->dispatch('refreshCalendar');
@@ -106,7 +107,7 @@ class DashboardBokning extends BaseDashboard
                                 $this->dispatch('refreshCalendar');
                             })
                     ])
-                    ->columns(3)
+                    ->columns(12)
                     ->columnSpanFull(),
             ]);
     }

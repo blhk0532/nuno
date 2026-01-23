@@ -36,6 +36,9 @@ class RatsitDataResource extends Resource
     // place resource under Databaser cluster
     protected static ?string $slug = 'databaser/ratsit-data';
 
+    // Make this resource global (not tenant-scoped) since Ratsit data is public information
+    protected static ?string $tenantOwnershipRelationshipName = null;
+
     public static function getNavigationBadge(): ?string
     {
         return static::getModel()::count();
