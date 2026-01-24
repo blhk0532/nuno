@@ -293,7 +293,7 @@
                             if (component.types.includes('postal_code')) {
                                 postalCode = component.long_name;
                             }
-                            
+
                             // Country
                             if (component.types.includes('country')) {
                                 country = component.long_name;
@@ -391,7 +391,7 @@
     >
         {{-- Search Box --}}
         @if ($isSearchable)
-            <div style="position: relative; margin-bottom: 12px;">
+            <div style="position: relative; margin-bottom: 12px;" class="fi-fo-pinpoint-searchbox">
                 <div style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); pointer-events: none;">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 16px; height: 16px;" class="text-gray-400 dark:text-gray-500">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
@@ -444,7 +444,7 @@
 
         {{-- Helper Text --}}
         @if ($isDraggable)
-            <p style="font-size: 12px; margin-top: 8px; display: flex; align-items: center; gap: 6px;" class="text-gray-500 dark:text-gray-400">
+            <p style="font-size: 12px; margin-top: 8px; display: none; align-items: center; gap: 6px;" class="text-gray-500 dark:text-gray-400 hidden">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" style="width: 16px; height: 16px; flex-shrink: 0;">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
                 </svg>

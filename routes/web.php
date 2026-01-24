@@ -16,7 +16,17 @@ use App\Http\Controllers\UserTwoFactorAuthenticationController;
 use Illuminate\Support\Facades\Route;
 use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
+use Livewire\Livewire;
 use Inertia\Inertia;
+
+// Livewire routes - MUST be registered for Livewire to work
+Livewire::setScriptRoute(function ($handle) {
+    return Route::get('/livewire/livewire.min.js', $handle);
+});
+
+Livewire::setUpdateRoute(function ($handle) {
+    return Route::post('/livewire/update', $handle);
+});
 
 // Route::get('/', fn () => Inertia::render('welcome'))->name('home');
 

@@ -12,7 +12,7 @@ use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 
 class Dashboard extends BaseDashboard
 {
-    protected static ?string $navigationLabel = 'NDS Dashboard';
+    protected static ?string $navigationLabel = 'Min Dashboard';
 
     protected static ?string $title = 'Min Dashboard';
 
@@ -24,7 +24,7 @@ class Dashboard extends BaseDashboard
  //   protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
  //   protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = -1;
 
     public function getMaxContentWidth(): Width
     {

@@ -47,6 +47,9 @@
     font-weight: 600;
 
     }
+    header.fi-header {
+        display:none!important;
+    }
 </style>
         <div class="get-heading flex justify-start flex-1 mb-4">
              {{ $this->getHeading() }}

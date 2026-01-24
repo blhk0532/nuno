@@ -90,9 +90,10 @@ public Model|int|string|null $record;
         HasOptions::getOptions insteadof CanBeConfigured;
 
         InteractsWithEventRecord::getEloquentQuery insteadof InteractsWithRecords;
-    }
-    use InteractsWithEvents {
-        InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
+    
+        
+        // Resolve method collisions from InteractsWithEvents vs InteractsWithCalendar
+InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         InteractsWithEvents::onDateSelectLegacy insteadof InteractsWithCalendar;
         InteractsWithEvents::onEventDropLegacy insteadof InteractsWithCalendar;
         InteractsWithEvents::onEventResizeLegacy insteadof InteractsWithCalendar;

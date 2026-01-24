@@ -14,7 +14,7 @@
     </div>
 
     <!-- Calendar -->
-    <div class="calendar-widget-wrapper" wire:key="booking-calendar-{{ $selectedCalendar ?? 'none' }}">
-        @livewire(\App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\BookingCalendar::class, ['lazy' => false, 'pageFilters' => ['booking_calendars' => $selectedCalendar]], key('booking-calendar-'.$selectedCalendar))
+    <div class="calendar-widget-wrapper" wire:key="single-calendars-{{ $selectedCalendar ?? 'none' }}">
+        @livewire(\App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\SlideoutCalendar::class, ['lazy' => false, 'pageFilters' => ['booking_calendars' => $selectedCalendar]], key('single-calendars-'.$selectedCalendar))
     </div>
 </div>

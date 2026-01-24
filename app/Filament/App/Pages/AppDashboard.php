@@ -47,7 +47,7 @@ final class AppDashboard extends BasePage
 
     protected static ?int $sort = 1;
 
-     protected static string | UnitEnum | null $navigationGroup = ' ';
+     protected static string | UnitEnum | null $navigationGroup = '';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedUserCircle;
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidUserCircle;
@@ -84,12 +84,12 @@ final class AppDashboard extends BasePage
 
     public static function getNavigationSort(): ?int
     {
-        return 10;
+        return 1;
     }
 
     public static function getSort(): ?int
     {
-        return 10;
+        return 1;
     }
 
     public function filtersForm(Schema $schema): Schema

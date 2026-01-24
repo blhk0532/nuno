@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\SwedishDateCast;
+use App\Enums\Outcomes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -36,11 +37,24 @@ class RingaData extends Model
         'is_queued' => 'boolean',
         'longitude' => 'decimal:7',
         'latitud' => 'decimal:7',
+        'attempts' => 'integer',
+        'booked_at' => 'datetime',
+        'outcome' => Outcomes::class,
     ];
 
     public function team()
     {
         return $this->belongsTo(Team::class);
+    }
+
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class, 'booking_id');
+    }
+
+    public function calendar()
+    {
+        return $this->belongsTo(BookingCalendar::class, 'calendar_id');
     }
 
     protected $fillable = [
@@ -85,7 +99,14 @@ class RingaData extends Model
         'is_hus',
         'is_queued',
         'user_service_id',
-        'user_id'
+        'user_id',
+        'status',
+        'outcome',
+        'attempts',
+        'booking_id',
+        'calendar_id',
+        'booked_at',
+        'user_notes',
     ];
 
     /** @return Builder<static> */

@@ -6,21 +6,30 @@ use App\Filament\App\Resources\RingaData\Pages\CreateRingaData;
 use App\Filament\App\Resources\RingaData\Pages\EditRingaData;
 use App\Filament\App\Resources\RingaData\Pages\ListRingaData;
 use App\Filament\App\Resources\RingaData\Pages\ViewRingaData;
+use App\Filament\App\Resources\RingaData\Pages\QueueRingaData;
 use App\Filament\App\Resources\RingaData\Schemas\RingaDataForm;
 use App\Filament\App\Resources\RingaData\Schemas\RingaDataInfolist;
 use App\Filament\App\Resources\RingaData\Tables\RingaDataTable;
 use App\Models\RingaData;
 use BackedEnum;
+use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class RingaDataResource extends Resource
 {
     protected static ?string $model = RingaData::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|BackedEnum|null $navigationIcon = Tabler::PhoneRinging;
+
+    protected static ?string $navigationLabel = 'Ringlista';
+
+    protected static UnitEnum|string|null $navigationGroup = '';
+
+    protected static ?int $navigationSort = 10;
 
     // Make this resource global (not tenant-scoped) since Ringa data is public information
     protected static ?string $tenantOwnershipRelationshipName = null;
@@ -52,6 +61,7 @@ class RingaDataResource extends Resource
         return [
             'index' => ListRingaData::route('/'),
             'create' => CreateRingaData::route('/create'),
+            'queue' => QueueRingaData::route('/queue'),
             'view' => ViewRingaData::route('/{record}'),
             'edit' => EditRingaData::route('/{record}/edit'),
         ];

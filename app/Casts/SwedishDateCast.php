@@ -15,7 +15,7 @@ class SwedishDateCast implements CastsAttributes
      */
     public function get(Model $model, string $key, mixed $value, array $attributes): ?Carbon
     {
-        if (is_null($value)) {
+        if (is_null($value) || $value === '') {
             return null;
         }
 
@@ -53,8 +53,8 @@ class SwedishDateCast implements CastsAttributes
         try {
             return Carbon::parse($englishDate);
         } catch (Exception $e) {
-            // If all parsing fails, return null or throw an exception
-            throw new InvalidArgumentException("Unable to parse date: {$value}");
+            // Gracefully return null for unparseable values (e.g. placeholders like "XXXX")
+            return null;
         }
     }
 

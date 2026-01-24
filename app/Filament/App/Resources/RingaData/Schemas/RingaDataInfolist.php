@@ -5,6 +5,14 @@ namespace App\Filament\App\Resources\RingaData\Schemas;
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Schema;
+use Filament\Forms\Components\RichEditor;
+use Filament\Notifications\Notification;
+use Filament\Actions\Action;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\Toggle;
 
 class RingaDataInfolist
 {
@@ -12,112 +20,16 @@ class RingaDataInfolist
     {
         return $schema
             ->components([
-                TextEntry::make('gatuadress')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('postnummer')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('postort')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('forsamling')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('kommun')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('kommun_ratsit')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('lan')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('adressandring')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('stjarntacken')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('fodelsedag')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('personnummer')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('alder')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('kon')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('civilstand')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('fornamn')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('efternamn')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('personnamn')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('telefon')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('agandeform')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('bostadstyp')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('boarea')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('byggar')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('fastighet')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('longitude')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('latitud')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('google_maps')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('google_streetview')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('ratsit_se')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                IconEntry::make('is_active')
-                    ->boolean(),
-                IconEntry::make('is_hus')
-                    ->boolean(),
-                IconEntry::make('is_telefon')
-                    ->boolean(),
-                IconEntry::make('is_queued')
-                    ->boolean(),
-                TextEntry::make('user_id')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('service_user_id')
-                    ->placeholder('-')
-                    ->columnSpanFull(),
-                TextEntry::make('started_at')
-                    ->dateTime(),
-                TextEntry::make('expires_at')
-                    ->dateTime(),
-                TextEntry::make('created_at')
-                    ->dateTime(),
-                TextEntry::make('updated_at')
-                    ->dateTime(),
+                RichEditor::make('user_notes')
+                    ->label('Anteckningar')
+                    ->columnSpanFull()
+                    ->toolbarButtons([
+                        ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+                        ['table', 'attachFiles'], // The `customBlocks` and `mergeTags` tools are also added here if those features are used.
+                        ['undo', 'redo'],
+                    ]),
             ]);
     }
 }

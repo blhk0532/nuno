@@ -234,6 +234,10 @@ final class FilamentBookingServiceProvider extends PackageServiceProvider
                 \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendarX6::class
             );
             \Livewire\Livewire::component(
+                'app.filament.app.clusters.services.resources.bookings.widgets.slideout-calendar',
+                \App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\SlideoutCalendar::class
+            );
+            \Livewire\Livewire::component(
                 'filament.app.pages.chat-dashboard',
                 \App\Filament\App\Pages\AppChatDashboard::class
             );

@@ -340,3 +340,44 @@ width: 100% !important;
     overflow: hidden!important;
 }
 
+.fi-text-color-950{
+    color:white!important;
+}
+
+
+.outcome-button svg{
+    color:white!important;
+    fill:#ffffff!important;
+}
+.outcome-buttons-section{
+    padding:4px!important;
+}
+.outcome-button{
+    color:white!important;
+    fill:#ffffff!important;
+    margin:2px!important;
+}
+
+.outcome-buttons-section .fi-section-header-after-ctn .fi-sc {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    align-items: stretch !important;
+    gap: 0.5rem !important;
+}
+
+.outcome-buttons-section .fi-section-header-after-ctn .fi-sc > div {
+    flex: 1 1 auto !important;
+    min-width: 101px !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+.outcome-buttons-section .outcome-button {
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap !important;
+    padding: 0.5rem 0.5rem !important;
+}

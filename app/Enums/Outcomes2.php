@@ -1,0 +1,54 @@
+<?php
+
+namespace App\Enums;
+
+use Filament\Support\Contracts\HasColor;
+use Filament\Support\Contracts\HasIcon;
+use Filament\Support\Contracts\HasLabel;
+
+enum Outcomes2: string implements HasColor, HasIcon, HasLabel
+{
+
+
+    case EjFramkopplad = 'Ej Framkopplad';
+    case Upptagen = 'Upptagen';
+    case Voicemail = 'Telefonsvar';
+    case IngetSvar = 'Inget Svar';
+
+
+    public function getLabel(): string
+    {
+        return $this->value;
+    }
+
+    public function getColor(): string
+    {
+        return match ($this) {
+
+            self::EjFramkopplad => 'info',
+            self::Upptagen => 'info',
+            self::IngetSvar => 'info',
+            self::Voicemail => 'info',
+
+        };
+    }
+
+    public function getIcon(): string
+    {
+        return match ($this) {
+
+            self::EjFramkopplad => 'heroicon-m-phone',
+            self::Upptagen => 'heroicon-m-phone-x-mark',
+            self::IngetSvar => 'heroicon-m-phone-arrow-down-left',
+            self::Voicemail => 'heroicon-m-chat-bubble-left-right',
+
+        };
+    }
+
+        public function getGroup(): string
+    {
+        return match ($this) {
+
+        };
+    }
+}

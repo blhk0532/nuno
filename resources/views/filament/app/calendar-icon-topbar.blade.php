@@ -51,7 +51,7 @@ $aSiderbar = $anderia === 'sidebar-no-topbar' ? true : false;
 
 <x-filament::modal id="calendar-modal" class="calendar-modal" slide-over width="3xl">
     <x-slot name="heading">
-        Booking Calendar
+        Bokningskalener
     </x-slot>
      @livewire('calendar-icon-modal')
 

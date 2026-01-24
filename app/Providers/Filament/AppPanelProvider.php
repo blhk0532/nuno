@@ -61,6 +61,9 @@ use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
 use Illuminate\Support\Str;
 use Andreia\FilamentUiSwitcher\Support\UiPreferenceManager;
 use App\Filament\App\Pages\AppDashboard;
+use App\Filament\App\Resources\RingaData\Pages\QueueRingaData;
+use App\Providers\Tenancy\CurrentTenant as TenancyCurrentTenant;
+use Devonab\FilamentEasyFooter\EasyFooterPlugin;
 final class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -108,6 +111,7 @@ final class AppPanelProvider extends PanelProvider
                 InertiaCalendar::class,
                 AppBookingSinleCalendar::class,
                 AppBookingMultiCalendar::class,
+                QueueRingaData::class,
             //    AppRingLista::class,
             //    BookingCalendersX2::class,
             //    BookingCalendersX4::class,
@@ -152,6 +156,22 @@ final class AppPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentApexChartsPlugin::make(),
+            ])
+                        ->plugins([
+                EasyFooterPlugin::make()
+                    ->hiddenFromPagesEnabled()
+                    ->hiddenFromPages(['sample-page', 'another-page', 'admin/login', 'admin/forgot-password', 'admin/register'])
+                    ->withBorder()
+                    ->withFooterPosition('sidebar.footer')
+                    ->withLogo(
+                        'https://static.cdnlogo.com/logos/l/23/laravel.svg', // Path to logo
+                        null,                                                // No link
+                        null,                                                // No text
+                        24                                                   // Logo height in pixels
+                    )
+                    ->withLinks([
+                        ['title' => 'ndsth.com', 'url' => 'https://ndsth.com', 'target' => '_blank'],
+                    ]),
             ])
             ->plugins([
                 TableLayoutTogglePlugin::make()

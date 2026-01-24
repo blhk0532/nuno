@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'search' => 'Search for a location...',
-    'use_my_location' => 'Use my location',
-    'instructions' => 'Click on the map or drag the marker to set the location. Use the search box to find an address.',
-    'loading_map' => 'Loading map...',
+    'search' => 'Sök efter en plats...',
+    'use_my_location' => 'Använd min plats',
+    'instructions' => 'Klicka på kartan eller dra markören för att ställa in platsen. Använd sökrutan för att hitta en adress.',
+    'loading_map' => 'Laddar karta...',
 ];
