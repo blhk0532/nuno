@@ -45,11 +45,11 @@ final class AppDashboard extends BasePage
   //  protected string $view = 'filament.app.dashboard';
 
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 2;
 
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 2;
 
-     protected static string | UnitEnum | null $navigationGroup = '';
+  //   protected static string | UnitEnum | null $navigationGroup = '';
 
   //  protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedUserCircle;
   //  protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidUserCircle;

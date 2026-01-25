@@ -26,6 +26,7 @@ use App\Http\Middleware\ApplyTenantScopes;
 use App\Http\Middleware\CurrentTenant;
 use App\Http\Middleware\FilamentPanelAccess;
 use App\Http\Middleware\VerifyCsrfToken;
+use Arshaviras\WeatherWidget\Widgets\WeatherWidget;
 use App\Models\Team;
 use App\Models\User;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
@@ -65,7 +66,7 @@ use App\Filament\App\Pages\AppDashboard;
 use App\Filament\App\Resources\RingaDatas\Pages\QueueRingaData;
 use App\Providers\Tenancy\CurrentTenant as TenancyCurrentTenant;
 use Devonab\FilamentEasyFooter\EasyFooterPlugin;
-use Wallacemartinss\FilamentIconPicker\Enums\BootstrapIcons;
+use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 
 final class AppPanelProvider extends PanelProvider
 {
@@ -106,7 +107,7 @@ final class AppPanelProvider extends PanelProvider
                 NavigationGroup::make('Bokningar Admin')
                     ->icon('heroicon-o-document-text'),
                 NavigationGroup::make('Mina Sidor')
-                    ->icon(BootstrapIcons::PersonCircle),
+                    ->icon(Tabler::UserSquareRounded),
             ])
             ->pages([
                 AppDashboard::class,
@@ -124,6 +125,7 @@ final class AppPanelProvider extends PanelProvider
             //    BookingCalendersX6::class,
             ])
             ->widgets([
+                WeatherWidget::class,
                 //    Widgets\AccountWidget::class,
                 //    Widgets\FilamentInfoWidget::class,
                 //   RatsitDataStatsWidget::class,
@@ -148,6 +150,7 @@ final class AppPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->plugins([
+            //    WeatherWidget::make(),
                 FilamentErrorPagesPlugin::make()
                     ->routes([
                         'nds/*',
@@ -266,7 +269,7 @@ final class AppPanelProvider extends PanelProvider
                     ]),
             ])
 
-                        ->plugin(FilamentUiSwitcherPlugin::make()
+                ->plugin(FilamentUiSwitcherPlugin::make()
                 ->withModeSwitcher());
 
     }

@@ -11,6 +11,8 @@ class RingaDataOutcomeFormWidget extends Widget
 
     protected int | string | array $columnSpan = 'full';
 
+     protected static ?int $sort = 2;
+
     protected string $view = 'filament.app.resources.ringa-data.widgets.ringa-data-outcome-form-widget';
 
     public ?RingaData $record = null;

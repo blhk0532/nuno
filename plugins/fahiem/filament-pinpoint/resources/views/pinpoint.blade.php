@@ -142,6 +142,7 @@
                 this.map = new google.maps.Map(mapElement, {
                     center: { lat: this.lat, lng: this.lng },
                     zoom: this.defaultZoom,
+                    mapTypeId: google.maps.MapTypeId.SATELLITE,
                     mapTypeControl: true,
                     streetViewControl: false,
                     fullscreenControl: true,

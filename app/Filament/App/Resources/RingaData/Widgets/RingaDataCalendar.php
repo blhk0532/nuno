@@ -46,6 +46,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Collection;
 use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Auth;
+use Filament\Schemas\Schema as FilamentSchema;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Filament\Schemas\Components\Utilities\Set;
@@ -102,19 +103,54 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
     protected string $view = 'adultdate/filament-booking::single-fullcalendar';
 
+    public function form(FilamentSchema $schema): FilamentSchema
+    {
+        return $schema->schema([]);
+    }
+
     public function getHeading(): string|Htmlable
     {
+        $normalized = $this->normalizeTechnicianSelection($this->selectedTechnician);
+        logger()->info('RingaData calendar getHeading', ['selectedTechnician' => $this->selectedTechnician, 'normalized' => $normalized]);
+
         return new HtmlString(view('filament.app.widgets.single-booking-calendar-header', [
             'calendars' => \App\Models\BookingCalendar::all()->pluck('name', 'id'),
+            'selectedTechnician' => $normalized,
+            'startDate' => $this->startDate,
+            'endDate' => $this->endDate,
         ])->render());
+    }
+
+    protected function normalizeTechnicianSelection(mixed $value): int|string
+    {
+        if ($value === 'all' || $value === null || $value === '') {
+            return 'all';
+        }
+
+        if (is_numeric($value)) {
+            return (int) $value;
+        }
+
+        return 'all';
     }
 
     public function onRecordSelected(int $recordId): void
     {
-        $record = \App\Models\RingaData::find($recordId);
-        if ($record && $record->calendar_id) {
-            $this->selectedTechnician = $record->calendar_id;
+        $this->record = \App\Models\RingaData::find($recordId);
+        $newTechnician = $this->normalizeTechnicianSelection($this->record?->calendar_id);
+        
+        $this->selectedTechnician = (string) $newTechnician;
+        
+        if (isset($this->pageFilters)) {
+            $this->pageFilters['booking_calendars'] = $this->selectedTechnician;
         }
+        
+        logger()->info('RingaData (Singular) calendar selected technician', [
+            'recordId' => $recordId, 
+            'technician' => $this->selectedTechnician,
+        ]);
+        
+        $this->refreshRecords();
     }
 
     public function updatedSelectedTechnician(): void
@@ -1850,7 +1886,10 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
     public function refreshCalendar()
     {
-        $this->selectedTechnician = $this->pageFilters['booking_calendars'] ?? $this->selectedTechnician;
+        $technicianSelection = $this->pageFilters['booking_calendars'] ?? $this->selectedTechnician;
+        if ($technicianSelection !== null) {
+            $this->selectedTechnician = $this->normalizeTechnicianSelection($technicianSelection);
+        }
         $this->startDate = $this->pageFilters['startDate'] ?? $this->startDate;
         $this->endDate = $this->pageFilters['endDate'] ?? $this->endDate;
         $this->refreshRecords();
@@ -1916,15 +1955,15 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
     public function mount(): void
     {
-        // Get widget data to access the record
-        $record = $this->data['record'] ?? null;
-
         // Set initial selectedTechnician based on the current record's calendar_id
-        if ($record && $record->calendar_id) {
-            $this->selectedTechnician = $record->calendar_id;
-        } else {
-            $this->selectedTechnician = $this->pageFilters['booking_calendars'] ?? 'all';
-        }
+        $initialTechnician = $this->record?->calendar_id ?? $this->pageFilters['booking_calendars'] ?? 'all';
+        $this->selectedTechnician = $this->normalizeTechnicianSelection($initialTechnician);
+        logger()->info('RingaData (Singular) calendar mount', [
+            'hasRecord' => (bool)$this->record,
+            'recordCalendarId' => $this->record?->calendar_id,
+            'initial' => $initialTechnician, 
+            'selected' => $this->selectedTechnician
+        ]);
 
         $this->startDate = $this->pageFilters['startDate'] ?? now()->startOfWeek()->toDateString();
         $this->endDate = $this->pageFilters['endDate'] ?? now()->endOfWeek()->toDateString();

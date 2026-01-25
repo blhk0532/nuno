@@ -20,14 +20,14 @@ final class InertiaCalendar extends Page
 
     protected static ?string $title = '';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 3;
 
-    protected static ?int $sort = 4;
+    protected static ?int $sort = 3;
 
     protected static ?string $slug = 'nds-bokningen';
 
     //  protected static string | UnitEnum | null $navigationGroup = 'Kalendrar';
-     protected static string|UnitEnum|null $navigationGroup = '';
+   //  protected static string|UnitEnum|null $navigationGroup = '';
 
     public function getMaxContentWidth(): Width
     {

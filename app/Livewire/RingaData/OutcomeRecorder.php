@@ -3,21 +3,106 @@
 namespace App\Livewire\RingaData;
 
 use App\Models\RingaData;
+use Filament\Actions\Action;
+use Filament\Actions\Concerns\InteractsWithActions;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Carbon;
 use Livewire\Component;
-use Livewire\Attributes\Reactive;
 
-class OutcomeRecorder extends Component
+class OutcomeRecorder extends Component implements HasActions, HasForms
 {
-    #[Reactive]
+    use InteractsWithActions;
+    use InteractsWithForms;
+
+    protected $listeners = [
+        'externalRecordOutcome' => 'recordOutcome',
+    ];
     public ?int $recordId = null;
 
     public ?RingaData $record = null;
+    public ?string $tenant = null;
+    protected ?string $defaultReturnCallAt = null;
+
+    public function returnCallAction(): Action
+    {
+        $default = $this->defaultReturnCallAt
+            ? Carbon::parse($this->defaultReturnCallAt)
+            : now()->addHour();
+
+        return $this->cacheAction(
+            Action::make('returnCall')
+                ->label('Ring Tillbaka')
+                ->extraAttributes(['class' => 'w-full px-3 py-2 rounded text-sm font-medium text-white outcome-button bg-blue-600 hover:bg-blue-700'])
+                ->modalHeading('Schemalägg återkommande samtal')
+                ->modalSubmitActionLabel('Schemalägg')
+                ->modalWidth('md')
+                ->form([
+                    DateTimePicker::make('aterkom_at')
+                        ->label('Datum och tid för återkommande samtal')
+                        ->default(fn () => $default)
+                        ->native(false)
+                        ->seconds(false)
+                        ->timezone(config('app.timezone'))
+                        ->required(),
+                ])
+                ->action(function (array $data): void {
+                    $this->recordOutcome('RingTillbaka', $data['aterkom_at'] ?? null);
+                })
+        );
+    }
+
+    public function aterkommerAction(): Action
+    {
+        $default = $this->defaultReturnCallAt
+            ? Carbon::parse($this->defaultReturnCallAt)
+            : now()->addHour();
+
+        return $this->cacheAction(
+            Action::make('aterkommer')
+                ->label('Återkom')
+                ->extraAttributes(['class' => 'w-full px-3 py-2 rounded text-sm font-medium text-white outcome-button bg-blue-600 hover:bg-blue-700'])
+                ->modalHeading('Schemalägg återkommande samtal')
+                ->modalSubmitActionLabel('Schemalägg')
+                ->modalWidth('md')
+                ->form([
+                    DateTimePicker::make('aterkom_at')
+                        ->label('Datum och tid för återkommande samtal')
+                        ->default(fn () => $default)
+                        ->native(false)
+                        ->seconds(false)
+                        ->timezone(config('app.timezone'))
+                        ->required(),
+                ])
+                ->action(function (array $data): void {
+                    $this->recordOutcome('Aterkommer', $data['aterkom_at'] ?? null);
+                })
+        );
+    }
 
     public function mount(): void
     {
-        \Log::info('OutcomeRecorder mount', ['recordId' => $this->recordId]);
+        \Log::info('OutcomeRecorder mount', ['recordId' => $this->recordId, 'tenant' => $this->tenant]);
+
         $this->loadRecord();
+
+        if (! $this->defaultReturnCallAt) {
+            $this->defaultReturnCallAt = now()->addHour()->seconds(0)->format('Y-m-d H:i');
+        }
+
+        // Fallback: if no recordId passed, load first unprocessed record
+        if (!$this->record && !$this->recordId) {
+            $this->record = RingaData::whereNull('outcome')
+                ->orderBy('id')
+                ->first();
+            if ($this->record) {
+                $this->recordId = $this->record->id;
+                \Log::info('Loaded fallback record', ['recordId' => $this->recordId]);
+            }
+        }
     }
 
     public function updated($property): void
@@ -38,7 +123,9 @@ class OutcomeRecorder extends Component
         }
     }
 
-    public function recordOutcome($outcomeValue): void
+
+
+    public function recordOutcome($outcomeValue, $aterkom_at = null): void
     {
         if (empty($outcomeValue)) {
             \Log::error('recordOutcome called with empty value');
@@ -102,39 +189,75 @@ class OutcomeRecorder extends Component
                 return;
             }
 
-            // Update the record
+            // If outcome is "Ring Tillbaka" or "Återkom" we expect a scheduled datetime from the action form
+            if (in_array($outcomeEnum->value, ['Ring Tillbaka', 'Återkom'])) {
+                if (blank($aterkom_at)) {
+                    Notification::make()
+                        ->title('Datum och tid krävs')
+                        ->body('Välj ett datum och en tid för återkommande samtal.')
+                        ->danger()
+                        ->send();
+
+                    return;
+                }
+
+                $scheduledAt = Carbon::parse($aterkom_at);
+
+                $this->record->outcome = $outcomeEnum;
+                $this->record->aterkom_at = $scheduledAt;
+                $this->record->attempts = ($this->record->attempts ?? 0) + 1;
+                $this->record->save();
+
+                Notification::make()
+                    ->title('Outcome recorded')
+                    ->body("Recorded outcome: {$outcomeEnum->getLabel()} with return call scheduled for {$scheduledAt->format('Y-m-d H:i')}")
+                    ->success()
+                    ->send();
+
+                $this->loadNextRecord();
+                return;
+            }
+
+            // For other outcomes, just save
             $this->record->outcome = $outcomeEnum;
             $this->record->attempts = ($this->record->attempts ?? 0) + 1;
             $this->record->save();
 
             Notification::make()
-                ->title('Outcome recorded: ' . $outcomeEnum->getLabel())
+                ->title('Outcome recorded')
+                ->body("Recorded outcome: {$outcomeEnum->getLabel()}")
                 ->success()
                 ->send();
 
-            // Redirect to fresh queue page using current tenant
-            $tenantSlug = request()->route('tenant');
-            if (!$tenantSlug) {
-                // Extract tenant from the referrer or current route
-                $tenantSlug = request()->header('referer') ?
-                    preg_match('/team\/([a-zA-Z0-9]+)/', request()->header('referer'), $m) ? $m[1] : null :
-                    null;
-            }
+            $this->loadNextRecord();
 
-            if ($tenantSlug) {
-                $queueUrl = route('filament.app.resources.ringa-data.queue', ['tenant' => $tenantSlug]);
-            } else {
-                $queueUrl = '/nds/app/team/' . ($tenantSlug ?? 'unknown') . '/ringa-data/queue';
-            }
-
-            $this->redirect($queueUrl);
-        } catch (\Throwable $e) {
+        } catch (\Exception $e) {
+            \Log::error('Error recording outcome', ['error' => $e->getMessage(), 'outcome' => $outcomeValue]);
             Notification::make()
-                ->title('Error')
-                ->body($e->getMessage())
+                ->title('Error recording outcome')
+                ->body('An error occurred while saving the outcome')
                 ->danger()
                 ->send();
         }
+    }
+
+    public function getColorClass($colorName): string
+    {
+        return match ($colorName) {
+            'danger' => 'bg-red-600 hover:bg-red-700',
+            'success' => 'bg-green-600 hover:bg-green-700',
+            'warning' => 'bg-amber-600 hover:bg-amber-700',
+            'primary' => 'bg-blue-600 hover:bg-blue-700',
+            'secondary' => 'bg-gray-600 hover:bg-gray-700',
+            'gray' => 'bg-slate-600 hover:bg-slate-700',
+            default => 'bg-blue-600 hover:bg-blue-700',
+        };
+    }
+
+    private function loadNextRecord(): void
+    {
+        // Full page reload to refresh all widgets
+        $this->js('window.location.reload()');
     }
 
     public function render()

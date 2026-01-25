@@ -84,6 +84,13 @@
       'EloquentSerialize' => 'AnourValar\\EloquentSerialize\\Facades\\EloquentSerializeFacade',
     ),
   ),
+  'arshaviras/weather-widget' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Arshaviras\\WeatherWidget\\WeatherWidgetServiceProvider',
+    ),
+  ),
   'asmit/resized-column' => 
   array (
     'providers' => 

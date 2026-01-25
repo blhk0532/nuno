@@ -7,93 +7,71 @@
                         <h3 class="text-lg font-bold">{{ $this->record->personnamn }}</h3>
                     </div>
 
-                    <!-- Address Information -->
-                    <div class="col-span-1">
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Address</p>
-                        <p class="font-medium">{{ $this->record->gatuadress ?? '-' }}</p>
-                    </div>
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Postal Code</p>
-                        <p class="font-medium">{{ $this->record->postnummer ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">City</p>
-                        <p class="font-medium">{{ $this->record->postort ?? '-' }}</p>
-                    </div>
-                    <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Municipality</p>
-                        <p class="font-medium">{{ $this->record->kommun ?? '-' }}</p>
-                    </div>
-
-                    <!-- Personal Information -->
-                    <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">First Name</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Förnamn</p>
                         <p class="font-medium">{{ $this->record->fornamn ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Last Name</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Efternamn</p>
                         <p class="font-medium">{{ $this->record->efternamn ?? '-' }}</p>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Phone</p>
-                        <p class="font-medium">{{ $this->record->telefon ?? '-' }}</p>
+
+                    <!-- Address Information -->
+                    <div class="col-span-1">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Adress</p>
+                        <p class="font-medium">{{ $this->record->gatuadress ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Phone Numbers</p>
-                        <p class="font-medium">
-                            @if($this->record->telfonnummer && is_array($this->record->telfonnummer) && count($this->record->telfonnummer) > 0)
-                                {{ implode(', ', $this->record->telfonnummer) }}
-                            @else
-                                -
-                            @endif
-                        </p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Postkod</p>
+                        <p class="font-medium">{{ $this->record->postnummer ?? '-' }}</p>
                     </div>
+                    <div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Kommun</p>
+                        <p class="font-medium">{{ $this->record->kommun ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Postort</p>
+                        <p class="font-medium">{{ $this->record->postort ?? '-' }}</p>
+                    </div>
+                    <!-- Personal Information -->
+
 
                     <!-- Identification -->
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Personal Number</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Personnummer</p>
                         <p class="font-medium">{{ $this->record->personnummer ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Gender</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Kön</p>
                         <p class="font-medium">{{ $this->record->kon ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Marital Status</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Civilstånd</p>
                         <p class="font-medium">{{ $this->record->civilstand ?? '-' }}</p>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Email Addresses</p>
-                        <p class="font-medium">
-                            @if($this->record->epost_adress && is_array($this->record->epost_adress) && count($this->record->epost_adress) > 0)
-                                {{ implode(', ', $this->record->epost_adress) }}
-                            @else
-                                -
-                            @endif
-                        </p>
-                    </div>
+
 
                     <!-- Housing Information -->
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Housing Type</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Bostadstyp</p>
                         <p class="font-medium">{{ $this->record->bostadstyp ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Ownership Form</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Ägandeform</p>
                         <p class="font-medium">{{ $this->record->agandeform ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Year Built</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Byggår</p>
                         <p class="font-medium">{{ $this->record->byggar ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Address Change</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Adressändring</p>
                         <p class="font-medium">{{ $this->record->adressandring ?? '-' }}</p>
                     </div>
 
                     <!-- Business & Assets -->
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Company Engagements</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Bolagsengagemang</p>
                         <p class="font-medium">
                             @if($this->record->bolagsengagemang && is_array($this->record->bolagsengagemang))
                                 {{ count($this->record->bolagsengagemang) }}
@@ -103,7 +81,7 @@
                         </p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Vehicles</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Fordon</p>
                         <p class="font-medium">
                             @if($this->record->fordon && is_array($this->record->fordon))
                                 {{ count($this->record->fordon) }}
@@ -113,7 +91,7 @@
                         </p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">People Associated</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Personer</p>
                         <p class="font-medium">
                             @if($this->record->personer && is_array($this->record->personer))
                                 {{ count($this->record->personer) }}
@@ -123,7 +101,7 @@
                         </p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400">Companies</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Företag</p>
                         <p class="font-medium">
                             @if($this->record->foretag && is_array($this->record->foretag))
                                 {{ count($this->record->foretag) }}
@@ -132,6 +110,31 @@
                             @endif
                         </p>
                 </div>
+         <div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Epost Adres</p>
+                        <p class="font-medium">
+                            @if($this->record->epost_adress && is_array($this->record->epost_adress) && count($this->record->epost_adress) > 0)
+                                {{ implode(', ', $this->record->epost_adress) }}
+                            @else
+                                -
+                            @endif
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Telefon</p>
+                        <p class="font-medium">{{ $this->record->telefon ?? '-' }}</p>
+                    </div>
+
+                                  <div>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Telefonnummer</p>
+                        <p class="font-medium">
+                            @if($this->record->telfonnummer && is_array($this->record->telfonnummer) && count($this->record->telfonnummer) > 0)
+                                {{ implode(', ', $this->record->telfonnummer) }}
+                            @else
+                                -
+                            @endif
+                        </p>
+                    </div>
             </div>
         @else
             <div class="p-6 text-center text-gray-500 dark:text-gray-400">

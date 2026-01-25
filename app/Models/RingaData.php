@@ -37,7 +37,7 @@ class RingaData extends Model
         'latitud' => 'decimal:7',
         'attempts' => 'integer',
         'booked_at' => 'datetime',
-        'outcome' => 'string',
+        'aterkom_at' => 'datetime',
     ];
 
     public function team()
@@ -104,6 +104,7 @@ class RingaData extends Model
         'booking_id',
         'calendar_id',
         'booked_at',
+        'aterkom_at',
         'user_notes',
     ];
 

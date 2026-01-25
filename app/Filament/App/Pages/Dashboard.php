@@ -14,6 +14,7 @@ use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
 use Wallacemartinss\FilamentIconPicker\Enums\BootstrapIcons;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Arshaviras\WeatherWidget\Widgets\WeatherWidget;
 use UnitEnum;
 
 class Dashboard extends BaseDashboard
@@ -69,6 +70,7 @@ class Dashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
+        //    WeatherWidget::class,
         //    MultiCalendar1::class,
         //    MultiCalendar2::class,
         //    MultiCalendar3::class,

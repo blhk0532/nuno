@@ -18,6 +18,7 @@ use Laravel\Fortify\Features;
 use Livewire\Volt\Volt;
 use Livewire\Livewire;
 use Inertia\Inertia;
+use App\Http\Controllers\RingaDataOutcomeController;
 
 // Livewire routes - MUST be registered for Livewire to work
 Livewire::setScriptRoute(function ($handle) {
@@ -148,4 +149,8 @@ Route::middleware('auth')->group(function (): void {
         // the admin dashboard to keep navigation stable.
         return redirect()->route('dashboard');
     })->name('filament.admin.pages.chat-dashboard');
+
+    // Record ringa-data outcomes (non-Livewire fallback)
+    Route::post('{tenant}/ringa-data/{id}/outcome', [RingaDataOutcomeController::class, 'store'])
+        ->name('ringa-data.outcome.store');
 });

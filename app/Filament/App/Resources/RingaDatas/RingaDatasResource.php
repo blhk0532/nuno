@@ -28,15 +28,15 @@ class RingaDatasResource extends Resource
     protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiTimerFlashFill;
 
 
-    protected static ?string $navigationLabel = 'Återkomst';
+    protected static ?string $navigationLabel = 'Återkomsten';
 
     protected static UnitEnum|string|null $navigationGroup = ' ';
 
-    protected static ?string $slug = 'ring/data';
+    protected static ?string $slug = 'ringa/data';
 
     protected static ?int $navigationSort = 10;
 
-    public static bool $shouldRegisterNavigation = true;
+    public static bool $shouldRegisterNavigation = false;
 
     // Make this resource global (not tenant-scoped) since Ringa data is public information
     protected static ?string $tenantOwnershipRelationshipName = null;

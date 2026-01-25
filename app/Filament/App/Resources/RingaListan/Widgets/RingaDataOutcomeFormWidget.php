@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\App\Resources\RingaDatas\Widgets;
+namespace App\Filament\App\Resources\RingaListan\Widgets;
 
 use App\Models\RingaData;
 use Filament\Widgets\Widget;
@@ -9,11 +9,13 @@ class RingaDataOutcomeFormWidget extends Widget
 {
     protected static ?string $heading = 'Call Outcomes';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = '1/2';
 
     protected string $view = 'filament.app.resources.ringa-data.widgets.ringa-data-outcome-form-widget';
 
     public ?RingaData $record = null;
+
+     protected static ?int $sort = 2;
 
     public function mount(): void
     {

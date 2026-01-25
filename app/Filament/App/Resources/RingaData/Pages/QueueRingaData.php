@@ -53,8 +53,9 @@ class QueueRingaData extends Page
 
             RingaDataPinpointWidget::class,
             RingaDataDisplayWidget::class,
+                 RingaDataOutcomeFormWidget::class,
             RingaDataOutcomeWidget::class,
-            RingaDataOutcomeFormWidget::class,
+
             RingaDataCalendar::class,
         ];
     }
@@ -86,11 +87,16 @@ class QueueRingaData extends Page
         ];
     }
 
-    #[On('record-selected')]
     public function selectRecord(int $recordId): void
     {
         $this->selectedRecordId = $recordId;
         $this->dispatch('record-selected', recordId: $recordId);
+    }
+
+    #[On('record-selected')]
+    public function handleRecordSelected(int $recordId): void
+    {
+        $this->selectedRecordId = $recordId;
     }
 
     public function getMaxContentWidth(): Width

@@ -36,9 +36,11 @@ class QueueRingaData extends Page
 
    // public static bool $shouldRegisterNavigation = true;
 
-   //  protected static UnitEnum|string|null $navigationGroup = '';
+     protected static UnitEnum|string|null $navigationGroup = ' ';
 
-     protected static ?int $navigationSort = 2;
+     protected static ?int $navigationSort = 8;
+
+      protected static ?int $sort = 8;
 
    protected static string|BackedEnum|null $navigationIcon = Tabler::PhoneRinging;
 
@@ -76,8 +78,9 @@ class QueueRingaData extends Page
 
             RingaDataPinpointWidget::class,
             RingaDataDisplayWidget::class,
+              RingaDataOutcomeFormWidget::class,
             RingaDataOutcomeWidget::class,
-            RingaDataOutcomeFormWidget::class,
+
             RingaDataCalendar::class,
         ];
     }
@@ -109,11 +112,16 @@ class QueueRingaData extends Page
         ];
     }
 
-    #[On('record-selected')]
     public function selectRecord(int $recordId): void
     {
         $this->selectedRecordId = $recordId;
         $this->dispatch('record-selected', recordId: $recordId);
+    }
+
+    #[On('record-selected')]
+    public function handleRecordSelected(int $recordId): void
+    {
+        $this->selectedRecordId = $recordId;
     }
 
     public function getMaxContentWidth(): Width

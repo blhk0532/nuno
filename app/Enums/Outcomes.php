@@ -26,7 +26,7 @@ enum Outcomes: string implements HasColor, HasIcon, HasLabel
     case RingIgen24 = 'Ring Igen 24';
 
     case NyligenGjort = 'Nyligen Gjort';
-    case Aterkommer = 'Återkommer';
+    case Aterkommer = 'Återkom';
     case RingTillbaka = 'Ring Tillbaka';
     case Yes = 'Bokad';
 

@@ -384,11 +384,14 @@ width: 100% !important;
 
 footer span.w-full{
 position: absolute;
-  left: 24px;
+  left: 64px;
   text-align: left;
   top: 22px;
   opacity: 0.8;
+  width: auto;
+  white-space: nowrap;
 }
+
 footer.fi-footer{
     display: flex;
   height: 50px;
@@ -396,6 +399,23 @@ footer.fi-footer{
 img.w-auto.object-contain{
     height: 24px;
   position: absolute;
-  right: 26px;
+  left: 24px;
   top: 20px;
+}
+.fi-badge-label-ctn {
+  max-height: 14px;
+}
+
+.fc-dom-16{
+    position: absolute;
+  left: 10rem;
+  top: 5px;
+}
+.outcome-button {
+  max-height: 36px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  display: block ruby;
 }

@@ -30,11 +30,11 @@ class RingaDataResource extends Resource
      protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedQueueList;
     protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidQueueList;
 
-    protected static ?string $navigationLabel = 'Nummerlista';
+    protected static ?string $navigationLabel = 'Nummer';
 
-    protected static UnitEnum|string|null $navigationGroup = ' ';
+     protected static UnitEnum|string|null $navigationGroup = ' ';
 
-    protected static ?string $slug = 'ringa';
+    protected static ?string $slug = 'nummer/lista';
 
     protected static ?int $navigationSort = 11;
 
@@ -72,5 +72,17 @@ class RingaDataResource extends Resource
             'view' => ViewRingaData::route('/{record}'),
             'edit' => EditRingaData::route('/{record}/edit'),
         ];
+    }
+
+            public static function getNavigationBadgeColor(): ?string
+    {
+        return 'warning';
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        $modelClass = self::$model;
+
+        return (string) $modelClass::count();
     }
 }

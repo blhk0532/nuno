@@ -2,6 +2,30 @@
 $isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
 $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layout', 'sidebar');
 @endphp
+@if($anderia === 'topbar')
+<style>
+    .fi-topbar-item-label {
+        display: none!important;
+    }
+    .fi-tenant-menu-trigger-tenant-name {
+        display: none!important;
+    }
+    .fi-dropdown.fi-user-menu{
+        min-width: 2rem!important;
+    }
+    .fi-topbar-nav-groups{
+        overflow: hidden;
+         max-height: 2rem;
+    }
+</style>
+@endif
+
+<style
+x-show="$store.sidebar.isOpen"
+>
+
+</style>
+
 @if ($isSimple)
     <x-filament::dropdown teleport placement="bottom-end">
         <x-slot name="trigger">
@@ -59,7 +83,7 @@ $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layo
     class="fi-sidebar-database-notifications-btn"
     x-show="$store.sidebar.isOpen"
     @else
-    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
+    class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn "
     @endif
 >
         <x-filament::icon

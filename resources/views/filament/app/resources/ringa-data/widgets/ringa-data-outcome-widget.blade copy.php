@@ -30,13 +30,13 @@
                     @endif
                 </div>
 
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+                <div class="grid grid-cols-4 md:grid-cols-3 gap-2">
                     @foreach(\App\Enums\Outcomes3::cases() as $outcome)
                         <x-filament::button
                             wire:click="selectOutcome('{{ $outcome->value }}')"
                             :color="$outcome->getColor()"
                             size="sm"
-                            class="w-full justify-start"
+                            class="w-full justify-start outcome-button"
                         >
                             <x-heroicon-{{ $outcome->getIcon() }} class="w-4 h-4 mr-2" />
                             {{ $outcome->getLabel() }}

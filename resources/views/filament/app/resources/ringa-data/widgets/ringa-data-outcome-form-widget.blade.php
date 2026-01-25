@@ -5,9 +5,14 @@
 
     @php
         $recordId = $this->record?->id;
+        $tenant = $this->tenant;
     @endphp
 
-    @if($recordId)
-        <livewire:ringa-data.outcome-recorder :record-id="$recordId" />
+    @if($recordId && $tenant)
+        <livewire:ringa-data.outcome-recorder :record-id="$recordId" :tenant="$tenant" />
+    @elseif(!$tenant)
+        <div class="p-4 text-center text-red-500">Error: Tenant not found</div>
+    @else
+        <div class="p-4 text-center text-gray-500">zzz</div>
     @endif
 </x-filament-widgets::widget>

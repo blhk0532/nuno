@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "774ea2f06cd2962ddf92b7708c00d04d",
+    "content-hash": "95bf63cc9a0ddac7c14c4879ccf03610",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -860,6 +860,74 @@
                 "source": "https://github.com/AnourValar/eloquent-serialize/tree/1.3.5"
             },
             "time": "2025-12-04T13:38:21+00:00"
+        },
+        {
+            "name": "arshaviras/weather-widget",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/arshaviras/weather-widget.git",
+                "reference": "f84b8e96cd98ae3d7ae4b0fd0b539c72d0755e8c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/arshaviras/weather-widget/zipball/f84b8e96cd98ae3d7ae4b0fd0b539c72d0755e8c",
+                "reference": "f84b8e96cd98ae3d7ae4b0fd0b539c72d0755e8c",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0|^5.0",
+                "illuminate/contracts": "^11.0|^12.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^7.9",
+                "orchestra/testbench": "^8.0|^9.0",
+                "pestphp/pest": "^2.0",
+                "pestphp/pest-plugin-arch": "^2.0",
+                "pestphp/pest-plugin-laravel": "^2.0",
+                "spatie/laravel-ray": "^1.26"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Arshaviras\\WeatherWidget\\WeatherWidgetServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Arshaviras\\WeatherWidget\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Arshavir Aghajanyan",
+                    "email": "arshaviras@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A weather widget for Filament",
+            "homepage": "https://github.com/arshaviras/weather-widget",
+            "keywords": [
+                "arshaviras",
+                "filament",
+                "filament-plugin",
+                "laravel",
+                "weather-widget"
+            ],
+            "support": {
+                "issues": "https://github.com/arshaviras/weather-widget/issues",
+                "source": "https://github.com/arshaviras/weather-widget"
+            },
+            "time": "2026-01-22T09:30:25+00:00"
         },
         {
             "name": "asmit/resized-column",

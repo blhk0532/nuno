@@ -3,13 +3,14 @@
     @endphp
 <footer
     x-data="{ sidebarCollapsed: false }"
+    x-on:click="$store.sidebar.open()"
     x-init="
         sidebarCollapsed = $store.sidebar?.isOpen === false;
         $watch('$store.sidebar.isOpen', value => {
             sidebarCollapsed = value === false;
         });
     "
-    x-show="!(sidebarCollapsed && @js($footerPosition === 'sidebar.footer' || $footerPosition === 'sidebar'))"
+
     x-transition
     @class([
         'fi-footer my-3 flex flex-wrap items-center justify-center text-sm text-gray-500 dark:text-gray-400',
@@ -43,7 +44,9 @@
         } => $footerPosition === 'footer',
     ])
 >
-    <span @class([
+    <span
+        x-show="!(sidebarCollapsed && @js($footerPosition === 'sidebar.footer' || $footerPosition === 'sidebar'))"
+    @class([
         'flex items-center gap-2' => $isHtmlSentence,
         'w-full' => $footerPosition === 'sidebar' || $footerPosition === 'sidebar.footer'
         ])>&copy; {{ now()->format('Y') }} -
