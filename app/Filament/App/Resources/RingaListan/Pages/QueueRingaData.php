@@ -14,6 +14,7 @@ use App\Filament\App\Resources\RingaListan\Widgets\RingaDataOutcomeWidget;
 use App\Filament\App\Resources\RingaListan\Widgets\RingaDataOutcomeFormWidget;
 use App\Filament\App\Resources\Bookings\Widgets\BookingCalendar;
 use App\Filament\App\Resources\RingaListan\Widgets\RingaDataCalendar;
+use App\Filament\App\Resources\RingaListan\Widgets\RingaDataTableWidget;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
@@ -78,6 +79,8 @@ class QueueRingaData extends Page
             RingaDataDisplayWidget::class,
                 RingaDataOutcomeFormWidget::class,
             RingaDataOutcomeWidget::class,
+
+            RingaDataTableWidget::class,
 
             RingaDataCalendar::class,
         ];
