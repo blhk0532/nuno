@@ -19,12 +19,14 @@ use App\UserRole;
 use Filament\Support\Enums\Width;
 use UnitEnum;
 use Carbon\Carbon;
+use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 
 class SingleCalendar extends BaseDashboard
 {
 
-        protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-calendar-days';
-
+   //     protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-calendar-days';
+    protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarTodoLine;
+    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarTodoFill;
     protected static ?string $navigationLabel = 'Kalender';
 
      protected static ?string $title = '';
@@ -44,7 +46,7 @@ class SingleCalendar extends BaseDashboard
         $this->calendarId = request()->query('booking_calendars') ?? BookingCalendarModel::first()?->id;
         $this->startDate = request()->query('startDate') ?? now()->startOfWeek()->toDateString();
         $this->endDate = request()->query('endDate') ?? now()->endOfWeek()->toDateString();
-        logger()->info('SingleCalendar mount', ['full_url' => url()->full(), 'query' => request()->query(), 'calendarId' => $this->calendarId]);
+        logger()->info('SingleCalendar mount', ['full_url' => request()->fullUrl(), 'query' => request()->query(), 'calendarId' => $this->calendarId]);
     }
 
      protected static string | UnitEnum | null $navigationGroup = '';

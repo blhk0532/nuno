@@ -20,9 +20,9 @@ div.fc-timegrid-slot-label-frame.fc-scrollgrid-shrink-frame{
   height:24px!important;
 }
 </style>
-<div class="flex flex-col gap-4 md:flex-row md:items-end w-full pb-2">
+<div class="flex flex-col gap-4 md:flex-row md:items-end w-full pb-2" style="display: contents;">
     {{-- Tekninker --}}
-    <div class="flex-1 fi-fo-field-wrp">
+    <div class="flex-1 fi-fo-field-wrp mr-3">
         <div class="grid gap-y-2">
             <div class="fi-input-wrp flex rounded-lg shadow-sm ring-1 transition duration-75 focus-within:ring-2 fi-fo-select bg-white dark:bg-white/5 ring-gray-950/10 dark:ring-white/20 focus-within:ring-primary-600 dark:focus-within:ring-primary-500 overflow-hidden">
                 <div class="min-w-0 flex-1">

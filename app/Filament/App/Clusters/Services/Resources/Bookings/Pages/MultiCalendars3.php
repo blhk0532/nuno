@@ -43,10 +43,10 @@ class MultiCalendars3 extends BaseDashboard
 
     protected static string $routePath = 'service/multi-calendars-3';
 
-  protected static string|BackedEnum|null $navigationIcon = Tabler::CalendarMonth;
-
-  protected static string|BackedEnum|null $activeNavigationIcon = Tabler::CalendarMonthF;
-
+  //protected static string|BackedEnum|null $navigationIcon = Tabler::CalendarMonth;
+  //protected static string|BackedEnum|null $activeNavigationIcon = Tabler::CalendarMonthF;
+    protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarCheckLine;
+    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarCheckFill;
 
 
     protected static ?int $navigationSort = 5;
