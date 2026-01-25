@@ -1892,4 +1892,12 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         return 'adultdate/filament-booking::calendar-widget';
     }
 
+    public function navigateToSingleCalendar()
+    {
+        $currentUrl = request()->url();
+        $singleCalendarUrl = preg_replace('/\/service\/[^\/]+$/', '/service/single-calendar', $currentUrl);
+
+        return redirect($singleCalendarUrl . '?booking_calendars=' . $this->selectedTechnician1);
+    }
+
 }

@@ -29,7 +29,7 @@ final class BookingResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'number';
 
-    protected static ?string $navigationLabel = 'Mina Bokningar';
+    protected static ?string $navigationLabel = 'Bokningar';
 
     protected static string|UnitEnum|null $navigationGroup = 'Mina Sidor';
 

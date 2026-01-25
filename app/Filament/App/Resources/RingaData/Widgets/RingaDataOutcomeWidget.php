@@ -17,7 +17,7 @@ class RingaDataOutcomeWidget extends Widget implements HasForms
 
     protected string $view = 'filament.app.resources.ringa-data.widgets.ringa-data-outcome-widget';
 
-    protected int|string|array $columnSpan = 'full';
+    protected int|string|array $columnSpan = '1/2';
 
     protected static ?string $heading = 'Call Outcomes';
 

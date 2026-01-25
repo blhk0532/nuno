@@ -9,6 +9,7 @@ use AdultDate\FilamentWirechat\Filament\Pages\ChatDashboard;
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\MultiCalendars3 as AppBookingMultiCalendar;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\SingleCalendar as AppBookingSinleCalendar;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\MultiCalendars3 as Scheman;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX2;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX4;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalendersX6;
@@ -61,9 +62,11 @@ use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
 use Illuminate\Support\Str;
 use Andreia\FilamentUiSwitcher\Support\UiPreferenceManager;
 use App\Filament\App\Pages\AppDashboard;
-use App\Filament\App\Resources\RingaData\Pages\QueueRingaData;
+use App\Filament\App\Resources\RingaDatas\Pages\QueueRingaData;
 use App\Providers\Tenancy\CurrentTenant as TenancyCurrentTenant;
 use Devonab\FilamentEasyFooter\EasyFooterPlugin;
+use Wallacemartinss\FilamentIconPicker\Enums\BootstrapIcons;
+
 final class AppPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
@@ -103,7 +106,7 @@ final class AppPanelProvider extends PanelProvider
                 NavigationGroup::make('Bokningar Admin')
                     ->icon('heroicon-o-document-text'),
                 NavigationGroup::make('Mina Sidor')
-                    ->icon('heroicon-m-identification'),
+                    ->icon(BootstrapIcons::PersonCircle),
             ])
             ->pages([
                 AppDashboard::class,
@@ -112,6 +115,7 @@ final class AppPanelProvider extends PanelProvider
                 AppBookingSinleCalendar::class,
                 AppBookingMultiCalendar::class,
                 QueueRingaData::class,
+                Scheman::class,
             //    AppRingLista::class,
             //    BookingCalendersX2::class,
             //    BookingCalendersX4::class,
@@ -168,10 +172,10 @@ final class AppPanelProvider extends PanelProvider
                         null,                                                // No link
                         null,                                                // No text
                         24                                                   // Logo height in pixels
-                    )
-                    ->withLinks([
-                        ['title' => 'ndsth.com', 'url' => 'https://ndsth.com', 'target' => '_blank'],
-                    ]),
+                    ),
+                //    ->withLinks([
+                //        ['title' => 'ndsth.com', 'url' => 'https://ndsth.com', 'target' => '_blank'],
+                //    ]),
             ])
             ->plugins([
                 TableLayoutTogglePlugin::make()

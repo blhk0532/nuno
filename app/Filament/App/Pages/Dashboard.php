@@ -9,22 +9,40 @@ use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar1
 use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar2;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar3;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
+use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
+use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
+use Wallacemartinss\FilamentIconPicker\Enums\BootstrapIcons;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use UnitEnum;
 
 class Dashboard extends BaseDashboard
 {
-    protected static ?string $navigationLabel = 'Min Dashboard';
+   // protected static ?string $navigationLabel = 'Dashboard';
 
-    protected static ?string $title = 'Min Dashboard';
+    protected static ?string $title = 'dashboard';
 
      protected static ?string $slug = 'dashboard';
 
-    protected static string|BackedEnum|null $navigationIcon = Remix::RiDashboard2Line;
-    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiDashboard2Fill;
+ // protected static string|BackedEnum|null $navigationIcon = Tabler::CalendarMonthF;
+    protected static string|BackedEnum|null $navigationIcon = BootstrapIcons::PersonCheck;
+    protected static string|BackedEnum|null $activeNavigationIcon = BootstrapIcons::PersonFillCheck;
+
+
+ //   protected static string|BackedEnum|null $navigationIcon = Remix::RiDashboard2Line;
+ //   protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiDashboard2Fill;
 
  //   protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
  //   protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;
 
+ //  protected static string|UnitEnum|null $navigationGroup = '';
     protected static ?int $navigationSort = -1;
+
+
+        public static function getNavigationLabel(): string
+    {
+        return ''.Str::ucfirst(Auth::user()->name) ?? 'User';
+    }
 
     public function getMaxContentWidth(): Width
     {
@@ -51,19 +69,28 @@ class Dashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
-            MultiCalendar1::class,
-            MultiCalendar2::class,
-            MultiCalendar3::class,
+        //    MultiCalendar1::class,
+        //    MultiCalendar2::class,
+        //    MultiCalendar3::class,
         ];
     }
-
-       public static function getNavigationBadge(): ?string
+    public static function getNavigationBadge(): ?string
     {
-        return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
+        return 'Online';
+
     }
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return 'primary';
+        return 'success';
     }
+
+//      public static function getNavigationBadge(): ?string
+//   {
+//       return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
+//   }
+//   public static function getNavigationBadgeColor(): ?string
+//   {
+//       return 'primary';
+//   }
 }

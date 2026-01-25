@@ -26,6 +26,7 @@ use Adultdate\FilamentBooking\Models\CalendarSettings;
 use Adultdate\FilamentBooking\ValueObjects\EventResizeInfo;
 use Adultdate\FilamentBooking\ValueObjects\FetchInfo;
 use App\Models\User;
+use App\Models\BookingCalendar as BookingCalendarModel;
 use App\UserRole;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -67,6 +68,8 @@ class SingleCalendars extends FullCalendarWidget implements HasCalendar
 
     public ?string $endDate = null;
 
+    public $selectedTechnician = null;
+
     protected $settings;
 
     protected $listeners = ['refreshCalendar' => 'refreshCalendar'];
@@ -92,8 +95,8 @@ class SingleCalendars extends FullCalendarWidget implements HasCalendar
         HasOptions::getOptions insteadof CanBeConfigured;
 
         InteractsWithEventRecord::getEloquentQuery insteadof InteractsWithRecords;
-    
-        
+
+
         // Resolve method collisions from InteractsWithEvents vs InteractsWithCalendar
 InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         InteractsWithEvents::onDateSelectLegacy insteadof InteractsWithCalendar;
@@ -108,6 +111,9 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
     {
         return new HtmlString(view('filament.widgets.single-booking-calendar-header', [
             'calendars' => \App\Models\BookingCalendar::all()->pluck('name', 'id'),
+            'selectedTechnician' => $this->selectedTechnician,
+            'startDate' => $this->startDate,
+            'endDate' => $this->endDate,
         ])->render());
     }
 
@@ -1910,14 +1916,31 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
     public function mount(): void
     {
-        $this->selectedTechnician = $this->pageFilters['booking_calendars'] ?? 'all';
-        $this->startDate = $this->pageFilters['startDate'] ?? null;
-        $this->endDate = $this->pageFilters['endDate'] ?? null;
+        // Check URL parameter first, then widget data, then page filters, then default
+        $urlParam = request()->query('booking_calendars');
+        // If the Livewire mount request doesn't include the original query string,
+        // attempt to parse it from the HTTP referer header (browser sends it on sub-requests).
+        if (empty($urlParam)) {
+            $referer = request()->headers->get('referer') ?? ($_SERVER['HTTP_REFERER'] ?? null);
+            if ($referer) {
+                $qs = parse_url($referer, PHP_URL_QUERY) ?: '';
+                parse_str($qs, $parsed);
+                $urlParam = $parsed['booking_calendars'] ?? null;
+            }
+        }
+
+        $this->selectedTechnician = $urlParam ?? $this->data['calendar_id'] ?? $this->pageFilters['booking_calendars'] ?? BookingCalendarModel::first()?->id ?? 'all';
+        logger()->info('SingleCalendars mount resolved selectedTechnician', ['urlParam' => $urlParam, 'referer' => request()->headers->get('referer') ?? null, 'data_calendar_id' => $this->data['calendar_id'] ?? null, 'pageFilters' => $this->pageFilters['booking_calendars'] ?? null, 'resolved' => $this->selectedTechnician]);
+        $this->startDate = $this->data['startDate'] ?? $this->pageFilters['startDate'] ?? now()->startOfWeek()->toDateString();
+        $this->endDate = $this->data['endDate'] ?? $this->pageFilters['endDate'] ?? now()->endOfWeek()->toDateString();
         $this->eventClickEnabled = true;
     //    $this->dateClickEnabled = true;
         $this->eventDragEnabled = true;
         $this->eventResizeEnabled = true;
         $this->dateSelectEnabled = true;
+
+        // Force refresh records with the selected technician
+        $this->refreshRecords();
     }
 
     public function getCalendarClass(): string

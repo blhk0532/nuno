@@ -18,7 +18,12 @@ enum Outcomes1: string implements HasColor, HasIcon, HasLabel
 
     public function getLabel(): string
     {
-        return $this->value;
+        return match ($this) {
+            self::DMC => 'Stärra',
+            self::Felnummer => 'Fel Nummer',
+            self::Klickad => 'Klickad',
+            self::EjIntresserad => 'Ej Intresse',
+        };
     }
 
     public function getColor(): string

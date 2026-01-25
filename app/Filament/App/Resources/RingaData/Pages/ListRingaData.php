@@ -4,7 +4,7 @@ namespace App\Filament\App\Resources\RingaData\Pages;
 
 use App\Models\RingaData;
 use App\Filament\App\Resources\RingaData\RingaDataResource;
-use App\Filament\App\Resources\RingaData\Widgets\RingaDataPinpointWidget;
+use App\Filament\App\Resources\RingaData\Widgets\RingaDataStatsWidget;
 use App\Filament\App\Resources\RingaData\Widgets\RingaDataDisplayWidget;
 use App\Filament\App\Resources\RingaData\Widgets\RingaDataOutcomeWidget;
 use Filament\Actions\CreateAction;
@@ -28,9 +28,10 @@ class ListRingaData extends ListRecords
     protected function getHeaderWidgets(): array
     {
         return [
-         RingaDataPinpointWidget::class,
-        RingaDataDisplayWidget::class,
-        RingaDataOutcomeWidget::class,
+    //    RingaDataPinpointWidget::class,
+    //    RingaDataDisplayWidget::class,
+    //    RingaDataOutcomeWidget::class,
+    RingaDataStatsWidget::class,
 
         ];
     }

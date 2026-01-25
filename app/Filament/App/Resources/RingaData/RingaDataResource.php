@@ -13,6 +13,8 @@ use App\Filament\App\Resources\RingaData\Tables\RingaDataTable;
 use App\Models\RingaData;
 use BackedEnum;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
+use Wallacemartinss\FilamentIconPicker\Enums\Remix;
+use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -23,13 +25,18 @@ class RingaDataResource extends Resource
 {
     protected static ?string $model = RingaData::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Tabler::PhoneRinging;
+   // protected static string|BackedEnum|null $navigationIcon = Tabler::PhoneRinging;
 
-    protected static ?string $navigationLabel = 'Ringlista';
+     protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedQueueList;
+    protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidQueueList;
 
-    protected static UnitEnum|string|null $navigationGroup = '';
+    protected static ?string $navigationLabel = 'Nummerlista';
 
-    protected static ?int $navigationSort = 10;
+    protected static UnitEnum|string|null $navigationGroup = ' ';
+
+    protected static ?string $slug = 'ringa';
+
+    protected static ?int $navigationSort = 11;
 
     // Make this resource global (not tenant-scoped) since Ringa data is public information
     protected static ?string $tenantOwnershipRelationshipName = null;

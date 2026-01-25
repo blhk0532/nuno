@@ -20,7 +20,7 @@
             </div>
             <div class="fi-input-wrp flex rounded-lg shadow-sm ring-1 transition duration-75 focus-within:ring-2 fi-fo-select bg-white dark:bg-white/5 ring-gray-950/10 dark:ring-white/20 focus-within:ring-primary-600 dark:focus-within:ring-primary-500 overflow-hidden">
                 <div class="min-w-0 flex-1">
-                    <select class="fi-select-input block w-full border-none bg-transparent py-1.5 pl-3 pr-10 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6 dark:text-white" wire:model.live="selectedTechnician">
+                    <select id="single_selected_technician" class="fi-select-input block w-full border-none bg-transparent py-1.5 pl-3 pr-10 text-gray-900 focus:ring-0 sm:text-sm sm:leading-6 dark:text-white" wire:model.live="selectedTechnician">
                         @foreach($options as $id => $name)
                             <option value="{{ $id }}">{{ $name }}</option>
                         @endforeach
@@ -81,3 +81,22 @@
 </a>
     </div>
 </div>
+
+<script>
+    (function(){
+        try {
+            const params = new URLSearchParams(window.location.search);
+            const cal = params.get('booking_calendars');
+            if (cal) {
+                const sel = document.getElementById('single_selected_technician');
+                if (sel) {
+                    // set value and dispatch change so Livewire updates
+                    sel.value = cal;
+                    sel.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            }
+        } catch (e) {
+            // noop
+        }
+    })();
+</script>

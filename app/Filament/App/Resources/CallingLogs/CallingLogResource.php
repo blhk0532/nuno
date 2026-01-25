@@ -31,6 +31,8 @@ final class CallingLogResource extends Resource
     // Disable tenant scoping for this resource (no `team` relationship on CallingLog).
     protected static bool $isScopedToTenant = false;
 
+    protected static bool $isDiscovered = false;
+
     public static function form(Schema $schema): Schema
     {
         return CallingLogForm::configure($schema);

@@ -16,18 +16,18 @@ final class InertiaCalendar extends Page
   //  protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDateRange;
   protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-clipboard-document-check';
 
-    protected static ?string $navigationLabel = 'NDS Bokningen';
+    protected static ?string $navigationLabel = 'Bokningen';
 
     protected static ?string $title = '';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 4;
 
-    protected static ?int $sort = 6;
+    protected static ?int $sort = 4;
 
-    protected static ?string $slug = 'inertia-calendar';
+    protected static ?string $slug = 'nds-bokningen';
 
     //  protected static string | UnitEnum | null $navigationGroup = 'Kalendrar';
-    // protected static string|UnitEnum|null $navigationGroup = '';
+     protected static string|UnitEnum|null $navigationGroup = '';
 
     public function getMaxContentWidth(): Width
     {

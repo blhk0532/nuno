@@ -249,7 +249,6 @@ class RingaDataForm
                 Toggle::make('is_queued')
                     ->required(),
                 TextInput::make('status'),
-                TextInput::make('outcome'),
                 TextInput::make('attempts')
                     ->numeric()
                     ->default(0),

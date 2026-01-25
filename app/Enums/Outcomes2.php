@@ -18,17 +18,22 @@ enum Outcomes2: string implements HasColor, HasIcon, HasLabel
 
     public function getLabel(): string
     {
-        return $this->value;
+        return match ($this) {
+            self::EjFramkopplad => 'Ej Kopplad',
+            self::Upptagen => 'Upptagen',
+            self::Voicemail => 'Telefonsvar',
+            self::IngetSvar => 'Inget Svar',
+        };
     }
 
     public function getColor(): string
     {
         return match ($this) {
 
-            self::EjFramkopplad => 'info',
-            self::Upptagen => 'info',
-            self::IngetSvar => 'info',
-            self::Voicemail => 'info',
+            self::EjFramkopplad => 'warning',
+            self::Upptagen => 'warning',
+            self::IngetSvar => 'warning',
+            self::Voicemail => 'warning',
 
         };
     }

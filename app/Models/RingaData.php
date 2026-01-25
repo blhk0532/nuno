@@ -16,8 +16,6 @@ class RingaData extends Model
 
     protected $table = 'ringa_data';
 
-       protected static bool $isScopedToTenant = false;
-
     protected $guarded = [];
 
     protected $casts = [
@@ -39,7 +37,7 @@ class RingaData extends Model
         'latitud' => 'decimal:7',
         'attempts' => 'integer',
         'booked_at' => 'datetime',
-        'outcome' => Outcomes::class,
+        'outcome' => 'string',
     ];
 
     public function team()
@@ -116,66 +114,30 @@ class RingaData extends Model
     }
 
     /**
-     * Ensure telfonnummer is always returned as an array.
-     * Accepts stored JSON arrays or pipe-delimited strings and normalizes to array.
-     *
-     * @param  mixed  $value
+     * Get the outcome attribute as an enum instance.
      */
-    public function getTelfonnummerAttribute($value): array
+    public function getOutcomeAttribute($value): ?Outcomes
     {
-        if (is_array($value)) {
-            return $value;
+        if (empty($value)) {
+            return null;
         }
 
-        if ($value === null) {
-            return [];
-        }
-
-        if (is_string($value)) {
-            $decoded = json_decode($value, true);
-            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                return $decoded;
-            }
-
-            // Fallback: pipe-delimited values -> convert to array
-            $parts = array_filter(array_map('trim', explode('|', $value)));
-
-            return array_values($parts);
-        }
-
-        // Any other type, cast to array
-        return (array) $value;
+        return Outcomes::tryFrom($value);
     }
 
     /**
-     * Normalize and store telfonnummer as JSON array.
-     * Accepts array, JSON string, or pipe-delimited string.
-     *
-     * @param  mixed  $value
+     * Set the outcome attribute, converting enum to string or handling null/empty values.
      */
-    public function setTelfonnummerAttribute($value): void
+    public function setOutcomeAttribute($value): void
     {
-        if (is_array($value)) {
-            $this->attributes['telfonnummer'] = json_encode(array_values($value));
-
-            return;
+        if ($value instanceof Outcomes) {
+            $this->attributes['outcome'] = $value->value;
+        } elseif (empty($value)) {
+            $this->attributes['outcome'] = null;
+        } else {
+            // Try to convert string to enum to validate it
+            $enum = Outcomes::tryFrom($value);
+            $this->attributes['outcome'] = $enum ? $enum->value : null;
         }
-
-        if (is_string($value)) {
-            $decoded = json_decode($value, true);
-            if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
-                $this->attributes['telfonnummer'] = json_encode(array_values($decoded));
-
-                return;
-            }
-
-            $parts = array_filter(array_map('trim', explode('|', $value)));
-            $this->attributes['telfonnummer'] = json_encode(array_values($parts));
-
-            return;
-        }
-
-        // Fallback: castable values
-        $this->attributes['telfonnummer'] = json_encode(array_values((array) $value));
     }
 }

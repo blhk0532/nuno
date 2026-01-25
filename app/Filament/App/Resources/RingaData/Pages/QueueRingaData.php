@@ -8,8 +8,12 @@ use App\Models\RingaData;
 use App\Filament\App\Resources\RingaData\Widgets\RingaDataPinpointWidget;
 use App\Filament\App\Resources\RingaData\Widgets\RingaDataDisplayWidget;
 use Filament\Support\Enums\Width;
-use App\Filament\App\Resources\RingaData\Widgets\RingaDataOutcomeFormWidget;
+use App\Filament\App\Resources\RingaData\Widgets\RingaDataStatsWidget;
 use Livewire\Attributes\On;
+use App\Filament\App\Resources\RingaData\Widgets\RingaDataOutcomeWidget;
+use App\Filament\App\Resources\RingaData\Widgets\RingaDataOutcomeFormWidget;
+use App\Filament\App\Resources\Bookings\Widgets\BookingCalendar;
+use App\Filament\App\Resources\RingaData\Widgets\RingaDataCalendar;
 
 class QueueRingaData extends Page
 {
@@ -32,13 +36,13 @@ class QueueRingaData extends Page
 
                 $this->selectedRecordId = $first?->id;
             }
-            
+
             // Dispatch event to inform widgets of the selected record
             if ($this->selectedRecordId) {
                 $this->dispatch('record-selected', recordId: $this->selectedRecordId);
             }
         } catch (\Exception $e) {
-            \Log::error('QueueRingaData mount error: ' . $e->getMessage(), ['exception' => $e]);
+            logger('QueueRingaData mount error: ' . $e->getMessage(), ['exception' => $e]);
             throw $e;
         }
     }
@@ -46,9 +50,12 @@ class QueueRingaData extends Page
     protected function getHeaderWidgets(): array
     {
         return [
+
             RingaDataPinpointWidget::class,
             RingaDataDisplayWidget::class,
+            RingaDataOutcomeWidget::class,
             RingaDataOutcomeFormWidget::class,
+            RingaDataCalendar::class,
         ];
     }
 

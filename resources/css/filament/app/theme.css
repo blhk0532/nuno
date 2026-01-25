@@ -381,3 +381,21 @@ width: 100% !important;
     white-space: nowrap !important;
     padding: 0.5rem 0.5rem !important;
 }
+
+footer span.w-full{
+position: absolute;
+  left: 24px;
+  text-align: left;
+  top: 22px;
+  opacity: 0.8;
+}
+footer.fi-footer{
+    display: flex;
+  height: 50px;
+}
+img.w-auto.object-contain{
+    height: 24px;
+  position: absolute;
+  right: 26px;
+  top: 20px;
+}

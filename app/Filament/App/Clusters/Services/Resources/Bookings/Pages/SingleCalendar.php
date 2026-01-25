@@ -25,17 +25,29 @@ class SingleCalendar extends BaseDashboard
 
         protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-calendar-days';
 
-    protected static ?string $navigationLabel = 'NDS Kalendrar';
+    protected static ?string $navigationLabel = 'Kalender';
 
      protected static ?string $title = '';
 
-        protected static ?int $navigationSort = 2;
+        protected static ?int $navigationSort = 6;
 
-        protected static ?int $sort = 2;
+        protected static ?int $sort = 6;
 
     protected static string $routePath = 'service/single-calendar';
 
-  //   protected static string | UnitEnum | null $navigationGroup = '';
+    public ?string $calendarId = null;
+    public ?string $startDate = null;
+    public ?string $endDate = null;
+
+    public function mount(): void
+    {
+        $this->calendarId = request()->query('booking_calendars') ?? BookingCalendarModel::first()?->id;
+        $this->startDate = request()->query('startDate') ?? now()->startOfWeek()->toDateString();
+        $this->endDate = request()->query('endDate') ?? now()->endOfWeek()->toDateString();
+        logger()->info('SingleCalendar mount', ['full_url' => url()->full(), 'query' => request()->query(), 'calendarId' => $this->calendarId]);
+    }
+
+     protected static string | UnitEnum | null $navigationGroup = '';
 
 
 
@@ -56,15 +68,24 @@ class SingleCalendar extends BaseDashboard
         ];
     }
 
+    public function getWidgetData(): array
+    {
+        return [
+            'calendar_id' => $this->calendarId,
+            'startDate' => $this->startDate,
+            'endDate' => $this->endDate,
+        ];
+    }
+
 public function getMaxContentWidth(): Width
 {
     return Width::Full;
 }
 
-    public static function getNavigationLabel(): string
-    {
-        return '' . Str::ucfirst('NDS Kalendrar') ?? 'NDS Kalender';
-    }
+//    public static function getNavigationLabel(): string
+//    {
+//        return '' . Str::ucfirst('Kalendrar') ?? 'NDS Kalender';
+//    }
 
 //    public static function getNavigationBadge(): ?string
 //    {
@@ -77,15 +98,15 @@ public function getMaxContentWidth(): Width
 //        return 'gray';
 //    }
 
-                public static function getNavigationSort(): ?int
-    {
-        return 3;
-    }
-
-                public static function getSort(): ?int
-    {
-        return 3;
-    }
+//                public static function getNavigationSort(): ?int
+//   {
+//       return 2;
+//   }
+//
+//               public static function getSort(): ?int
+//   {
+//       return 2;
+//   }
 
        public static function getNavigationBadge(): ?string
     {
@@ -94,7 +115,7 @@ public function getMaxContentWidth(): Width
 
     return now()
         ->timezone('Europe/Stockholm')
-        ->translatedFormat('D d M');
+        ->translatedFormat('d F');
     }
 
     public static function getNavigationBadgeColor(): ?string

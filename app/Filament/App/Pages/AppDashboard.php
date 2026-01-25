@@ -38,19 +38,25 @@ final class AppDashboard extends BasePage
 
     protected static ?string $title = '';
 
-    protected static ?string $slug = 'user';
+    protected static ?string $slug = 'nds-dashboard';
+
+     protected static ?string $navigationLabel = 'Dashboard';
 
   //  protected string $view = 'filament.app.dashboard';
 
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 3;
 
-    protected static ?int $sort = 1;
+    protected static ?int $sort = 3;
 
      protected static string | UnitEnum | null $navigationGroup = '';
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedUserCircle;
-    protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidUserCircle;
+  //  protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedUserCircle;
+  //  protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidUserCircle;
+
+    protected static string|BackedEnum|null $navigationIcon = Remix::RiDashboard2Line;
+    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiDashboard2Fill;
+
 
     // Prevent this app-level Dashboard from being auto-discovered so that
     // the explicit `AdminDashboard` can be registered as the admin panel root.
@@ -63,34 +69,42 @@ final class AppDashboard extends BasePage
 
         public static function getSlug(?Panel $panel = null): string
         {
-            return 'user';
+            return 'nds-dashboard';
     }
 
-    public static function getNavigationLabel(): string
-    {
-        return ''.Str::ucfirst(Auth::user()->name) ?? 'User';
-    }
+      public static function getNavigationBadge(): ?string
+      {
+          return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
+      }
+      public static function getNavigationBadgeColor(): ?string
+      {
+          return 'primary';
+      }
 
-    public static function getNavigationBadge(): ?string
-    {
-        return 'Online';
+  //  public static function getNavigationLabel(): string
+  //  {
+  //      return ''.Str::ucfirst(Auth::user()->name) ?? 'User';
+  //  }
 
-    }
+ //  public static function getNavigationBadge(): ?string
+ //  {
+ //      return 'Online';
 
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return 'success';
-    }
+ //  }
+ //  public static function getNavigationBadgeColor(): ?string
+ //  {
+ //      return 'success';
+ //  }
 
-    public static function getNavigationSort(): ?int
-    {
-        return 1;
-    }
+ //  public static function getNavigationSort(): ?int
+ //  {
+ //      return -1;
+ //  }
 
-    public static function getSort(): ?int
-    {
-        return 1;
-    }
+ //  public static function getSort(): ?int
+ //  {
+ //      return -1;
+ //  }
 
     public function filtersForm(Schema $schema): Schema
     {

@@ -9,7 +9,7 @@ class RingaDataOutcomeFormWidget extends Widget
 {
     protected static ?string $heading = 'Call Outcomes';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int | string | array $columnSpan = '1/2';
 
     protected string $view = 'filament.app.resources.ringa-data.widgets.ringa-data-outcome-form-widget';
 

@@ -25,22 +25,31 @@ use Adultdate\FilamentBooking\Filament\Widgets\AccountWidget;
 use Adultdate\FilamentBooking\Filament\Widgets\FullCalendarWidget;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiEventCalendar;
 use App\Models\Action;
+use Wallacemartinss\FilamentIconPicker\Enums\Remix;
+use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
+use Carbon\Carbon;
 use UnitEnum;
 
 class MultiCalendars3 extends BaseDashboard
 {
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDateRange;
+  //  protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDateRange;
 
-    //    protected static ?string $navigationLabel = 'Dash';
+    protected static ?string $navigationLabel = 'Schema';
 
     protected static ?string $title = '';
 
-    protected static string | UnitEnum | null $navigationGroup = 'Boknings Kalendrar';
+    protected static string | UnitEnum | null $navigationGroup = '';
 
     protected static string $routePath = 'service/multi-calendars-3';
 
-    protected static ?int $navigationSort = 3;
+  protected static string|BackedEnum|null $navigationIcon = Tabler::CalendarMonth;
+
+  protected static string|BackedEnum|null $activeNavigationIcon = Tabler::CalendarMonthF;
+
+
+
+    protected static ?int $navigationSort = 5;
 
 
 
@@ -50,109 +59,31 @@ class MultiCalendars3 extends BaseDashboard
 
     public static function shouldRegisterNavigation(): bool
     {
-        return false;
+        return true;
     }
 
 
+  // public static function getNavigationBadge(): ?string
+  //  {
+  //      return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
+  //  }
 
-    public static function getNavigationLabel(): string
+       public static function getNavigationBadge(): ?string
     {
-        return '' . Str::ucfirst('Multi Kalendrar') ?? 'User';
-    }
+Carbon::setLocale('sv');
 
-   public static function getNavigationBadge(): ?string
-    {
-        return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
-    }
+$day = now()
+    ->timezone('Europe/Stockholm')
+    ->translatedFormat('l');
+
+    return Str::ucfirst($day);
+ }
 
     public static function getNavigationBadgeColor(): ?string
     {
         return 'gray';
     }
 
-    //    public static function getNavigationBadge(): ?string
-    //    {
-    //          return 'x3';
-    //
-    //    }
-    //
-    //    public static function getNavigationBadgeColor(): ?string
-    //    {
-    //        return 'gray';
-    //    }
-
-
-   // public function filtersForm(Schema $schema): Schema
-   // {
-   //     $calendarOptions = BookingCalendarModel::pluck('name', 'id')->toArray();
-   //     $calendarIds = array_keys($calendarOptions);
-
-   //     return $schema
-   //         ->components([
-   //             Section::make()
-   //                 ->schema([
-   //                     Select::make('booking_calendars_1')
-   //                         ->options($calendarOptions)
-   //                         ->label('#1 ◴ Tekninker')
-   //                         ->placeholder('Select Tekniker for Calendar 1')
-   //                         ->searchable()
-   //                         ->live()
-   //                         ->columnSpan(3)
-   //                         ->default($calendarIds[0] ?? null)
-   //                         ->afterStateUpdated(function ($state) {
-   //                             $this->dispatch('refreshCalendar');
-   //                         }),
-   //                     FormAction::make('go_to_booking')
-   //                         ->label('Kalender')
-   //                         ->extraAttributes([
-   //                             'class' => 'go-to-booking-button',
-   //                         ])
-   //                         ->url('http://localhost:8000/nds/booking/service/booking?filters[booking_calendars]=1')
-   //                         ->icon('heroicon-m-calendar-days')
-   //                         ->color('primary'),
-   //                     Select::make('booking_calendars_2')
-   //                         ->options($calendarOptions)
-   //                         ->label('#2 ◴ Tekninker')
-   //                         ->placeholder('Select Tekniker for Calendar 2')
-   //                         ->searchable()
-   //                         ->live()
-   //                         ->columnSpan(3)
-   //                         ->default($calendarIds[1] ?? null)
-   //                         ->afterStateUpdated(function ($state) {
-   //                             $this->dispatch('refreshCalendar');
-   //                         }),
-   //                     FormAction::make('go_to_booking')
-   //                         ->label('Kalender')
-   //                         ->extraAttributes([
-   //                             'class' => 'go-to-booking-button',
-   //                         ])
-   //                         ->url('http://localhost:8000/nds/booking/service/booking?filters[booking_calendars]=2')
-   //                         ->icon('heroicon-m-calendar-days')
-   //                         ->color('primary'),
-   //                     Select::make('booking_calendars_3')
-   //                         ->options($calendarOptions)
-   //                         ->label('#3 ◴ Tekniker')
-   //                         ->placeholder('Select Tekniker for Calendar 3')
-   //                         ->searchable()
-   //                         ->live()
-   //                         ->columnSpan(3)
-   //                         ->default($calendarIds[2] ?? null)
-   //                         ->afterStateUpdated(function ($state) {
-   //                             $this->dispatch('refreshCalendar');
-   //                         }),
-   //                     FormAction::make('go_to_booking')
-   //                         ->label('Kalender')
-   //                         ->extraAttributes([
-   //                             'class' => 'go-to-booking-button',
-   //                         ])
-   //                         ->url('http://localhost:8000/nds/booking/service/booking?filters[booking_calendars]=2')
-   //                         ->icon('heroicon-m-calendar-days')
-   //                         ->color('primary')
-   //                 ])
-   //                 ->columns(12)
-   //                 ->columnSpanFull(),
-   //         ]);
-   // }
 
     public function getPermissionCheckClosure(): \Closure
     {
