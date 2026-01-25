@@ -138,18 +138,18 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
     {
         $this->record = \App\Models\RingaData::find($recordId);
         $newTechnician = $this->normalizeTechnicianSelection($this->record?->calendar_id);
-        
+
         $this->selectedTechnician = (string) $newTechnician;
-        
+
         if (isset($this->pageFilters)) {
             $this->pageFilters['booking_calendars'] = $this->selectedTechnician;
         }
-        
+
         logger()->info('RingaData (Singular) calendar selected technician', [
-            'recordId' => $recordId, 
+            'recordId' => $recordId,
             'technician' => $this->selectedTechnician,
         ]);
-        
+
         $this->refreshRecords();
     }
 
@@ -1961,7 +1961,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         logger()->info('RingaData (Singular) calendar mount', [
             'hasRecord' => (bool)$this->record,
             'recordCalendarId' => $this->record?->calendar_id,
-            'initial' => $initialTechnician, 
+            'initial' => $initialTechnician,
             'selected' => $this->selectedTechnician
         ]);
 

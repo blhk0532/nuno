@@ -419,3 +419,8 @@ img.w-auto.object-contain{
 
   display: block ruby;
 }
+.text-queue-card{
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+}

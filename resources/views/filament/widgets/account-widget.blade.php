@@ -1,7 +1,15 @@
 @php
     $user = filament()->auth()->user();
 @endphp
-
+<style>
+   .fi-page-header-main-ctn{
+       padding: 0rem !important;
+   }
+   .fi-avatar.fi-circular.fi-size-lg.fi-user-avatar {
+         width: 46px;
+         height: 46px;
+   }
+</style>
 <x-filament-widgets::widget class="fi-account-widget">
     <x-filament::section>
         <x-filament-panels::avatar.user
@@ -12,11 +20,11 @@
 
         <div class="fi-account-widget-main">
             <h2 class="fi-account-widget-heading">
-                {{ __('filament-panels::widgets/account-widget.welcome', ['app' => config('app.name')]) }}
+                 {{ filament()->getUserName($user) }}
             </h2>
 
-            <p class="fi-account-widget-user-name">
-                {{ filament()->getUserName($user) }}
+            <p class="fi-account-widget-user-name text-sm">
+                Active now...
             </p>
         </div>
 

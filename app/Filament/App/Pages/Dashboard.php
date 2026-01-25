@@ -12,6 +12,8 @@ use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
 use Wallacemartinss\FilamentIconPicker\Enums\BootstrapIcons;
+use App\Filament\App\Widgets\AccountInfoStackWidget;
+use App\Filament\App\Widgets\WorldClockWidget;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Arshaviras\WeatherWidget\Widgets\WeatherWidget;
@@ -66,11 +68,21 @@ class Dashboard extends BaseDashboard
             '2xl' => 3,
         ];
     }
+    public function getHeaderWidgets(): array
+    {
+        return [
+            AccountInfoStackWidget::class,
+            WorldClockWidget::class,
 
+        //    MultiCalendar1::class,
+        //    MultiCalendar2::class,
+        //    MultiCalendar3::class,
+        ];
+    }
     public function getWidgets(): array
     {
         return [
-        //    WeatherWidget::class,
+            WeatherWidget::class,
         //    MultiCalendar1::class,
         //    MultiCalendar2::class,
         //    MultiCalendar3::class,

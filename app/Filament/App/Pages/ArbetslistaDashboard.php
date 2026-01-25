@@ -32,30 +32,30 @@ use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseSlowRequests;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseUsage;
 
-final class AppDashboard extends BasePage
+final class ArbetslistaDashboard extends BasePage
 {
     use HasFiltersForm;
 
-    protected static ?string $title = '';
+    protected static ?string $title = 'Arbetslista';
 
-    protected static ?string $slug = 'nds-dashboard';
+    protected static ?string $slug = 'arbetslista';
 
-     protected static ?string $navigationLabel = 'Dashboard';
+     protected static ?string $navigationLabel = 'Arbetslista';
 
   //  protected string $view = 'filament.app.dashboard';
 
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 2;
 
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 2;
 
   //   protected static string | UnitEnum | null $navigationGroup = '';
 
   //  protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedUserCircle;
   //  protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidUserCircle;
 
-    protected static string|BackedEnum|null $navigationIcon = Remix::RiDashboard2Line;
-    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiDashboard2Fill;
+    protected static string|BackedEnum|null $navigationIcon = Remix::RiNewsLine;
+    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiNewsFill;
 
 
     // Prevent this app-level Dashboard from being auto-discovered so that
@@ -67,14 +67,10 @@ final class AppDashboard extends BasePage
         return true;
     }
 
-        public static function getSlug(?Panel $panel = null): string
-        {
-            return 'nds-dashboard';
-    }
 
       public static function getNavigationBadge(): ?string
       {
-          return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
+          return '🇸🇪 ' . now()->timezone('Europe/Stockholm')->format('H:i');
       }
       public static function getNavigationBadgeColor(): ?string
       {

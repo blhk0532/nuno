@@ -115,7 +115,7 @@ public function getMaxContentWidth(): Width
 
     return now()
         ->timezone('Europe/Stockholm')
-        ->translatedFormat('d F');
+        ->translatedFormat('d M');
     }
 
     public static function getNavigationBadgeColor(): ?string

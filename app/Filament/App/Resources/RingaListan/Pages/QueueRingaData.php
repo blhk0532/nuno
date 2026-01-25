@@ -25,7 +25,7 @@ class QueueRingaData extends Page
 {
     protected static string $resource = RingaListanResource::class;
 
-    protected static ?string $slug = 'queue';
+    protected static ?string $slug = 'queues';
 
     protected static ?string $model = RingaData::class;
 
@@ -110,6 +110,7 @@ class QueueRingaData extends Page
 
         return [
             'record' => $record,
+            'recordId' => $this->selectedRecordId,
         ];
     }
 

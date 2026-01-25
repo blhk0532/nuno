@@ -61,7 +61,7 @@ final class AppRingLista extends Page
 
     public static function getNavigationLabel(): string
     {
-        return 'Ringlista';
+        return 'Ringlistan';
     }
 
     public static function getNavigationBadge(): ?string

@@ -22,13 +22,9 @@ class RingaDataTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->query(fn () => RingaData::query()
-                ->whereIn('outcome', ['Återkom', 'Ring Tillbaka']))
             ->toolbarActions([
         ])
             ->columns([
-                TextColumn::make('gatuadress')
-                    ->sortable(),
                 TextColumn::make('gatuadress')
                     ->sortable(),
                 TextColumn::make('postort')

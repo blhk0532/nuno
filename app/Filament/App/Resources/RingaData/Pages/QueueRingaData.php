@@ -14,12 +14,13 @@ use App\Filament\App\Resources\RingaData\Widgets\RingaDataOutcomeWidget;
 use App\Filament\App\Resources\RingaData\Widgets\RingaDataOutcomeFormWidget;
 use App\Filament\App\Resources\Bookings\Widgets\BookingCalendar;
 use App\Filament\App\Resources\RingaData\Widgets\RingaDataCalendar;
+use App\Filament\App\Resources\RingaDatas\Widgets\RingaDatasQueueTableWidget;
 
 class QueueRingaData extends Page
 {
     protected static string $resource = RingaDataResource::class;
 
-    protected static ?string $slug = 'queue';
+    protected static ?string $slug = 'qued';
 
     public ?int $selectedRecordId = null;
 
@@ -57,6 +58,7 @@ class QueueRingaData extends Page
             RingaDataOutcomeWidget::class,
 
             RingaDataCalendar::class,
+            RingaDatasQueueTableWidget::class,
         ];
     }
 
@@ -84,6 +86,7 @@ class QueueRingaData extends Page
 
         return [
             'record' => $record,
+            'recordId' => $this->selectedRecordId,
         ];
     }
 

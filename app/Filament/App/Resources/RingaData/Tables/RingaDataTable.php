@@ -38,8 +38,6 @@ class RingaDataTable
             ->columns([
                 TextColumn::make('gatuadress')
                     ->sortable(),
-                TextColumn::make('gatuadress')
-                    ->sortable(),
                 TextColumn::make('postort')
                     ->sortable(),
                 TextColumn::make('personnamn')

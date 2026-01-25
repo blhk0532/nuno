@@ -35,7 +35,7 @@ class RingaListanResource extends Resource
 
     protected static ?string $slug = 'ringa/listan';
 
-    protected static ?int $navigationSort = 10;
+    protected static ?int $navigationSort = 12;
 
     public static bool $shouldRegisterNavigation = true;
 
@@ -54,7 +54,11 @@ class RingaListanResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return RingaDataTable::configure($table);
+        return RingaDataTable::configure($table)
+            ->query(fn () => RingaData::query()->whereIn('outcome', [
+                Outcomes::Aterkommer->value,
+                Outcomes::RingTillbaka->value,
+            ]));
     }
 
     public static function getRelations(): array

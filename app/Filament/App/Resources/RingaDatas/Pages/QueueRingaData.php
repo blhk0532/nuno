@@ -17,6 +17,7 @@ use App\Filament\App\Resources\RingaDatas\Widgets\RingaDataCalendar;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
+use App\Filament\App\Resources\RingaDatas\Widgets\RingaDatasQueueTableWidget;
 use BackedEnum;
 use UnitEnum;
 
@@ -80,8 +81,8 @@ class QueueRingaData extends Page
             RingaDataDisplayWidget::class,
               RingaDataOutcomeFormWidget::class,
             RingaDataOutcomeWidget::class,
-
             RingaDataCalendar::class,
+            RingaDatasQueueTableWidget::class,
         ];
     }
 
@@ -109,6 +110,7 @@ class QueueRingaData extends Page
 
         return [
             'record' => $record,
+            'recordId' => $this->selectedRecordId,
         ];
     }
 

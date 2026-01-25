@@ -23,7 +23,7 @@ class RingaDataOutcomeFormWidget extends Widget
         // Get tenant from Filament (uses slug for routing)
         $tenant = filament()->getTenant();
         $this->tenant = $tenant ? $tenant->slug : null;
-        \Log::info('Widget tenant set from Filament', ['tenant' => $this->tenant, 'tenant_id' => $tenant?->id, 'tenant_slug' => $tenant?->slug]);
+        logger('Widget tenant set from Filament', ['tenant' => $this->tenant, 'tenant_id' => $tenant?->id, 'tenant_slug' => $tenant?->slug]);
 
         // Load the first unprocessed record directly
         // This bypasses Filament's data-passing mechanism which isn't working

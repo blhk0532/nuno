@@ -16,6 +16,7 @@ use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalenders
 use App\Filament\App\Pages\InertiaCalendar;
 use App\Filament\App\Pages\AppRingLista;
 use App\Filament\App\Pages\Dashboard;
+use App\Filament\App\Pages\ArbetslistaDashboard;
 use App\Filament\App\Pages\TeamInvitationAccept;
 use App\Filament\App\Pages\Tenancy\EditTeamProfile;
 use App\Filament\App\Pages\Tenancy\RegisterTeam;
@@ -67,6 +68,7 @@ use App\Filament\App\Resources\RingaDatas\Pages\QueueRingaData;
 use App\Providers\Tenancy\CurrentTenant as TenancyCurrentTenant;
 use Devonab\FilamentEasyFooter\EasyFooterPlugin;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
+use JeffersonGoncalves\Filament\RefreshSidebar\RefreshSidebarPlugin;
 
 final class AppPanelProvider extends PanelProvider
 {
@@ -117,6 +119,7 @@ final class AppPanelProvider extends PanelProvider
                 AppBookingMultiCalendar::class,
                 QueueRingaData::class,
                 Scheman::class,
+                ArbetslistaDashboard::class,
             //    AppRingLista::class,
             //    BookingCalendersX2::class,
             //    BookingCalendersX4::class,
@@ -162,6 +165,7 @@ final class AppPanelProvider extends PanelProvider
                 //    FilamentShieldPlugin::make(),
             ])
             ->plugins([
+                RefreshSidebarPlugin::make(),
                 FilamentApexChartsPlugin::make(),
             ])
                         ->plugins([
