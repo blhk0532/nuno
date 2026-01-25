@@ -7,6 +7,7 @@ namespace App\Models;
 use Adultdate\Wirechat\Contracts\WirechatUser;
 use Adultdate\Wirechat\Panel as WirechatStandalonePanel;
 use Adultdate\Wirechat\Traits\InteractsWithWirechat;
+use App\Enums\UserActiveStatus;
 use App\Observers\UserObserver;
 use Exception;
 use Filament\Models\Contracts\FilamentUser;
@@ -57,6 +58,8 @@ use Andreia\FilamentUiSwitcher\Models\Traits\HasUiPreferences;
  * @property array<array-key, mixed>|null $custom_fields
  * @property string|null $locale
  * @property string|null $theme_color
+ * @property UserActiveStatus $active_status
+ * @property \Illuminate\Support\Carbon|null $active_at
  * @property int|null $current_team_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -121,6 +124,8 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
         'theme_color',
         'current_team_id',
         'role',
+        'active_status',
+        'active_at',
     ];
 
     protected $hidden = [
@@ -389,7 +394,14 @@ public function withAccessToken(?ScopeAuthorizable $accessToken): static
             'status' => 'boolean',
             'custom_fields' => 'array',
             'ui_preferences' => 'array',
+            'active_status' => UserActiveStatus::class,
+            'active_at' => 'datetime',
         ];
+    }
+
+    public function isOnline(): bool
+    {
+        return $this->active_at && $this->active_at->gt(now()->subMinutes(5));
     }
 
     protected function canManageTeam(): bool

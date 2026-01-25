@@ -2,6 +2,7 @@
 
 namespace App\Filament\User\Resources\Users\Tables;
 
+use App\Enums\UserActiveStatus;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -15,6 +16,15 @@ class UsersTable
     {
         return $table
             ->columns([
+                TextColumn::make('active_status')
+                    ->badge()
+                    ->sortable(),
+                TextColumn::make('active_at')
+                    ->dateTime()
+                    ->since()
+                    ->label('Last Seen')
+                    ->sortable()
+                    ->toggleable(),
                 IconColumn::make('status')
                     ->boolean()
                     ->trueIcon('heroicon-o-check-badge')

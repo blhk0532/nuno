@@ -875,6 +875,10 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
                 $booking->updateTotalPrice();
 
+                if ($this->record instanceof \App\Models\RingaData) {
+                    $this->record->update(['outcome' => 'Bokad']);
+                }
+
                 // The Observer will handle Google Calendar sync and WhatsApp notification automatically
 
                 $this->refreshRecords();
@@ -882,6 +886,8 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     ->title('Booking created successfully')
                     ->success()
                     ->send();
+
+                return redirect(request()->header('Referer'));
             });
     }
 
@@ -1693,11 +1699,23 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
     public function getFormSchema(): array
     {
+        $clientDefaults = [];
+        if ($this->record instanceof \App\Models\RingaData) {
+            $clientDefaults = [
+                'name' => trim(($this->record->fornamn ?? '') . ' ' . ($this->record->efternamn ?? '')) ?: $this->record->personnamn,
+                'phone' => $this->record->telefon,
+                'email' => is_array($this->record->epost_adress) ? ($this->record->epost_adress[0] ?? null) : $this->record->epost_adress,
+                'street' => $this->record->gatuadress,
+                'zip' => $this->record->postnummer,
+                'city' => $this->record->postort,
+            ];
+        }
+
         return [
             Group::make()
                 ->schema([
                     Section::make()
-                        ->schema(BookingForm::getDetailsComponents())
+                        ->schema(BookingForm::getDetailsComponents($clientDefaults))
                         ->columns(2),
 
                     Section::make('Booking items')

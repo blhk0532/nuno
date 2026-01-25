@@ -5,7 +5,7 @@
 
         <div class="fi-filament-info-widget-main overflow-hidden">
 
-
+<div class="flex">
           <svg style="opacity:0.8;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1476 336" width="132" height="30" fill="currentColor">
 	<g>
 		<path fill-rule="evenodd" class="nds-svg-path n0" d="m992.5 13.5q39 0 78 0 0.25 104-0.5 208-7.73 69.72-72.5 96.5-81.52 23.59-131.5-44.5-35.41-60.78 1-121 47.62-63.63 125.5-45 0-47 0-94zm-73 200q4.85 39.91 45 39.5 31.97-6.41 35-39-5.72-41.96-48-39.5-29.03 8.55-32 39z"/>
@@ -26,15 +26,15 @@
 		<path fill-rule="evenodd" class="nds-svg-path n5" d="m1132.5 106.5q42 0 84 0 0 105 0 210-42 0-84 0 0-105 0-210z"/>
 	</g>
 </svg>
-            </a>
-
+            <img src="https://static.cdnlogo.com/logos/l/23/laravel.svg" alt="Logo" class="w-auto relative pl-3 mt-1" style="height: 28px;">
+</div>
             <div class="flex pr-3 overflow-hidden whitespace-nowrap overflow-hidden">
 
             <p class="fi-filament-info-widget-version truncate font-bold">
                 Nordic Digital Solutions
             </p>
             <p class="fi-filament-info-widget-version pl-2 truncate">
-                {{ \Composer\InstalledVersions::getPrettyVersion('filament/filament') }}
+v1.1.8
             </p>
 
             </div>

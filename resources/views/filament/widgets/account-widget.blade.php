@@ -12,19 +12,37 @@
 </style>
 <x-filament-widgets::widget class="fi-account-widget">
     <x-filament::section>
-        <x-filament-panels::avatar.user
-            size="lg"
-            :user="$user"
-            loading="lazy"
-        />
+        @php
+            $isOnline = $user->isOnline();
+        @endphp
+        <div class="relative inline-flex">
+            <x-filament-panels::avatar.user
+                size="lg"
+                :user="$user"
+                loading="lazy"
+            />
+            <div 
+                @class([
+                    'absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-white dark:border-gray-900',
+                    'bg-green-500' => $isOnline,
+                    'bg-gray-500' => !$isOnline,
+                ])
+                style="{{ $isOnline ? 'background-color: #22c55e;' : 'background-color: #6b7280;' }}"
+            ></div>
+        </div>
 
         <div class="fi-account-widget-main">
             <h2 class="fi-account-widget-heading">
                  {{ filament()->getUserName($user) }}
             </h2>
 
-            <p class="fi-account-widget-user-name text-sm">
-                Active now...
+            <p class="fi-account-widget-user-name flex items-center gap-x-1.5 text-sm">
+                {{ $user->active_status?->getLabel() ?? 'Offline' }}
+                @if($user->active_at)
+                    <span class="text-gray-500 italic text-xs">
+                        • {{ $user->active_at->diffForHumans() }}
+                    </span>
+                @endif
             </p>
         </div>
 

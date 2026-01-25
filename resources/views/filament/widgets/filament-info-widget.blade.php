@@ -24,7 +24,7 @@
             </a>
 
             <p class="fi-filament-info-widget-version">
-                {{ \Composer\InstalledVersions::getPrettyVersion('filament/filament') }}
+                v1.1.0
             </p>
         </div>
 

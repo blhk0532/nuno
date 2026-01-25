@@ -27,8 +27,10 @@ final class InertiaCalendar extends Page
 
     protected static ?string $slug = 'bokning';
 
-        protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
-    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;
+  //      protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
+  //  protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;
+    protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarCheckLine;
+    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarCheckFill;
 
     //  protected static string | UnitEnum | null $navigationGroup = 'Kalendrar';
      protected static string|UnitEnum|null $navigationGroup = '';

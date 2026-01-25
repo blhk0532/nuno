@@ -87,7 +87,7 @@ final class BookingForm
     }
 
     /** @return array<Component> */
-    public static function getDetailsComponents(): array
+    public static function getDetailsComponents(array $clientDefaults = []): array
     {
         return [
             TextInput::make('number')
@@ -120,30 +120,34 @@ final class BookingForm
                         ->columns(2)
                         ->schema([
                             TextInput::make('name')
+                                ->default($clientDefaults['name'] ?? null)
                                 ->required()
-                                ->maxLength(255)
-                                ->required(),
+                                ->maxLength(255),
                             TextInput::make('phone')
+                                ->default($clientDefaults['phone'] ?? null)
                                 ->maxLength(255)
                                 ->required(),
                             TextInput::make('email')
                                 ->label('Email address')
-
+                                ->default($clientDefaults['email'] ?? null)
                                 ->email()
                                 ->maxLength(255)
                                 ->unique(),
 
                             TextInput::make('street')
                                 ->label('Street address')
+                                ->default($clientDefaults['street'] ?? null)
                                 ->maxLength(255)
                                 ->required(),
 
                             TextInput::make('zip')
                                 ->label('Postal code')
+                                ->default($clientDefaults['zip'] ?? null)
                                 ->maxLength(20)
                                 ->required(),
 
                             TextInput::make('city')
+                                ->default($clientDefaults['city'] ?? null)
                                 ->maxLength(255)
                                 ->required(),
 

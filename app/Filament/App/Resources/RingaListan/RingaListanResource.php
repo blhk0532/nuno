@@ -35,7 +35,7 @@ class RingaListanResource extends Resource
 
     protected static ?string $slug = 'ringa/listan';
 
-    protected static ?int $navigationSort = 12;
+    protected static ?int $navigationSort = 10;
 
     public static bool $shouldRegisterNavigation = true;
 

@@ -2,7 +2,7 @@
     <x-filament::section>
         @if ($this->record)
             <div class="space-y-3">
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-3 mt-3">
                     <div class="col-span-2">
                         <h3 class="text-lg font-bold">{{ $this->record->personnamn }}</h3>
                     </div>
