@@ -54,6 +54,13 @@ final class CreateBooking extends CreateRecord
                     Section::make()
                         ->schema([BookingForm::getItemsRepeater()]),
                 ]),
+
+            Step::make('Additional Information')
+                ->schema([
+                    Section::make()
+                        ->schema(BookingForm::getDetailsComponents2())
+                        ->columns(2),
+                ]),
         ];
     }
 

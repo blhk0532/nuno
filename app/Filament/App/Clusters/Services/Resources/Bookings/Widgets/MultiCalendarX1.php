@@ -68,8 +68,8 @@ final class MultiCalendarX1 extends FullCalendarWidget implements HasCalendar
         HasOptions::getOptions insteadof CanBeConfigured;
 
         InteractsWithEventRecord::getEloquentQuery insteadof InteractsWithRecords;
-    
-        
+
+
         // Resolve method collisions from InteractsWithEvents vs InteractsWithCalendar
 InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         InteractsWithEvents::onDateSelectLegacy insteadof InteractsWithCalendar;
@@ -532,14 +532,14 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     ->color('success')
                     ->icon('heroicon-o-calendar-days')
                     ->action(function () {
-                        $startDate = Carbon::parse($this->calendarData['start'])->format('Y-m-d');
+                        $startDate = Carbon::parse($this->calendarData['start']);
                         $startVal = $this->calendarData['start_val'];
                         $endVal = $this->calendarData['end_val'];
                         $dateVal = $this->calendarData['date_val'];
                         $serviceUserId = $this->calendarData['service_user_id'] ?? null;
                         $timeStamp = time();
                         $dateStamp = date('Ymd', $timeStamp);
-                        $startStamp = date('Ymd', strtotime($startDate));
+                        $startStamp = $startDate->format('Ymd');
                         $bookingNumber = Str::upper(Auth::user()->name).$timeStamp;
                         if ($this->calendarData['allDay']) {
                             $startTime = '00:00';
@@ -551,7 +551,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                             $endTime = Carbon::parse($this->calendarData['end_val'])->format('H:i');
                         }
                         if ($endTime === $startTime) {
-                            $startDate = Carbon::parse($dateVal)->format('Y-m-d');
+                            $startDate = Carbon::parse($dateVal);
                             $startTime = Carbon::parse($startVal)->format('H:i');
                             $endTime = Carbon::parse($endVal)->format('H:i');
                         }
@@ -567,7 +567,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     ->color('primary')
                     ->icon('heroicon-o-map-pin')
                     ->action(function () {
-                        $startDate = Carbon::parse($this->calendarData['start'])->format('Y-m-d');
+                        $startDate = Carbon::parse($this->calendarData['start']);
                         $startVal = $this->calendarData['start_val'];
                         $endVal = $this->calendarData['end_val'];
                         $dateVal = $this->calendarData['date_val'];
@@ -581,7 +581,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                             $endTime = Carbon::parse($this->calendarData['end'])->format('H:i');
                         }
                         if ($endTime === $startTime) {
-                            $startDate = Carbon::parse($dateVal)->format('Y-m-d');
+                            $startDate = Carbon::parse($dateVal);
                             $startTime = Carbon::parse($startVal)->format('H:i');
                             $endTime = Carbon::parse($endVal)->format('H:i');
                         }
@@ -597,14 +597,14 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     ->color('danger')
                     ->icon('heroicon-o-clock')
                     ->action(function () {
-                        $startDate = Carbon::parse($this->calendarData['start'])->format('Y-m-d');
+                        $startDate = Carbon::parse($this->calendarData['start']);
                         $startTime = Carbon::parse($this->calendarData['start'])->format('H:i');
                         $endTime = Carbon::parse($this->calendarData['end'])->format('H:i');
                         $startVal = $this->calendarData['start_val'];
                         $endVal = $this->calendarData['end_val'];
                         $dateVal = $this->calendarData['date_val'];
                         if ($endTime === $startTime) {
-                            $startDate = Carbon::parse($dateVal)->format('Y-m-d');
+                            $startDate = Carbon::parse($dateVal);
                             $startTime = Carbon::parse($startVal)->format('H:i');
                             $endTime = Carbon::parse($endVal)->format('H:i');
                         }

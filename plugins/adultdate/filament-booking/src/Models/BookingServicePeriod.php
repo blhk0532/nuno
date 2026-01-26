@@ -23,7 +23,7 @@ class BookingServicePeriod extends Model
         'ends_at',
         'period_type',
         'created_by',
-    ]; 
+    ];
 
     /**
      * Casts

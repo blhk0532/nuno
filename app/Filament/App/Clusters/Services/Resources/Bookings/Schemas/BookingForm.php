@@ -35,7 +35,6 @@ final class BookingForm
                         Section::make()
                             ->schema(self::getDetailsComponents())
                             ->columns(2),
-
                         Section::make('Booking items')
                             ->afterHeader([
                                 Action::make('reset')
@@ -48,6 +47,9 @@ final class BookingForm
                             ->schema([
                                 self::getItemsRepeater(),
                             ]),
+                        Section::make()
+                            ->schema(self::getDetailsComponents2())
+                            ->columns(2),
                     ])
                     ->columnSpan(['lg' => 3]),
 
@@ -96,11 +98,23 @@ final class BookingForm
                 ->disabled()
                 ->dehydrated()
                 ->required()
+                ->hidden()
                 ->maxLength(32)
                 ->unique(Booking::class, 'number', ignoreRecord: true),
+            Select::make('service_id')
+                ->relationship('service', 'name')
+                ->searchable()
+                ->hidden(),
+            Select::make('service_user_id')
+                ->label('Service User')
+                ->options(User::where('role', 'service')->pluck('name', 'id'))
+                ->searchable()
+                ->required(),
 
             \Filament\Forms\Components\DatePicker::make('service_date')
                 ->dehydrated()
+                   ->prefix('Start')
+    ->suffix('time')
                 ->required(),
 
             \Filament\Forms\Components\TimePicker::make('start_time')
@@ -178,16 +192,6 @@ final class BookingForm
                     return $client->id;
                 }),
 
-            Select::make('service_id')
-                ->relationship('service', 'name')
-                ->searchable()
-                ->hidden(),
-
-            Select::make('service_user_id')
-                ->label('Service User')
-                ->options(User::where('role', 'service')->pluck('name', 'id'))
-                ->searchable()
-                ->required(),
 
             TextInput::make('booking_user_id')
                 ->hidden()
@@ -197,15 +201,19 @@ final class BookingForm
                 ->hidden()
                 ->dehydrated(),
 
+        ];
+    }
+
+        /** @return array<Component> */
+    public static function getDetailsComponents2(array $clientDefaults = []): array
+    {
+        return [
             ToggleButtons::make('status')
                 ->inline()
                 ->options(BookingStatus::class)
                 ->columnSpan('full')
                 ->required()
                 ->hidden(fn (?Booking $record) => ! self::canShowStatus($record)),
-
-            // Address moved to client create modal; no address field on booking form
-
             RichEditor::make('notes')
                 ->columnSpan('full'),
         ];
@@ -214,17 +222,18 @@ final class BookingForm
     public static function getItemsRepeater(): Repeater
     {
         return Repeater::make('items')
+            ->label('Bokade Tjänster')
             ->relationship()
             ->table([
-                TableColumn::make('Service'),
-                TableColumn::make('Quantity')
+                TableColumn::make('Tjänst'),
+                TableColumn::make('Antal')
                     ->width(100),
-                TableColumn::make('Unit Price')
+                TableColumn::make('Enhetspris')
                     ->width(110),
             ])
             ->schema([
                 Select::make('booking_service_id')
-                    ->label('Service')
+                    ->label('Tjänst')
                     ->options(Service::query()->pluck('name', 'id'))
                     ->required()
                     ->reactive()
@@ -234,7 +243,7 @@ final class BookingForm
                     ->searchable(),
 
                 TextInput::make('qty')
-                    ->label('Quantity')
+                    ->label('Antal')
                     ->numeric()
                     ->default(1)
                     ->required(),

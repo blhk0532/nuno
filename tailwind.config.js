@@ -1,3 +1,4 @@
+// tailwind.config.js
 module.exports = {
   content: [
     './resources/**/*.blade.php',
@@ -5,10 +6,8 @@ module.exports = {
     './resources/**/*.jsx',
     './resources/**/*.ts',
     './resources/**/*.tsx',
-
     './app/**/*.php',
     './livewire/**/*.php',
-
     './vendor/filament/**/*.blade.php',
     './vendor/**/*.php',
   ],
@@ -16,12 +15,6 @@ module.exports = {
   safelist: [
     {
       pattern: /(bg|text|border|ring)-(red|green|blue|yellow|orange|amber|purple|pink|indigo|teal|cyan|lime|emerald|gray|slate|zinc|neutral|stone)-(50|100|200|300|400|500|600|700|800|900)/,
-    },
-    {
-      pattern: /(bg|text|border|ring)-(success|warning|error|info)-(100|200|300|400|500|600|700)/,
-    },
-    {
-      pattern: /(bg|text|border|ring)-(red|green|blue|yellow|orange|amber|purple|pink|indigo|teal|cyan|lime|emerald|gray|slate|zinc|neutral|stone)-(100|200|300|400|500|600|700)\/(10|20|30|40|50|60|70|80|90)/,
     },
   ],
 
