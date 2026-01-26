@@ -68,7 +68,7 @@ class MultiEventCalendar extends SimpleCalendarWidget implements HasCalendar
         HasOptions::getOptions insteadof CanBeConfigured;
 
         InteractsWithEventRecord::getEloquentQuery insteadof InteractsWithRecords;
-        
+
         // Resolve method collisions from InteractsWithEvents vs InteractsWithCalendar
         InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         InteractsWithEvents::onDateSelectLegacy insteadof InteractsWithCalendar;
@@ -964,7 +964,7 @@ class MultiEventCalendar extends SimpleCalendarWidget implements HasCalendar
                 'start' => $loc->date?->toDateString(),
                 'number' => 0,
                 'allDay' => true,
-                'backgroundColor' => '#e7000b',
+                'backgroundColor' => '#f3f4f6',
                 'borderColor' => 'transparent',
                 'textColor' => '#111827',
                 'extendedProps' => [

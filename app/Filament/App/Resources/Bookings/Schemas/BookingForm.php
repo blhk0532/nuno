@@ -20,8 +20,9 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
+use Filament\Forms\Components\DateTimePicker;
 
-class BookingForm
+final class BookingForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -30,21 +31,15 @@ class BookingForm
                 Group::make()
                     ->schema([
                         Section::make()
-                            ->schema(static::getDetailsComponents())
+                            ->schema(self::getDetailsComponents())
                             ->columns(2),
-
-                        Section::make('Booking items')
-                            ->afterHeader([
-                                Action::make('reset')
-                                    ->modalHeading('Are you sure?')
-                                    ->modalDescription('All existing items will be removed from the booking.')
-                                    ->requiresConfirmation()
-                                    ->color('danger')
-                                    ->action(fn (Set $set) => $set('items', [])),
-                            ])
+                        Section::make('Tjänster')
                             ->schema([
-                                static::getItemsRepeater(),
+                                self::getItemsRepeater(),
                             ]),
+                        Section::make()
+                            ->schema(self::getDetailsComponents2())
+                            ->columns(2),
                     ])
                     ->columnSpan(['lg' => 3]),
 
@@ -85,7 +80,7 @@ class BookingForm
     }
 
     /** @return array<Component> */
-    public static function getDetailsComponents(): array
+    public static function getDetailsComponents(array $clientDefaults = []): array
     {
         return [
             TextInput::make('number')
@@ -93,22 +88,42 @@ class BookingForm
                 ->disabled()
                 ->dehydrated()
                 ->required()
+                ->hidden()
                 ->maxLength(32)
                 ->unique(Booking::class, 'number', ignoreRecord: true),
+            Select::make('service_id')
+                ->relationship('service', 'name')
+                ->searchable()
+                ->hidden(),
+            Select::make('service_user_id')
+                ->label('Service User')
+                ->options(User::where('role', 'service')->pluck('name', 'id'))
+                ->searchable()
+                ->required(),
 
             \Filament\Forms\Components\DatePicker::make('service_date')
-                ->dehydrated()
-                ->required(),
+                ->label('Datum')
+                ->required()
+                ->columnSpan(1),
 
-            \Filament\Forms\Components\TimePicker::make('start_time')
-                ->seconds(false)
-                ->dehydrated()
-                ->required(),
+            Group::make()
+                ->schema([
+                    \Filament\Forms\Components\TimePicker::make('start_time')
+                        ->label('Starttid')
+                        ->seconds(false)
+                        ->displayFormat('H:i')
+                        ->native(false)
+                        ->required(),
 
-            \Filament\Forms\Components\TimePicker::make('end_time')
-                ->seconds(false)
-                ->dehydrated()
-                ->required(),
+                    \Filament\Forms\Components\TimePicker::make('end_time')
+                        ->label('Sluttid')
+                        ->seconds(false)
+                        ->displayFormat('H:i')
+                        ->native(false)
+                        ->required(),
+                ])
+                ->columns(2)
+                ->columnSpan(1),
 
             Select::make('booking_client_id')
                 ->relationship('client', 'name')
@@ -119,30 +134,34 @@ class BookingForm
                         ->columns(2)
                         ->schema([
                             TextInput::make('name')
+                                ->default($clientDefaults['name'] ?? null)
                                 ->required()
-                                ->maxLength(255)
-                                ->required(),
+                                ->maxLength(255),
                             TextInput::make('phone')
+                                ->default($clientDefaults['phone'] ?? null)
                                 ->maxLength(255)
                                 ->required(),
                             TextInput::make('email')
                                 ->label('Email address')
-
+                                ->default($clientDefaults['email'] ?? null)
                                 ->email()
                                 ->maxLength(255)
                                 ->unique(),
 
                             TextInput::make('street')
                                 ->label('Street address')
+                                ->default($clientDefaults['street'] ?? null)
                                 ->maxLength(255)
                                 ->required(),
 
                             TextInput::make('zip')
                                 ->label('Postal code')
+                                ->default($clientDefaults['zip'] ?? null)
                                 ->maxLength(20)
                                 ->required(),
 
                             TextInput::make('city')
+                                ->default($clientDefaults['city'] ?? null)
                                 ->maxLength(255)
                                 ->required(),
 
@@ -172,17 +191,6 @@ class BookingForm
                     return $client->id;
                 }),
 
-            Select::make('service_id')
-                ->relationship('service', 'name')
-                ->searchable()
-                ->hidden(),
-
-            Select::make('service_user_id')
-                ->label('Service User')
-                ->options(User::where('role', 'service')->pluck('name', 'id'))
-                ->searchable()
-                ->required(),
-
             TextInput::make('booking_user_id')
                 ->hidden()
                 ->dehydrated(),
@@ -191,16 +199,22 @@ class BookingForm
                 ->hidden()
                 ->dehydrated(),
 
+        ];
+    }
+
+        /** @return array<Component> */
+    public static function getDetailsComponents2(array $clientDefaults = []): array
+    {
+        return [
             ToggleButtons::make('status')
-                ->inline()
                 ->options(BookingStatus::class)
-                ->columnSpan('full')
+                
+                ->inline()
                 ->required()
-                ->hidden(fn (?Booking $record) => ! static::canShowStatus($record)),
-
-            // Address moved to client create modal; no address field on booking form
-
+                ->hidden(fn (?Booking $record) => ! self::canShowStatus($record))
+                ->columnSpan('full'),
             RichEditor::make('notes')
+                ->label('Anteckningar')
                 ->columnSpan('full'),
         ];
     }
@@ -208,37 +222,36 @@ class BookingForm
     public static function getItemsRepeater(): Repeater
     {
         return Repeater::make('items')
+            ->label('Tjänster')
             ->relationship()
-            ->table([
-                TableColumn::make('Service'),
-                TableColumn::make('Quantity')
-                    ->width(100),
-                TableColumn::make('Unit Price')
-                    ->width(110),
-            ])
             ->schema([
                 Select::make('booking_service_id')
-                    ->label('Service')
+                    ->label('Tjänst')
                     ->options(Service::query()->pluck('name', 'id'))
                     ->required()
                     ->reactive()
-                    ->afterStateUpdated(fn ($state, Set $set) => $set('unit_price', Service::find($state)->price ?? 0))
+                    ->afterStateUpdated(fn ($state, Set $set) => $set('unit_price', Service::find($state)?->price ?? 0))
                     ->distinct()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                    ->searchable(),
+                    ->searchable()
+                    ->columnSpan(2),
 
                 TextInput::make('qty')
-                    ->label('Quantity')
+                    ->label('Antal')
                     ->numeric()
                     ->default(1)
-                    ->required(),
+                    ->required()
+                    ->columnSpan(1),
 
                 TextInput::make('unit_price')
+                    ->label('Pris')
                     ->disabled()
                     ->dehydrated()
                     ->numeric()
-                    ->required(),
+                    ->required()
+                    ->columnSpan(1),
             ])
+            ->columns(4)
             ->orderColumn('sort')
             ->defaultItems(1)
             ->hiddenLabel();

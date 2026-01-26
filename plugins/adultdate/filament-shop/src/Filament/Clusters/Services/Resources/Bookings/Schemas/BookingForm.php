@@ -2,11 +2,11 @@
 
 namespace Adultdate\FilamentShop\Filament\Clusters\Services\Resources\Bookings\Schemas;
 
-use Adultdate\FilamentShop\Enums\BookingStatus;
-use Adultdate\FilamentShop\Filament\Clusters\Services\Resources\Clients\ClientResource;
-use Adultdate\FilamentShop\Forms\Components\AddressForm;
-use Adultdate\FilamentShop\Models\Booking\Booking;
-use Adultdate\FilamentShop\Models\Booking\Service;
+use Adultdate\FilamentBooking\Enums\BookingStatus;
+use Adultdate\FilamentBooking\Models\Booking\Booking;
+use Adultdate\FilamentBooking\Models\Booking\Client;
+use Adultdate\FilamentBooking\Models\Booking\Service;
+use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Repeater\TableColumn;
@@ -14,14 +14,15 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\ToggleButtons;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Component;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Facades\Auth;
+use Filament\Forms\Components\DateTimePicker;
 
-class BookingForm
+final class BookingForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -30,101 +31,190 @@ class BookingForm
                 Group::make()
                     ->schema([
                         Section::make()
-                            ->schema(static::getDetailsComponents())
+                            ->schema(self::getDetailsComponents())
                             ->columns(2),
-
-                        Section::make('Booking items')
-                            ->afterHeader([
-                                Action::make('reset')
-                                    ->modalHeading('Are you sure?')
-                                    ->modalDescription('All existing items will be removed from the booking.')
-                                    ->requiresConfirmation()
-                                    ->color('danger')
-                                    ->action(fn (Set $set) => $set('items', [])),
-                            ])
+                        Section::make('Tjänster')
                             ->schema([
-                                static::getItemsRepeater(),
+                                self::getItemsRepeater(),
                             ]),
+                        Section::make()
+                            ->schema(self::getDetailsComponents2())
+                            ->columns(2),
                     ])
-                    ->columnSpan(['lg' => fn (?Booking $record) => $record === null ? 3 : 2]),
+                    ->columnSpan(['lg' => 3]),
 
-                Section::make()
-                    ->schema([
-                        TextEntry::make('created_at')
-                            ->label('Booking date')
-                            ->state(fn (Booking $record): ?string => $record->created_at?->diffForHumans()),
-
-                        TextEntry::make('updated_at')
-                            ->label('Last modified at')
-                            ->state(fn (Booking $record): ?string => $record->updated_at?->diffForHumans()),
-                    ])
-                    ->columnSpan(['lg' => 1])
-                    ->hidden(fn (?Booking $record) => $record === null),
+                // Removed created_at / updated_at display section — not needed in modal
             ])
             ->columns(3);
     }
 
+    /**
+     * Determine if the current user may see and edit the booking `status` field.
+     */
+    public static function canShowStatus(?Booking $record): bool
+    {
+
+        $user = Auth::user();
+        if (! $user) {
+            return false;
+        }
+
+        if (is_object($user) && method_exists($user, 'hasRole') && call_user_func([$user, 'hasRole'], 'admin')) {
+            return true;
+        }
+
+        if ($user->role === 'admin' || $user->role === 'super') {
+            return true;
+        }
+
+        return false;
+
+    }
+
     /** @return array<Component> */
-    public static function getDetailsComponents(): array
+    public static function getClientComponents(): array
+    {
+        return [
+
+        ];
+    }
+
+    /** @return array<Component> */
+    public static function getDetailsComponents(array $clientDefaults = []): array
     {
         return [
             TextInput::make('number')
-                ->default('BK-' . random_int(100000, 999999))
+                ->default('OR-'.random_int(100000, 999999))
                 ->disabled()
                 ->dehydrated()
                 ->required()
+                ->hidden()
                 ->maxLength(32)
                 ->unique(Booking::class, 'number', ignoreRecord: true),
+            Select::make('service_id')
+                ->relationship('service', 'name')
+                ->searchable()
+                ->hidden(),
+            Select::make('service_user_id')
+                ->label('Service User')
+                ->options(User::where('role', 'service')->pluck('name', 'id'))
+                ->searchable()
+                ->required(),
 
-            Select::make('shop_client_id')
+            \Filament\Forms\Components\DatePicker::make('service_date')
+                ->label('Datum')
+                ->required()
+                ->columnSpan(1),
+
+            Group::make()
+                ->schema([
+                    \Filament\Forms\Components\TimePicker::make('start_time')
+                        ->label('Starttid')
+                        ->seconds(false)
+                        ->displayFormat('H:i')
+                        ->native(false)
+                        ->required(),
+
+                    \Filament\Forms\Components\TimePicker::make('end_time')
+                        ->label('Sluttid')
+                        ->seconds(false)
+                        ->displayFormat('H:i')
+                        ->native(false)
+                        ->required(),
+                ])
+                ->columns(2)
+                ->columnSpan(1),
+
+            Select::make('booking_client_id')
                 ->relationship('client', 'name')
                 ->searchable()
                 ->required()
                 ->createOptionForm([
-                    TextInput::make('name')
-                        ->required()
-                        ->maxLength(255),
+                    Group::make()
+                        ->columns(2)
+                        ->schema([
+                            TextInput::make('name')
+                                ->default($clientDefaults['name'] ?? null)
+                                ->required()
+                                ->maxLength(255),
+                            TextInput::make('phone')
+                                ->default($clientDefaults['phone'] ?? null)
+                                ->maxLength(255)
+                                ->required(),
+                            TextInput::make('email')
+                                ->label('Email address')
+                                ->default($clientDefaults['email'] ?? null)
+                                ->email()
+                                ->maxLength(255)
+                                ->unique(),
 
-                    TextInput::make('email')
-                        ->label('Email address')
-                        ->required()
-                        ->email()
-                        ->maxLength(255)
-                        ->unique(),
+                            TextInput::make('street')
+                                ->label('Street address')
+                                ->default($clientDefaults['street'] ?? null)
+                                ->maxLength(255)
+                                ->required(),
 
-                    TextInput::make('phone')
-                        ->maxLength(255),
+                            TextInput::make('zip')
+                                ->label('Postal code')
+                                ->default($clientDefaults['zip'] ?? null)
+                                ->maxLength(20)
+                                ->required(),
+
+                            TextInput::make('city')
+                                ->default($clientDefaults['city'] ?? null)
+                                ->maxLength(255)
+                                ->required(),
+
+                            TextInput::make('country')
+                                ->hidden()
+                                ->placeholder('Sweden'),
+                        ]),
                 ])
                 ->createOptionAction(function (Action $action) {
                     return $action
                         ->modalHeading('Create client')
                         ->modalSubmitActionLabel('Create client')
                         ->modalWidth('lg');
+                })
+                ->createOptionUsing(function (array $data) {
+                    $country = $data['country'] ?? null;
+                    if (array_key_exists('country', $data)) {
+                        unset($data['country']);
+                    }
+
+                    $client = Client::create($data);
+
+                    if ($country) {
+                        $client->update(['address' => $country]);
+                    }
+
+                    return $client->id;
                 }),
 
+            TextInput::make('booking_user_id')
+                ->hidden()
+                ->dehydrated(),
+
+            TextInput::make('admin_id')
+                ->hidden()
+                ->dehydrated(),
+
+        ];
+    }
+
+        /** @return array<Component> */
+    public static function getDetailsComponents2(array $clientDefaults = []): array
+    {
+        return [
             ToggleButtons::make('status')
-                ->inline()
                 ->options(BookingStatus::class)
-                ->required(),
-
-            Select::make('currency')
-                ->searchable()
-                ->placeholder('Swedish Krona')
-                ->options([
-                    'SEK' => 'Swedish Krona (SEK)',
-                    'USD' => 'US Dollar (USD)',
-                    'EUR' => 'Euro (EUR)',
-                    'GBP' => 'British Pound (GBP)',
-                    'NOK' => 'Norwegian Krone (NOK)',
-                    'DKK' => 'Danish Krone (DKK)',
-                ])
-                ->default('SEK')
-                ->required(),
-
-            AddressForm::make('address')
+                
+                ->inline()
+                ->required()
+                ->hidden(fn (?Booking $record) => ! self::canShowStatus($record))
                 ->columnSpan('full'),
-
             RichEditor::make('notes')
+                ->label('Anteckningar')
                 ->columnSpan('full'),
         ];
     }
@@ -132,40 +222,38 @@ class BookingForm
     public static function getItemsRepeater(): Repeater
     {
         return Repeater::make('items')
+            ->label('Tjänster')
             ->relationship()
-            ->table([
-                TableColumn::make('Service'),
-                TableColumn::make('Quantity')
-                    ->width(100),
-                TableColumn::make('Unit Price')
-                    ->width(110),
-            ])
             ->schema([
-                Select::make('shop_service_id')
-                    ->label('Service')
+                Select::make('booking_service_id')
+                    ->label('Tjänst')
                     ->options(Service::query()->pluck('name', 'id'))
                     ->required()
                     ->reactive()
-                    ->afterStateUpdated(fn ($state, Set $set) => $set('unit_price', Service::find($state)->price ?? 0))
+                    ->afterStateUpdated(fn ($state, Set $set) => $set('unit_price', Service::find($state)?->price ?? 0))
                     ->distinct()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                    ->searchable(),
+                    ->searchable()
+                    ->columnSpan(2),
 
                 TextInput::make('qty')
-                    ->label('Quantity')
+                    ->label('Antal')
                     ->numeric()
                     ->default(1)
-                    ->required(),
+                    ->required()
+                    ->columnSpan(1),
 
                 TextInput::make('unit_price')
+                    ->label('Pris')
                     ->disabled()
                     ->dehydrated()
                     ->numeric()
-                    ->required(),
+                    ->required()
+                    ->columnSpan(1),
             ])
+            ->columns(4)
             ->orderColumn('sort')
             ->defaultItems(1)
-            ->hiddenLabel()
-            ->required();
+            ->hiddenLabel();
     }
 }

@@ -35,15 +35,7 @@ final class BookingForm
                         Section::make()
                             ->schema(self::getDetailsComponents())
                             ->columns(2),
-                        Section::make('Booking items')
-                            ->afterHeader([
-                                Action::make('reset')
-                                    ->modalHeading('Are you sure?')
-                                    ->modalDescription('All existing items will be removed from the booking.')
-                                    ->requiresConfirmation()
-                                    ->color('danger')
-                                    ->action(fn (Set $set) => $set('items', [])),
-                            ])
+                        Section::make('Tjänster')
                             ->schema([
                                 self::getItemsRepeater(),
                             ]),
@@ -112,20 +104,29 @@ final class BookingForm
                 ->required(),
 
             \Filament\Forms\Components\DatePicker::make('service_date')
-                ->dehydrated()
-                   ->prefix('Start')
-    ->suffix('time')
-                ->required(),
+                ->label('Datum')
+                ->required()
+                ->columnSpan(1),
 
-            \Filament\Forms\Components\TimePicker::make('start_time')
-                ->seconds(false)
-                ->dehydrated()
-                ->required(),
+            Group::make()
+                ->schema([
+                    \Filament\Forms\Components\TimePicker::make('start_time')
+                        ->label('Starttid')
+                        ->seconds(false)
+                        ->displayFormat('H:i')
+                        ->native(false)
+                        ->required(),
 
-            \Filament\Forms\Components\TimePicker::make('end_time')
-                ->seconds(false)
-                ->dehydrated()
-                ->required(),
+                    \Filament\Forms\Components\TimePicker::make('end_time')
+                        ->label('Sluttid')
+                        ->seconds(false)
+                        ->displayFormat('H:i')
+                        ->native(false)
+                        ->required(),
+                ])
+                ->columns(2)
+                ->columnSpan(1),
+
             Select::make('booking_client_id')
                 ->relationship('client', 'name')
                 ->searchable()
@@ -192,7 +193,6 @@ final class BookingForm
                     return $client->id;
                 }),
 
-
             TextInput::make('booking_user_id')
                 ->hidden()
                 ->dehydrated(),
@@ -209,12 +209,14 @@ final class BookingForm
     {
         return [
             ToggleButtons::make('status')
-                ->inline()
                 ->options(BookingStatus::class)
-                ->columnSpan('full')
+                
+                ->inline()
                 ->required()
-                ->hidden(fn (?Booking $record) => ! self::canShowStatus($record)),
+                ->hidden(fn (?Booking $record) => ! self::canShowStatus($record))
+                ->columnSpan('full'),
             RichEditor::make('notes')
+                ->label('Anteckningar')
                 ->columnSpan('full'),
         ];
     }
@@ -222,38 +224,36 @@ final class BookingForm
     public static function getItemsRepeater(): Repeater
     {
         return Repeater::make('items')
-            ->label('Bokade Tjänster')
+            ->label('Tjänster')
             ->relationship()
-            ->table([
-                TableColumn::make('Tjänst'),
-                TableColumn::make('Antal')
-                    ->width(100),
-                TableColumn::make('Enhetspris')
-                    ->width(110),
-            ])
             ->schema([
                 Select::make('booking_service_id')
                     ->label('Tjänst')
                     ->options(Service::query()->pluck('name', 'id'))
                     ->required()
                     ->reactive()
-                    ->afterStateUpdated(fn ($state, Set $set) => $set('unit_price', Service::find($state)->price ?? 0))
+                    ->afterStateUpdated(fn ($state, Set $set) => $set('unit_price', Service::find($state)?->price ?? 0))
                     ->distinct()
                     ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                    ->searchable(),
+                    ->searchable()
+                    ->columnSpan(2),
 
                 TextInput::make('qty')
                     ->label('Antal')
                     ->numeric()
                     ->default(1)
-                    ->required(),
+                    ->required()
+                    ->columnSpan(1),
 
                 TextInput::make('unit_price')
+                    ->label('Pris')
                     ->disabled()
                     ->dehydrated()
                     ->numeric()
-                    ->required(),
+                    ->required()
+                    ->columnSpan(1),
             ])
+            ->columns(4)
             ->orderColumn('sort')
             ->defaultItems(1)
             ->hiddenLabel();

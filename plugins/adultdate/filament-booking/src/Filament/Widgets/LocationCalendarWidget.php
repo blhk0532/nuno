@@ -145,10 +145,10 @@ final class LocationCalendarWidget extends FullCalendarWidget implements HasActi
                 if (isset($arguments['date'])) {
                     $data['date'] = $arguments['date'];
                 }
-                
+
                 // Create the record
                 DailyLocation::create($data);
-                
+
                 // Send notification
                 Notification::make()
                     ->title('Daily location created successfully')
@@ -212,7 +212,7 @@ final class LocationCalendarWidget extends FullCalendarWidget implements HasActi
                 'title' => $title,
                 'start' => $loc->date?->toDateString(),
                 'allDay' => true,
-                'backgroundColor' => '#e7000b',
+                'backgroundColor' => '#f3f4f6',
                 'borderColor' => 'transparent',
                 'textColor' => '#111827',
                 'extendedProps' => [

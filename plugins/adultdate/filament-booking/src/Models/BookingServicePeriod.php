@@ -102,7 +102,7 @@ class BookingServicePeriod extends Model
             'start' => $start,
             'end' => $end,
             'type' => 'blocking',
-            'backgroundColor' => $this->status?->getColor() ?? '#e7000b',
+            'backgroundColor' => $this->status?->getColor() ?? '#f3f4f6',
             'borderColor' => $this->status?->getColor() ?? 'transparent',
             'textColor' => '#ffffff',
             'extendedProps' => [

@@ -967,7 +967,7 @@ class BookingPeriodsCalendar extends SimpleCalendarWidget implements HasCalendar
                 'start' => $loc->date?->toDateString(),
                 'number' => 0,
                 'allDay' => true,
-                'backgroundColor' => '#e7000b',
+                'backgroundColor' => '#f3f4f6',
                 'borderColor' => 'transparent',
                 'textColor' => '#111827',
                 'extendedProps' => [

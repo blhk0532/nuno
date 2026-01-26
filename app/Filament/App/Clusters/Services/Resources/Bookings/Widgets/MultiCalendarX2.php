@@ -68,8 +68,8 @@ final class MultiCalendarX2 extends FullCalendarWidget implements HasCalendar
         HasOptions::getOptions insteadof CanBeConfigured;
 
         InteractsWithEventRecord::getEloquentQuery insteadof InteractsWithRecords;
-    
-        
+
+
         // Resolve method collisions from InteractsWithEvents vs InteractsWithCalendar
 InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         InteractsWithEvents::onDateSelectLegacy insteadof InteractsWithCalendar;
@@ -1666,20 +1666,14 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         return [
             Group::make()
                 ->schema([
-                    Section::make()
-                        ->schema(BookingForm::getDetailsComponents())
+                    Section::make('Booking Information')
+                        ->schema([
+                            ...BookingForm::getDetailsComponents(),
+                            ...BookingForm::getDetailsComponents2(),
+                        ])
                         ->columns(2),
 
-                    Section::make('Booking items')
-                        ->afterHeader([
-                            Action::make('reset-items')
-                                ->label('Reset items')
-                                ->color('danger')
-                                ->modalHeading('Reset booking items')
-                                ->modalDescription('All existing items will be removed from the booking.')
-                                ->requiresConfirmation()
-                                ->action(fn (Set $set) => $set('items', [])),
-                        ])
+                    Section::make('Tjänster')
                         ->schema([
                             $this->getCalendarItemsRepeater(),
                         ]),

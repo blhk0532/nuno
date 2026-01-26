@@ -1728,19 +1728,13 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                         ->schema(BookingForm::getDetailsComponents($clientDefaults))
                         ->columns(2),
 
-                    Section::make('Booking items')
-                        ->afterHeader([
-                            Action::make('reset-items')
-                                ->label('Reset items')
-                                ->color('danger')
-                                ->modalHeading('Reset booking items')
-                                ->modalDescription('All existing items will be removed from the booking.')
-                                ->requiresConfirmation()
-                                ->action(fn (Set $set) => $set('items', [])),
-                        ])
+                    Section::make('Tjänster')
                         ->schema([
                             $this->getCalendarItemsRepeater(),
                         ]),
+                    Section::make()
+                        ->schema(BookingForm::getDetailsComponents2())
+                        ->columns(2),
                 ])
                 ->columnSpan(['lg' => 3]),
         ];

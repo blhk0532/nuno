@@ -36,7 +36,9 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
         return $this->cacheAction(
             Action::make('returnCall')
                 ->label('Ring Tillbaka')
-                ->extraAttributes(['class' => 'w-full px-3 py-2 rounded text-sm font-medium text-white outcome-button bg-blue-600 hover:bg-blue-700'])
+                ->color('primary')
+                ->button()
+                ->extraAttributes(['class' => 'w-full outcome-button'])
                 ->modalHeading('Schemalägg återkommande samtal')
                 ->modalSubmitActionLabel('Schemalägg')
                 ->modalWidth('md')
@@ -64,7 +66,9 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
         return $this->cacheAction(
             Action::make('aterkommer')
                 ->label('Återkom')
-                ->extraAttributes(['class' => 'w-full px-3 py-2 rounded text-sm font-medium text-white outcome-button bg-blue-600 hover:bg-blue-700'])
+                ->color('primary')
+                ->button()
+                ->extraAttributes(['class' => 'w-full outcome-button'])
                 ->modalHeading('Schemalägg återkommande samtal')
                 ->modalSubmitActionLabel('Schemalägg')
                 ->modalWidth('md')

@@ -40,11 +40,14 @@ class CreateBooking extends CreateRecord
     protected function getSteps(): array
     {
         return [
-            Step::make('Booking Details')
+            Step::make('Booking Information')
                 ->schema([
                     Section::make()
-                        ->schema(BookingForm::getDetailsComponents())
-                        ->columns(),
+                        ->schema([
+                            ...BookingForm::getDetailsComponents(),
+                            ...BookingForm::getDetailsComponents2(),
+                        ])
+                        ->columns(2),
                 ]),
 
             Step::make('Booking Items')
@@ -77,4 +80,3 @@ class CreateBooking extends CreateRecord
     }
 }
 
- 
