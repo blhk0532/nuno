@@ -16,7 +16,7 @@ use Livewire\Features\SupportTesting\Testable;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-
+use Illuminate\Support\Facades\App;
 class FilamentWirechatServiceProvider extends PackageServiceProvider
 {
     public static string $name = 'filament-wirechat';
@@ -182,16 +182,21 @@ class FilamentWirechatServiceProvider extends PackageServiceProvider
     /**
      * @return array<Asset>
      */
-    protected function getAssets(): array
-    {
-        return [
-            // CSS will be included via the main app.css file
-            // Load Laravel Echo for real-time broadcasting - must load on all pages for real-time to work
-            // Reference the main application's app.js file using Vite
-            Js::make('filament-wirechat-echo', Vite::asset('resources/js/app.tsx'))
-                ->module(),
-        ];
+protected function getAssets(): array
+{
+    if (App::runningInConsole()) {
+        return [];
     }
+
+    return [
+        // CSS will be included via the main app.css file
+        // Load Laravel Echo for real-time broadcasting - must load on all pages for real-time to work
+        // Reference the main application's app.js file using Vite
+        Js::make('filament-wirechat-echo', Vite::asset('resources/js/app.tsx'))
+            ->module(),
+    ];
+}
+
 
     /**
      * @return array<class-string>
