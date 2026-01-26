@@ -26,7 +26,7 @@ enum Outcomes: string implements HasColor, HasIcon, HasLabel
     case RingIgen24 = 'Ring Igen 24';
 
     case NyligenGjort = 'Nyligen Gjort';
-    case Aterkommer = 'Återkom';
+    case Aterkommer = 'Återkommer';
     case RingTillbaka = 'Ring Tillbaka';
     case Yes = 'Bokad';
 
@@ -51,8 +51,8 @@ enum Outcomes: string implements HasColor, HasIcon, HasLabel
             self::RingIgen12 => 'warning',
             self::RingIgen24 => 'warning',
             self::NyligenGjort => 'gray',
-            self::Aterkommer => 'gray',
-            self::RingTillbaka => 'gray',
+            self::Aterkommer => 'primary',
+            self::RingTillbaka => 'primary',
             self::Yes => 'success',
         };
     }

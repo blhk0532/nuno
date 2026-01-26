@@ -1,81 +1,88 @@
-<div>
-    <section class="fi-section">
-        <div class="fi-section-content-ctn">
-            <div class="fi-section-content">
-                <div class="outcome-recorder space-y-4">
-                    @if($record && $this->tenant)
-                        <div class="grid grid-cols-1 gap-4">
-                            <!-- Outcomes 1 -->
-                            <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-4 gap-2">
-                                @foreach(\App\Enums\Outcomes1::cases() as $outcome)
-                                    <form method="POST" action="{{ route('ringa-data.outcome.store', ['tenant' => $this->tenant, 'id' => $record->id]) }}" class="w-full">
+<div class="h-full">
+    <div class="outcome-recorder space-y-6 h-full flex flex-col">
+        @if($record && $this->tenant)
+            <div class="space-y-4 flex-grow">
+                <!-- Outcomes 1: Critical/Negative -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-danger-600 dark:text-danger-400">Avslut/Problem</h4>
+                    <div class="grid grid-cols-4 gap-2 items-stretch">
+                        @foreach(\App\Enums\Outcomes1::cases() as $outcome)
+                            <form method="POST" action="{{ route('ringa-data.outcome.store', ['tenant' => $this->tenant, 'id' => $record->id]) }}" class="w-full h-full flex">
+                                @csrf
+                                <input type="hidden" name="outcome" value="{{ $outcome->name }}" />
+                                <x-filament::button
+                                    type="submit"
+                                    :color="$outcome->getColor()"
+                                    size="sm"
+                                    class="w-full h-full shadow-sm"
+                                >
+                                    {{ $outcome->getLabel() }}
+                                </x-filament::button>
+                            </form>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Outcomes 2: Temporary/Warning -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-warning-600 dark:text-warning-400">Inget Svar/Upptagen</h4>
+                    <div class="grid grid-cols-4 gap-2 items-stretch">
+                        @foreach(\App\Enums\Outcomes2::cases() as $outcome)
+                            <form method="POST" action="{{ route('ringa-data.outcome.store', ['tenant' => $this->tenant, 'id' => $record->id]) }}" class="w-full h-full flex">
+                                @csrf
+                                <input type="hidden" name="outcome" value="{{ $outcome->name }}" />
+                                <x-filament::button
+                                    type="submit"
+                                    :color="$outcome->getColor()"
+                                    size="sm"
+                                    class="w-full h-full shadow-sm"
+                                >
+                                    {{ $outcome->getLabel() }}
+                                </x-filament::button>
+                            </form>
+                        @endforeach
+                    </div>
+                </div>
+
+                <!-- Outcomes 4: Positive/Follow-up -->
+                <div class="space-y-2">
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400">Bokning/Återkoppling</h4>
+                    <div class="grid grid-cols-4 gap-2 items-stretch">
+                        @foreach(\App\Enums\Outcomes4::cases() as $outcome)
+                            <div class="flex">
+                                @if($outcome->name === 'RingTillbaka')
+                                    {{ ($this->returnCallAction)(['class' => 'w-full shadow-sm', 'size' => 'sm']) }}
+                                @elseif($outcome->name === 'Aterkommer')
+                                    {{ ($this->aterkommerAction)(['class' => 'w-full shadow-sm', 'size' => 'sm']) }}
+                                @else
+                                    <form method="POST" action="{{ route('ringa-data.outcome.store', ['tenant' => $this->tenant, 'id' => $record->id]) }}" class="w-full h-full">
                                         @csrf
                                         <input type="hidden" name="outcome" value="{{ $outcome->name }}" />
                                         <x-filament::button
                                             type="submit"
                                             :color="$outcome->getColor()"
-                                            class="w-full outcome-button"
                                             size="sm"
+                                            class="w-full h-full shadow-sm"
                                         >
                                             {{ $outcome->getLabel() }}
                                         </x-filament::button>
                                     </form>
-                                @endforeach
+                                @endif
                             </div>
-
-                            <!-- Outcomes 2 -->
-                            <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-4 gap-2">
-                                @foreach(\App\Enums\Outcomes2::cases() as $outcome)
-                                    <form method="POST" action="{{ route('ringa-data.outcome.store', ['tenant' => $this->tenant, 'id' => $record->id]) }}" class="w-full">
-                                        @csrf
-                                        <input type="hidden" name="outcome" value="{{ $outcome->name }}" />
-                                        <x-filament::button
-                                            type="submit"
-                                            :color="$outcome->getColor()"
-                                            class="w-full outcome-button"
-                                            size="sm"
-                                        >
-                                            {{ $outcome->getLabel() }}
-                                        </x-filament::button>
-                                    </form>
-                                @endforeach
-                            </div>
-
-                            <!-- Outcomes 4 (includes Ring Tillbaka and Återkom) -->
-                            <div class="grid grid-cols-4 sm:grid-cols-4 lg:grid-cols-4 gap-2">
-                                @foreach(\App\Enums\Outcomes4::cases() as $outcome)
-                                    @if($outcome->name === 'RingTillbaka')
-                                        {{ ($this->returnCallAction)(['class' => 'w-full']) }}
-                                    @elseif($outcome->name === 'Aterkommer')
-                                        {{ ($this->aterkommerAction)(['class' => 'w-full']) }}
-                                    @else
-                                        <form method="POST" action="{{ route('ringa-data.outcome.store', ['tenant' => $this->tenant, 'id' => $record->id]) }}" class="w-full">
-                                            @csrf
-                                            <input type="hidden" name="outcome" value="{{ $outcome->name }}" />
-                                            <x-filament::button
-                                                type="submit"
-                                                :color="$outcome->getColor()"
-                                                class="w-full outcome-button"
-                                                size="sm"
-                                            >
-                                                {{ $outcome->getLabel() }}
-                                            </x-filament::button>
-                                        </form>
-                                    @endif
-                                @endforeach
-                            </div>
-                        </div>
-                    @else
-                        @if(!$this->tenant)
-                            <div class="p-4 text-center text-red-500">Error: Tenant not found</div>
-                        @else
-                            <div class="p-4 text-center text-gray-500">No record loaded</div>
-                        @endif
-                    @endif
+                        @endforeach
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        @else
+            <div class="p-4 text-center text-gray-500 flex-grow flex items-center justify-center">
+                @if(!$this->tenant)
+                    Error: Tenant not found
+                @else
+                    No record loaded
+                @endif
+            </div>
+        @endif
+    </div>
 
     <x-filament-actions::modals />
 </div>

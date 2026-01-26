@@ -91,7 +91,8 @@ public static function form(Form $form): Form
 {
     return $form
         ->schema([
-            Pinpoint::make('location')
+                            Pinpoint::make('location')
+                ->height(300)
                 ->label('Location')
                 ->latField('lat')
                 ->lngField('lng'),
@@ -112,7 +113,8 @@ public static function form(Form $form): Form
 ```php
 use Fahiem\FilamentPinpoint\Pinpoint;
 
-Pinpoint::make('location')
+                Pinpoint::make('location')
+                ->height(300)
     ->label('Business Location')
     ->defaultLocation(-6.200000, 106.816666) // Jakarta
     ->defaultZoom(15)
@@ -135,7 +137,8 @@ Pinpoint::make('location')
 ### Disable Features
 
 ```php
-Pinpoint::make('location')
+                Pinpoint::make('location')
+                ->height(300)
     ->draggable(false)  // Disable marker dragging
     ->searchable(false) // Hide search box
 ```
@@ -155,7 +158,8 @@ Repeater::make('branches')
             ->label('Branch Name')
             ->required(),
 
-        Pinpoint::make('location')
+                        Pinpoint::make('location')
+                ->height(300)
             ->label('Location')
             ->latField('latitude')
             ->lngField('longitude')

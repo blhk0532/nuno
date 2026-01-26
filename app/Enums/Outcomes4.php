@@ -11,7 +11,7 @@ enum Outcomes4: string implements HasColor, HasIcon, HasLabel
 
 
     case NyligenGjort = 'Nyligen Gjort';
-    case Aterkommer = 'Återkom';
+    case Aterkommer = 'Återkommer';
     case RingTillbaka = 'Ring Tillbaka';
     case Yes = 'Bokad';
 

@@ -1,70 +1,92 @@
-<x-filament-widgets::widget>
-    <x-filament::section>
-        @if ($this->record)
-            <div class="space-y-4">
-                <div class="text-sm text-gray-600 dark:text-gray-400 pt-2">
-                    <div class="mb-4">
+<x-filament-widgets::widget class="h-full ringa-data-outcome-widget">
+    <x-filament::section class="h-full">
+        <x-slot name="heading">
+            @if ($this->record)
+                Call Outcomes - {{ $this->record->telefon }}
+            @else
+                Call Outcomes
+            @endif
+        </x-slot>
 
-<strong class="p-1">Utfall:</strong>
+        <div class="h-full flex flex-col justify-between">
+            @if ($this->record)
+                <div class="space-y-4 flex-grow">
+                    <!-- Status & History Section -->
+                    <div class="flex items-center gap-4 pb-4 border-b border-gray-100 dark:border-white/5">
+                        <div class="flex items-center justify-center w-12 h-12 rounded-xl shrink-0 bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-400">
+                            <x-filament::icon icon="heroicon-o-chat-bubble-left-right" class="w-7 h-7" />
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <h3 class="text-sm font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">Senaste Utfall</h3>
+                                @if($this->record->outcome)
+                                    <x-filament::badge
+                                        :color="$this->record->outcome->getColor()"
+                                        :icon="$this->record->outcome->getIcon()"
+                                        size="sm"
+                                    >
+                                        {{ $this->record->outcome->getLabel() }}
+                                    </x-filament::badge>
+                                @else
+                                    <span class="text-xs text-gray-400 italic font-medium">Inget utfall än</span>
+                                @endif
+                            </div>
+                            <div class="flex flex-wrap gap-x-4 gap-y-1 mt-1">
+                                <span class="text-xs text-gray-500 dark:text-gray-400">
+                                    <span class="font-bold">Försök:</span> {{ $this->record->attempts ?? 0 }}
+                                </span>
+                                @if($this->record->outcome)
+                                    <span class="text-xs text-gray-500 dark:text-gray-400">
+                                        <span class="font-bold">Senast:</span> {{ $this->record->updated_at->format('l H:i') }}
+                                    </span>
+                                @endif
+                                @if($this->record->aterkom_at)
+                                    <span class="text-xs text-primary-600 dark:text-primary-400 font-bold">
+                                        Återkommer: {{ $this->record->aterkom_at->format('l H:i') }}
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
 
-                    @if($this->record->outcome)
-                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                            @if($this->record->outcome->value === 'Bokad') bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300
-                            @elseif($this->record->outcome->value === 'Stärra') bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300
-                            @elseif($this->record->outcome->value === 'Klickad') bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300
-                            @elseif($this->record->outcome->value === 'Inget Svar') bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300
-                            @elseif($this->record->outcome->value === 'Telefonsvar') bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300
-                            @elseif($this->record->outcome->value === 'Ej Framkopplad') bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-300
-                            @elseif($this->record->outcome->value === 'Ring Tillbaka') bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-300
-                            @elseif($this->record->outcome->value === 'Ej Intresserad') bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300
-                            @elseif($this->record->outcome->value === 'Fel Telefonnummer') bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300
-                            @elseif($this->record->outcome->value === 'Upptagen') bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300
-                            @elseif($this->record->outcome->value === 'Nyligen Gjort') bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-300
-                            @elseif($this->record->outcome->value === 'Återkom') bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300
-                            @else bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-300
-                            @endif">
-                            {{ $this->record->outcome->getLabel() }}
-                        </span>
+                    <!-- Call Actions -->
+                    @php
+                        $phoneNumbers = $this->record->telfonnummer ?? [];
+                    @endphp
+
+                    @if (!empty($phoneNumbers))
+                        <div class="space-y-3 p-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                                <x-filament::icon icon="heroicon-m-phone" class="w-3.5 h-3.5" />
+                                Ring Nummer
+                            </h4>
+                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                                @foreach($phoneNumbers as $phone)
+                                    @php $dialable = preg_replace('/\s+/', '', $phone); @endphp
+                                    <x-filament::button
+                                        tag="a"
+                                        href="tel:{{ $dialable }}"
+                                        color="gray"
+                                        size="sm"
+                                        class="w-full justify-start shadow-sm bg-white dark:bg-white/10 hover:bg-primary-50 dark:hover:bg-primary-500/10 group transition-colors"
+                                    >
+                                        <span class="text-xs font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400">{{ $phone }}</span>
+                                    </x-filament::button>
+                                @endforeach
+                            </div>
+                        </div>
                     @else
-                        <span class="text-gray-500"></span>
+                        <div class="flex items-center gap-2 p-3 text-sm text-warning-600 rounded-lg bg-warning-50 dark:bg-warning-500/10">
+                            <x-filament::icon icon="heroicon-m-exclamation-triangle" class="w-5 h-5" />
+                            <span>Inga telefonnummer tillgängliga.</span>
+                        </div>
                     @endif
-                    <br>
-                    <strong class="p-1">Återkom:</strong> {{ $this->record->aterkom_at !== null ? $this->record->aterkom_at->format('l H:i') : '' }}<br>
-                    <strong class="p-1">Försök:</strong> {{ $this->record->attempts ?? 0 }}<br>
-                    <strong class="p-1">Senast:</strong> {{ $this->record->outcome !== null ? $this->record->updated_at->format('l H:i') : '' }}<br>
-
                 </div>
-
-                @php
-                    $phoneNumbers = $this->record->telfonnummer ?? [];
-                @endphp
-
-                @if (!empty($phoneNumbers))
-                    <div class="grid grid-cols-4 md:grid-cols-4 gap-2 pt-2">
-                        @foreach($phoneNumbers as $phone)
-                            @php $dialable = preg_replace('/\s+/', '', $phone); @endphp
-                            <x-filament::button
-                                tag="a"
-                                href="tel:{{ $dialable }}"
-                                color="primary"
-                                icon="heroicon-o-phone"
-                                size="sm"
-                                class="w-full outcome-button justify-start whitespace-nowrap flex-nowrap flex w-full px-3 py-2 rounded text-sm font-medium text-white outcome-button"
-                            >
-                                {{ $phone }}
-                            </x-filament::button>
-                        @endforeach
-                    </div>
-                @else
-                    <div class="text-sm text-gray-500 dark:text-gray-400">
-                        No phone numbers available.
-                    </div>
-                @endif
-            </div>
-        @else
-            <div class="p-6 text-center text-gray-500 dark:text-gray-400">
-                <p>Select a record from the table to record call outcomes.</p>
-            </div>
-        @endif
+            @else
+                <div class="p-6 text-center text-gray-500 dark:text-gray-400 flex-grow flex items-center justify-center">
+                    <p>Select a record from the table to record call outcomes.</p>
+                </div>
+            @endif
+        </div>
     </x-filament::section>
 </x-filament-widgets::widget>

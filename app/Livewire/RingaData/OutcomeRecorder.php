@@ -33,12 +33,15 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
             ? Carbon::parse($this->defaultReturnCallAt)
             : now()->addHour();
 
+        $outcome = \App\Enums\Outcomes4::RingTillbaka;
+
         return $this->cacheAction(
             Action::make('returnCall')
                 ->label('Ring Tillbaka')
-                ->color('primary')
+                ->color($outcome->getColor())
                 ->button()
-                ->extraAttributes(['class' => 'w-full outcome-button'])
+                ->size('sm')
+                ->extraAttributes(['class' => 'w-full'])
                 ->modalHeading('Schemalägg återkommande samtal')
                 ->modalSubmitActionLabel('Schemalägg')
                 ->modalWidth('md')
@@ -63,12 +66,15 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
             ? Carbon::parse($this->defaultReturnCallAt)
             : now()->addHour();
 
+        $outcome = \App\Enums\Outcomes4::Aterkommer;
+
         return $this->cacheAction(
             Action::make('aterkommer')
-                ->label('Återkom')
-                ->color('primary')
+                ->label('Återkommer')
+                ->color($outcome->getColor())
                 ->button()
-                ->extraAttributes(['class' => 'w-full outcome-button'])
+                ->size('sm')
+                ->extraAttributes(['class' => 'w-full'])
                 ->modalHeading('Schemalägg återkommande samtal')
                 ->modalSubmitActionLabel('Schemalägg')
                 ->modalWidth('md')
@@ -193,8 +199,8 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
                 return;
             }
 
-            // If outcome is "Ring Tillbaka" or "Återkom" we expect a scheduled datetime from the action form
-            if (in_array($outcomeEnum->value, ['Ring Tillbaka', 'Återkom'])) {
+            // If outcome is "Ring Tillbaka" or "Återkommer" we expect a scheduled datetime from the action form
+            if (in_array($outcomeEnum->value, ['Ring Tillbaka', 'Återkommer'])) {
                 if (blank($aterkom_at)) {
                     Notification::make()
                         ->title('Datum och tid krävs')

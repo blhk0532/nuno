@@ -411,14 +411,38 @@ img.w-auto.object-contain{
   left: 10rem;
   top: 5px;
 }
-.outcome-button {
-  max-height: 36px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-
-  display: block ruby;
+.outcome-recorder .fi-btn,
+.outcome-recorder .fi-button,
+.ringa-data-outcome-widget .fi-btn,
+.ringa-data-outcome-widget .fi-button {
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
 }
+
+.ringa-data-outcome-widget .fi-btn span,
+.ringa-data-outcome-widget .fi-button span,
+.outcome-recorder .fi-btn span,
+.outcome-recorder .fi-button span {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.outcome-form-widget .fi-wi-widget-ctn,
+.ringa-data-outcome-widget .fi-wi-widget-ctn,
+.outcome-form-widget .fi-section,
+.ringa-data-outcome-widget .fi-section,
+.outcome-form-widget .fi-section-content-ctn,
+.ringa-data-outcome-widget .fi-section-content-ctn,
+.outcome-form-widget .fi-section-content,
+.ringa-data-outcome-widget .fi-section-content {
+    height: 100% !important;
+}
+
 .text-queue-card{
     white-space: nowrap !important;
     overflow: hidden !important;

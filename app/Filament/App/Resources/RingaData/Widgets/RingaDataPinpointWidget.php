@@ -63,7 +63,8 @@ class RingaDataPinpointWidget extends Widget implements HasForms
 
         return $schema
             ->schema([
-                Pinpoint::make('location')
+                                Pinpoint::make('location')
+                ->height(300)
                          ->label($this->record->gatuadress . ' ' . $this->record->postort ?? null)
                     ->latField('lat')
                     ->lngField('lng')

@@ -38,8 +38,8 @@ PhoneInput::make('phone')
     ->initialCountry('se')
     ->onlyCountries(['se','no', 'dk', 'fi','th', 'ph']),
 
-    
-    
+
+
     NumpadField::make('price')
     ->label('Telefon')
     ->minCents(0)
@@ -64,7 +64,8 @@ PhoneInput::make('phone')
                 DateTimePicker::make('end_time'),
                 Toggle::make('is_active')
                     ->required(),
-                            Pinpoint::make('location')
+                                            Pinpoint::make('location')
+                ->height(300)
                 ->label('Location')
                 ->latField('lat')
                 ->lngField('lng'),
