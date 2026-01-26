@@ -2,7 +2,7 @@
     $options = ['all' => 'Show All'] + $calendars->toArray();
     // Get tenant from current URL by replacing the page part
     $currentUrl = request()->url();
-    $singleCalendarUrl = preg_replace('/\/service\/[^\/]+$/', '/service/single-calendar', $currentUrl);
+    $singleCalendarUrl = preg_replace('/\/service\/[^\/]+$/', '/single-calendar', $currentUrl);
     $targetCalendar = $selectedTechnician3 ?? null;
     $singleCalendarHref = $singleCalendarUrl . ($targetCalendar && $targetCalendar !== 'all' ? '?booking_calendars=' . urlencode($targetCalendar) : '');
 @endphp
@@ -39,7 +39,7 @@ div.fc-timegrid-slot-label-frame.fc-scrollgrid-shrink-frame{
     {{-- Link Button --}}
     <div class="flex-shrink-0 flex items-center justify-end">
         <a href="#"
-           onclick="(function(){var sel=document.getElementById('selectedTechnician3');var val=sel?sel.value:null;var pathname=window.location.pathname;var m=pathname.match(/^(.+\/team\/[^\/]+)/);var path=m? m[1] + '/service/single-calendar' : pathname.replace(/\/service\/[^\/]+$/, '/service/single-calendar');if(val&&val!=='all'){path += '?booking_calendars=' + encodeURIComponent(val);}window.location.href=path;})(); return false;"
+           onclick="(function(){var sel=document.getElementById('selectedTechnician3');var val=sel?sel.value:null;var pathname=window.location.pathname;var m=pathname.match(/^(.+\/team\/[^\/]+)/);var path=m? m[1] + '/single-calendar' : pathname.replace(/\/service\/[^\/]+$/, '/single-calendar');if(val&&val!=='all'){path += '?booking_calendars=' + encodeURIComponent(val);}window.location.href=path;})(); return false;"
            class="fi-btn fi-btn-color-primary relative flex items-center justify-center gap-1 font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-primary fi-size-md fi-btn-size-md gap-x-2 px-3 py-2 text-sm text-white shadow-sm bg-primary-600 hover:bg-primary-500 focus-visible:ring-primary-500/50 sm:whitespace-nowrap w-full md:w-auto">
             <x-filament::icon icon="heroicon-m-calendar-days" class="w-5 h-5 color-primary text-primary" />
 

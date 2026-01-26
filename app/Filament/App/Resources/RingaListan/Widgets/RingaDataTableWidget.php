@@ -58,7 +58,6 @@ class RingaDataTableWidget extends BaseWidget
                 return \App\Models\RingaData::query()->where('id', (int)$id);
             })
             ->paginated(false)
-            ->isScopedToTenant(false)
             ->emptyStateHeading('Ingen aktuell post vald')
             ->emptyStateDescription('Välj en post från listan eller kalendern för att se detaljer.');
     }

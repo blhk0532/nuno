@@ -29,7 +29,7 @@
             $options = ['all' => 'Show All'] + $calendars->toArray();
             // Get tenant from current URL by replacing the page part
             $currentUrl = request()->url();
-            $singleCalendarUrl = preg_replace('/\/service\/[^\/]+$/', '/service/single-calendar', $currentUrl);
+            $singleCalendarUrl = preg_replace('/\/service\/[^\/]+$/', '/single-calendar', $currentUrl);
 
             // Determine which technician variable to use based on calendar class
             $calendarClass = $this->getCalendarClass();

@@ -16,6 +16,7 @@ use App\Filament\App\Clusters\Services\Resources\Bookings\Pages\BookingCalenders
 use App\Filament\App\Pages\InertiaCalendar;
 use App\Filament\App\Pages\AppRingLista;
 use App\Filament\App\Pages\Dashboard;
+use App\Filament\App\Pages\AppDataHistory;
 use App\Filament\App\Pages\ArbetslistaDashboard;
 use App\Filament\App\Pages\TeamInvitationAccept;
 use App\Filament\App\Pages\Tenancy\EditTeamProfile;
@@ -120,6 +121,7 @@ final class AppPanelProvider extends PanelProvider
                 QueueRingaData::class,
                 Scheman::class,
                 ArbetslistaDashboard::class,
+                AppDataHistory::class,
             //    AppRingLista::class,
             //    BookingCalendersX2::class,
             //    BookingCalendersX4::class,
@@ -210,15 +212,16 @@ final class AppPanelProvider extends PanelProvider
                     ->shouldRegisterNavigation(false)
                     ->shouldShowEmailForm()
                     ->shouldShowLocaleForm(options: [
-                        'pt_BR' => __('🇧🇷 Portuguese'),
                         'en' => __('🇺🇸 English'),
-                        'es' => __('🇪🇸 Spanish'),
                     ])
-                    ->shouldShowThemeColorForm()
+                    ->shouldShowThemeColorForm(false)
                     ->shouldShowSanctumTokens()
                     ->shouldShowMultiFactorAuthentication()
                     ->shouldShowBrowserSessionsForm()
-                    ->shouldShowAvatarForm(true, 'attachments'),
+                    ->shouldShowAvatarForm(true, 'attachments')
+                            ->customProfileComponents([
+            \App\Livewire\CustomProfileComponent::class,
+        ])
             ])
             ->userMenuItems([
                 'profile' => Action::make('profile')

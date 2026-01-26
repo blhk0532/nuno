@@ -41,7 +41,7 @@ class MultiCalendars3 extends BaseDashboard
 
     protected static string | UnitEnum | null $navigationGroup = '';
 
-    protected static string $routePath = 'service/multi-calendars-3';
+    protected static string $routePath = 'multi-calendars-3';
 
   //protected static string|BackedEnum|null $navigationIcon = Tabler::CalendarMonth;
   //protected static string|BackedEnum|null $activeNavigationIcon = Tabler::CalendarMonthF;

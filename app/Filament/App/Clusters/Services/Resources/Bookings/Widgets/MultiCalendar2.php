@@ -1894,7 +1894,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
     public function navigateToSingleCalendar()
     {
         $currentUrl = request()->url();
-        $singleCalendarUrl = preg_replace('/\/service\/[^\/]+$/', '/service/single-calendar', $currentUrl);
+        $singleCalendarUrl = preg_replace('/\/service\/[^\/]+$/', '/single-calendar', $currentUrl);
 
         return redirect($singleCalendarUrl . '?booking_calendars=' . $this->selectedTechnician2);
     }

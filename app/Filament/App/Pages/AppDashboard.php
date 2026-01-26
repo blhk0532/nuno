@@ -23,6 +23,10 @@ use Illuminate\Support\Str;
 use UnitEnum;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar1;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar2;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar3;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\SingleCalendars;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseCache;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseExceptions;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseQueues;
@@ -78,7 +82,7 @@ final class AppDashboard extends BasePage
       }
       public static function getNavigationBadgeColor(): ?string
       {
-          return 'primary';
+          return 'gray';
       }
 
   //  public static function getNavigationLabel(): string
@@ -157,6 +161,7 @@ final class AppDashboard extends BasePage
         return [
             AccountInfoStackWidget::class,
             WorldClockWidget::class,
+            \App\Filament\App\Widgets\LatestOrders::class,
         ];
     }
 
@@ -164,7 +169,10 @@ final class AppDashboard extends BasePage
     {
 
         return [
-            \App\Filament\App\Widgets\LatestOrders::class,
+
+                        MultiCalendar2::class,
+            MultiCalendar3::class,
+
         ];
     }
 

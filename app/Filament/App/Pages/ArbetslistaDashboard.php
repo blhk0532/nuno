@@ -74,7 +74,7 @@ final class ArbetslistaDashboard extends BasePage
       }
       public static function getNavigationBadgeColor(): ?string
       {
-          return 'primary';
+          return 'gray';
       }
 
   //  public static function getNavigationLabel(): string

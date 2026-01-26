@@ -126,6 +126,11 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
         'role',
         'active_status',
         'active_at',
+        'custom_fields',
+        'phone',
+        'status',
+        'active_status',
+        'active_at'
     ];
 
     protected $hidden = [

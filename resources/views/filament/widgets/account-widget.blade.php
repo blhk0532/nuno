@@ -2,8 +2,16 @@
     $user = filament()->auth()->user();
 @endphp
 <style>
-   .fi-page-header-main-ctn{
+    div.fi-ta-header.fi-ta-header-adaptive-actions-position{
+         display: none!important;
+    }
+div.fi-page div.fi-page-header-main-ctn header.fi-header{
        padding: 0rem !important;
+       display: none!important;
+   }
+
+   div.flex.items-center.justify-end.flex-shrink-0{
+       display: none!important;
    }
    .fi-avatar.fi-circular.fi-size-lg.fi-user-avatar {
          width: 46px;
@@ -21,7 +29,7 @@
                 :user="$user"
                 loading="lazy"
             />
-            <div 
+            <div
                 @class([
                     'absolute bottom-0 right-0 h-3.5 w-3.5 rounded-full border-2 border-white dark:border-gray-900',
                     'bg-green-500' => $isOnline,

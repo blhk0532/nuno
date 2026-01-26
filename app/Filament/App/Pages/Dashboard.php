@@ -8,6 +8,7 @@ use Filament\Support\Enums\Width;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar1;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar2;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar3;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\SingleCalendars;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
@@ -17,6 +18,7 @@ use App\Filament\App\Widgets\WorldClockWidget;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Arshaviras\WeatherWidget\Widgets\WeatherWidget;
+use App\Filament\App\Resources\RingaData\Widgets\RingaDataTableWidget;
 use UnitEnum;
 
 class Dashboard extends BaseDashboard
@@ -73,16 +75,23 @@ class Dashboard extends BaseDashboard
         return [
             AccountInfoStackWidget::class,
             WorldClockWidget::class,
+        //    \App\Filament\App\Widgets\LatestOrders::class,
+        //    \App\Filament\App\Widgets\StatsOverviewWidget::class,
+            SingleCalendars::class,
 
         //    MultiCalendar1::class,
-        //    MultiCalendar2::class,
-        //    MultiCalendar3::class,
+            MultiCalendar2::class,
+            MultiCalendar3::class,
         ];
     }
     public function getWidgets(): array
     {
         return [
-            WeatherWidget::class,
+            RingaDataTableWidget::class,
+       //      WeatherWidget::class,
+       //     \App\Filament\App\Widgets\OrdersChart::class,
+        //    \App\Filament\App\Widgets\CustomersChart::class,
+        //    SingleCalendars::class,
         //    MultiCalendar1::class,
         //    MultiCalendar2::class,
         //    MultiCalendar3::class,
@@ -93,7 +102,11 @@ class Dashboard extends BaseDashboard
         return 'Online';
 
     }
-
+public function getFooterWidgets(): array{
+        return [
+            WeatherWidget::class,
+        ];
+}
     public static function getNavigationBadgeColor(): ?string
     {
         return 'success';
