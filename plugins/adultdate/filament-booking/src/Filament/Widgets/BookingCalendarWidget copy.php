@@ -514,6 +514,11 @@ class BookingCalendarWidget extends FullCalendarWidget implements HasCalendar
             'service_date' => $startDate->format('Y-m-d'),
         ]);
 
+        $data['start_time'] = $startDate->format('H:i');
+        if ($end) {
+            $data['end_time'] = \Carbon\Carbon::parse($end, $timezone)->format('H:i');
+        }
+
         if (! $allDay && $startDate->format('H:i:s') !== '00:00:00') {
             $data['start_time'] = $startDate->format('H:i');
 

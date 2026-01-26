@@ -104,6 +104,7 @@ class BookingServicePeriod extends Model
             'type' => 'blocking',
             'backgroundColor' => $this->status?->getColor() ?? '#e7000b',
             'borderColor' => $this->status?->getColor() ?? 'transparent',
+            'textColor' => '#ffffff',
             'extendedProps' => [
                 'key' => $this->id,  // Required: Record ID for event resolution
                 'booking_id' => $this->id,

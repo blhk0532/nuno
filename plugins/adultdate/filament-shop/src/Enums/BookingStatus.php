@@ -38,6 +38,18 @@ enum BookingStatus: string
         };
     }
 
+    public function getCalendarColor(): string
+    {
+        return match ($this) {
+            self::Booked => '#3b82f6',     // Blue
+            self::Changed => '#f59e0b',    // Amber
+            self::Processing => '#94a3b8',  // Slate
+            self::Cancelled => '#ef4444',   // Red
+            self::Updated => '#0ea5e9',     // Sky
+            self::Complete => '#22c55e',    // Green
+        };
+    }
+
     public static function toOptions(): array
     {
         return array_map(fn (self $s) => $s->getLabel(), self::cases());

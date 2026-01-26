@@ -208,8 +208,9 @@ class Booking extends Model
             'start' => $start,
             'end' => $end,
             'type' => 'booking',
-            'backgroundColor' => $this->status?->getColor() ?? '#3788d8',
-            'borderColor' => $this->status?->getColor() ?? '#3788d8',
+            'backgroundColor' => $this->status?->getCalendarColor() ?? '#3788d8',
+            'borderColor' => $this->status?->getCalendarColor() ?? '#3788d8',
+            'textColor' => '#ffffff',
             'extendedProps' => [
                 'key' => $this->id,  // Required: Record ID for event resolution
                 'booking_id' => $this->id,

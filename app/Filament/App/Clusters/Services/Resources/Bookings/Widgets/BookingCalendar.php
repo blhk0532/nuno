@@ -345,19 +345,16 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
             'service_date' => $startDate->format('Y-m-d'),
         ]);
 
-        if (! $allDay && $startDate->format('H:i:s') !== '00:00:00') {
-            $data['start_time'] = $startDate->format('H:i');
-
-            if ($end) {
-                $endDate = Carbon::parse($end, $timezone);
-                if ($endDate->format('H:i:s') !== '00:00:00') {
-                    $data['end_time'] = $endDate->format('H:i');
-                }
-            }
+        $data['start_time'] = $startDate->format('H:i');
+        if ($end) {
+            $data['end_time'] = \Carbon\Carbon::parse($end, $timezone)->format('H:i');
         }
+
         if ($allDay) {
             $startTime = '00:00';
             $endTime = '23:59';
+            $data['start_time'] = '00:00';
+            $data['end_time'] = '23:59';
             $endDate = Carbon::parse($end, $timezone);
         }
 
@@ -527,6 +524,8 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
                         if ($this->calendarData['allDay']) {
                             $startTime = '00:00';
                             $endTime = '23:59';
+            $data['start_time'] = '00:00';
+            $data['end_time'] = '23:59';
                         } else {
                             $startTime = Carbon::parse($this->calendarData['start_val'])->format('H:i');
                             $endTime = Carbon::parse($this->calendarData['end_val'])->format('H:i');
@@ -555,6 +554,8 @@ final class BookingCalendar extends FullCalendarWidget implements HasCalendar
                         if ($this->calendarData['allDay']) {
                             $startTime = '00:00';
                             $endTime = '23:59';
+            $data['start_time'] = '00:00';
+            $data['end_time'] = '23:59';
                         } else {
                             $startTime = Carbon::parse($this->calendarData['start'])->format('H:i');
                             $endTime = Carbon::parse($this->calendarData['end'])->format('H:i');

@@ -464,10 +464,11 @@ class BookingCalendarWidget extends FullCalendarWidget implements HasCalendar
                 ->modalWidth('2xl')
                 ->schema(fn (FilamentSchema $schema) => $this->getFormSchemaForModel($schema, $this->getModel()))
                 ->mountUsing(function ($form, array $arguments) {
+                    $data = $arguments['data'] ?? [];
                     $form->fill($this->getDefaultFormData([
-                        'service_date' => $arguments['service_date'] ?? null,
-                        'start_time' => $arguments['start_time'] ?? null,
-                        'end_time' => $arguments['end_time'] ?? null,
+                        'service_date' => $data['service_date'] ?? $arguments['service_date'] ?? null,
+                        'start_time' => $data['start_time'] ?? $arguments['start_time'] ?? null,
+                        'end_time' => $data['end_time'] ?? $arguments['end_time'] ?? null,
                     ]));
                 })
                 ->using(function (array $data) {
@@ -526,6 +527,11 @@ class BookingCalendarWidget extends FullCalendarWidget implements HasCalendar
         $data = $this->getDefaultFormData([
             'service_date' => $startDate->format('Y-m-d'),
         ]);
+
+        $data['start_time'] = $startDate->format('H:i');
+        if ($end) {
+            $data['end_time'] = \Carbon\Carbon::parse($end, $timezone)->format('H:i');
+        }
 
         if (! $allDay && $startDate->format('H:i:s') !== '00:00:00') {
             $data['start_time'] = $startDate->format('H:i');

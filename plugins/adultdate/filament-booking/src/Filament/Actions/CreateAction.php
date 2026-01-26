@@ -44,7 +44,7 @@ class CreateAction extends \Filament\Actions\CreateAction
                 // Normalize nested `data` payload into top-level keys so callers that pass dates under `data` (calendar context) are handled.
                 if (isset($arguments['data']) && is_array($arguments['data'])) {
                     foreach ($arguments['data'] as $k => $v) {
-                        if (! array_key_exists($k, $arguments)) {
+                        if (! array_key_exists($k, $arguments) || is_null($arguments[$k])) {
                             $arguments[$k] = $v;
                         }
                     }
