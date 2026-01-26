@@ -812,13 +812,16 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 unset($data['items']);
 
                 // Build proper starts_at and ends_at from service_date + times
-                if (isset($data['service_date']) && isset($data['start_time'])) {
-                    $startDateTime = \Carbon\Carbon::parse($data['service_date'].' '.$data['start_time']);
-                    $data['starts_at'] = $startDateTime->toDateTimeString();
-                }
-                if (isset($data['service_date']) && isset($data['end_time'])) {
-                    $endDateTime = \Carbon\Carbon::parse($data['service_date'].' '.$data['end_time']);
-                    $data['ends_at'] = $endDateTime->toDateTimeString();
+                if (isset($data['service_date'])) {
+                    $date = \Carbon\Carbon::parse($data['service_date'])->format('Y-m-d');
+                    if (isset($data['start_time'])) {
+                        $startDateTime = \Carbon\Carbon::parse($date . ' ' . $data['start_time']);
+                        $data['starts_at'] = $startDateTime->toDateTimeString();
+                    }
+                    if (isset($data['end_time'])) {
+                        $endDateTime = \Carbon\Carbon::parse($date . ' ' . $data['end_time']);
+                        $data['ends_at'] = $endDateTime->toDateTimeString();
+                    }
                 }
 
                 logger()->info('BookingCalendarWidget: BEFORE Booking::create()', [

@@ -19,7 +19,7 @@
 
     {{-- Link Button --}}
     <div class="flex-shrink-0 flex items-center justify-end">
-        <a href="http://localhost:8000/nds/booking/service/bokning" class="fi-btn fi-btn-color-primary relative flex items-center justify-center gap-1 font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-primary fi-size-md fi-btn-size-md gap-x-2 px-3 py-2 text-sm text-white shadow-sm bg-primary-600 hover:bg-primary-500 focus-visible:ring-primary-500/50 sm:whitespace-nowrap w-full md:w-auto">
+        <a href="https://ndsth.com/nds/booking/service/bokning" class="fi-btn fi-btn-color-primary relative flex items-center justify-center gap-1 font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-primary fi-size-md fi-btn-size-md gap-x-2 px-3 py-2 text-sm text-white shadow-sm bg-primary-600 hover:bg-primary-500 focus-visible:ring-primary-500/50 sm:whitespace-nowrap w-full md:w-auto">
             <x-filament::icon icon="heroicon-m-calendar-days" class="w-5 h-5 color-primary text-primary" />
 
         </a>

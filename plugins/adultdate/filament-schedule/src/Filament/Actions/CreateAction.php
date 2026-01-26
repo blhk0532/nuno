@@ -82,10 +82,12 @@ class CreateAction extends \Filament\Actions\CreateAction
                         $endsAt = null;
 
                         if ($startDate) {
+                            $startDate = \Carbon\Carbon::parse($startDate, $timezone)->format('Y-m-d');
                             $startsAt = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $startDate . ' ' . $startTime, $timezone)->toDateTimeString();
                         }
 
                         if ($endDate) {
+                            $endDate = \Carbon\Carbon::parse($endDate, $timezone)->format('Y-m-d');
                             $et = $endTime ?? ($startTime ?? '00:00');
                             $endsAt = \Carbon\Carbon::createFromFormat('Y-m-d H:i', $endDate . ' ' . $et, $timezone)->toDateTimeString();
                         } elseif (isset($arguments['end'])) {

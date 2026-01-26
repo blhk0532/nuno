@@ -81,7 +81,7 @@ All bookings support:
 
 ### Accessing the Calendar
 
-1. Navigate to `http://localhost:8000/calendar`
+1. Navigate to `https://ndsth.com/calendar`
 2. Login with your credentials (all API endpoints require authentication)
 
 ### Creating Bookings

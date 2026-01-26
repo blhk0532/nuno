@@ -847,11 +847,13 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
                 // Build proper starts_at and ends_at from service_date + times
                 if (isset($data['service_date']) && isset($data['start_time'])) {
-                    $startDateTime = \Carbon\Carbon::parse($data['service_date'] . ' ' . $data['start_time']);
+                    $date = \Carbon\Carbon::parse($data['service_date'])->format('Y-m-d');
+                    $startDateTime = \Carbon\Carbon::parse($date . ' ' . $data['start_time']);
                     $data['starts_at'] = $startDateTime->toDateTimeString();
                 }
                 if (isset($data['service_date']) && isset($data['end_time'])) {
-                    $endDateTime = \Carbon\Carbon::parse($data['service_date'] . ' ' . $data['end_time']);
+                    $date = \Carbon\Carbon::parse($data['service_date'])->format('Y-m-d');
+                    $endDateTime = \Carbon\Carbon::parse($date . ' ' . $data['end_time']);
                     $data['ends_at'] = $endDateTime->toDateTimeString();
                 }
 
