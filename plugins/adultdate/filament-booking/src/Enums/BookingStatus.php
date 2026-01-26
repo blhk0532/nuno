@@ -23,6 +23,16 @@ enum BookingStatus: string implements HasLabel, HasColor, HasIcon
         return array_map(fn (self $s) => $s->getLabel(), self::cases());
     }
 
+    public static function restrictedOptions(): array
+    {
+        return [
+            self::Booked->value => self::Booked->getLabel(),
+            self::Confirmed->value => self::Confirmed->getLabel(),
+            self::Problem->value => self::Problem->getLabel(),
+            self::Complete->value => self::Complete->getLabel(),
+        ];
+    }
+
     public function getLabel(): ?string
     {
         return match ($this) {
@@ -66,13 +76,13 @@ enum BookingStatus: string implements HasLabel, HasColor, HasIcon
     public function getCalendarColor(): string
     {
         return match ($this) {
-            self::Booked => '#3b82f6',    // Blue
-            self::Pending => '#94a3b8',   // Slate
-            self::Confirmed => '#f59e0b', // Amber/Yellow
-            self::Updated => '#0ea5e9',   // Sky
-            self::Cancelled => '#ef4444', // Red
-            self::Problem => '#b91c1c',   // Dark Red
-            self::Complete => '#22c55e',  // Green
+            self::Booked => 'primary',
+            self::Pending => 'gray',
+            self::Confirmed => 'warning',
+            self::Updated => 'info',
+            self::Cancelled => 'danger',
+            self::Problem => 'danger',
+            self::Complete => 'success',
         };
     }
 }

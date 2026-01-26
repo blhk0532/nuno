@@ -634,9 +634,9 @@ final class MultiEventCalendar extends SimpleCalendarWidget implements HasCalend
                 ->seconds(false)
                 ->native(false),
 
-            Select::make('status')
+            Select::make('status')->hidden(fn () => ! in_array(Auth::user()?->role, ['admin', 'super', 'manager']))
                 ->label('Status')
-                ->options(BookingStatus::class)
+                ->options(BookingStatus::restrictedOptions())
                 ->default(BookingStatus::Booked->value)
                 ->required(),
 
@@ -723,9 +723,9 @@ final class MultiEventCalendar extends SimpleCalendarWidget implements HasCalend
                 'start' => $loc->date?->toDateString(),
                 'number' => 0,
                 'allDay' => true,
-                'backgroundColor' => '#f3f4f6',
-                'borderColor' => 'transparent',
-                'textColor' => '#111827',
+                'backgroundColor' => 'primary',
+                'borderColor' => 'primary',
+                'textColor' => 'white',
                 'extendedProps' => [
                     'is_location' => true,
                     'daily_location_id' => $loc->id,

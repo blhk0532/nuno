@@ -1781,7 +1781,7 @@ public Model|int|string|null $record;
                 'start' => $loc->date?->toDateString(),
                 'number' => 0,
                 'allDay' => true,
-                'backgroundColor' => '#f3f4f6',
+                'backgroundColor' => 'primary',
                 'borderColor' => 'transparent',
                 'textColor' => '#111827',
                 'extendedProps' => [

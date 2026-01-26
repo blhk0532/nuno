@@ -424,3 +424,14 @@ img.w-auto.object-contain{
     overflow: hidden !important;
     text-overflow: ellipsis !important;
 }
+/* .fi-main-ctn{
+
+
+  min-height: 100vh;
+
+  background:
+    linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)),
+    url("https://ndsth.com/assets/bangkok.jpg") center / cover no-repeat fixed;
+
+} */
+

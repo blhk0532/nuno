@@ -220,10 +220,10 @@ class EventCalendar extends CalendarWidget
                                 ->rule('after:starts_at')
                                 ->columnSpanFull(),
 
-                            ToggleButtons::make('status')
+                            ToggleButtons::make('status')->hidden(fn () => ! in_array(Auth::user()?->role, ['admin', 'super', 'manager']))
                                 ->label('Status')
                                 ->inline()
-                                ->options(BookingStatus::class)
+                                ->options(BookingStatus::restrictedOptions())
                                 ->default(BookingStatus::Booked )
                                 ->required()
                                 ->columnSpanFull(),

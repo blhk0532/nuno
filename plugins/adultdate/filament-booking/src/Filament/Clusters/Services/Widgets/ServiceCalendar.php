@@ -891,9 +891,9 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
                 ->seconds(false)
                 ->native(false),
 
-            Select::make('status')
+            Select::make('status')->hidden(fn () => ! in_array(Auth::user()?->role, ['admin', 'super', 'manager']))
                 ->label('Status')
-                ->options(BookingStatus::class)
+                ->options(BookingStatus::restrictedOptions())
                 ->default(BookingStatus::Booked->value)
                 ->required(),
 
@@ -1005,7 +1005,7 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
                 'start' => $loc->date?->toDateString(),
                 'number' => 0,
                 'allDay' => true,
-                'backgroundColor' => '#f3f4f6',
+                'backgroundColor' => 'primary',
                 'borderColor' => 'transparent',
                 'textColor' => '#111827',
                 'extendedProps' => [

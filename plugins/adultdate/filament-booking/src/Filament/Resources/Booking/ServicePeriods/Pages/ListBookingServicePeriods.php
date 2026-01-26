@@ -2,6 +2,8 @@
 
 namespace Adultdate\FilamentBooking\Filament\Resources\Booking\ServicePeriods\Pages;
 
+use Illuminate\Support\Facades\Auth;
+
 use Adultdate\FilamentBooking\Filament\Resources\Booking\ServicePeriods\BookingServicePeriodResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
@@ -139,9 +141,9 @@ Section::make('')
                         ->columns(3),
 
 
-                    Select::make('status')
+                    Select::make('status')->hidden(fn () => ! in_array(Auth::user()?->role, ['admin', 'super', 'manager']))
                         ->label('Status')
-                        ->options(BookingStatus::class)
+                        ->options(BookingStatus::restrictedOptions())
                         ->default(BookingStatus::Booked->value)
                         ->hidden()
                         ->required(),

@@ -55,22 +55,25 @@ final class BookingForm
      */
     public static function canShowStatus(?Booking $record): bool
     {
-
         $user = Auth::user();
+        
         if (! $user) {
             return false;
         }
 
-        if (is_object($user) && method_exists($user, 'hasRole') && call_user_func([$user, 'hasRole'], 'admin')) {
-            return true;
+        if (is_object($user) && method_exists($user, 'hasRole')) {
+            if (call_user_func([$user, 'hasRole'], 'admin') || 
+                call_user_func([$user, 'hasRole'], 'super') || 
+                call_user_func([$user, 'hasRole'], 'manager')) {
+                return true;
+            }
         }
 
-        if ($user->role === 'admin' || $user->role === 'super') {
+        if (in_array($user->role ?? null, ['admin', 'super', 'manager'])) {
             return true;
         }
 
         return false;
-
     }
 
     /** @return array<Component> */
@@ -209,7 +212,8 @@ final class BookingForm
     {
         return [
             ToggleButtons::make('status')
-                ->options(BookingStatus::class)
+                ->options(BookingStatus::restrictedOptions())
+                
                 
                 ->inline()
                 ->required()

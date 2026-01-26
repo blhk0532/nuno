@@ -333,9 +333,9 @@ class EventCalendar extends SimpleCalendarWidget implements HasCalendar
                 ->seconds(false)
                 ->native(false),
 
-            Select::make('status')
+            Select::make('status')->hidden(fn () => ! in_array(Auth::user()?->role, ['admin', 'super', 'manager']))
                 ->label('Status')
-                ->options(BookingStatus::class)
+                ->options(BookingStatus::restrictedOptions())
                 ->default(BookingStatus::Booked->value)
                 ->required(),
 

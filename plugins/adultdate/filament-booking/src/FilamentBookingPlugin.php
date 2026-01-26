@@ -165,6 +165,11 @@ HTML,
         );
 
     //    FilamentView::registerRenderHook(
+    //        PanelsRenderHook::CONTENT_BEFORE,
+    //        fn () => view('filament.app.content-before')
+    //    );
+
+    //    FilamentView::registerRenderHook(
     //        PanelsRenderHook::SIDEBAR_LOGO_AFTER,
     //        fn () => view('filament.app.calendar-icon-topbar')
     //    );

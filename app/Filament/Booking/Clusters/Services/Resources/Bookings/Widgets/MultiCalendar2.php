@@ -1777,9 +1777,9 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 'start' => $loc->date?->toDateString(),
                 'number' => 0,
                 'allDay' => true,
-                'backgroundColor' => '#f3f4f6',
-                'borderColor' => 'transparent',
-                'textColor' => '#111827',
+                'backgroundColor' => 'primary',
+                'borderColor' => 'primary',
+                'textColor' => 'white',
                 'extendedProps' => [
                     'is_location' => true,
                     'type' => 'location',
