@@ -59,7 +59,9 @@ final class AppDataHistory extends Page
 
     public static function getNavigationBadge(): ?string
     {
-        $count = \App\Models\RingaData::where('user_id', Auth::id())->count();
+        $count = \App\Models\RingaData::where('user_id', Auth::id())
+        ->whereNotNull('outcome')
+        ->count();
         return $count > 0 ? (string)$count : null;
 
     }
@@ -118,7 +120,7 @@ final class AppDataHistory extends Page
     {
 
         return [
-            \App\Filament\App\Widgets\LatestOrders::class,
+         //   \App\Filament\App\Widgets\LatestOrders::class,
         ];
     }
 

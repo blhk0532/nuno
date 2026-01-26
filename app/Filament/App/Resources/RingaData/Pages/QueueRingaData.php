@@ -5,6 +5,7 @@ namespace App\Filament\App\Resources\RingaData\Pages;
 use App\Filament\App\Resources\RingaData\RingaDataResource;
 use Filament\Resources\Pages\Page;
 use App\Models\RingaData;
+use Illuminate\Database\Eloquent\Builder;
 use App\Filament\App\Resources\RingaData\Widgets\RingaDataPinpointWidget;
 use App\Filament\App\Resources\RingaData\Widgets\RingaDataDisplayWidget;
 use Filament\Support\Enums\Width;
@@ -26,12 +27,20 @@ class QueueRingaData extends Page
 
     protected string $view = 'filament.app.resources.ringa-data.pages.queue';
 
+    protected function getQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        return static::getResource()::getEloquentQuery()
+            ->where(function (\Illuminate\Database\Eloquent\Builder $query) {
+                $query->whereNull('outcome');
+                //    ->orWhere('attempts', '<', 3);
+            });
+    }
+
     public function mount(): void
     {
         try {
             if (!$this->selectedRecordId) {
-                $first = RingaData::query()
-                    ->whereNull('outcome')
+                $first = $this->getQuery()
                     ->orderBy('id')
                     ->first();
 
@@ -72,12 +81,11 @@ class QueueRingaData extends Page
         $record = null;
 
         if ($this->selectedRecordId) {
-            $record = RingaData::find($this->selectedRecordId);
+            $record = $this->getQuery()->find($this->selectedRecordId);
         }
 
         if (!$record) {
-            $record = RingaData::query()
-                ->whereNull('outcome')
+            $record = $this->getQuery()
                 ->orderBy('id')
                 ->first();
 

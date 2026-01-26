@@ -288,7 +288,11 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
     protected function getEloquentQuery(): Builder
     {
-        return $this->getModel()::query();
+        return \App\Filament\App\Resources\RingaDatas\RingaDatasResource::getEloquentQuery()
+            ->where(function ($query) {
+                   $query->whereNull('outcome');
+                //    ->orWhere('attempts', '<', 3);
+            });
     }
 
     protected int|string|array $columnSpan = 'full';

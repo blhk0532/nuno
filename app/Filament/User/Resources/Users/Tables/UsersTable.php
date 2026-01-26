@@ -3,6 +3,8 @@
 namespace App\Filament\User\Resources\Users\Tables;
 
 use App\Enums\UserActiveStatus;
+use Deldius\UserField\UserColumn;
+use Filament\Support\Enums\Size;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
@@ -16,27 +18,46 @@ class UsersTable
     {
         return $table
             ->columns([
+
+                                TextColumn::make('teams.name')
+                    ->label('Team')
+                    ->badge()
+                    ->searchable()
+                    ->toggleable(),
+                                                 IconColumn::make('status')
+                    ->boolean()
+                    ->label(' ')
+                    ->trueIcon('heroicon-o-check-badge')
+                    ->falseIcon('heroicon-o-x-circle')
+                    ->sortable(),
+                UserColumn::make('id')
+                    ->showActiveState() // Show active/inactive indicator
+                    ->avatarUrl(fn ($record) => $record->getFilamentAvatarUrl())
+                    ->size(Size::Small) // Set avatar size
+                    ->label('Användare'),
                 TextColumn::make('active_status')
                     ->badge()
+                    ->label('Status')
                     ->sortable(),
                 TextColumn::make('active_at')
                     ->dateTime()
                     ->since()
-                    ->label('Last Seen')
+                    ->label('Aktiv')
                     ->sortable()
                     ->toggleable(),
-                IconColumn::make('status')
-                    ->boolean()
-                    ->trueIcon('heroicon-o-check-badge')
-                    ->falseIcon('heroicon-o-x-circle')
-                    ->sortable(),
+
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('phone')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('email')
                     ->searchable()
                     ->sortable()
                     ->toggleable(),
+
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -51,8 +72,6 @@ class UsersTable
             ])
             ->recordActions([
                 ViewAction::make(),
-                EditAction::make(),
-                DeleteAction::make(),
             ]);
     }
 }

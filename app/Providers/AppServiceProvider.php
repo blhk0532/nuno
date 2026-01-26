@@ -12,7 +12,10 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Fortify\Contracts\LoginResponse;
+use App\Filament\App\Widgets\TeamMembersWidget;
 use Filament\View\PanelsRenderHook;
+use Livewire\Livewire;
+
 final class AppServiceProvider extends ServiceProvider
 {
     public function register(): void
@@ -22,6 +25,9 @@ final class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Livewire::component('app.filament.app.widgets.team-members-widget', TeamMembersWidget::class);
+        Livewire::component('team-members-widget', TeamMembersWidget::class);
+
         $this->app->bind(\Filament\Auth\Http\Responses\Contracts\LoginResponse::class, function () {
             return new class implements \Filament\Auth\Http\Responses\Contracts\LoginResponse
             {

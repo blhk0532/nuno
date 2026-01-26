@@ -77,6 +77,7 @@ class Dashboard extends BaseDashboard
             WorldClockWidget::class,
         //    \App\Filament\App\Widgets\LatestOrders::class,
         //    \App\Filament\App\Widgets\StatsOverviewWidget::class,
+             \App\Filament\App\Widgets\LatestOrders::class,
             SingleCalendars::class,
 
         //    MultiCalendar1::class,
@@ -87,37 +88,23 @@ class Dashboard extends BaseDashboard
     public function getWidgets(): array
     {
         return [
-            RingaDataTableWidget::class,
-       //      WeatherWidget::class,
-       //     \App\Filament\App\Widgets\OrdersChart::class,
-        //    \App\Filament\App\Widgets\CustomersChart::class,
+        //    RingaDataTableWidget::class,
+             WeatherWidget::class,
+        //    \App\Filament\App\Widgets\OrdersChart::class,
+       //     \App\Filament\App\Widgets\CustomersChart::class,
         //    SingleCalendars::class,
         //    MultiCalendar1::class,
         //    MultiCalendar2::class,
         //    MultiCalendar3::class,
         ];
     }
-    public static function getNavigationBadge(): ?string
-    {
-        return 'Online';
 
-    }
-public function getFooterWidgets(): array{
-        return [
-            WeatherWidget::class,
-        ];
-}
-    public static function getNavigationBadgeColor(): ?string
-    {
-        return 'success';
-    }
-
-//      public static function getNavigationBadge(): ?string
-//   {
-//       return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
-//   }
-//   public static function getNavigationBadgeColor(): ?string
-//   {
-//       return 'primary';
-//   }
+      public static function getNavigationBadge(): ?string
+      {
+          return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
+      }
+      public static function getNavigationBadgeColor(): ?string
+      {
+          return 'gray';
+      }
 }

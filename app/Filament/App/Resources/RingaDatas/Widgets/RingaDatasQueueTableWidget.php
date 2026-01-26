@@ -39,8 +39,11 @@ class RingaDatasQueueTableWidget extends BaseWidget
 
         // If still no ID, try to find the "current" one just like the page does
         if (!$id) {
-            $id = \App\Models\RingaData::query()
-                ->whereNull('outcome')
+            $id = \App\Filament\App\Resources\RingaDatas\RingaDatasResource::getEloquentQuery()
+                ->where(function ($query) {
+                  $query->whereNull('outcome');
+                //    ->orWhere('attempts', '<', 3);
+            })
                 ->orderBy('id')
                 ->first()
                 ?->id;
@@ -52,12 +55,12 @@ class RingaDatasQueueTableWidget extends BaseWidget
             'page_id' => $pageId
         ]);
 
-        return RingaDatasTable::configure($table)
+        return \App\Filament\App\Resources\RingaDatas\Tables\RingaDatasTable::configure($table)
             ->query(function () use ($id) {
                 if (!$id) {
                     return \App\Models\RingaData::query()->whereRaw('1=0');
                 }
-                return \App\Models\RingaData::query()->where('id', (int)$id);
+                return \App\Filament\App\Resources\RingaDatas\RingaDatasResource::getEloquentQuery()->where('id', (int)$id);
             })
             ->paginated(false)
             ->emptyStateHeading('Ingen aktuell post vald')

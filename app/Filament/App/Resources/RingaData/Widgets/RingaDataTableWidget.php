@@ -12,7 +12,7 @@ class RingaDataTableWidget extends BaseWidget
 {
     public ?int $recordId = null;
 
-    protected static ?string $heading = 'Resultat';
+    protected static ?string $heading = ' ';
 
     protected int | string | array $columnSpan = 'full';
 

@@ -5,6 +5,7 @@ namespace App\Filament\App\Resources\RingaDatas\Pages;
 use App\Filament\App\Resources\RingaDatas\RingaDatasResource;
 use Filament\Resources\Pages\Page;
 use App\Models\RingaData;
+use Illuminate\Database\Eloquent\Builder;
 use App\Filament\App\Resources\RingaDatas\Widgets\RingaDataPinpointWidget;
 use App\Filament\App\Resources\RingaDatas\Widgets\RingaDataDisplayWidget;
 use Filament\Support\Enums\Width;
@@ -48,15 +49,34 @@ class QueueRingaData extends Page
   // protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedQueueList;
   // protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidQueueList;
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getResource()::getEloquentQuery()
+            ->whereNull('outcome')
+            ->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'danger';
+    }
 
     protected string $view = 'filament.app.resources.ringa-data.pages.queue';
+
+    protected function getQuery(): Builder
+    {
+        return static::getResource()::getEloquentQuery()
+            ->where(function (Builder $query) {
+                $query->whereNull('outcome');
+                //    ->orWhere('attempts', '<', 3);
+            });
+    }
 
     public function mount(): void
     {
         try {
             if (!$this->selectedRecordId) {
-                $first = RingaData::query()
-                    ->whereNull('outcome')
+                $first = $this->getQuery()
                     ->orderBy('id')
                     ->first();
 
@@ -96,12 +116,11 @@ class QueueRingaData extends Page
         $record = null;
 
         if ($this->selectedRecordId) {
-            $record = RingaData::find($this->selectedRecordId);
+            $record = $this->getQuery()->find($this->selectedRecordId);
         }
 
         if (!$record) {
-            $record = RingaData::query()
-                ->whereNull('outcome')
+            $record = $this->getQuery()
                 ->orderBy('id')
                 ->first();
 
@@ -129,17 +148,5 @@ class QueueRingaData extends Page
     public function getMaxContentWidth(): Width
     {
         return Width::Full;
-    }
-
-        public static function getNavigationBadgeColor(): ?string
-    {
-        return 'danger';
-    }
-
-    public static function getNavigationBadge(): ?string
-    {
-        $modelClass = self::$model;
-
-        return (string) $modelClass::count();
     }
 }

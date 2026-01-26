@@ -45,7 +45,7 @@ v1.1.8
             <span class="pb-1">
             <x-filament::link
                 color="gray"
-                href="https://ndsth.com"
+                href="multi-calendars-3"
                 :icon="\Filament\Support\Icons\Heroicon::CalendarDateRange"
                 rel="noopener noreferrer"
                 target="_blank"
@@ -56,13 +56,13 @@ v1.1.8
  <span class="whitespace-nowrap">
             <x-filament::link
                 color="gray"
-                href="https://ndsth.com"
+                href="bokning"
                 :icon="\Filament\Support\Icons\Heroicon::Identification"
                 rel="noopener noreferrer"
                 target="_blank"
             >
 
-                {{ __('Mina Bokning') }}
+                {{ __('Bokningen') }}
             </x-filament::link>
 </span>
         </div>

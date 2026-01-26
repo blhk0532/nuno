@@ -27,6 +27,7 @@ use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar1
 use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar2;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar3;
 use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\SingleCalendars;
+use App\Filament\App\Widgets\TeamMembersWidget;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseCache;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseExceptions;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseQueues;
@@ -78,17 +79,17 @@ final class AppDashboard extends BasePage
 
       public static function getNavigationBadge(): ?string
       {
-          return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
+          return '🇸🇪 ' . now()->timezone('Europe/Stockholm')->format('H:i');
       }
       public static function getNavigationBadgeColor(): ?string
       {
           return 'gray';
       }
 
-  //  public static function getNavigationLabel(): string
-  //  {
-  //      return ''.Str::ucfirst(Auth::user()->name) ?? 'User';
-  //  }
+    public static function getNavigationLabel(): string
+    {
+        return (string) (filament()->getTenant()?->name ?? 'Dashboard');
+    }
 
  //  public static function getNavigationBadge(): ?string
  //  {
@@ -149,6 +150,7 @@ final class AppDashboard extends BasePage
         return [
             BookingCalendar::class,
             \App\Filament\App\Widgets\StatsOverviewWidget::class,
+
             \App\Filament\App\Widgets\OrdersChart::class,
             \App\Filament\App\Widgets\CustomersChart::class,
             //     \App\Filament\App\Widgets\BookingStats::class,
@@ -161,7 +163,7 @@ final class AppDashboard extends BasePage
         return [
             AccountInfoStackWidget::class,
             WorldClockWidget::class,
-            \App\Filament\App\Widgets\LatestOrders::class,
+            TeamMembersWidget::class,
         ];
     }
 
@@ -172,7 +174,7 @@ final class AppDashboard extends BasePage
 
                         MultiCalendar2::class,
             MultiCalendar3::class,
-
+            \App\Filament\App\Widgets\LatestOrders::class,
         ];
     }
 

@@ -27,6 +27,7 @@ class UsersTable
             ->columns([
                 UserColumn::make('id')
                     ->showActiveState() // Show active/inactive indicator
+                    ->avatarUrl(fn ($record) => $record->getFilamentAvatarUrl())
                     ->size(Size::Small) // Set avatar size
                     ->label('User'),
                 IconSelectColumn::make('role')
@@ -56,6 +57,15 @@ class UsersTable
                 TextColumn::make('email')
                     ->searchable()
                     ->sortable()
+                    ->toggleable(),
+                TextColumn::make('phone')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(),
+                TextColumn::make('teams.name')
+                    ->label('Team Name')
+                    ->badge()
+                    ->searchable()
                     ->toggleable(),
                 //       RatingColumn::make('rating'),
                 TextColumn::make('created_at')

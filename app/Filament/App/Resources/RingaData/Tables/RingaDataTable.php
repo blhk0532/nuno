@@ -29,10 +29,10 @@ class RingaDataTable
                 ->headerActions([
                           \EightyNine\ExcelImport\ExcelImportAction::make()
                 ->color("primary"),
-            Actions\CreateAction::make()
-                    ->label("+"),
-            static::generateFakeDataAction()
-            ->label(""),
+            // Actions\CreateAction::make()
+            //         ->label("+"),
+        //    static::generateFakeDataAction()
+        //    ->label(""),
 
         ])
             ->columns([
@@ -92,7 +92,6 @@ class RingaDataTable
         return [
             \EightyNine\ExcelImport\ExcelImportAction::make()
                 ->color("primary"),
-            Actions\CreateAction::make(),
         ];
     }
 

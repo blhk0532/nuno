@@ -65,6 +65,7 @@ use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
 use Illuminate\Support\Str;
 use Andreia\FilamentUiSwitcher\Support\UiPreferenceManager;
 use App\Filament\App\Pages\AppDashboard;
+use App\Filament\App\Resources\TeamUsers\TeamUserResource;
 use App\Filament\App\Resources\RingaDatas\Pages\QueueRingaData;
 use App\Providers\Tenancy\CurrentTenant as TenancyCurrentTenant;
 use Devonab\FilamentEasyFooter\EasyFooterPlugin;
@@ -213,6 +214,8 @@ final class AppPanelProvider extends PanelProvider
                     ->shouldShowEmailForm()
                     ->shouldShowLocaleForm(options: [
                         'en' => __('🇺🇸 English'),
+                        'sv' => __('🇸🇪 Svenska'),
+                        'th' => __('🇹🇭 ภาษาไทย'),
                     ])
                     ->shouldShowThemeColorForm(false)
                     ->shouldShowSanctumTokens()
@@ -250,6 +253,11 @@ final class AppPanelProvider extends PanelProvider
                     ->visible(fn () => Filament::getTenant() !== null),
                 'profile' => fn (Action $action) => $action->label('Edit team profile')
                     ->visible(fn () => User::canManageTeam() !== false),
+                'team-users' => Action::make('team-users')
+                    ->label('Medlemmar')
+                    ->icon('heroicon-m-user-group')
+                    ->url(fn () => TeamUserResource::getUrl())
+                    ->visible(true),
             ])
             ->plugin(
                 AuthDesignerPlugin::make()

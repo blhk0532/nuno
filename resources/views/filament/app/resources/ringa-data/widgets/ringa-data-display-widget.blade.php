@@ -3,7 +3,7 @@
         @if ($this->record)
             <div class="space-y-3">
                 <div class="grid grid-cols-2 gap-3 mt-3">
-                    <div class="col-span-2">
+                    <div class="col-span-2 hidden">
                         <h3 class="text-lg font-bold">{{ $this->record->personnamn }}</h3>
                     </div>
 

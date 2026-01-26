@@ -18,19 +18,13 @@ class UserInfolist
                 Section::make()
                     ->columns()
                     ->schema([
-                        TextEntry::make('id'),
-                        IconEntry::make('status')
-                            ->boolean(),
+
                         TextEntry::make('name'),
                         TextEntry::make('email')
                             ->copyable()
                             ->copyMessage('Email copied successfully!')
                             ->copyMessageDuration(1500),
                     ]),
-                AdditionalInformation::make([
-                    'created_at',
-                    'updated_at',
-                ]),
             ]);
     }
 }

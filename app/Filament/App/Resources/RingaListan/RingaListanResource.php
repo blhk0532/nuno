@@ -12,6 +12,7 @@ use App\Filament\App\Resources\RingaListan\Schemas\RingaDataForm;
 use App\Filament\App\Resources\RingaListan\Schemas\RingaDataInfolist;
 use App\Filament\App\Resources\RingaListan\Tables\RingaDataTable;
 use App\Models\RingaData;
+use Illuminate\Database\Eloquent\Builder;
 use BackedEnum;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
@@ -55,10 +56,25 @@ class RingaListanResource extends Resource
     public static function table(Table $table): Table
     {
         return RingaDataTable::configure($table)
-            ->query(fn () => RingaData::query()->whereIn('outcome', [
+            ->query(fn () => static::getEloquentQuery()->whereIn('outcome', [
                 Outcomes::Aterkommer->value,
                 Outcomes::RingTillbaka->value,
             ]));
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        $userId = auth()->id();
+        $tenantId = filament()->getTenant()?->id;
+
+        return parent::getEloquentQuery()
+            ->where(function (Builder $query) use ($userId, $tenantId) {
+                $query->where('user_id', $userId);
+                
+                if ($tenantId) {
+                    $query->orWhere('team_id', $tenantId);
+                }
+            });
     }
 
     public static function getRelations(): array

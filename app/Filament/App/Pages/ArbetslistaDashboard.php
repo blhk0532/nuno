@@ -64,7 +64,7 @@ final class ArbetslistaDashboard extends BasePage
 
     public static function shouldRegisterNavigation(): bool
     {
-        return true;
+        return false;
     }
 
 

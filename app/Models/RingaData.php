@@ -98,6 +98,7 @@ class RingaData extends Model
         'is_queued',
         'user_service_id',
         'user_id',
+        'team_id',
         'status',
         'outcome',
         'attempts',

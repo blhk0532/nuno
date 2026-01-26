@@ -11,6 +11,15 @@ class EditRingaData extends EditRecord
 {
     protected static string $resource = RingaListanResource::class;
 
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if (empty($data['team_id'])) {
+            $data['team_id'] = filament()->getTenant()?->id;
+        }
+
+        return $data;
+    }
+
     protected function getHeaderActions(): array
     {
         return [
