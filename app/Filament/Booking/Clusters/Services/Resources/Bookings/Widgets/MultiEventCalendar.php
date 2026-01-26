@@ -231,13 +231,14 @@ class MultiEventCalendar extends SimpleCalendarWidget implements HasCalendar
         }
 
         $data = [
+            ...$data,
             'start' => $startTime,
             'end' => $endTime,
             'allDay' => $allDay,
             'view' => $info->view,
             'resource' => null,
-            'date' => $startDate,
-            'service_date' => $startDate,
+            'date' => $startDate->format('Y-m-d'),
+            'service_date' => $startDate->format('Y-m-d'),
             'timezone' => $timezone,
             'start_val' => $startVal,
             'end_val' => $endVal,
@@ -289,7 +290,8 @@ class MultiEventCalendar extends SimpleCalendarWidget implements HasCalendar
                             $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
                             $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
                         }
-                        $data = ['number' => $bookingNumber, 'notes' => '', 'service_user_id' => null, 'booking_client_id' => null, 'date' => $startDate, 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate, 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
+                        $data = ['number' => $bookingNumber, 'notes' => '', 'service_user_id' => null, 'booking_client_id' => null, 'date' => $startDate->format('Y-m-d'), ...$data,
+            'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate->format('Y-m-d'), 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: B BOOK DATA', $data);
                         $this->replaceMountedAction('create', ['data' => $data]);
                         $newIndex = max(0, count($this->mountedActions) - 1);
@@ -317,7 +319,8 @@ class MultiEventCalendar extends SimpleCalendarWidget implements HasCalendar
                             $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
                             $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
                         }
-                        $data = ['date' => $startDate, 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate, 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
+                        $data = ['date' => $startDate->format('Y-m-d'), ...$data,
+            'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate->format('Y-m-d'), 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: LOCATION DATA', $data);
                         $this->replaceMountedAction('createDailyLocation', ['data' => $data]);
                         $newIndex = max(0, count($this->mountedActions) - 1);
@@ -340,7 +343,8 @@ class MultiEventCalendar extends SimpleCalendarWidget implements HasCalendar
                             $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
                             $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
                         }
-                        $data = ['date' => $startDate, 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate, 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
+                        $data = ['date' => $startDate->format('Y-m-d'), ...$data,
+            'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate->format('Y-m-d'), 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: BLOCK PERIOD DATA', $data);
                         $this->replaceMountedAction('createServicePeriod', ['data' => $data]);
                         $newIndex = max(0, count($this->mountedActions) - 1);

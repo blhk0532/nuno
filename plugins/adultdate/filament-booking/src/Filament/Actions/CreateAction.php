@@ -152,13 +152,20 @@ class CreateAction extends \Filament\Actions\CreateAction
                         }
 
                         $values = [
-                            'start_date' => $arguments['start_date'] ?? null,
+                            'service_date' => $arguments['service_date'] ?? $arguments['start_date'] ?? null,
+                            'start_date' => $arguments['start_date'] ?? $arguments['service_date'] ?? null,
                             'start_time' => $arguments['start_time'] ?? null,
                             'end_date' => $arguments['end_date'] ?? null,
                             'end_time' => $arguments['end_time'] ?? null,
                             // Ensure metadata key exists (as JSON string for CodeEditor)
                             'metadata' => $meta,
                         ];
+
+                        foreach ($arguments as $key => $value) {
+                            if (! array_key_exists($key, $values)) {
+                                $values[$key] = $value;
+                            }
+                        }
 
                         $user = \Illuminate\Support\Facades\Auth::user();
                         if ($user) {
@@ -183,6 +190,7 @@ class CreateAction extends \Filament\Actions\CreateAction
                                 ];
                             } else {
                                 $values = [
+                                    'service_date' => $start->format('Y-m-d'),
                                     'start_date' => $start->format('Y-m-d'),
                                     'end_date' => isset($arguments['end']) ? \Carbon\Carbon::parse($arguments['end'], $timezone)->format('Y-m-d') : null,
                                     'metadata' => $arguments['metadata'] ?? [],
@@ -198,7 +206,7 @@ class CreateAction extends \Filament\Actions\CreateAction
                             $values['schedulable_id'] = $user->id;
                         }
 
-                        if ($start->format('H:i:s') !== '00:00:00') {
+                        if ($start && $start->format('H:i:s') !== '00:00:00') {
                             $values['start_time'] = $start->format('H:i');
                         }
 
@@ -206,6 +214,12 @@ class CreateAction extends \Filament\Actions\CreateAction
                             $end = \Carbon\Carbon::parse($arguments['end'], $timezone);
                             if ($end->format('H:i:s') !== '00:00:00') {
                                 $values['end_time'] = $end->format('H:i');
+                            }
+                        }
+
+                        foreach ($arguments as $key => $value) {
+                            if ($key !== 'data' && ! array_key_exists($key, $values)) {
+                                $values[$key] = $value;
                             }
                         }
                     }

@@ -51,10 +51,11 @@ class CreateBlockPeriodAction extends Action
                             $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
                         } 
                         $data = [
-                            'date' => $startDate,
-                            'start' => $startTime,
+                            'date' => $startDate->format('Y-m-d'),
+                            ...$data,
+            'start' => $startTime,
                             'end' => $endTime,
-                            'service_date' => $startDate,
+                            'service_date' => $startDate->format('Y-m-d'),
                             'start_time' => $startTime,
                             'end_time' => $endTime,
                             'start_val' => $startVal,

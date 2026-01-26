@@ -96,18 +96,19 @@ class BookingForm
                 ->maxLength(32)
                 ->unique(Booking::class, 'number', ignoreRecord: true),
 
-            TextInput::make('service_date')
-                ->default(Auth::id())
-                ->dehydrated(),
+            \Filament\Forms\Components\DatePicker::make('service_date')
+                ->dehydrated()
+                ->required(),
 
-            TextInput::make('start_time')
-                ->default(Auth::id())
-                ->dehydrated(),
+            \Filament\Forms\Components\TimePicker::make('start_time')
+                ->seconds(false)
+                ->dehydrated()
+                ->required(),
 
-            TextInput::make('end_time')
-
-                ->default(Auth::id())
-                ->dehydrated(),
+            \Filament\Forms\Components\TimePicker::make('end_time')
+                ->seconds(false)
+                ->dehydrated()
+                ->required(),
 
             Select::make('booking_client_id')
                 ->relationship('client', 'name')

@@ -374,6 +374,8 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
         $this->mountAction('create', [
             'service_date' => $startDate->format('Y-m-d'),
+            'start_time' => $startDate->format('H:i'),
+            'end_time' => $startDate->copy()->addHour()->format('H:i'),
             'booking_calendar_id' => $bookingCalendarId,
             'notes' => '',
         ]);
@@ -450,13 +452,14 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         }
 
         $data = [
+            ...$data,
             'start' => $startTime,
             'end' => $endTime,
             'allDay' => $allDay,
             'view' => $view,
             'resource' => $resource,
-            'date' => $startDate,
-            'service_date' => $startDate,
+            'date' => $startDate->format('Y-m-d'),
+            'service_date' => $startDate->format('Y-m-d'),
             'service_user_id' => $serviceUserId,
             'booking_calendar_id' => $bookingCalendarId,
             'timezone' => $timezone,
@@ -606,7 +609,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                             $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
                             $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
                         }
-                        $data = ['number' => $bookingNumber, 'notes' => '', 'service_user_id' => $serviceUserId, 'booking_client_id' => null, 'booking_calendar_id' => $this->calendarData['booking_calendar_id'] ?? null, 'date' => $startDate, 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate, 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
+                        $data = ['number' => $bookingNumber, 'notes' => '', 'service_user_id' => $serviceUserId, 'booking_client_id' => null, 'booking_calendar_id' => $this->calendarData['booking_calendar_id'] ?? null, 'date' => $startDate->format('Y-m-d'), 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate->format('Y-m-d'), 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: B BOOK DATA', $data);
                         $this->replaceMountedAction('create', ['data' => $data]);
                         $newIndex = max(0, count($this->mountedActions) - 1);
@@ -634,7 +637,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                             $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
                             $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
                         }
-                        $data = ['date' => $startDate, 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate, 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
+                        $data = ['date' => $startDate->format('Y-m-d'), 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate->format('Y-m-d'), 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: LOCATION DATA', $data);
                         $this->replaceMountedAction('createDailyLocation', ['data' => $data]);
                         $newIndex = max(0, count($this->mountedActions) - 1);
@@ -657,7 +660,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                             $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
                             $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
                         }
-                        $data = ['date' => $startDate, 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate, 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
+                        $data = ['date' => $startDate->format('Y-m-d'), 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate->format('Y-m-d'), 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: BLOCK PERIOD DATA', $data);
                         $this->replaceMountedAction('createServicePeriod', ['data' => $data]);
                         $newIndex = max(0, count($this->mountedActions) - 1);
