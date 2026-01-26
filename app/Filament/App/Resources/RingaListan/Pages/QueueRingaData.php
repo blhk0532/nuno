@@ -17,7 +17,6 @@ use App\Filament\App\Resources\Bookings\Widgets\BookingCalendar;
 use App\Filament\App\Resources\RingaListan\Widgets\RingaDataCalendar;
 use App\Filament\App\Resources\RingaListan\Widgets\RingaDataTableWidget;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
-use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 use BackedEnum;
 use UnitEnum;
@@ -43,9 +42,6 @@ class QueueRingaData extends Page
      protected static ?int $navigationSort = 2;
 
    protected static string|BackedEnum|null $navigationIcon = Tabler::PhoneRinging;
-
-  // protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedQueueList;
-  // protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidQueueList;
 
     public static function getNavigationBadge(): ?string
     {

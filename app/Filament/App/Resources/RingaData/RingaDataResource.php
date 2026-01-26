@@ -15,7 +15,6 @@ use Illuminate\Database\Eloquent\Builder;
 use BackedEnum;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
-use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -26,10 +25,8 @@ class RingaDataResource extends Resource
 {
     protected static ?string $model = RingaData::class;
 
-   // protected static string|BackedEnum|null $navigationIcon = Tabler::PhoneRinging;
-
-     protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedQueueList;
-    protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidQueueList;
+    protected static string|BackedEnum|null $navigationIcon = Remix::RiStackLine;
+    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiStackFill;
 
     protected static ?string $navigationLabel = 'Nummer';
 
