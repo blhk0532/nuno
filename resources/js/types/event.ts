@@ -19,6 +19,8 @@ export interface Events {
   location: string;
   category: string;
   color: string;
+  backgroundColor?: string;
+  textColor?: string;
   createdAt: Date;
   updatedAt: Date;
   technicianId?: string;

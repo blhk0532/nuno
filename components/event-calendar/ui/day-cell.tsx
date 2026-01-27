@@ -116,18 +116,21 @@ export function DayCell({
                 !isHexColor ? (colorClasses?.bg ?? 'bg-primary') : '',
               )}
               style={isHexColor ? {
-                backgroundColor: firstEvent.color,
+                backgroundColor: firstEvent.backgroundColor || firstEvent.color,
+                color: firstEvent.textColor || 'white',
                 opacity: 0.8,
-              } : {}}
+              } : {
+                color: firstEvent.textColor || 'white'
+              }}
               onClick={(e) => {
                 e.stopPropagation();
                 onOpenEvent(firstEvent);
               }}
             >
-              <span className="truncate font-medium text-white">
+              <span className={cn("truncate font-medium", !firstEvent.textColor && "text-white")}>
                 {firstEvent.title}
               </span>
-              <div className="hidden items-center truncate text-white sm:flex">
+              <div className={cn("hidden items-center truncate sm:flex", !firstEvent.textColor && "text-white")}>
                 <Clock className="mr-1 h-3 w-3" />
                 <span className="truncate">
                   {formatTimeDisplay(firstEvent.startTime, timeFormat)} -{' '}

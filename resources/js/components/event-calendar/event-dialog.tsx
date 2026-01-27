@@ -23,6 +23,7 @@ import { deleteEvent, updateEvent } from '@/app/actions';
 import { useShallow } from 'zustand/shallow';
 import { getLocaleFromCode } from '@/lib/event';
 import type { CalendarCategoryOption } from '@/types/event';
+import { useBookingDropdowns } from './hooks/use-booking-dropdowns';
 
 const DEFAULT_START_TIME = '07:00';
 const DEFAULT_END_TIME = '10:00';
@@ -81,6 +82,15 @@ export default function EventDialog({ categoryOptions = [] }: EventDialogProps) 
 
   const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState<boolean>(false);
   const isMounted = useIsMounted();
+
+  const {
+    clients,
+    services,
+    technicians,
+    calendars,
+    loading: dropdownLoading,
+    error: dropdownError,
+  } = useBookingDropdowns();
 
   const form = useForm<EventFormValues>({
     resolver: zodResolver(eventFormSchema),
@@ -168,16 +178,21 @@ export default function EventDialog({ categoryOptions = [] }: EventDialogProps) 
             Event details {selectedEvent?.title}
           </DialogDescription>
         </DialogHeader>
+        {dropdownError && (
+          <div className="mx-6 mt-2 rounded border border-destructive/40 bg-destructive/10 p-3 text-xs text-destructive">
+            Failed to load services and clients.
+          </div>
+        )}
         <ScrollArea className="h-[350px] w-full sm:h-[500px]">
           <EventDetailsForm
             form={form}
             onSubmit={handleUpdate}
             locale={localeObj}
             categoryOptions={categoryOptions}
-            clients={[]}
-            services={[]}
-            serviceUsers={[]}
-            calendars={[]}
+            clients={clients}
+            services={services}
+            serviceUsers={technicians}
+            calendars={calendars}
           />
         </ScrollArea>
         <DialogFooter className="mt-2 flex flex-row">

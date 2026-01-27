@@ -325,8 +325,9 @@ final class CalendarBookingController extends Controller
                 'title' => $location->location ?: ($location->serviceUser?->name ?? 'Location'),
                 'start' => $location->date?->toDateString(),
                 'allDay' => true,
-                'backgroundColor' => '#f3f4f6',
-                'borderColor' => 'transparent',
+                'color' => '#ffffff',
+                'backgroundColor' => '#ffffff',
+                'borderColor' => '#e5e7eb',
                 'textColor' => '#111827',
                 'extendedProps' => [
                     'type' => 'location',
@@ -365,9 +366,10 @@ final class CalendarBookingController extends Controller
                 'title' => $period->period_type ? ucfirst($period->period_type) : 'Service Period',
                 'start' => $startDateTime->toIso8601String(),
                 'end' => $endDateTime->toIso8601String(),
+                'color' => $period->color ?: $this->getServicePeriodColor($period->period_type),
                 'backgroundColor' => $period->color ?: $this->getServicePeriodColor($period->period_type),
                 'borderColor' => $period->color ? $this->adjustColorBrightness($period->color, -20) : $this->getServicePeriodBorderColor($period->period_type),
-                'textColor' => '#ffffff',
+                'textColor' => '#111827',
                 'extendedProps' => [
                     'type' => 'service_period',
                     'period_type' => $period->period_type,
@@ -499,10 +501,10 @@ final class CalendarBookingController extends Controller
     private function getServicePeriodColor(?string $periodType): string
     {
         return match ($periodType) {
-            'unavailable' => '#8b5cf6', // purple
-            'available' => '#06b6d4', // cyan
-            'blocked' => '#f59e0b', // amber
-            default => '#6b7280', // gray
+            'unavailable' => '#ede9fe', // light purple
+            'available' => '#ecfeff', // light cyan
+            'blocked' => '#fffbeb', // light amber
+            default => '#f9fafb', // light gray
         };
     }
 

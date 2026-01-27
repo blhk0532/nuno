@@ -52,10 +52,10 @@ export const EventDetailsForm = memo(
     form,
     onSubmit,
     locale,
-    clients,
-    services,
-    serviceUsers,
-    calendars,
+    clients = [],
+    services = [],
+    serviceUsers = [],
+    calendars = [],
     categoryOptions = [],
   }: EventDetailsFormProps) => {
     const serviceUserId = form.watch('service_user_id');
@@ -127,7 +127,7 @@ export const EventDetailsForm = memo(
       const service = services.find((item) => String(item.id) === selectedServiceId);
 
       if (service?.price !== undefined && service?.price !== null) {
-        form.setValue('total_price', service.price.toFixed(2));
+        form.setValue('total_price', Number(service.price).toFixed(2));
         return;
       }
 

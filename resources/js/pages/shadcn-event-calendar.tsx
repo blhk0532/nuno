@@ -41,6 +41,8 @@ const transformBookingToEvent = (booking: any): Events => {
     location: booking.location ?? booking.extendedProps?.location ?? '',
     category: booking.category ?? booking.extendedProps?.category ?? 'General',
     color: booking.color ?? booking.extendedProps?.color ?? '#3b82f6',
+    backgroundColor: booking.backgroundColor ?? booking.color ?? booking.extendedProps?.color ?? '#3b82f6',
+    textColor: booking.textColor ?? '#ffffff',
     createdAt: booking.createdAt ? new Date(booking.createdAt) : new Date(),
     updatedAt: booking.updatedAt ? new Date(booking.updatedAt) : new Date(),
     technicianId: booking.resourceId ? booking.resourceId.toString() : undefined,

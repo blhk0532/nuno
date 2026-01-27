@@ -62,15 +62,19 @@ export const MultiDayEvent = ({
     >
       <Button
         className={cn(
-          'group absolute flex h-full w-full cursor-pointer flex-col items-start justify-start gap-0 overflow-hidden rounded bg-transparent p-2 text-white hover:bg-transparent',
+          'group absolute flex h-full w-full cursor-pointer flex-col items-start justify-start gap-0 overflow-hidden rounded bg-transparent p-2 hover:bg-transparent',
           'border-2 border-gray-400 dark:border-gray-500 shadow-sm',
           'transition-colors',
           !isHexColor ? bg : '',
+          !event.textColor && 'text-white'
         )}
         style={isHexColor ? {
-          backgroundColor: event.color,
+          backgroundColor: event.backgroundColor || event.color,
+          color: event.textColor || 'white',
           opacity: 0.8,
-        } : {}}
+        } : {
+          color: event.textColor || 'white'
+        }}
         onClick={() => onClick(event)}
       >
         <div className="text-xs font-medium sm:truncate">{event.title}</div>

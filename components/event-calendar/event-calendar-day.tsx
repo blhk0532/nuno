@@ -127,7 +127,11 @@ export function EventCalendarDay({ events, currentDate }: CalendarDayProps) {
               {allDayEvents.slice(0, 2).map((event) => (
                 <div
                   key={event.id}
-                  className="bg-muted rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold pl-2 pr-2 w-full text-[#434343] dark:text-[#d3d3d3]"
+                  className="rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold pl-2 pr-2 w-full border border-gray-200"
+                  style={{
+                    backgroundColor: event.backgroundColor || event.color || '#f3f4f6',
+                    color: event.textColor || '#434343',
+                  }}
                   title={event.title}
                 >
                   {event.title}

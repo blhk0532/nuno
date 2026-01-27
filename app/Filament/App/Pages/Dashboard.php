@@ -101,7 +101,8 @@ class Dashboard extends BaseDashboard
 
       public static function getNavigationBadge(): ?string
       {
-          return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
+          return '🇸🇪 ' . now()->timezone('Europe/Stockholm')->format('H:i');
+
       }
       public static function getNavigationBadgeColor(): ?string
       {

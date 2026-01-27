@@ -56,14 +56,14 @@ final class BookingForm
     public static function canShowStatus(?Booking $record): bool
     {
         $user = Auth::user();
-        
+
         if (! $user) {
             return false;
         }
 
         if (is_object($user) && method_exists($user, 'hasRole')) {
-            if (call_user_func([$user, 'hasRole'], 'admin') || 
-                call_user_func([$user, 'hasRole'], 'super') || 
+            if (call_user_func([$user, 'hasRole'], 'admin') ||
+                call_user_func([$user, 'hasRole'], 'super') ||
                 call_user_func([$user, 'hasRole'], 'manager')) {
                 return true;
             }
@@ -100,6 +100,31 @@ final class BookingForm
                 ->relationship('service', 'name')
                 ->searchable()
                 ->hidden(),
+
+
+            \Filament\Forms\Components\DatePicker::make('service_date')
+                ->label('Datum')
+                ->required()
+                ->columnSpan(1),
+
+            Group::make()
+                ->schema([
+                    \Filament\Forms\Components\TimePicker::make('start_time')
+                        ->label('Starttid')
+                        ->seconds(false)
+                        ->displayFormat('H:i')
+                        ->native(false)
+                        ->required(),
+
+                    \Filament\Forms\Components\TimePicker::make('end_time')
+                        ->label('Sluttid')
+                        ->seconds(false)
+                        ->displayFormat('H:i')
+                        ->native(false)
+                        ->required(),
+                ])
+                ->columns(2)
+                ->columnSpan(1),
             Select::make('booking_client_id')
                 ->label('Fastighetsägare')
                 ->relationship('client', 'name')
@@ -171,31 +196,6 @@ final class BookingForm
                 ->options(User::where('role', 'service')->pluck('name', 'id'))
                 ->searchable()
                 ->required(),
-
-            \Filament\Forms\Components\DatePicker::make('service_date')
-                ->label('Datum')
-                ->required()
-                ->columnSpan(1),
-
-            Group::make()
-                ->schema([
-                    \Filament\Forms\Components\TimePicker::make('start_time')
-                        ->label('Starttid')
-                        ->seconds(false)
-                        ->displayFormat('H:i')
-                        ->native(false)
-                        ->required(),
-
-                    \Filament\Forms\Components\TimePicker::make('end_time')
-                        ->label('Sluttid')
-                        ->seconds(false)
-                        ->displayFormat('H:i')
-                        ->native(false)
-                        ->required(),
-                ])
-                ->columns(2)
-                ->columnSpan(1),
-
             TextInput::make('booking_user_id')
                 ->hidden()
                 ->dehydrated(),
@@ -266,6 +266,6 @@ final class BookingForm
             ->columns(4)
             ->orderColumn('sort')
             ->defaultItems(1)
-            ->hiddenLabel();
+            ->hiddenLabel(true);
     }
 }

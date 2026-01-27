@@ -78,17 +78,21 @@ export const EventCard = ({
       key={event.id}
       data-testid={`event-item-${event.id}`}
       className={cn(
-        'group/event relative z-0 flex h-auto w-full flex-col items-start justify-start gap-3 px-4 py-3 text-left text-white hover:cursor-pointer',
+        'group/event relative z-0 flex h-auto w-full flex-col items-start justify-start gap-3 px-4 py-3 text-left hover:cursor-pointer',
         'transition-all duration-200',
         'focus-visible:ring-ring last:border-b-0 focus-visible:ring-1 focus-visible:ring-offset-0',
         'rounded-md border-2 border-gray-400 dark:border-gray-500 shadow-sm',
         'mb-2',
         !isHexColor ? bg : '',
+        !event.textColor && 'text-white'
       )}
       style={isHexColor ? {
-        backgroundColor: event.color,
+        backgroundColor: event.backgroundColor || event.color,
+        color: event.textColor || 'white',
         opacity: 0.8,
-      } : {}}
+      } : {
+        color: event.textColor || 'white'
+      }}
       onClick={() => onClick(event)}
     >
       <div className="flex w-full items-start justify-between gap-2 group-hover/event:opacity-50">
