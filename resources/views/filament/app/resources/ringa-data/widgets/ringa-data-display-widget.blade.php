@@ -36,7 +36,7 @@
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 pb-0">
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 pb-2">
                     <!-- Address Group -->
                     <div class="p-4 rounded-xl bg-gray-50/50 dark:bg-white/5">
 
@@ -95,7 +95,9 @@
                                  <div>
                                 <p class="text-xs text-gray-500 uppercase dark:text-gray-400">Civilstånd</p>
 
-                                    <p class="text-sm font-semibold">{{ $this->record->civilstand ?? '-' }}</p>
+                                    <p class="text-sm font-semibold" style="white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;">{{ $this->record->civilstand ?? '-' }}</p>
 
                                 </div>
                             </div>

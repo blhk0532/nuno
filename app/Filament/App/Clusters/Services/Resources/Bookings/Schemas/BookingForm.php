@@ -100,37 +100,8 @@ final class BookingForm
                 ->relationship('service', 'name')
                 ->searchable()
                 ->hidden(),
-            Select::make('service_user_id')
-                ->label('Service User')
-                ->options(User::where('role', 'service')->pluck('name', 'id'))
-                ->searchable()
-                ->required(),
-
-            \Filament\Forms\Components\DatePicker::make('service_date')
-                ->label('Datum')
-                ->required()
-                ->columnSpan(1),
-
-            Group::make()
-                ->schema([
-                    \Filament\Forms\Components\TimePicker::make('start_time')
-                        ->label('Starttid')
-                        ->seconds(false)
-                        ->displayFormat('H:i')
-                        ->native(false)
-                        ->required(),
-
-                    \Filament\Forms\Components\TimePicker::make('end_time')
-                        ->label('Sluttid')
-                        ->seconds(false)
-                        ->displayFormat('H:i')
-                        ->native(false)
-                        ->required(),
-                ])
-                ->columns(2)
-                ->columnSpan(1),
-
             Select::make('booking_client_id')
+                ->label('Fastighetsägare')
                 ->relationship('client', 'name')
                 ->searchable()
                 ->required()
@@ -195,6 +166,35 @@ final class BookingForm
 
                     return $client->id;
                 }),
+            Select::make('service_user_id')
+                ->label('Service User')
+                ->options(User::where('role', 'service')->pluck('name', 'id'))
+                ->searchable()
+                ->required(),
+
+            \Filament\Forms\Components\DatePicker::make('service_date')
+                ->label('Datum')
+                ->required()
+                ->columnSpan(1),
+
+            Group::make()
+                ->schema([
+                    \Filament\Forms\Components\TimePicker::make('start_time')
+                        ->label('Starttid')
+                        ->seconds(false)
+                        ->displayFormat('H:i')
+                        ->native(false)
+                        ->required(),
+
+                    \Filament\Forms\Components\TimePicker::make('end_time')
+                        ->label('Sluttid')
+                        ->seconds(false)
+                        ->displayFormat('H:i')
+                        ->native(false)
+                        ->required(),
+                ])
+                ->columns(2)
+                ->columnSpan(1),
 
             TextInput::make('booking_user_id')
                 ->hidden()
@@ -213,8 +213,12 @@ final class BookingForm
         return [
             ToggleButtons::make('status')
                 ->options(BookingStatus::restrictedOptions())
-                
-                
+                ->colors([
+                    'booked' => 'gray',
+                    'confirmed' => 'gray',
+                    'problem' => 'gray',
+                    'complete' => 'gray',
+                ])
                 ->inline()
                 ->required()
                 ->hidden(fn (?Booking $record) => ! self::canShowStatus($record))
@@ -257,6 +261,8 @@ final class BookingForm
                     ->required()
                     ->columnSpan(1),
             ])
+            ->addActionAlignment(\Filament\Support\Enums\Alignment::Start)
+            ->addActionLabel('Lägg till tjänst')
             ->columns(4)
             ->orderColumn('sort')
             ->defaultItems(1)

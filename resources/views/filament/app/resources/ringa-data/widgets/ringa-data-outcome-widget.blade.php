@@ -1,13 +1,5 @@
 <x-filament-widgets::widget class="h-full ringa-data-outcome-widget">
     <x-filament::section class="h-full">
-        <x-slot name="heading">
-            @if ($this->record)
-                Call Outcomes - {{ $this->record->telefon }}
-            @else
-                Call Outcomes
-            @endif
-        </x-slot>
-
         <div class="h-full flex flex-col justify-between">
             @if ($this->record)
                 <div class="space-y-4 flex-grow">

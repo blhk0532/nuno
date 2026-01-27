@@ -7,7 +7,7 @@ use Filament\Widgets\Widget;
 
 class RingaDataOutcomeFormWidget extends Widget
 {
-    protected static ?string $heading = 'Call Outcomes';
+    protected static ?string $heading = null;
 
     protected int | string | array $columnSpan = '1/2';
 

@@ -19,7 +19,7 @@ class RingaDataOutcomeWidget extends Widget implements HasForms
 
     protected int|string|array $columnSpan = '1/2';
 
-    protected static ?string $heading = 'Call Outcomes';
+    protected static ?string $heading = null;
 
     public ?RingaData $record = null;
 

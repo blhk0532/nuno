@@ -11,6 +11,7 @@ use UnitEnum;
 use Filament\Support\Icons\Heroicon;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 use Joaopaulolndev\FilamentWorldClock\Helpers\FlagsHelper;
+use Illuminate\Support\Facades\Auth;
 final class InertiaCalendar extends Page
 {
     protected string $view = 'filament.booking.pages.inertia-calendar';
@@ -21,9 +22,9 @@ final class InertiaCalendar extends Page
 
     protected static ?string $title = '';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 13;
 
-    protected static ?int $sort = 4;
+    protected static ?int $sort = 13;
 
     protected static ?string $slug = 'bokning';
 
@@ -40,11 +41,18 @@ final class InertiaCalendar extends Page
         return Width::Full;
     }
 
-
+    public static function shouldRegisterNavigation(): bool
+    {
+        if(Auth::user()->role === 'admin' || Auth::user()->role === 'super' || Auth::user()->role === 'manager' ){
+            return true;
+        }else{
+            return false;
+        }
+    }
 
    public static function getNavigationBadge(): ?string
     {
-        return 'Öppen';
+        return Auth::user()->role;
     }
 
     public static function getNavigationBadgeColor(): ?string

@@ -1,9 +1,5 @@
 <x-filament-widgets::widget class="h-full outcome-form-widget">
     <x-filament::section class="h-full">
-        <x-slot name="heading">
-            Call Outcomes @if($this->record) - {{ $this->record->telefon }} @endif
-        </x-slot>
-
         @php
             $recordId = $this->record?->id;
             $tenant = $this->tenant;

@@ -79,6 +79,7 @@ final class AppDashboard extends BasePage
 
       public static function getNavigationBadge(): ?string
       {
+            return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
           return '🇸🇪 ' . now()->timezone('Europe/Stockholm')->format('H:i');
       }
       public static function getNavigationBadgeColor(): ?string
@@ -88,6 +89,7 @@ final class AppDashboard extends BasePage
 
     public static function getNavigationLabel(): string
     {
+        return 'Team';
         return (string) (filament()->getTenant()?->name ?? 'Dashboard');
     }
 

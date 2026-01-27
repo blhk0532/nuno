@@ -30,7 +30,7 @@ class RingaDataResource extends Resource
 
     protected static ?string $navigationLabel = 'Nummer';
 
-     protected static UnitEnum|string|null $navigationGroup = ' ';
+     protected static UnitEnum|string|null $navigationGroup = 'Mina Sidor';
 
     protected static ?string $slug = 'nummer/lista';
 
@@ -62,7 +62,7 @@ class RingaDataResource extends Resource
         return parent::getEloquentQuery()
             ->where(function (Builder $query) use ($userId, $tenantId) {
                 $query->where('user_id', $userId);
-                
+
                 if ($tenantId) {
                     $query->orWhere('team_id', $tenantId);
                 }

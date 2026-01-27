@@ -1767,6 +1767,8 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     ->numeric()
                     ->required(),
             ])
+            ->addActionAlignment(\Filament\Support\Enums\Alignment::Start)
+            ->addActionLabel('Lägg till tjänst')
             ->orderColumn('sort')
             ->defaultItems(1)
             ->hiddenLabel();
