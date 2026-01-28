@@ -88,8 +88,8 @@ public Model|int|string|null $record;
         HasOptions::getOptions insteadof CanBeConfigured;
 
         InteractsWithEventRecord::getEloquentQuery insteadof InteractsWithRecords;
-    
-        
+
+
         // Resolve method collisions from InteractsWithEvents vs InteractsWithCalendar
 InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         InteractsWithEvents::onDateSelectLegacy insteadof InteractsWithCalendar;
@@ -277,7 +277,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
             'timeZone' => 'Europe/Stockholm',
             'now' => now()->setTimezone('Europe/Stockholm')->addHour()->toISOString(),
             'slotMinTime' => '07:00:00',
-            'slotMaxTime' => '17:00:00',
+            'slotMaxTime' => '18:00:00',
             'views' => [
                 'timeGridDay' => [
                     'slotMinTime' => $openingStart ? $openingStart : '08:00:00',
@@ -285,7 +285,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 ],
                 'timeGridWeek' => [
                     'slotMinTime' => '07:00:00',
-                    'slotMaxTime' => '17:00:00',
+                    'slotMaxTime' => '18:00:00',
                 ],
                 'timeGridMonth' => [
                     'slotMinTime' => $openingStart ? $openingStart : '08:00:00',

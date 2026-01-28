@@ -33,7 +33,7 @@ interface SearchableMonthPickerProps {
 export function SearchMonthPicker({
   locale = enUS,
   className = '',
-  monthFormat = 'MMMM',
+  monthFormat = 'MMM',
   placeholder = 'Select month',
 }: SearchableMonthPickerProps) {
   const [open, setOpen] = useState(false);
@@ -102,7 +102,7 @@ export function SearchMonthPicker({
             role="combobox"
             aria-expanded={open}
             className={cn(
-              'w-[150px] justify-between text-sm font-normal',
+              'w-[100px] justify-between text-sm font-normal',
               !selectedMonth && 'text-muted-foreground',
               className,
             )}
@@ -160,9 +160,6 @@ export function SearchMonthPicker({
                       )}
                     />
                     <span className="flex-1">{m.label}</span>
-                    <span className="text-muted-foreground mr-2 text-sm">
-                      {m.shortLabel}
-                    </span>
                   </CommandItem>
                 ))}
                 <ScrollBar orientation="vertical" />

@@ -28,7 +28,7 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
 
 const HOUR_HEIGHT = 64; // Height in pixels for 1 hour
 const START_HOUR = 7; // 08:00
-const END_HOUR = 17; // 18:00
+const END_HOUR = 18; // 18:00
 const DAYS_IN_WEEK = 7;
 const DAY_WIDTH_PERCENT = 100 / DAYS_IN_WEEK;
 const MULTI_DAY_ROW_HEIGHT = 64;
@@ -285,8 +285,8 @@ export function EventCalendarWeek({ events, currentDate }: CalendarWeekProps) {
                 <div
                   key={`all-day-cell-${dayIndex}`}
                   className={cn(
-                    'relative table items-center justify-center px-1 border-r border-l border-b border-t relative overflow-hidden',
-                    todayIndex === dayIndex && 'border-t border-red-500/50 dark:border-red-500/50',
+                    'relative table items-center justify-center px-1 border-b border-t relative overflow-hidden min-h-[40px]',
+                    todayIndex === dayIndex && 'border-t border-2 rounded border-[#619af780] dark:border-[#619af780]',
                     'flex-1',
                   )}
                 >

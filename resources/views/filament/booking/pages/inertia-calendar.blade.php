@@ -9,6 +9,10 @@
         .fi-page-content {
             padding: 0rem !important;
         }
+        main.relative{
+               padding: 0rem !important;
+               margin: 0rem !important;
+        }
     </style>
 <div class="h-full">
     <iframe

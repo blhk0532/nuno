@@ -47,11 +47,11 @@ export function TodayButton({
 
   const getButtonLabel = () => {
     const labels = {
-      [CalendarViewType.DAY]: 'Today',
-      [CalendarViewType.DAYS]: 'Today',
-      [CalendarViewType.WEEK]: 'Nu',
-      [CalendarViewType.MONTH]: 'This month',
-      [CalendarViewType.YEAR]: 'This year',
+      [CalendarViewType.DAY]: '•',
+      [CalendarViewType.DAYS]: '•',
+      [CalendarViewType.WEEK]: '•',
+      [CalendarViewType.MONTH]: '•',
+      [CalendarViewType.YEAR]: '•',
     };
 
     return labels[viewType];

@@ -222,7 +222,7 @@ export const EventCalendarFilters = ({
             value={selectedTechnicianId}
             onValueChange={onTechnicianChange}
           >
-            <SelectTrigger className="h-9 w-[140px] gap-2 text-sm font-medium">
+            <SelectTrigger className="h-9 w-[120px] gap-2 text-sm font-medium">
               <Users className="h-4 w-4" />
               <SelectValue placeholder="Tekniker" />
             </SelectTrigger>
@@ -404,7 +404,7 @@ Bokning
                 />
               )}
               {currentView !== 'year' && (
-                <SearchMonthPicker locale={localeObj} monthFormat="LLLL" />
+                <SearchMonthPicker locale={localeObj} monthFormat="LLL" />
               )}
               <SearchYearPicker yearRange={20} minYear={2000} maxYear={2030} />
             </div>

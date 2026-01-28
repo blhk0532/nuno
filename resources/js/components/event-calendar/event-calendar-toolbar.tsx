@@ -305,17 +305,17 @@ export default function EventCalendarToolbar({
   return (
     <div className="flex flex-col">
       <div className="bg-muted/30 flex flex-col">
-        <div className="flex flex-wrap items-center justify-center lg:justify-between gap-x-4 gap-y-3 px-2 py-1">
+        <div className="flex flex-wrap items-center justify-center lg:justify-between gap-x-4 gap-y-0 px-2">
           <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-1 sm:gap-2">
-
+<div className="min-w-[120px]">
     {users && users.length > 0 && onTechnicianChange && (
               <Select
                 value={selectedTechnicianId}
                 onValueChange={onTechnicianChange}
               >
-                <SelectTrigger className="h-9 w-[140px] gap-2 text-sm font-medium">
-                  <Users className="h-4 w-4" />
+                <SelectTrigger className="h-9 w-[120px] gap-2 text-sm font-medium">
+
                   <SelectValue placeholder="Tekniker" />
                 </SelectTrigger>
                 <SelectContent>
@@ -330,10 +330,11 @@ export default function EventCalendarToolbar({
                 </SelectContent>
               </Select>
             )}
+</div>
 
 
-
-            {filters.isRepeating === 'repeating' && (
+<div className="flex flex-wrap items-center justify-center gap-2 lg:gap-4 min-w-[270px] max-w-[320px] relative min-[768px]:max-[1024px]:min-w-[250px]">
+        {filters.isRepeating === 'repeating' && (
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
@@ -341,7 +342,7 @@ export default function EventCalendarToolbar({
                       filters.repeatingTypes.length > 0 ? 'default' : 'outline'
                     }
                     size="sm"
-                    className="h-9 gap-2 px-3 text-sm font-medium transition-all"
+                    className="h-9 gap-2 px-3 text-sm font-medium transition-all absolute l-0"
                   >
                     <Clock className="h-4 w-4" />
                     <span className="hidden sm:inline">Repeat</span>
@@ -394,7 +395,7 @@ export default function EventCalendarToolbar({
               <Button
                 variant="ghost"
                 size="icon"
-                className="hover:bg-muted h-9 w-9 rounded-full"
+                className="hover:bg-muted h-9 w-9 rounded-full   absolute left-0 min-[768px]:max-[1024px]:hidden"
                 onClick={handleNavigatePrevious}
               >
                 <ChevronLeft className="h-4 w-4" />
@@ -416,7 +417,7 @@ export default function EventCalendarToolbar({
                     date={currentDate}
                     onDateChange={onDateChange}
                     locale={localeObj}
-                    monthFormat="LLLL"
+                    monthFormat="LLL"
                   />
                 )}
                 <SearchYearPicker
@@ -426,33 +427,43 @@ export default function EventCalendarToolbar({
                   minYear={2000}
                   maxYear={2030}
                 />
-              </div>
+   </div>
               <Button
                 variant="ghost"
                 size="icon"
-                className="hover:bg-muted h-9 w-9 rounded-full"
+                className="hover:bg-muted h-9 w-9 rounded-full   absolute right-0 min-[768px]:max-[1024px]:hidden"
                 onClick={handleNavigateNext}
               >
                 <ChevronRight className="h-4 w-4" />
               </Button>
+ </div>
+
+
             </div>
+
 
 
 
 
           </div>
 
-          <EventCalendarTabs
+
+
+    <EventCalendarTabs
             viewType={currentView}
             onChange={handleViewTypeChange}
           />
 
-          <div className="flex flex-wrap items-center justify-center lg:justify-end gap-2 lg:gap-4">
 
-            <div className="flex flex-wrap items-center justify-center lg:justify-end gap-1 sm:gap-2">
 
+          <div className="flex flex-wrap items-center justify-center lg:justify-end gap-2 min-[768px]:max-[1024px]:hidden">
+
+
+
+            <div className=" flex min-w-[240px] min-[768px]:max-[1320px]:hidden gap-2">
 
 <ToggleTheme/>
+
 
             <TodayButton
               viewType={currentView}
@@ -461,17 +472,80 @@ export default function EventCalendarToolbar({
             />
 
 
+
+
+
+
+
+  <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={
+                      filters.categories.length > 0 ? 'default' : 'outline'
+                    }
+                    size="icon"
+                    className="relative h-8 w-9 transition-all w-[50px]"
+                  >
+                    <Tag className="h-4 w-4" />
+                    {filters.categories.length > 0 && (
+                      <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
+                        {filters.categories.length}
+                      </span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-64 p-4">
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium">Välj Kategori</h4>
+                    <div className="max-h-48 space-y-3 overflow-y-auto">
+                      {categoryOptions && categoryOptions.length > 0 ? (
+                        categoryOptions.map((category) => (
+                          <div
+                            key={category.value}
+                            className="flex items-center space-x-3"
+                          >
+                            <Checkbox
+                              id={`category-${category.value}`}
+                              checked={filters.categories.includes(
+                                category.value,
+                              )}
+                              onCheckedChange={() =>
+                                toggleArrayFilter('categories', category.value)
+                              }
+                            />
+                            <Label
+                              htmlFor={`category-${category.value}`}
+                              className="cursor-pointer text-sm font-normal"
+                            >
+                              {category.label}
+                            </Label>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-sm text-muted-foreground">
+                          No categories configured
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+
+
               <TimeFormatToggle
                 format={timeFormat}
                 onChange={handleTimeFormatChange}
               />
+
+
 
    <Popover>
                 <PopoverTrigger asChild>
                   <Button
                     variant={filters.colors.length > 0 ? 'default' : 'outline'}
                     size="icon"
-                    className="relative h-9 w-9 transition-all"
+                    className="relative h-9 w-9 transition-all hidden"
                   >
                     <div className="h-4 w-4 rounded-full bg-green-500 ring-2 ring-white" />
                     {filters.colors.length > 0 && (
@@ -521,68 +595,11 @@ export default function EventCalendarToolbar({
 
 
 
+ </div>
 
-
-  <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant={
-                      filters.categories.length > 0 ? 'default' : 'outline'
-                    }
-                    size="icon"
-                    className="relative h-9 w-9 transition-all"
-                  >
-                    <Tag className="h-4 w-4" />
-                    {filters.categories.length > 0 && (
-                      <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
-                        {filters.categories.length}
-                      </span>
-                    )}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-64 p-4">
-                  <div className="space-y-3">
-                    <h4 className="text-sm font-medium">Välj Kategori</h4>
-                    <div className="max-h-48 space-y-3 overflow-y-auto">
-                      {categoryOptions && categoryOptions.length > 0 ? (
-                        categoryOptions.map((category) => (
-                          <div
-                            key={category.value}
-                            className="flex items-center space-x-3"
-                          >
-                            <Checkbox
-                              id={`category-${category.value}`}
-                              checked={filters.categories.includes(
-                                category.value,
-                              )}
-                              onCheckedChange={() =>
-                                toggleArrayFilter('categories', category.value)
-                              }
-                            />
-                            <Label
-                              htmlFor={`category-${category.value}`}
-                              className="cursor-pointer text-sm font-normal"
-                            >
-                              {category.label}
-                            </Label>
-                          </div>
-                        ))
-                      ) : (
-                        <div className="text-sm text-muted-foreground">
-                          No categories configured
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </PopoverContent>
-              </Popover>
-
-
-
-
-
+<div className='min-[768px]:max-[1024px]:hidden'>
          <ViewModeToggle mode={viewMode} onChange={handleViewModeChange} />
-
+</div>
 
 
 
@@ -592,7 +609,7 @@ export default function EventCalendarToolbar({
               className="h-9 gap-2 px-3 text-sm font-medium transition-all"
             >
               <Search className="h-4 w-4" />
-              <span className="xl:inline hidden">Sök</span>
+
               {filters.search && (
                 <Badge variant="secondary" className="ml-1 px-1.5 py-0">
                   1
@@ -613,7 +630,7 @@ export default function EventCalendarToolbar({
               </Button>
               <CalendarSettingsDialog />
 
-            </div>
+
           </div>
         </div>
 

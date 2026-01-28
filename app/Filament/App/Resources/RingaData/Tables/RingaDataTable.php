@@ -14,6 +14,10 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Actions;
+use Filament\Actions\BulkAction;
+use Filament\Forms\Components\Select;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Filament\Resources\Pages\ListRecords;
 
 class RingaDataTable
@@ -80,9 +84,32 @@ class RingaDataTable
                 ViewAction::make(),
                 EditAction::make(),
             ])
-            ->toolbarActions([
+            ->bulkActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),
+                    BulkAction::make('assignToUsers')
+                        ->label('Tilldela till användare')
+                        ->icon('heroicon-o-users')
+                        ->form([
+                            Select::make('users')
+                                ->label('Välj användare')
+                                ->multiple()
+                                ->searchable()
+                                ->options(User::all()->pluck('name', 'id'))
+                                ->required(),
+                        ])
+                        ->action(function (Collection $records, array $data): void {
+                            $userIds = implode(',', $data['users']);
+                            foreach ($records as $record) {
+                                $record->update(['user_id' => $userIds]);
+                            }
+
+                            Notification::make()
+                                ->title('Användare tilldelade')
+                                ->success()
+                                ->send();
+                        })
+                        ->visible(fn () => in_array(auth()->user()->role, ['admin', 'super', 'super_admin', 'superadmin', 'manager'])),
                 ]),
             ]);
     }

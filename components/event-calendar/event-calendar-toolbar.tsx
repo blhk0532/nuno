@@ -172,7 +172,7 @@ export default function EventCalendarToolbar({
                 />
               )}
               {currentView !== 'year' && (
-                <SearchMonthPicker locale={localeObj} monthFormat="LLLL" />
+                <SearchMonthPicker locale={localeObj} monthFormat="LLL" />
               )}
               <SearchYearPicker yearRange={20} minYear={2000} maxYear={2030} />
             </div>

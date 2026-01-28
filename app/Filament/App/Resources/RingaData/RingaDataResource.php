@@ -61,7 +61,10 @@ class RingaDataResource extends Resource
 
         return parent::getEloquentQuery()
             ->where(function (Builder $query) use ($userId, $tenantId) {
-                $query->where('user_id', $userId);
+                $query->where(function ($q) use ($userId) {
+                    $q->where('user_id', (string) $userId)
+                      ->orWhereRaw("FIND_IN_SET(?, user_id)", [$userId]);
+                });
 
                 if ($tenantId) {
                     $query->orWhere('team_id', $tenantId);

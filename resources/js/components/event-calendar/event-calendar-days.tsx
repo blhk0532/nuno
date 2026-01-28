@@ -28,7 +28,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 
 const HOUR_HEIGHT = 64;
 const START_HOUR = 7; // 08:00
-const END_HOUR = 17; // 18:00
+const END_HOUR = 18; // 18:00
 const MULTI_DAY_ROW_HEIGHT = 65;
 
 const getLocationDisplay = (event: Events): string => {

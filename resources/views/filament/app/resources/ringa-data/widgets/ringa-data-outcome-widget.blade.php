@@ -5,6 +5,7 @@
                 <div class="space-y-4 flex-grow">
                     <!-- Status & History Section -->
                     <div class="flex items-center gap-4 pb-4 border-b border-gray-100 dark:border-white/5">
+                        @if ((is_array($this->record->telfonnummer) ? count($this->record->telfonnummer) : 0) < 5)
                         <div class="flex items-center justify-center w-12 h-12 rounded-xl shrink-0 bg-gray-50 dark:bg-white/5 text-gray-600 dark:text-gray-400">
                             <x-filament::icon icon="heroicon-o-chat-bubble-left-right" class="w-7 h-7" />
                         </div>
@@ -39,6 +40,7 @@
                                 @endif
                             </div>
                         </div>
+                        @endif
                     </div>
 
                     <!-- Call Actions -->

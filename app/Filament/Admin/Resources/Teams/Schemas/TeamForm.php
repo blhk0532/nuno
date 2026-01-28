@@ -4,6 +4,7 @@ namespace App\Filament\Admin\Resources\Teams\Schemas;
 
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
 class TeamForm
@@ -20,6 +21,7 @@ class TeamForm
                     ->required(),
                 TextInput::make('slug')
                     ->required(),
+                Toggle::make('personal_team'),
             ]);
     }
 }

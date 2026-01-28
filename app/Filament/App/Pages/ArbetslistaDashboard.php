@@ -40,37 +40,37 @@ final class ArbetslistaDashboard extends BasePage
 
     protected static ?string $slug = 'arbetslista';
 
-     protected static ?string $navigationLabel = 'Arbetslista';
+     protected static ?string $navigationLabel = 'NDSนอร์ดิก TEAM';
 
   //  protected string $view = 'filament.app.dashboard';
 
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 4;
 
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 4;
 
-  //   protected static string | UnitEnum | null $navigationGroup = '';
+  //   protected static string | UnitEnum | null $navigationGroup = ' ';
 
   //  protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedUserCircle;
   //  protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidUserCircle;
 
-    protected static string|BackedEnum|null $navigationIcon = Remix::RiNewsLine;
-    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiNewsFill;
+    protected static string|BackedEnum|null $navigationIcon = Remix::RiGroup3Line;
+    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiGroup3Fill;
 
 
     // Prevent this app-level Dashboard from being auto-discovered so that
     // the explicit `AdminDashboard` can be registered as the admin panel root.
-    protected static bool $isDiscovered = false;
+    protected static bool $isDiscovered = true;
 
     public static function shouldRegisterNavigation(): bool
     {
-        return false;
+        return true;
     }
 
 
       public static function getNavigationBadge(): ?string
       {
-          return '🇸🇪 ' . now()->timezone('Europe/Stockholm')->format('H:i');
+           return  now()->timezone('Asia/Bangkok')->format('H:i') . ' 🇹🇭 ';
       }
       public static function getNavigationBadgeColor(): ?string
       {

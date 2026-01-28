@@ -30,12 +30,12 @@ class Dashboard extends BaseDashboard
      protected static ?string $slug = 'dashboard';
 
  // protected static string|BackedEnum|null $navigationIcon = Tabler::CalendarMonthF;
-    protected static string|BackedEnum|null $navigationIcon = BootstrapIcons::PersonCheck;
-    protected static string|BackedEnum|null $activeNavigationIcon = BootstrapIcons::PersonFillCheck;
+ //   protected static string|BackedEnum|null $navigationIcon = BootstrapIcons::PersonCheck;
+ //   protected static string|BackedEnum|null $activeNavigationIcon = BootstrapIcons::PersonFillCheck;
 
 
- //   protected static string|BackedEnum|null $navigationIcon = Remix::RiDashboard2Line;
- //   protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiDashboard2Fill;
+    protected static string|BackedEnum|null $navigationIcon = Remix::RiShieldUserLine;
+    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiShieldUserFill;
 
  //   protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
  //   protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;
@@ -110,11 +110,11 @@ class Dashboard extends BaseDashboard
 
       public static function getNavigationBadge(): ?string
       {
-          return '🇸🇪 ' . now()->timezone('Europe/Stockholm')->format('H:i');
+          return '❍nline';
 
       }
       public static function getNavigationBadgeColor(): ?string
       {
-          return 'gray';
+          return 'success';
       }
 }

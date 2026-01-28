@@ -204,7 +204,7 @@ export default function ShadcnEventCalendar() {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>
       <Head title="NDS Calendar" />
-      <div className="w-full max-w-[100%] max-h-[96vh] min-h-[96vh]">
+      <div className="w-full max-w-[100%] max-h-[100vh] min-h-[100vh]">
         <div className="bg-transparent rounded-lg p-0">
           <EventCalendar
             events={events}

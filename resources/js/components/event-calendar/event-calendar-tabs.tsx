@@ -160,7 +160,7 @@ export function EventCalendarTabs({
   };
 
   return (
-    <div className={cn('border-border relative border-b', className)}>
+    <div className={cn('border-border relative', className)}>
       <div
         ref={navRef}
         className="relative z-0 hidden items-center justify-start py-2 md:flex"
@@ -227,7 +227,7 @@ export function EventCalendarTabs({
               onPointerEnter={() => setHoveredTabIndex(i)}
               onFocus={() => setHoveredTabIndex(i)}
               className={cn(
-                'relative z-20 flex h-8 cursor-pointer items-center rounded-md bg-transparent px-4 text-sm select-none',
+                'relative z-20 flex h-8 cursor-pointer items-center rounded-md bg-transparent px-3 text-sm select-none',
                 isActive
                   ? 'text-foreground font-medium'
                   : 'text-muted-foreground',
