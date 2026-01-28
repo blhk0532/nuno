@@ -71,6 +71,7 @@ use App\Providers\Tenancy\CurrentTenant as TenancyCurrentTenant;
 use Devonab\FilamentEasyFooter\EasyFooterPlugin;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 use JeffersonGoncalves\Filament\RefreshSidebar\RefreshSidebarPlugin;
+use Filament\Support\Enums\Width;
 
 final class AppPanelProvider extends PanelProvider
 {
@@ -90,6 +91,7 @@ final class AppPanelProvider extends PanelProvider
             ->databaseNotificationsPolling('30s')
             ->tenant(Team::class, slugAttribute: 'slug', ownershipRelationship: null)
             ->tenantRoutePrefix('team')
+            ->maxContentWidth(Width::Full)
             ->tenantRegistration(RegisterTeam::class)
             ->tenantProfile(EditTeamProfile::class)
             ->homeUrl(fn () => Dashboard::getUrl())
@@ -99,12 +101,16 @@ final class AppPanelProvider extends PanelProvider
             ->brandLogo(fn () => view('filament.app.logo'))
             ->brandLogoHeight(fn () => request()->is('admin/login', 'admin/password-reset/*') ? '68px' : '34px')
             ->viteTheme('resources/css/filament/app/theme.css')
-            ->defaultThemeMode(config('teamkit.theme_mode', ThemeMode::Dark))
+            ->defaultThemeMode(ThemeMode::Dark)
         //    ->discoverClusters(in: app_path('Filament/App/Clusters'), for: 'App\\Filament\\App\\Clusters')
             ->discoverPages(in: app_path('Filament/App/Pages'), for: 'App\\Filament\\App\\Pages')
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverWidgets(in: app_path('Filament/App/Widgets'), for: 'App\\Filament\\App\\Widgets')
             ->profile(null)
+             ->registerErrorNotification(
+            title: 'Oops! Något gick fel',
+            body: 'Vängligen försök igen senare...',
+        )
             ->navigationGroups([
                 NavigationGroup::make('Kalendrar')
                     ->icon('heroicon-c-squares-plus'),

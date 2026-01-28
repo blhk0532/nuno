@@ -89,7 +89,7 @@ final class AppDashboard extends BasePage
 
     public static function getNavigationLabel(): string
     {
-        return 'Team';
+        return 'Dashboard';
         return (string) (filament()->getTenant()?->name ?? 'Dashboard');
     }
 

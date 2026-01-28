@@ -202,11 +202,11 @@ class SchedulesCalendarWidget extends FullCalendarWidget
                 ->required(),
 
             DatePicker::make('start_date')
-                ->label('Start date')
+                ->label(' ')
                 ->required(),
 
             TimePicker::make('start_time')
-                ->label('Start time')
+                ->label(' ')
                 ->visible(fn ($get) => filled($get('start_date'))),
 
             DatePicker::make('end_date')

@@ -13,7 +13,7 @@ return new class extends Migration
         // Map old outcome values to new ones
         $mappings = [
             'yes' => 'Bokad',
-            'dmc' => 'Stärra',
+            'dmc' => '( DMC )',
             'no_answer' => 'Inget Svar',
             'voicemail' => 'Telefonsvar',
             'not_connected' => 'Ej Kopplat',
@@ -39,7 +39,7 @@ return new class extends Migration
         // Reverse the mappings
         $reverseMappings = [
             'Bokad' => 'yes',
-            'Stärra' => 'dmc',
+            '( DMC )' => 'dmc',
             'Inget Svar' => 'no_answer',
             'Telefonsvar' => 'voicemail',
             'Ej Kopplat' => 'not_connected',

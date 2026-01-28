@@ -166,8 +166,7 @@
                             <div class="pt-2 mt-2 border-t border-gray-100 dark:border-white/5">
                                 <p class="text-xs text-gray-500 uppercase dark:text-gray-400">Personer</p>
                                 <div class="flex items-center gap-1">
-                                    <span class="text-lg font-bold">{{ is_array($this->record->personer) ? count($this->record->personer) : 0 }}</span>
-                                    <x-filament::icon icon="heroicon-m-users" class="w-5 h-5 text-gray-400" />
+                                    <span class="text-sm font-semibold">{{ $this->record->boarea }}</span>
                                 </div>
                             </div>
                         </div>
@@ -180,6 +179,13 @@
                             <h4 class="text-sm font-bold uppercase tracking-wider">Status</h4>
                         </div>
                         <div class="space-y-1">
+                                                        <div class="pt-2 mt-2 border-t border-gray-100 dark:border-white/5">
+                                <p class="text-xs text-gray-500 uppercase dark:text-gray-400">Personer</p>
+                                <div class="flex items-center gap-1">
+                                    <span class="text-lg font-bold">{{ is_array($this->record->personer) ? count($this->record->personer) : 0 }}</span>
+                                    <x-filament::icon icon="heroicon-m-users" class="w-5 h-5 text-gray-400" />
+                                </div>
+                            </div>
                          <div class="pt-2 mt-0 border-t border-gray-100 dark:border-white/5">
                                 <p class="text-xs text-gray-500 uppercase dark:text-gray-400">Bolag</p>
                                 <div class="flex items-center gap-1">
@@ -192,13 +198,6 @@
                                 <div class="flex items-center gap-1">
                                     <span class="text-lg font-bold">{{ is_array($this->record->fordon) ? count($this->record->fordon) : 0 }}</span>
                                     <x-filament::icon icon="heroicon-m-truck" class="w-4 h-4 text-gray-400" />
-                                </div>
-                            </div>
-                         <div class="pt-2 mt-0 border-t border-gray-100 dark:border-white/5">
-                                <p class="text-xs text-gray-500 uppercase dark:text-gray-400">Företag</p>
-                                <div class="flex items-center gap-1">
-                                    <span class="text-lg font-bold">{{ is_array($this->record->foretag) ? count($this->record->foretag) : 0 }}</span>
-                                    <x-filament::icon icon="heroicon-m-building-storefront" class="w-4 h-4 text-gray-400" />
                                 </div>
                             </div>
                            <div class="pt-2 mt-0 border-t border-gray-100 dark:border-white/5">

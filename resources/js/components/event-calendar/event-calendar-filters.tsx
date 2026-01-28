@@ -1,6 +1,11 @@
-import { useState } from 'react';
-import { Search, X, Tag, Repeat, Clock, Users } from 'lucide-react';
+import { useState, useCallback } from 'react';
+import { Search, X, Tag, Repeat, Clock, Users, Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { SearchYearPicker } from './ui/search-year-picker';
+import { SearchMonthPicker } from './ui/search-month-picker';
+import { SearchDayPicker } from './ui/search-day-picker';
+import { getLocaleFromCode } from '@/lib/event';
+import { subDays, subWeeks, subMonths, subYears, addDays, addWeeks, addMonths, addYears } from 'date-fns';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -24,15 +29,26 @@ import { useShallow } from 'zustand/shallow';
 import { useEventCalendarStore } from '@/hooks/use-event';
 import type { IUser } from '@/components/calendar/interfaces';
 import { ToggleTheme } from '@/components/layout/change-theme';
-
+import { TodayButton } from './ui/today-button';
+import type { CalendarTechnician } from '@/components/event-calendar/types';
 interface EventCalendarFiltersProps {
   users?: IUser[];
   selectedTechnicianId?: string;
   onTechnicianChange?: (id: string) => void;
   totalEvents?: number;
   categoryOptions?: CalendarCategoryOption[];
+    currentDate: Date;
+  onDateChange: (date: Date) => void;
 }
-
+interface EventCalendarToolbarProps {
+  users?: IUser[];
+  selectedTechnicianId?: string;
+  onTechnicianChange?: (id: string) => void;
+  totalEvents?: number;
+  categoryOptions?: CalendarCategoryOption[];
+  currentDate: Date;
+  onDateChange: (date: Date) => void;
+}
 type FiltersState = {
   categories: string[];
   locations: string[];
@@ -55,20 +71,91 @@ const INITIAL_FILTERS: FiltersState = {
   search: '',
 };
 
+type TechnicianMap = Record<string, CalendarTechnician>;
+
 export const EventCalendarFilters = ({
   users = [],
   selectedTechnicianId = 'all',
   onTechnicianChange,
   totalEvents = 0,
   categoryOptions = [],
+  currentDate,
+  onDateChange,
 }: EventCalendarFiltersProps) => {
   const categories = categoryOptions;
+
   const { timeFormat, openEventDialog } = useEventCalendarStore(
     useShallow((state) => ({
       timeFormat: state.timeFormat,
       openEventDialog: state.openEventDialog,
     })),
   );
+    const [technicians, setTechnicians] = useState<TechnicianMap>({});
+    const {
+      viewMode,
+      locale,
+      currentView,
+      setView,
+      setTimeFormat,
+      setMode,
+      openQuickAddDialog,
+      setQuickAddDefaults,
+    } = useEventCalendarStore(
+      useShallow((state) => ({
+        viewMode: state.viewMode,
+        locale: state.locale,
+        currentView: state.currentView,
+        setView: state.setView,
+        setTimeFormat: state.setTimeFormat,
+        setMode: state.setMode,
+        openQuickAddDialog: state.openQuickAddDialog,
+        setQuickAddDefaults: state.setQuickAddDefaults,
+      })),
+    );
+  const localeObj = getLocaleFromCode(locale);
+
+  const handleNavigateNext = useCallback(() => {
+    let newDate = new Date(currentDate);
+
+    switch (currentView) {
+      case 'day':
+        newDate = addDays(newDate, 1);
+        break;
+      case 'week':
+        newDate = addWeeks(newDate, 1);
+        break;
+      case 'month':
+        newDate = addMonths(newDate, 1);
+        break;
+      case 'year':
+        newDate = addYears(newDate, 1);
+        break;
+    }
+
+    onDateChange(newDate);
+  }, [currentDate, currentView, onDateChange]);
+
+  const handleNavigatePrevious = useCallback(() => {
+    let newDate = new Date(currentDate);
+
+    switch (currentView) {
+      case 'day':
+        newDate = subDays(newDate, 1);
+        break;
+      case 'week':
+        newDate = subWeeks(newDate, 1);
+        break;
+      case 'month':
+        newDate = subMonths(newDate, 1);
+        break;
+      case 'year':
+        newDate = subYears(newDate, 1);
+        break;
+    }
+
+    onDateChange(newDate);
+  }, [currentDate, currentView, onDateChange]);
+
   const [searchDialogOpen, setSearchDialogOpen] = useState(false);
   const [filters, setFilters] = useState<FiltersState>(INITIAL_FILTERS);
 
@@ -135,13 +222,13 @@ export const EventCalendarFilters = ({
             value={selectedTechnicianId}
             onValueChange={onTechnicianChange}
           >
-            <SelectTrigger className="h-9 w-[200px] gap-2 text-sm font-medium">
+            <SelectTrigger className="h-9 w-[140px] gap-2 text-sm font-medium">
               <Users className="h-4 w-4" />
-              <SelectValue placeholder="All Technicians" />
+              <SelectValue placeholder="Tekniker" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all" className="text-sm">
-                Alla Tekniker
+                Tekniker
               </SelectItem>
               {users.map((user) => (
                 <SelectItem key={user.id} value={user.id} className="text-sm">
@@ -151,7 +238,19 @@ export const EventCalendarFilters = ({
             </SelectContent>
           </Select>
         )}
-
+           <Button
+          variant={filters.search ? 'default' : 'outline'}
+          onClick={() => setSearchDialogOpen(true)}
+          className="h-9 gap-2 px-4 text-sm font-medium transition-all"
+        >
+          <Search className="h-4 w-4" />
+Bokning
+          {filters.search && (
+            <Badge variant="secondary" className="ml-1">
+              1
+            </Badge>
+          )}
+        </Button>
 
         <Popover>
           <PopoverTrigger asChild>
@@ -172,6 +271,7 @@ export const EventCalendarFilters = ({
               )}
             </Button>
           </PopoverTrigger>
+
           <PopoverContent className="w-64 p-4">
             <div className="space-y-3">
               <h4 className="text-muted-foreground text-sm font-medium">
@@ -267,23 +367,74 @@ export const EventCalendarFilters = ({
           </PopoverContent>
         </Popover>
 
-
+         <div className="flex items-center space-x-3">
+          <div className="flex w-full flex-col items-center justify-between gap-5 space-x-2 sm:flex-row sm:gap-0">
+            <div className="flex w-full items-center justify-around sm:hidden">
+              <Button
+                variant="outline"
+                className="hover:bg-muted rounded-full"
+                onClick={handleNavigatePrevious}
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </Button>
+              <Button
+                variant={'outline'}
+                className="hover:bg-muted rounded-full"
+                onClick={handleNavigateNext}
+              >
+                <ChevronRight className="h-4 w-4" />
+                Next
+              </Button>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="hover:bg-muted hidden h-8 w-8 rounded-full sm:block"
+              onClick={handleNavigatePrevious}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <div className="flex items-center space-x-2">
+              {currentView === 'day' && (
+                <SearchDayPicker
+                  locale={localeObj}
+                  weekStartsOn={0}
+                  placeholder="Select day"
+                />
+              )}
+              {currentView !== 'year' && (
+                <SearchMonthPicker locale={localeObj} monthFormat="LLLL" />
+              )}
+              <SearchYearPicker yearRange={20} minYear={2000} maxYear={2030} />
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="hover:bg-muted hidden h-8 w-8 rounded-full sm:block"
+              onClick={handleNavigateNext}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
 
             <ToggleTheme />
 
-        <Button
-          variant={filters.search ? 'default' : 'outline'}
-          onClick={() => setSearchDialogOpen(true)}
-          className="h-9 gap-2 px-4 text-sm font-medium transition-all ml-auto"
-        >
-          <Search className="h-4 w-4" />
-Sök Bokning
-          {filters.search && (
-            <Badge variant="secondary" className="ml-1">
-              1
-            </Badge>
-          )}
-        </Button>
+        <div className="flex items-center justify-center space-x-3 sm:justify-start ml-auto">
+          <TodayButton
+            viewType={currentView}
+            currentDate={currentDate}
+            onDateChange={onDateChange}
+          />
+          <Button
+            onClick={() => openQuickAddDialog({ date: new Date() })}
+            className="h-9 gap-1.5 px-3"
+          >
+            <Plus className="h-3.5 w-3.5" />
+
+          </Button>
+        </div>
 
         {filters.isRepeating === 'repeating' && (
           <Popover>

@@ -10,7 +10,7 @@ enum Outcomes1: string implements HasColor, HasIcon, HasLabel
 {
 
 
-    case DMC = 'Stärra';
+    case DMC = '( DMC )';
     case Felnummer = 'Fel Telefonnummer';
     case Klickad   = 'Klickad';
     case EjIntresserad = 'Ej Intresserad';
@@ -19,7 +19,7 @@ enum Outcomes1: string implements HasColor, HasIcon, HasLabel
     public function getLabel(): string
     {
         return match ($this) {
-            self::DMC => 'Stärra',
+            self::DMC => '( DMC )',
             self::Felnummer => 'Fel Nummer',
             self::Klickad => 'Klickad',
             self::EjIntresserad => 'Ej Intresse',
@@ -30,9 +30,9 @@ enum Outcomes1: string implements HasColor, HasIcon, HasLabel
     {
         return match ($this) {
             self::DMC => 'danger',
-            self::Klickad => 'danger',
-            self::EjIntresserad => 'danger',
-            self::Felnummer => 'danger',
+            self::Klickad => 'warning',
+            self::EjIntresserad => 'warning',
+            self::Felnummer => 'warning',
         };
     }
 

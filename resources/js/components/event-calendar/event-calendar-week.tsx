@@ -190,8 +190,8 @@ export function EventCalendarWeek({ events, currentDate }: CalendarWeekProps) {
   }, []);
 
   return (
-    <div className="flex h-full flex-col border">
-      <div className="bg-background border-border sticky top-0 z-30 flex flex-col items-center justify-center pr-4">
+    <div className="flex h-full flex-col border relative">
+      <div className="bg-background border-border sticky top-0 z-30 flex flex-col items-center justify-center absolute w-full" style={{ marginBottom: '36px' }}>
         <WeekDayHeaders
           weekNumber={weekNumber}
           daysInWeek={weekDays}
@@ -205,7 +205,7 @@ export function EventCalendarWeek({ events, currentDate }: CalendarWeekProps) {
       </div>
       {multiDayEventRows.length > 0 &&
         viewSettings.week.expandMultiDayEvents && (
-          <div className="bg-background border-border sticky top-18 z-50 mb-2 flex border-b pr-4">
+          <div className="bg-background border-border sticky top-18 z-50 flex border-b pr-4">
             <div className="flex h-[64px] w-14 items-center justify-center sm:w-32">
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -249,7 +249,7 @@ export function EventCalendarWeek({ events, currentDate }: CalendarWeekProps) {
                           key={`multi-day-cell-${rowIndex}-${dayIndex}`}
                           data-testid={`multi-day-cell-${rowIndex}-${dayIndex}`}
                           className={cn(
-                            'relative flex items-center justify-center border-r last:border-r-0',
+                            'relative flex items-center justify-center border-r last:border-r-0 border-l',
                             todayIndex === dayIndex && 'bg-primary/10',
                             'flex-1',
                           )}
@@ -270,7 +270,7 @@ export function EventCalendarWeek({ events, currentDate }: CalendarWeekProps) {
           </div>
         )}
       {/* All-day events section */}
-      <div className="bg-background border-border sticky top-18 z-40 mb-2 flex border-b pr-4">
+      <div className="bg-background border-border sticky z-40 mb-2 flex w-full" style={{ position: 'absolute', top: '40px' }}>
         <div className="flex h-[32px] w-14 items-center justify-center text-xs font-medium text-muted-foreground sm:w-32">
           All Day
         </div>
@@ -285,17 +285,17 @@ export function EventCalendarWeek({ events, currentDate }: CalendarWeekProps) {
                 <div
                   key={`all-day-cell-${dayIndex}`}
                   className={cn(
-                    'relative table items-center justify-center border-r px-1 last:border-r-0',
-                    todayIndex === dayIndex && 'bg-[#e5e5e555] dark:bg-[#3a3a3a55]',
+                    'relative table items-center justify-center px-1 border-r border-l border-b border-t relative overflow-hidden',
+                    todayIndex === dayIndex && 'border-t border-red-500/50 dark:border-red-500/50',
                     'flex-1',
                   )}
                 >
                   {hasEvents && (
-                    <div className="flex flex-wrap gap-0.5 mb-1 text-center truncate max-w-full w-full justify-center">
+                    <div className="flex flex-wrap gap-0.5 mb-1 text-center truncate max-w-full w-full justify-center" style={{ height: '32px' }}>
                       {dayAllDayEvents.slice(0, 2).map((event) => (
                         <div
                           key={event.id}
-                          className="bg-muted rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold  pl-2 pr-2 w-full text-[#434343] dark:text-[#d3d3d3]"
+                          className="bg-muted rounded px-1 pb-1 mt-1 pt-1 text-sm truncate max-w-full font-bold absolute ml-2 mr-2 pl-2 pr-2 w-full text-[#434343] dark:text-[#d3d3d3]"
                         >
                           {getLocationDisplay(event)}
                         </div>
@@ -315,7 +315,7 @@ export function EventCalendarWeek({ events, currentDate }: CalendarWeekProps) {
       </div>
       <div className="h-full">
         <ScrollArea className="h-full w-full">
-          <div className="relative flex flex-1 overflow-hidden pr-4">
+          <div className="relative flex flex-1 overflow-hidden">
             <TimeColumn
               ref={timeColumnRef}
               timeSlots={timeSlots}

@@ -102,9 +102,19 @@ class BookingServicePeriod extends Model
             'start' => $start,
             'end' => $end,
             'type' => 'blocking',
-            'backgroundColor' => $this->status?->getColor() ?? 'primary',
-            'borderColor' => $this->status?->getColor() ?? 'primary',
-            'textColor' => 'white',
+            'backgroundColor' => match ($this->period_type) {
+                'unavailable' => '#ede9fe', // light purple
+                'available' => '#ecfeff', // light cyan
+                'blocked' => '#fffbeb', // light amber
+                default => '#f9fafb', // light gray
+            },
+            'borderColor' => match ($this->period_type) {
+                'unavailable' => '#ddd6fe',
+                'available' => '#cffafe',
+                'blocked' => '#fef3c7',
+                default => '#f3f4f6',
+            },
+            'textColor' => '#1f2937',
             'extendedProps' => [
                 'key' => $this->id,  // Required: Record ID for event resolution
                 'booking_id' => $this->id,

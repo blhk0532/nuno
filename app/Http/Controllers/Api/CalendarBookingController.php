@@ -369,7 +369,7 @@ final class CalendarBookingController extends Controller
                 'color' => $period->color ?: $this->getServicePeriodColor($period->period_type),
                 'backgroundColor' => $period->color ?: $this->getServicePeriodColor($period->period_type),
                 'borderColor' => $period->color ? $this->adjustColorBrightness($period->color, -20) : $this->getServicePeriodBorderColor($period->period_type),
-                'textColor' => '#111827',
+                'textColor' => $period->color ? '#ffffff' : '#1f2937',
                 'extendedProps' => [
                     'type' => 'service_period',
                     'period_type' => $period->period_type,
@@ -511,10 +511,10 @@ final class CalendarBookingController extends Controller
     private function getServicePeriodBorderColor(?string $periodType): string
     {
         return match ($periodType) {
-            'unavailable' => '#6d28d9', // darker purple
-            'available' => '#0891b2', // darker cyan
-            'blocked' => '#d97706', // darker amber
-            default => '#4b5563', // darker gray
+            'unavailable' => '#ddd6fe', // light purple border
+            'available' => '#cffafe', // light cyan border
+            'blocked' => '#fef3c7', // light amber border
+            default => '#f3f4f6', // light gray border
         };
     }
 

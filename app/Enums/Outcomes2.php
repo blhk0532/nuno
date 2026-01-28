@@ -30,10 +30,10 @@ enum Outcomes2: string implements HasColor, HasIcon, HasLabel
     {
         return match ($this) {
 
-            self::EjFramkopplad => 'warning',
-            self::Upptagen => 'warning',
-            self::IngetSvar => 'warning',
-            self::Voicemail => 'warning',
+            self::EjFramkopplad => 'primary',
+            self::Upptagen => 'primary',
+            self::IngetSvar => 'primary',
+            self::Voicemail => 'primary',
 
         };
     }

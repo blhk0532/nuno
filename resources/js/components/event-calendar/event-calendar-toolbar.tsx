@@ -1,6 +1,16 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, Plus } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  Plus,
+  Search,
+  X,
+  Tag,
+  Repeat,
+  Clock,
+  Users,
+} from 'lucide-react';
 import { Button } from '../ui/button';
 import { TimeFormatToggle } from './ui/time-format-toggel';
 import { TodayButton } from './ui/today-button';
@@ -23,12 +33,30 @@ import {
   subWeeks,
   subYears,
 } from 'date-fns';
-import { EventCalendarFilters } from './event-calendar-filters';
 import CalendarSettingsDialog from './event-calendar-setting-dialog';
 import { getLocaleFromCode } from '@/lib/event';
 import type { IUser } from '@/components/calendar/interfaces';
 import type { CalendarTechnician } from '@/components/event-calendar/types';
 import type { CalendarCategoryOption } from '@/types/event';
+import { Label } from '../ui/label';
+import { Badge } from '../ui/badge';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select';
+import { Checkbox } from '../ui/checkbox';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '../ui/popover';
+import { EVENT_COLORS } from '@/constants/calendar-constant';
+import { getColorClasses } from '@/lib/event';
+import { EventSearchDialog } from './event-search-dialog';
+import { ToggleTheme } from '@/components/layout/change-theme';
 
 interface EventCalendarToolbarProps {
   users?: IUser[];
@@ -39,6 +67,28 @@ interface EventCalendarToolbarProps {
   currentDate: Date;
   onDateChange: (date: Date) => void;
 }
+
+type FiltersState = {
+  categories: string[];
+  locations: string[];
+  colors: string[];
+  isRepeating: string;
+  repeatingTypes: string[];
+  dateStart: string;
+  dateEnd: string;
+  search: string;
+};
+
+const INITIAL_FILTERS: FiltersState = {
+  categories: [],
+  locations: [],
+  colors: [],
+  isRepeating: '',
+  repeatingTypes: [],
+  dateStart: '',
+  dateEnd: '',
+  search: '',
+};
 
 type TechnicianMap = Record<string, CalendarTechnician>;
 
@@ -62,6 +112,8 @@ export default function EventCalendarToolbar({
     setMode,
     openQuickAddDialog,
     setQuickAddDefaults,
+    openEventDialog,
+    daysCount,
   } = useEventCalendarStore(
     useShallow((state) => ({
       viewMode: state.viewMode,
@@ -73,9 +125,57 @@ export default function EventCalendarToolbar({
       setMode: state.setMode,
       openQuickAddDialog: state.openQuickAddDialog,
       setQuickAddDefaults: state.setQuickAddDefaults,
+      openEventDialog: state.openEventDialog,
+      daysCount: state.daysCount,
     })),
   );
   const localeObj = getLocaleFromCode(locale);
+
+  const [searchDialogOpen, setSearchDialogOpen] = useState(false);
+  const [filters, setFilters] = useState<FiltersState>(INITIAL_FILTERS);
+
+  const getActiveFiltersCount = () => {
+    let count = 0;
+    count += filters.categories.length;
+    count += filters.locations.length;
+    count += filters.colors.length;
+    count += filters.repeatingTypes.length;
+    if (filters.isRepeating) count += 1;
+    if (filters.dateStart || filters.dateEnd) count += 1;
+    if (filters.search) count += 1;
+    return count;
+  };
+
+  const toggleArrayFilter = (
+    key: keyof Pick<FiltersState, 'categories' | 'locations' | 'colors' | 'repeatingTypes'>,
+    value: string,
+  ) => {
+    const currentArray = filters[key];
+    const newArray = currentArray.includes(value)
+      ? currentArray.filter((item) => item !== value)
+      : [...currentArray, value];
+
+    setFilters((prev) => ({ ...prev, [key]: newArray }));
+  };
+
+  const updateSingleFilter = (key: keyof FiltersState, value: string) => {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const clearAllFilters = () => {
+    setFilters(INITIAL_FILTERS);
+  };
+
+  const clearSingleArrayFilter = (
+    key: keyof Pick<FiltersState, 'categories' | 'locations' | 'colors' | 'repeatingTypes'>,
+    value: string,
+  ) => {
+    const currentArray = filters[key];
+    const newArray = currentArray.filter((item) => item !== value);
+    setFilters((prev) => ({ ...prev, [key]: newArray }));
+  };
+
+  const activeFiltersCount = getActiveFiltersCount();
 
   const handleNavigateNext = useCallback(() => {
     let newDate = new Date(currentDate);
@@ -83,6 +183,9 @@ export default function EventCalendarToolbar({
     switch (currentView) {
       case 'day':
         newDate = addDays(newDate, 1);
+        break;
+      case 'days':
+        newDate = addDays(newDate, daysCount || 1);
         break;
       case 'week':
         newDate = addWeeks(newDate, 1);
@@ -93,10 +196,13 @@ export default function EventCalendarToolbar({
       case 'year':
         newDate = addYears(newDate, 1);
         break;
+      default:
+        newDate = addDays(newDate, 1);
+        break;
     }
 
     onDateChange(newDate);
-  }, [currentDate, currentView, onDateChange]);
+  }, [currentDate, currentView, daysCount, onDateChange]);
 
   const handleNavigatePrevious = useCallback(() => {
     let newDate = new Date(currentDate);
@@ -104,6 +210,9 @@ export default function EventCalendarToolbar({
     switch (currentView) {
       case 'day':
         newDate = subDays(newDate, 1);
+        break;
+      case 'days':
+        newDate = subDays(newDate, daysCount || 1);
         break;
       case 'week':
         newDate = subWeeks(newDate, 1);
@@ -114,10 +223,13 @@ export default function EventCalendarToolbar({
       case 'year':
         newDate = subYears(newDate, 1);
         break;
+      default:
+        newDate = subDays(newDate, 1);
+        break;
     }
 
     onDateChange(newDate);
-  }, [currentDate, currentView, onDateChange]);
+  }, [currentDate, currentView, daysCount, onDateChange]);
 
   const handleTimeFormatChange = useCallback(
     (format: TimeFormatType) => {
@@ -192,94 +304,388 @@ export default function EventCalendarToolbar({
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col space-y-2 px-4 pt-3 sm:flex-row sm:items-center sm:justify-between sm:space-y-0">
-        <div className="flex items-center space-x-3">
-          <div className="flex w-full flex-col items-center justify-between gap-5 space-x-2 sm:flex-row sm:gap-0">
-            <div className="flex w-full items-center justify-around sm:hidden">
+      <div className="bg-muted/30 flex flex-col">
+        <div className="flex flex-wrap items-center justify-center lg:justify-between gap-x-4 gap-y-3 px-2 py-1">
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-1 sm:gap-2">
+
+    {users && users.length > 0 && onTechnicianChange && (
+              <Select
+                value={selectedTechnicianId}
+                onValueChange={onTechnicianChange}
+              >
+                <SelectTrigger className="h-9 w-[140px] gap-2 text-sm font-medium">
+                  <Users className="h-4 w-4" />
+                  <SelectValue placeholder="Tekniker" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all" className="text-sm">
+                    Tekniker
+                  </SelectItem>
+                  {users.map((user) => (
+                    <SelectItem key={user.id} value={user.id} className="text-sm">
+                      {user.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+
+
+
+            {filters.isRepeating === 'repeating' && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={
+                      filters.repeatingTypes.length > 0 ? 'default' : 'outline'
+                    }
+                    size="sm"
+                    className="h-9 gap-2 px-3 text-sm font-medium transition-all"
+                  >
+                    <Clock className="h-4 w-4" />
+                    <span className="hidden sm:inline">Repeat</span>
+                    {filters.repeatingTypes.length > 0 && (
+                      <Badge variant="secondary" className="px-1.5 py-0">
+                        {filters.repeatingTypes.length}
+                      </Badge>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-52 p-4">
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium">Repeat Frequency</h4>
+                    <div className="space-y-3">
+                      {['daily', 'weekly', 'monthly'].map((type) => (
+                        <div key={type} className="flex items-center space-x-3">
+                          <Checkbox
+                            id={`repeat-${type}`}
+                            checked={filters.repeatingTypes.includes(type)}
+                            onCheckedChange={() =>
+                              toggleArrayFilter('repeatingTypes', type)
+                            }
+                          />
+                          <Label
+                            htmlFor={`repeat-${type}`}
+                            className="cursor-pointer text-sm font-normal capitalize"
+                          >
+                            {type}
+                          </Label>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            )}
+
+            {activeFiltersCount > 0 && (
               <Button
-                variant="outline"
-                className="hover:bg-muted rounded-full"
+                variant="ghost"
+                onClick={clearAllFilters}
+                size="sm"
+                className="h-8 gap-1 px-2 text-xs font-medium text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-3 w-3" />
+                Clear
+              </Button>
+            )}
+
+              <Button
+                variant="ghost"
+                size="icon"
+                className="hover:bg-muted h-9 w-9 rounded-full"
                 onClick={handleNavigatePrevious}
               >
                 <ChevronLeft className="h-4 w-4" />
-                Previous
               </Button>
+              <div className="flex items-center space-x-1">
+                {currentView === 'day' && (
+                  <SearchDayPicker
+                    date={currentDate}
+                    onDateChange={onDateChange}
+                    locale={localeObj}
+                    weekStartsOn={0}
+                    placeholder="Select day"
+                  />
+                )}
+
+
+                {currentView !== 'year' && (
+                  <SearchMonthPicker
+                    date={currentDate}
+                    onDateChange={onDateChange}
+                    locale={localeObj}
+                    monthFormat="LLLL"
+                  />
+                )}
+                <SearchYearPicker
+                  date={currentDate}
+                  onDateChange={onDateChange}
+                  yearRange={20}
+                  minYear={2000}
+                  maxYear={2030}
+                />
+              </div>
               <Button
-                variant={'outline'}
-                className="hover:bg-muted rounded-full"
+                variant="ghost"
+                size="icon"
+                className="hover:bg-muted h-9 w-9 rounded-full"
                 onClick={handleNavigateNext}
               >
                 <ChevronRight className="h-4 w-4" />
-                Next
               </Button>
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="hover:bg-muted hidden h-8 w-8 rounded-full sm:block"
-              onClick={handleNavigatePrevious}
+
+
+
+
+          </div>
+
+          <EventCalendarTabs
+            viewType={currentView}
+            onChange={handleViewTypeChange}
+          />
+
+          <div className="flex flex-wrap items-center justify-center lg:justify-end gap-2 lg:gap-4">
+
+            <div className="flex flex-wrap items-center justify-center lg:justify-end gap-1 sm:gap-2">
+
+
+<ToggleTheme/>
+
+            <TodayButton
+              viewType={currentView}
+              currentDate={currentDate}
+              onDateChange={onDateChange}
+            />
+
+
+              <TimeFormatToggle
+                format={timeFormat}
+                onChange={handleTimeFormatChange}
+              />
+
+   <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={filters.colors.length > 0 ? 'default' : 'outline'}
+                    size="icon"
+                    className="relative h-9 w-9 transition-all"
+                  >
+                    <div className="h-4 w-4 rounded-full bg-green-500 ring-2 ring-white" />
+                    {filters.colors.length > 0 && (
+                      <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
+                        {filters.colors.length}
+                      </span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-64 p-4">
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium">Filter Status</h4>
+                    <div className="grid grid-cols-2 gap-3">
+                      {EVENT_COLORS.map((color) => {
+                        const validColors = getColorClasses(color.value);
+                        return (
+                          <div
+                            key={color.value}
+                            className="flex items-center space-x-3"
+                          >
+                            <Checkbox
+                              id={`color-${color.value}`}
+                              checked={filters.colors.includes(color.value)}
+                              onCheckedChange={() =>
+                                toggleArrayFilter('colors', color.value)
+                              }
+                            />
+                            <div className="flex items-center gap-2">
+                              <div
+                                className={`h-4 w-4 rounded-full border border-white shadow-sm ${validColors.bg}`}
+                              />
+                              <Label
+                                htmlFor={`color-${color.value}`}
+                                className="cursor-pointer text-sm font-normal"
+                              >
+                                {color.label}
+                              </Label>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+
+
+
+
+
+  <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={
+                      filters.categories.length > 0 ? 'default' : 'outline'
+                    }
+                    size="icon"
+                    className="relative h-9 w-9 transition-all"
+                  >
+                    <Tag className="h-4 w-4" />
+                    {filters.categories.length > 0 && (
+                      <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
+                        {filters.categories.length}
+                      </span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-64 p-4">
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-medium">Välj Kategori</h4>
+                    <div className="max-h-48 space-y-3 overflow-y-auto">
+                      {categoryOptions && categoryOptions.length > 0 ? (
+                        categoryOptions.map((category) => (
+                          <div
+                            key={category.value}
+                            className="flex items-center space-x-3"
+                          >
+                            <Checkbox
+                              id={`category-${category.value}`}
+                              checked={filters.categories.includes(
+                                category.value,
+                              )}
+                              onCheckedChange={() =>
+                                toggleArrayFilter('categories', category.value)
+                              }
+                            />
+                            <Label
+                              htmlFor={`category-${category.value}`}
+                              className="cursor-pointer text-sm font-normal"
+                            >
+                              {category.label}
+                            </Label>
+                          </div>
+                        ))
+                      ) : (
+                        <div className="text-sm text-muted-foreground">
+                          No categories configured
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
+
+
+
+
+         <ViewModeToggle mode={viewMode} onChange={handleViewModeChange} />
+
+
+
+
+          <Button
+              variant={filters.search ? 'default' : 'outline'}
+              onClick={() => setSearchDialogOpen(true)}
+              className="h-9 gap-2 px-3 text-sm font-medium transition-all"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <Search className="h-4 w-4" />
+              <span className="xl:inline hidden">Sök</span>
+              {filters.search && (
+                <Badge variant="secondary" className="ml-1 px-1.5 py-0">
+                  1
+                </Badge>
+              )}
             </Button>
-            <div className="flex items-center space-x-2">
-              {currentView === 'day' && (
-                <SearchDayPicker
-                  locale={localeObj}
-                  weekStartsOn={0}
-                  placeholder="Select day"
-                />
-              )}
-              {currentView !== 'year' && (
-                <SearchMonthPicker locale={localeObj} monthFormat="LLLL" />
-              )}
-              <SearchYearPicker yearRange={20} minYear={2000} maxYear={2030} />
+
+
+
+
+
+            <Button
+                onClick={() => openQuickAddDialog({ date: new Date() })}
+                className="h-9 gap-2 px-3 text-sm font-medium transition-all hidden"
+              >
+                <Plus className="lucide lucide-plus h-4 w-4" />
+
+              </Button>
+              <CalendarSettingsDialog />
+
             </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="hover:bg-muted hidden h-8 w-8 rounded-full sm:block"
-              onClick={handleNavigateNext}
-            >
-              <ChevronRight className="h-4 w-4" />
-            </Button>
           </div>
         </div>
-        <div className="flex items-center justify-center space-x-3 sm:justify-start">
-          <TodayButton
-            viewType={currentView}
-            currentDate={currentDate}
-            onDateChange={onDateChange}
-          />
-          <Button
-            onClick={() => openQuickAddDialog({ date: new Date() })}
-            className="h-9 gap-1.5 px-3"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            Add Event
-          </Button>
-        </div>
+
+        {activeFiltersCount > 0 && (
+          <div className="flex flex-wrap items-center gap-2 px-4 pb-2">
+            {filters.search && (
+              <Badge
+                variant="outline"
+                className="h-6 gap-1 border-blue-200 bg-blue-50 px-2 text-blue-700"
+              >
+                <Search className="h-3 w-3" />
+                <span className="text-[10px]">"{filters.search}"</span>
+                <button
+                  onClick={() => updateSingleFilter('search', '')}
+                  className="ml-1 rounded-full hover:bg-blue-200"
+                >
+                  <X className="h-2.5 w-2.5" />
+                </button>
+              </Badge>
+            )}
+            {filters.categories.map((catValue) => (
+              <Badge
+                key={catValue}
+                variant="outline"
+                className="h-6 gap-1 border-green-200 bg-green-50 px-2 text-green-700"
+              >
+                <Tag className="h-3 w-3" />
+                <span className="text-[10px]">
+                  {categoryOptions?.find((c) => c.value === catValue)?.label ||
+                    catValue}
+                </span>
+                <button
+                  onClick={() => clearSingleArrayFilter('categories', catValue)}
+                  className="ml-1 rounded-full hover:bg-green-200"
+                >
+                  <X className="h-2.5 w-2.5" />
+                </button>
+              </Badge>
+            ))}
+            {filters.colors.map((colorValue) => (
+              <Badge
+                key={colorValue}
+                variant="outline"
+                className="h-6 gap-1 border-purple-200 bg-purple-50 px-2 text-purple-700"
+              >
+                <div
+                  className={`h-2.5 w-2.5 rounded-full ${getColorClasses(colorValue).bg}`}
+                />
+                <span className="text-[10px]">
+                  {EVENT_COLORS.find((c) => c.value === colorValue)?.label ||
+                    colorValue}
+                </span>
+                <button
+                  onClick={() => clearSingleArrayFilter('colors', colorValue)}
+                  className="ml-1 rounded-full hover:bg-purple-200"
+                >
+                  <X className="h-2.5 w-2.5" />
+                </button>
+              </Badge>
+            ))}
+          </div>
+        )}
       </div>
-      <EventCalendarFilters
-        users={users}
-        selectedTechnicianId={selectedTechnicianId}
-        onTechnicianChange={onTechnicianChange}
-        totalEvents={totalEvents}
-        categoryOptions={categoryOptions}
+
+      <EventSearchDialog
+        open={searchDialogOpen}
+        onOpenChange={setSearchDialogOpen}
+        searchQuery={filters.search}
+        onSearchQueryChange={(query) => updateSingleFilter('search', query)}
+        onEventSelect={openEventDialog}
+        timeFormat={timeFormat}
       />
-      <div className="bg-muted/30 flex items-center justify-between border-b px-4 py-2">
-        <EventCalendarTabs
-          viewType={currentView}
-          onChange={handleViewTypeChange}
-        />
-        <div className="flex items-center sm:space-x-2">
-          <TimeFormatToggle
-            format={timeFormat}
-            onChange={handleTimeFormatChange}
-          />
-          <ViewModeToggle mode={viewMode} onChange={handleViewModeChange} />
-          <CalendarSettingsDialog />
-        </div>
-      </div>
     </div>
   );
 }

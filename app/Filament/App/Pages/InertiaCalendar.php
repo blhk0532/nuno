@@ -18,7 +18,7 @@ final class InertiaCalendar extends Page
   //  protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDateRange;
 // protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-clipboard-document-check';
 
-    protected static ?string $navigationLabel = 'Bokning';
+    protected static ?string $navigationLabel = 'Kalender';
 
     protected static ?string $title = '';
 
@@ -26,13 +26,13 @@ final class InertiaCalendar extends Page
 
     protected static ?int $sort = 13;
 
-    protected static ?string $slug = 'bokning';
+    protected static ?string $slug = 'bokning-kalender';
 
   //      protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
   //  protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;
-    protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarCheckLine;
-    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarCheckFill;
 
+    protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarTodoLine;
+    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarTodoFill;
     //  protected static string | UnitEnum | null $navigationGroup = 'Kalendrar';
      protected static string|UnitEnum|null $navigationGroup = '';
 
@@ -43,7 +43,7 @@ final class InertiaCalendar extends Page
 
     public static function shouldRegisterNavigation(): bool
     {
-        if(Auth::user()->role === 'admin' || Auth::user()->role === 'super' || Auth::user()->role === 'manager' ){
+        if(Auth::user()->role === 'booking' || Auth::user()->role === 'admin' || Auth::user()->role === 'super' || Auth::user()->role === 'manager' ){
             return true;
         }else{
             return false;

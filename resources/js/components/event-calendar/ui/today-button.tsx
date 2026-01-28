@@ -49,7 +49,7 @@ export function TodayButton({
     const labels = {
       [CalendarViewType.DAY]: 'Today',
       [CalendarViewType.DAYS]: 'Today',
-      [CalendarViewType.WEEK]: 'This week',
+      [CalendarViewType.WEEK]: 'Nu',
       [CalendarViewType.MONTH]: 'This month',
       [CalendarViewType.YEAR]: 'This year',
     };

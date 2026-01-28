@@ -295,7 +295,7 @@ export function EventCalendarDays({
                 <div
                   key={`all-day-cell-${dayIndex}`}
                   className={cn(
-                    'relative table items-center justify-center border-r px-1 last:border-r-0',
+                    'relative table items-center justify-center border-r  border-l px-1 last:border-r-0 first:border-l-0',
                     todayIndex === dayIndex && 'today',
                     'flex-none',
                   )}

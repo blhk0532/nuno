@@ -27,8 +27,8 @@
     {{-- Start Date --}}
     <div class="fi-fo-field-wrp w-full flex-shrink-0 sm:flex-1 sm:min-w-0">
         <div class="grid gap-y-2">
-            <div class="flex items-center gap-x-3 justify-between">
-                <label class="fi-fo-field-wrp-label inline-flex items-center gap-x-3 text-sm font-medium leading-6 text-gray-950 dark:text-white">
+            <div class="hidden flex items-center gap-x-3 justify-between">
+                <label class="hidden fi-fo-field-wrp-label inline-flex items-center gap-x-3 text-sm font-medium leading-6 text-gray-950 dark:text-white">
                     Start date
                 </label>
             </div>
@@ -43,7 +43,7 @@
     {{-- End Date --}}
     <div class="fi-fo-field-wrp w-full flex-shrink-0 sm:flex-1 sm:min-w-0">
         <div class="grid gap-y-2">
-            <div class="flex items-center gap-x-3 justify-between">
+            <div class="hidden flex items-center gap-x-3 justify-between">
                 <label class="fi-fo-field-wrp-label inline-flex items-center gap-x-3 text-sm font-medium leading-6 text-gray-950 dark:text-white">
                     End date
                 </label>
@@ -59,8 +59,9 @@
     {{-- Link Button --}}
     <div class="flex items-center justify-end flex-shrink-0">
         <a href="https://ndsth.com/nds/booking/service/bokning" class="fi-btn fi-btn-color-primary relative flex items-center justify-center gap-1 font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-primary fi-size-md fi-btn-size-md gap-x-2 px-3 py-2 text-sm text-white shadow-sm bg-primary-600 hover:bg-primary-500 focus-visible:ring-primary-500/50 sm:whitespace-nowrap w-full sm:w-auto">
+            Kalendrar
             <x-filament::icon icon="heroicon-m-calendar-days" class="w-5 h-5 text-white color-white" />
-            x3
+            x 3
         </a>
     </div>
 </div>

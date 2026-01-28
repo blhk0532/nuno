@@ -23,6 +23,8 @@ class CalendarEvent
 
     protected ?string $backgroundColor = null;
 
+    protected ?string $borderColor = null;
+
     protected ?string $textColor = null;
 
     protected ?string $display = null;
@@ -122,7 +124,17 @@ class CalendarEvent
     {
         return $this->backgroundColor;
     }
+    public function borderColor(?string $borderColor): static
+    {
+        $this->borderColor = $borderColor;
 
+        return $this;
+    }
+
+    public function getBorderColor(): ?string
+    {
+        return $this->borderColor;
+    }
     public function textColor(string $color): static
     {
         $this->textColor = $color;
@@ -328,6 +340,7 @@ class CalendarEvent
                 : $this->getStart()->utcOffset($timezoneOffset)->toIso8601String(),
             'allDay' => $this->getAllDay(),
             'backgroundColor' => $this->getBackgroundColor(),
+            'borderColor' => $this->getBorderColor(),
             'textColor' => $this->getTextColor(),
             'styles' => $this->getStyles(),
             'classNames' => $this->getClassNames(),

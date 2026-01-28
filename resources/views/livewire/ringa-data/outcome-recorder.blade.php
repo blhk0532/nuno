@@ -4,7 +4,7 @@
             <div class="space-y-4 flex-grow">
                 <!-- Outcomes 1: Critical/Negative -->
                 <div class="space-y-2">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-danger-600 dark:text-danger-400">Avslut/Problem</h4>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-danger-600 dark:text-danger-400 hidden">Avslut/Problem</h4>
                     <div class="grid grid-cols-4 gap-2 items-stretch">
                         @foreach(\App\Enums\Outcomes1::cases() as $outcome)
                             <form method="POST" action="{{ route('ringa-data.outcome.store', ['tenant' => $this->tenant, 'id' => $record->id]) }}" class="w-full h-full flex">
@@ -25,7 +25,7 @@
 
                 <!-- Outcomes 2: Temporary/Warning -->
                 <div class="space-y-2">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-warning-600 dark:text-warning-400">Inget Svar/Upptagen</h4>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-warning-600 dark:text-warning-400 hidden">Inget Svar/Upptagen</h4>
                     <div class="grid grid-cols-4 gap-2 items-stretch">
                         @foreach(\App\Enums\Outcomes2::cases() as $outcome)
                             <form method="POST" action="{{ route('ringa-data.outcome.store', ['tenant' => $this->tenant, 'id' => $record->id]) }}" class="w-full h-full flex">
@@ -46,7 +46,7 @@
 
                 <!-- Outcomes 4: Positive/Follow-up -->
                 <div class="space-y-2">
-                    <h4 class="text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400">Bokning/Återkoppling</h4>
+                    <h4 class="text-xs font-bold uppercase tracking-wider text-primary-600 dark:text-primary-400 hidden">Bokning/Återkoppling</h4>
                     <div class="grid grid-cols-4 gap-2 items-stretch">
                         @foreach(\App\Enums\Outcomes4::cases() as $outcome)
                             <div class="flex">

@@ -10,10 +10,12 @@ enum Outcomes4: string implements HasColor, HasIcon, HasLabel
 {
 
 
-    case NyligenGjort = 'Nyligen Gjort';
+    case NyligenGjort = 'Redan Gjort';
+    case Offert = 'Skicka Offert';
     case Aterkommer = 'Återkommer';
     case RingTillbaka = 'Ring Tillbaka';
-    case Yes = 'Bokad';
+
+ //   case Yes = 'Bokad';
 
     public function getLabel(): string
     {
@@ -24,10 +26,11 @@ enum Outcomes4: string implements HasColor, HasIcon, HasLabel
     {
         return match ($this) {
 
-            self::NyligenGjort => 'primary',
-            self::Aterkommer => 'primary',
-            self::RingTillbaka => 'primary',
-            self::Yes => 'success',
+            self::NyligenGjort => '',
+            self::RingTillbaka => '',
+            self::Aterkommer => '',
+        //    self::Yes => 'success',
+            self::Offert => '',
         };
     }
 
@@ -38,7 +41,8 @@ enum Outcomes4: string implements HasColor, HasIcon, HasLabel
             self::NyligenGjort => 'heroicon-m-clock',
             self::Aterkommer => 'heroicon-m-phone',
             self::RingTillbaka => 'heroicon-m-phone-arrow-up-right',
-            self::Yes => 'heroicon-m-check-circle',
+            self::Offert => 'heroicon-m-check-circle',
+         //   self::Yes => 'heroicon-m-check-circle',
         };
     }
 

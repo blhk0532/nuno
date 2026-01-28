@@ -50,9 +50,9 @@ export function WeekDayHeaders({
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3 }}
-          className="flex w-14 flex-shrink-0 flex-col items-center justify-center gap-2 p-2 text-center font-medium sm:w-32"
+          className="flex w-14 flex-shrink-0 items-center justify-center gap-2 p-2 text-center font-medium sm:w-32"
         >
-          <div className="text-muted-foreground text-xs sm:text-sm">Week</div>
+          <div className="text-muted-foreground text-xs sm:text-sm">v.</div>
           <div className="text-muted-foreground text-xs sm:text-sm">
             {weekNumber}
           </div>
@@ -65,28 +65,30 @@ export function WeekDayHeaders({
           <motion.div
             key={dayIndex}
             className={cn(
-              'flex flex-1 flex-col items-center justify-center p-0 font-medium sm:p-2',
+              'flex flex-1 items-center justify-center gap-2 p-0 font-medium sm:p-2  border-l border-r border-t',
             )}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: dayIndex * 0.05 }}
           >
-            <span className="text-muted-foreground mb-1 text-xs sm:text-sm">
-              {formatDate(day, 'EEE', { locale })}
-            </span>
-            {showDayNumber && (
-              <div className="">
+                                      {showDayNumber && (
+
                 <span
                   className={cn(
-                    'flex h-5 w-5 items-center justify-center rounded-full text-xs font-medium sm:h-6 sm:w-6',
+                    'flex h-5 w-5 items-center justify-center rounded-full text-xs font-semibold text-muted-foreground sm:h-6 sm:w-6',
                     isToday && 'bg-blue-500 text-white',
                     dayNumberClassName,
                   )}
                 >
                   {formatDate(day, 'd', { locale })}
                 </span>
-              </div>
+
             )}
+            <span className="text-muted-foreground text-xs sm:text-sm">
+
+              {formatDate(day, 'EEE', { locale })}
+            </span>
+
           </motion.div>
         );
       })}

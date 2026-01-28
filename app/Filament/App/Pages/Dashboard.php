@@ -75,27 +75,36 @@ class Dashboard extends BaseDashboard
         return [
             AccountInfoStackWidget::class,
             WorldClockWidget::class,
+
         //    \App\Filament\App\Widgets\LatestOrders::class,
         //    \App\Filament\App\Widgets\StatsOverviewWidget::class,
-             \App\Filament\App\Widgets\LatestOrders::class,
-            SingleCalendars::class,
+
+
 
         //    MultiCalendar1::class,
-            MultiCalendar2::class,
-            MultiCalendar3::class,
+        //    MultiCalendar2::class,
+        //    MultiCalendar3::class,
         ];
     }
     public function getWidgets(): array
     {
         return [
         //    RingaDataTableWidget::class,
-             WeatherWidget::class,
+              \App\Filament\App\Widgets\LatestOrders::class,
         //    \App\Filament\App\Widgets\OrdersChart::class,
-       //     \App\Filament\App\Widgets\CustomersChart::class,
+        //    \App\Filament\App\Widgets\CustomersChart::class,
         //    SingleCalendars::class,
         //    MultiCalendar1::class,
         //    MultiCalendar2::class,
         //    MultiCalendar3::class,
+        ];
+    }
+
+    protected function getFooterWidgets(): array
+    {
+                return [
+                    SingleCalendars::class,
+                    WeatherWidget::class,
         ];
     }
 

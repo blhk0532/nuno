@@ -31,6 +31,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Skeleton } from '@/components/ui/skeleton';
 
 interface SearchDayPickerProps {
+  date?: Date;
+  onDateChange?: (date: Date) => void;
   locale?: Locale;
   className?: string;
   placeholder?: string;
@@ -38,6 +40,8 @@ interface SearchDayPickerProps {
 }
 
 export function SearchDayPicker({
+  date: propsDate,
+  onDateChange,
   locale = enUS,
   className = '',
   placeholder = 'Choose Day',
@@ -48,7 +52,9 @@ export function SearchDayPicker({
   const [inputValue, setInputValue] = useState('');
   const [selectedDayChanged, setSelectedDayChanged] = useState(false);
   const [isPending, startTransition] = useTransition();
-  const [date, setDate] = useState(new Date());
+  const [internalDate, setInternalDate] = useState(new Date());
+
+  const date = propsDate || internalDate;
 
   const day = getDate(date);
 
@@ -114,7 +120,11 @@ export function SearchDayPicker({
     const newDate = new Date(date);
     newDate.setDate(newDay);
 
-    setDate(newDate);
+    if (onDateChange) {
+      onDateChange(newDate);
+    } else {
+      setInternalDate(newDate);
+    }
     setOpen(false);
     setSearchValue('');
     setSelectedDayChanged(true);

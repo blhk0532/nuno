@@ -33,8 +33,8 @@
     {{-- Start Date --}}
     <div class="fi-fo-field-wrp w-full flex-shrink-0 sm:flex-1 sm:min-w-0">
         <div class="grid gap-y-2">
-            <div class="flex items-center gap-x-3 justify-between">
-                <label class="fi-fo-field-wrp-label inline-flex items-center gap-x-3 text-sm font-medium leading-6 text-gray-950 dark:text-white">
+            <div class="hidden flex items-center gap-x-3 justify-between">
+                <label class="hidden fi-fo-field-wrp-label inline-flex items-center gap-x-3 text-sm font-medium leading-6 text-gray-950 dark:text-white">
                     Start date
                 </label>
             </div>
@@ -49,8 +49,8 @@
     {{-- End Date --}}
     <div class="fi-fo-field-wrp w-full flex-shrink-0 sm:flex-1 sm:min-w-0">
         <div class="grid gap-y-2">
-            <div class="flex items-center gap-x-3 justify-between">
-                <label class="fi-fo-field-wrp-label inline-flex items-center gap-x-3 text-sm font-medium leading-6 text-gray-950 dark:text-white">
+            <div class="hidden flex items-center gap-x-3 justify-between">
+                <label class="hidden fi-fo-field-wrp-label inline-flex items-center gap-x-3 text-sm font-medium leading-6 text-gray-950 dark:text-white">
                     End date
                 </label>
             </div>

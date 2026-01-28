@@ -197,7 +197,7 @@ export default function EventCalendarToolbar({
             className="h-9 gap-1.5 px-3"
           >
             <Plus className="h-3.5 w-3.5" />
-            Add Event
+            Bokning
           </Button>
         </div>
       </div>

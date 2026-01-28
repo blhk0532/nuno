@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/sidebar';
 import { app, bigCalendar, calendarMulti, calendars, dashboard, shadcnEventCalendar } from '@/routes';
 import { calendar } from '@/routes';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
+import { type NavItem, SharedData } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
 import { BookOpen, CalendarDays, Folder, LayoutGrid, Bolt, Star, Lightbulb} from 'lucide-react';
 import AppLogo from './app-logo';
 import { DayViewMultiDayEventsRow } from '@/calendar/components/week-and-day-view/day-view-multi-day-events-row';
@@ -63,6 +63,15 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+    const { auth } = usePage<SharedData>().props;
+    const userRole = auth.user.role as string;
+
+    const allowedRoles = ['admin', 'super_admin', 'superadmin', 'manager'];
+
+    if (!allowedRoles.includes(userRole)) {
+        return null;
+    }
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>

@@ -47,12 +47,12 @@
                     @endphp
 
                     @if (!empty($phoneNumbers))
-                        <div class="space-y-3 p-3 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/5">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-2">
-                                <x-filament::icon icon="heroicon-m-phone" class="w-3.5 h-3.5" />
-                                Ring Nummer
+                        <div class="space-y-3 p-3 rounded-xl ">
+                            <h4 class="hidden text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400 flex items-center gap-2 hidden">
+                                <x-filament::icon icon="heroicon-m-phone" class="w-3.5 h-3.5 hidden" />
+
                             </h4>
-                            <div class="grid grid-cols-2 lg:grid-cols-4 gap-2">
+                            <div class="grid grid-cols-3 lg:grid-cols-4 gap-2">
                                 @foreach($phoneNumbers as $phone)
                                     @php $dialable = preg_replace('/\s+/', '', $phone); @endphp
                                     <x-filament::button
@@ -60,9 +60,9 @@
                                         href="tel:{{ $dialable }}"
                                         color="gray"
                                         size="sm"
-                                        class="w-full justify-start shadow-sm bg-white dark:bg-white/10 hover:bg-primary-50 dark:hover:bg-primary-500/10 group transition-colors"
+                                        class="w-full justify-start shadow-sm hover:bg-success-50 dark:hover:bg-gray-500/50 group transition-colors"
                                     >
-                                        <span class="text-xs font-medium group-hover:text-primary-600 dark:group-hover:text-primary-400">{{ $phone }}</span>
+                                        <span class="text-xs font-medium group-hover:text-primary-600 dark:group-hover:text-white">{{ $phone }}</span>
                                     </x-filament::button>
                                 @endforeach
                             </div>

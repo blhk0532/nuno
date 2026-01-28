@@ -87,7 +87,7 @@ export function EventCalendar({
           currentDate={currentDate}
           onDateChange={setCurrentDate}
         />
-        <div className="overflow-hidden p-0">{renderCalendarView}</div>
+        <div className="overflow-hidden p-0 bg-background">{renderCalendarView}</div>
       </div>
     </>
   );

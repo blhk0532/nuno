@@ -299,9 +299,7 @@ div.filament-fullcalendar.filament-fullcalendar.fc.fc-media-screen.fc-direction-
         width: 100% !important;
 }
 div.filament-fullcalendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard.fc-liquid-hack {
-    min-height: 777px;
-    max-height: 777px;
-    height: 777px;
+    max-height: 720px;
 }
 
 .calendar-widget-wrapper {
@@ -466,3 +464,13 @@ div.fi-fo-table-repeater-add {
     display: contents!important;
   }
 
+h2.fc-dom-16{
+position: absolute;
+  left: 172px;
+  top: 6px;
+}
+#fc-dom-16{
+position: absolute;
+  left: 172px;
+  top: 6px;
+}

@@ -59,7 +59,8 @@ class DailyLocation extends Model implements Eventable
             ->title($title)
             ->start($this->date)
             ->allDay(true)
-            ->backgroundColor('#f3f4f6')
+            ->backgroundColor('#ffffff')
+            ->borderColor('#e5e7eb')
             ->textColor('#111827')
             ->extendedProps([
                 'id' => $this->id,

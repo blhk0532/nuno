@@ -22,6 +22,8 @@ import { ScrollArea, ScrollBar } from '../../ui/scroll-area';
 import { motion, AnimatePresence } from 'motion/react';
 
 interface SearchYearPickerProps {
+  date?: Date;
+  onDateChange?: (date: Date) => void;
   yearRange?: number;
   className?: string;
   minYear?: number;
@@ -29,6 +31,8 @@ interface SearchYearPickerProps {
 }
 
 export function SearchYearPicker({
+  date: propsDate,
+  onDateChange,
   yearRange = 10,
   className = '',
   minYear,
@@ -38,7 +42,9 @@ export function SearchYearPicker({
   const [searchValue, setSearchValue] = useState('');
   const [inputValue, setInputValue] = useState('');
   const [selectedYearChanged, setSelectedYearChanged] = useState(false);
-  const [date, setDate] = useState(new Date());
+  const [internalDate, setInternalDate] = useState(new Date());
+
+  const date = propsDate || internalDate;
 
   const year = getYear(date);
 
@@ -66,7 +72,11 @@ export function SearchYearPicker({
     const newYear = parseInt(yearValue);
     const newDate = setYear(date, newYear);
 
-    setDate(newDate);
+    if (onDateChange) {
+      onDateChange(newDate);
+    } else {
+      setInternalDate(newDate);
+    }
     setOpen(false);
     setSearchValue('');
     setSelectedYearChanged(true);
@@ -96,7 +106,7 @@ export function SearchYearPicker({
             role="combobox"
             aria-expanded={open}
             className={cn(
-              'w-[120px] justify-between text-sm font-normal',
+              'w-[90px] justify-between text-sm font-normal',
               !year && 'text-muted-foreground',
               className,
             )}
@@ -120,7 +130,7 @@ export function SearchYearPicker({
           </Button>
         </motion.div>
       </PopoverTrigger>
-      <PopoverContent className="w-[120px] p-0" align="start">
+      <PopoverContent className="w-[90px] p-0" align="start">
         <Command shouldFilter={false}>
           <CommandInput
             placeholder="Search year..."

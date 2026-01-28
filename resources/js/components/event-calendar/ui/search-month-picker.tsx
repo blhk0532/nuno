@@ -22,6 +22,8 @@ import { ScrollArea, ScrollBar } from '../../ui/scroll-area';
 import { motion, AnimatePresence } from 'framer-motion';
 import { enUS } from 'date-fns/locale';
 interface SearchableMonthPickerProps {
+  date?: Date;
+  onDateChange?: (date: Date) => void;
   locale: Locale;
   className?: string;
   monthFormat?: string;
@@ -29,6 +31,8 @@ interface SearchableMonthPickerProps {
 }
 
 export function SearchMonthPicker({
+  date: propsDate,
+  onDateChange,
   locale = enUS,
   className = '',
   monthFormat = 'MMMM',
@@ -39,7 +43,9 @@ export function SearchMonthPicker({
   const [inputValue, setInputValue] = useState('');
   const [selectedMonthChange, setSelectedMonthChanged] =
     useState<boolean>(false);
-  const [date, setDate] = useState(new Date());
+  const [internalDate, setInternalDate] = useState(new Date());
+
+  const date = propsDate || internalDate;
 
   const month = getMonth(date);
 
@@ -66,7 +72,11 @@ export function SearchMonthPicker({
     const newMonth = parseInt(monthValue);
     const newDate = setMonth(date, newMonth);
 
-    setDate(newDate);
+    if (onDateChange) {
+      onDateChange(newDate);
+    } else {
+      setInternalDate(newDate);
+    }
     setOpen(false);
     setSearchValue('');
     setSelectedMonthChanged(true);
@@ -95,7 +105,7 @@ export function SearchMonthPicker({
             role="combobox"
             aria-expanded={open}
             className={cn(
-              'w-[150px] justify-between text-sm font-normal',
+              'w-[120px] justify-between text-sm font-normal',
               !selectedMonth && 'text-muted-foreground',
               className,
             )}

@@ -69,8 +69,8 @@ class Booking extends Model
         'service_date' => 'date',
         'starts_at' => 'datetime',
         'ends_at' => 'datetime',
-        'start_time',
-        'end_time',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
         'state' => \Adultdate\FilamentBooking\Enums\BookingState::class,
     ];
 

@@ -15,7 +15,7 @@
         <div class="grid gap-y-2">
             <div class="flex items-center gap-x-3 justify-between">
                 <label class="fi-fo-field-wrp-label inline-flex items-center gap-x-3 text-sm font-medium leading-6 text-gray-950 dark:text-white">
-                    Tekninker
+
                 </label>
             </div>
             <div class="fi-input-wrp flex rounded-lg shadow-sm ring-1 transition duration-75 focus-within:ring-2 fi-fo-select bg-white dark:bg-white/5 ring-gray-950/10 dark:ring-white/20 focus-within:ring-primary-600 dark:focus-within:ring-primary-500 overflow-hidden">
@@ -33,9 +33,9 @@
     {{-- Start Date --}}
     <div class="fi-fo-field-wrp w-full flex-shrink-0 sm:flex-1 sm:min-w-0">
         <div class="grid gap-y-2">
-            <div class="flex items-center gap-x-3 justify-between">
+            <div class="hidden flex items-center gap-x-3 justify-between">
                 <label class="fi-fo-field-wrp-label inline-flex items-center gap-x-3 text-sm font-medium leading-6 text-gray-950 dark:text-white">
-                    Start date
+
                 </label>
             </div>
             <div class="fi-input-wrp flex rounded-lg shadow-sm ring-1 transition duration-75 focus-within:ring-2 bg-white dark:bg-white/5 ring-gray-950/10 dark:ring-white/20 focus-within:ring-primary-600 dark:focus-within:ring-primary-500 overflow-hidden">
@@ -49,9 +49,9 @@
     {{-- End Date --}}
     <div class="fi-fo-field-wrp w-full flex-shrink-0 sm:flex-1 sm:min-w-0">
         <div class="grid gap-y-2">
-            <div class="flex items-center gap-x-3 justify-between">
-                <label class="fi-fo-field-wrp-label inline-flex items-center gap-x-3 text-sm font-medium leading-6 text-gray-950 dark:text-white">
-                    End date
+            <div class="hidden flex items-center gap-x-3 justify-between">
+                <label class="hidden fi-fo-field-wrp-label inline-flex items-center gap-x-3 text-sm font-medium leading-6 text-gray-950 dark:text-white">
+
                 </label>
             </div>
             <div class="fi-input-wrp flex rounded-lg shadow-sm ring-1 transition duration-75 focus-within:ring-2 bg-white dark:bg-white/5 ring-gray-950/10 dark:ring-white/20 focus-within:ring-primary-600 dark:focus-within:ring-primary-500 overflow-hidden">
@@ -77,7 +77,22 @@
     class="fi-btn fi-btn-color-primary relative flex items-center justify-center gap-1 font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-primary fi-size-md fi-btn-size-md gap-x-2 px-3 py-2 text-sm text-white shadow-sm bg-primary-600 hover:bg-primary-500 focus-visible:ring-primary-500/50 sm:whitespace-nowrap w-full sm:w-auto"
 >
     <x-filament::icon icon="heroicon-m-calendar-days" class="w-5 h-5 text-white color-white" />
-    x3
+     x2
+</a>
+<a
+    x-data
+    :href="(() => {
+        const url = new URL(window.location.href)
+        const parts = url.pathname.split('/').filter(Boolean)
+
+        parts[parts.length - 1] = 'multi-calendars-3'
+
+        return url.origin + '/' + parts.join('/')
+    })()"
+    class="ml-2  fi-btn fi-btn-color-primary relative flex items-center justify-center gap-1 font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-primary fi-size-md fi-btn-size-md gap-x-2 px-3 py-2 text-sm text-white shadow-sm bg-primary-600 hover:bg-primary-500 focus-visible:ring-primary-500/50 sm:whitespace-nowrap w-full sm:w-auto"
+>
+    <x-filament::icon icon="heroicon-m-calendar-days" class="w-5 h-5 text-white color-white" />
+     x3
 </a>
     </div>
 </div>
