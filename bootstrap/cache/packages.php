@@ -112,6 +112,17 @@
       0 => 'Awcodes\\Overlook\\OverlookServiceProvider',
     ),
   ),
+  'aymanalhattami/filament-context-menu' => 
+  array (
+    'aliases' => 
+    array (
+      'Skeleton' => 'AymanAlhattami\\FilamentContextMenu\\Facades\\FilamentContextMenu',
+    ),
+    'providers' => 
+    array (
+      0 => 'AymanAlhattami\\FilamentContextMenu\\FilamentContextMenuServiceProvider',
+    ),
+  ),
   'barryvdh/laravel-ide-helper' => 
   array (
     'providers' => 
@@ -1161,6 +1172,13 @@
       0 => 'WallaceMartinss\\FilamentEvolution\\FilamentEvolutionServiceProvider',
     ),
   ),
+  'webbingbrasil/filament-copyactions' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Webbingbrasil\\FilamentCopyActions\\FilamentCopyActionsProvider',
+    ),
+  ),
   'wire-elements/spotlight' => 
   array (
     'aliases' => 
@@ -1177,6 +1195,17 @@
     'providers' => 
     array (
       0 => 'Ysfkaya\\FilamentPhoneInput\\FilamentPhoneInputServiceProvider',
+    ),
+  ),
+  'zvizvi/user-fields' => 
+  array (
+    'aliases' => 
+    array (
+      'UserFields' => 'Zvizvi\\UserFields\\Facades\\UserFields',
+    ),
+    'providers' => 
+    array (
+      0 => 'Zvizvi\\UserFields\\UserFieldsServiceProvider',
     ),
   ),
 );

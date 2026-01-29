@@ -62,7 +62,7 @@ class RingaDataForm
                                             ->send();
                                     }
                                 });
-                        }, \App\Enums\Outcomes1::cases())
+                        }, \App\Enums\Outcomes::cases())
                     ]),
                 Section::make()
                     ->description('')

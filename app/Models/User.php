@@ -428,4 +428,9 @@ public function withAccessToken(?ScopeAuthorizable $accessToken): static
     {
         return auth()->user()->name;
     }
+
+    public function ringaData(): HasMany
+    {
+        return $this->hasMany(RingaData::class, 'user_id', 'id');
+    }
 }

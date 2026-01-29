@@ -16,43 +16,104 @@ use Filament\Tables\Table;
 use Filament\Actions;
 use Filament\Actions\BulkAction;
 use Filament\Forms\Components\Select;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
+use Filament\Forms\Components\DatePicker;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Resources\Pages\ListRecords;
+use Shreejan\ActionableColumn\Tables\Columns\ActionableColumn;
+use Filament\Actions\Action;
+use Filament\Support\Icons\Heroicon;
+use Webbingbrasil\FilamentCopyActions\Tables\CopyableTextColumn;
+
 
 class RingaDataTable
 {
     public static function configure(Table $table): Table
     {
         return $table
-                ->toolbarActions([
-                        \EightyNine\ExcelImport\ExcelImportAction::make()
-                ->color("primary"),
-            Actions\CreateAction::make(),
-        ])
-                ->headerActions([
-                          \EightyNine\ExcelImport\ExcelImportAction::make()
-                ->color("primary"),
-            // Actions\CreateAction::make()
-            //         ->label("+"),
-        //    static::generateFakeDataAction()
-        //    ->label(""),
+            ->toolbarActions([
+                \EightyNine\ExcelImport\ExcelImportAction::make()
+                    ->color("primary"),
+                Actions\CreateAction::make(),
+            ])
+            ->headerActions([
 
-        ])
+                // Actions\CreateAction::make()
+                //         ->label("+"),
+                //    static::generateFakeDataAction()
+                //    ->label(""),
+
+            ])
             ->columns([
+
+                TextColumn::make('personnamn')
+                    ->searchable()
+                    ->sortable(),
+                                    TextColumn::make('fodelsedag')
+                    ->label('Age')
+                    ->state(fn(RingaData $record) => $record->fodelsedag ? \Carbon\Carbon::parse($record->fodelsedag)->age : '-')
+                    ->sortable(),
                 TextColumn::make('gatuadress')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('postnummer')
+                ->label('postnr')
+                    ->searchable()
                     ->sortable(),
                 TextColumn::make('postort')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('personnamn')
-                    ->sortable(),
-                TextColumn::make('telefon'),
-                TextColumn::make('outcome')
+
+
+
+                CopyableTextColumn::make('telefon')
+                    ->searchable()
+                        ->sortable(),
+                                    TextColumn::make('attempts')
+                    ->label('Try')
                     ->sortable()
-                    ->badge(),
-                            TextColumn::make('attempts')
-                    ->sortable()
+                       ->toggleable(isToggledHiddenByDefault: true)
                     ->alignCenter(),
+                                   TextColumn::make('outcome')
+                                    ->label('🕻')
+                    ->sortable()
+                    ->badge()
+                    ->formatStateUsing(fn ($state) => null),
+
+                     ActionableColumn::make('status')
+                    ->badge()
+                        ->sortable()
+                      ->toggleable(false)
+                        ->label('🛈')                                  // Display as badge (or remove for simple text)
+                    ->color('success')                           // Badge/text color: success, danger, warning, info, primary
+                    ->actionIcon(Heroicon::Clock)         // Action button icon (Heroicon enum or string)
+                    ->actionIconColor('warning')                 // Icon color (independent from badge color)
+                    ->clickableColumn()                          // Make entire column clickable (or remove for button-only)
+                    ->tapAction(
+                        Action::make('changeStatus')              // Any Filament Action: edit, delete, approve, etc.
+                            ->label('Change Status')
+                            ->tooltip('Click to change status')
+                            ->schema([
+                                Select::make('status')
+                                    ->options([
+                                        'active' => 'Active',
+                                        'disabled' => 'Disabled',
+                                         '⊘' => 'Quarantine',
+                                    ])
+                                    ->required(),
+                            ])
+                            ->fillForm(fn($record) => [
+                                'status' => $record->status,
+                            ])
+                            ->action(function ($record, array $data) {
+                                $record->update($data);
+                            })
+                    ),
+
+
+
                 TextColumn::make('expires_at')
                     ->dateTime()
                     ->hidden()
@@ -69,20 +130,46 @@ class RingaDataTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Filter::make('fodelsedag')
+                    ->form([
+                        DatePicker::make('fodelsedag_min')
+                            ->label('Min födelsedag'),
+                        DatePicker::make('fodelsedag_max')
+                            ->label('Max födelsedag'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query
+                            ->when(
+                                $data['fodelsedag_min'] ?? null,
+                                fn($q, $date) => $q->whereDate('fodelsedag', '>=', $date),
+                            )
+                            ->when(
+                                $data['fodelsedag_max'] ?? null,
+                                fn($q, $date) => $q->whereDate('fodelsedag', '<=', $date),
+                            );
+                    }),
+                Filter::make('postnummer')
+                    ->form([
+                        \Filament\Forms\Components\TextInput::make('postnummer')
+                            ->label('Postnummer'),
+                    ])
+                    ->query(function ($query, array $data) {
+                        return $query->when(
+                            $data['postnummer'] ?? null,
+                            fn($q, $postnummer) => $q->where('postnummer', 'like', '%' . $postnummer . '%'),
+                        );
+                    }),
+                SelectFilter::make('outcome')
+                    ->label('Outcome'),
             ])
             ->recordActions([
                 \Filament\Actions\Action::make('view_details')
-                    ->label('Ring')
+                    ->label('')
                     ->icon('heroicon-o-phone-arrow-up-right')
                     ->color('primary')
-                    ->action(function ($record, $livewire) {
-                        if (method_exists($livewire, 'selectRecord')) {
-                            $livewire->selectRecord($record->id);
-                        }
-                    }),
-                ViewAction::make(),
-                EditAction::make(),
+                    ->url(fn(RingaData $record) => 'tel:' . $record->telefon),
+                EditAction::make()
+                    ->label(''),
             ])
             ->bulkActions([
                 BulkActionGroup::make([
@@ -109,7 +196,7 @@ class RingaDataTable
                                 ->success()
                                 ->send();
                         })
-                        ->visible(fn () => in_array(auth()->user()->role, ['admin', 'super', 'super_admin', 'superadmin', 'manager'])),
+                        ->visible(fn() => in_array(auth()->user()->role, ['admin', 'super', 'super_admin', 'superadmin', 'manager'])),
                 ]),
             ]);
     }

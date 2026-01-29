@@ -40,7 +40,7 @@ final class ArbetslistaDashboard extends BasePage
 
     protected static ?string $slug = 'arbetslista';
 
-     protected static ?string $navigationLabel = 'NDSนอร์ดิก TEAM';
+     protected static ?string $navigationLabel = 'NDSนอร์ดิก';
 
   //  protected string $view = 'filament.app.dashboard';
 
@@ -70,11 +70,12 @@ final class ArbetslistaDashboard extends BasePage
 
       public static function getNavigationBadge(): ?string
       {
-           return  now()->timezone('Asia/Bangkok')->format('H:i') . ' 🇹🇭 ';
+        return 'GROUP';
+           // return  now()->timezone('Asia/Bangkok')->format('H:i') . ' 🇹🇭 ';
       }
       public static function getNavigationBadgeColor(): ?string
       {
-          return 'gray';
+          return 'primary';
       }
 
   //  public static function getNavigationLabel(): string

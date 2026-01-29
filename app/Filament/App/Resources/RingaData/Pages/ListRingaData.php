@@ -7,23 +7,51 @@ use App\Filament\App\Resources\RingaData\RingaDataResource;
 use App\Filament\App\Resources\RingaData\Widgets\RingaDataStatsWidget;
 use App\Filament\App\Resources\RingaData\Widgets\RingaDataDisplayWidget;
 use App\Filament\App\Resources\RingaData\Widgets\RingaDataOutcomeWidget;
+use AymanAlhattami\FilamentContextMenu\Actions\{ RefreshAction, GoBackAction, GoForwardAction};
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
-use Filament\Actions;
+// use Filament\Actions;
 use Filament\Support\Enums\Width;
+use Filament\Actions\Action;
+use App\Filament\Resources\UserResource\Pages\TrashedUsers;
+use AymanAlhattami\FilamentContextMenu\ContextMenuDivider;
+use AymanAlhattami\FilamentContextMenu\Traits\PageHasContextMenu;
+use Filament\Notifications\Notification;
+use Illuminate\Database\Eloquent\Collection;
+use Shreejan\ActionableColumn\Tables\Columns\ActionableColumn;
+use Filament\Forms\Components\Select;
+use Filament\Support\Icons\Heroicon;
 
 class ListRingaData extends ListRecords
 {
+
+ //  use PageHasContextMenu;
     protected static string $resource = RingaDataResource::class;
 
     public ?int $selectedRecordId = null;
 
     protected function getHeaderActions(): array
     {
-        return [
 
+        return [
+            Action::make('Create user')
+                ->url(CreateRingaData::getUrl()),
+            ContextMenuDivider::make(),
+            Action::make('Trashed user')
+                ->url(QueueRingaData::getUrl()),
         ];
+
+
     }
+
+  //  public static function getContextMenuActions(): array
+  //  {
+  //      return [
+  //          RefreshAction::make(),
+  //          GoBackAction::make(),
+  //          GoForwardAction::make()
+  //      ];
+  //  }
 
     protected function getHeaderWidgets(): array
     {

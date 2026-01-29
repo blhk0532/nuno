@@ -12,19 +12,21 @@ use Filament\Support\Icons\Heroicon;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 use Joaopaulolndev\FilamentWorldClock\Helpers\FlagsHelper;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+
 final class InertiaCalendar extends Page
 {
     protected string $view = 'filament.booking.pages.inertia-calendar';
   //  protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDateRange;
 // protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-clipboard-document-check';
 
-    protected static ?string $navigationLabel = 'Kalender';
+    protected static ?string $navigationLabel = 'Bokning';
 
     protected static ?string $title = '';
 
-    protected static ?int $navigationSort = 13;
+    protected static ?int $navigationSort = 2;
 
-    protected static ?int $sort = 13;
+    protected static ?int $sort = 2;
 
     protected static ?string $slug = 'bokning-kalender';
 
@@ -52,11 +54,12 @@ final class InertiaCalendar extends Page
 
    public static function getNavigationBadge(): ?string
     {
-        return Auth::user()->role;
+        $role = Str::upper(Auth::user()->role);
+        return 'Öppen';
     }
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return 'success';
+        return 'warning';
     }
 }

@@ -10,14 +10,20 @@ enum Outcomes3: string implements HasColor, HasIcon, HasLabel
 {
 
 
-    case RingIgen3 = 'Ring 3mån';
-    case RingIgen6 = 'Ring 6mån';
-    case RingIgen12 = 'Ring 1år';
-    case RingIgen24 = 'Ring 2år';
+    case RingIgen3 = 'Ring Igen 3';
+    case RingIgen6 = 'Ring Igen 6';
+    case RingIgen12 = 'Ring Igen 12';
+    case RingIgen24 = 'Ring Igen 24';
 
     public function getLabel(): string
     {
-        return $this->value;
+        return match ($this) {
+            self::RingIgen3 => 'Ring 3mån',
+            self::RingIgen6 => 'Ring 6mån',
+            self::RingIgen12 => 'Ring 1år',
+            self::RingIgen24 => 'Ring 2år',
+            default => $this->value,
+        };
     }
 
     public function getColor(): string

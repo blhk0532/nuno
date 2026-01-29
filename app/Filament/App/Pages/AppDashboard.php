@@ -79,13 +79,13 @@ final class AppDashboard extends BasePage
 
       public static function getNavigationBadge(): ?string
       {
-          return now()->timezone('Europe/Stockholm')->format('H:i') . ' 🇸🇪 ';
+          return now()->timezone('Europe/Stockholm')->format('H:i') . ' 🇸🇪';
 
 
       }
       public static function getNavigationBadgeColor(): ?string
       {
-          return 'gray';
+          return 'primary';
       }
 
     public static function getNavigationLabel(): string

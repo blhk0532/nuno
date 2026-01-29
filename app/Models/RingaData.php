@@ -134,12 +134,31 @@ class RingaData extends Model
     {
         if ($value instanceof Outcomes) {
             $this->attributes['outcome'] = $value->value;
-        } elseif (empty($value)) {
-            $this->attributes['outcome'] = null;
-        } else {
-            // Try to convert string to enum to validate it
-            $enum = Outcomes::tryFrom($value);
-            $this->attributes['outcome'] = $enum ? $enum->value : null;
+            return;
         }
+
+        if (empty($value)) {
+            $this->attributes['outcome'] = null;
+            return;
+        }
+
+        // Try to convert string to enum to validate it
+        $enum = Outcomes::tryFrom((string)$value);
+
+        if ($enum) {
+            $this->attributes['outcome'] = $enum->value;
+            return;
+        }
+
+        // Try matching by name if value didn't match
+        foreach (Outcomes::cases() as $case) {
+            if ($case->name === $value) {
+                $this->attributes['outcome'] = $case->value;
+                return;
+            }
+        }
+
+        // If it's a string that doesn't match any enum, store it as is
+        $this->attributes['outcome'] = (string)$value;
     }
 }

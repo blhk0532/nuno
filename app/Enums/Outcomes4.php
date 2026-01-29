@@ -10,8 +10,8 @@ enum Outcomes4: string implements HasColor, HasIcon, HasLabel
 {
 
 
-    case NyligenGjort = 'Redan Gjort';
-    case Offert = 'Skicka Offert';
+    case NyligenGjort = 'Nyligen Gjort';
+    case Offert = 'Offert';
     case Aterkommer = 'Återkommer';
     case RingTillbaka = 'Ring Tillbaka';
 
@@ -19,7 +19,11 @@ enum Outcomes4: string implements HasColor, HasIcon, HasLabel
 
     public function getLabel(): string
     {
-        return $this->value;
+        return match ($this) {
+            self::NyligenGjort => 'Redan Gjort',
+            self::Offert => 'Skicka Offert',
+            default => $this->value,
+        };
     }
 
     public function getColor(): string

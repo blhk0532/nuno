@@ -156,6 +156,12 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
         }
 
         try {
+            \Log::info('Recording outcome', [
+                'recordId' => $this->record->id,
+                'outcome' => $outcomeValue,
+                'aterkom_at' => $aterkom_at
+            ]);
+
             // Find the actual Outcomes enum that matches this enum name
             $outcomeEnum = null;
 
@@ -181,6 +187,14 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
                         // Find the corresponding main enum by value
                         foreach (\App\Enums\Outcomes::cases() as $case) {
                             if ($case->value === $displayEnum->value) {
+                                $outcomeEnum = $case;
+                                break 2;
+                            }
+                        }
+
+                        // Fallback: match by name
+                        foreach (\App\Enums\Outcomes::cases() as $case) {
+                            if ($case->name === $displayEnum->name) {
                                 $outcomeEnum = $case;
                                 break 2;
                             }

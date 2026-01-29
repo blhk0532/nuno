@@ -27,7 +27,7 @@ class SingleCalendar extends BaseDashboard
    //     protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-calendar-days';
     protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarCheckLine;
     protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarCheckFill;
-    protected static ?string $navigationLabel = 'Bokning';
+    protected static ?string $navigationLabel = 'Kalender';
 
      protected static ?string $title = '';
 

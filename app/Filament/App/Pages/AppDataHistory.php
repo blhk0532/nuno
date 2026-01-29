@@ -59,11 +59,20 @@ final class AppDataHistory extends Page
 
     public static function getNavigationBadge(): ?string
     {
-        $count = \App\Models\RingaData::where('user_id', Auth::id())
-        ->whereNotNull('outcome')
-        ->count();
-        return $count > 0 ? (string)$count : null;
+        $userId = auth()->id();
 
+        if (! $userId) {
+            return null;
+        }
+
+        $count = \App\Models\RingaData::where(function ($query) use ($userId) {
+            $query->where('user_id', (string) $userId)
+                ->orWhereRaw("FIND_IN_SET(?, user_id)", [$userId]);
+        })
+            ->whereNotNull('outcome')
+            ->count();
+
+        return $count > 0 ? (string) $count : null;
     }
  //   public static function getNavigationBadgeColor(): ?string
  //   {

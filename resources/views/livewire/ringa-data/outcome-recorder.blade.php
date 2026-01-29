@@ -7,18 +7,17 @@
                     <h4 class="text-xs font-bold uppercase tracking-wider text-danger-600 dark:text-danger-400 hidden">Avslut/Problem</h4>
                     <div class="grid grid-cols-4 gap-2 items-stretch">
                         @foreach(\App\Enums\Outcomes1::cases() as $outcome)
-                            <form method="POST" action="{{ route('ringa-data.outcome.store', ['tenant' => $this->tenant, 'id' => $record->id]) }}" class="w-full h-full flex">
-                                @csrf
-                                <input type="hidden" name="outcome" value="{{ $outcome->name }}" />
+                            <div class="w-full h-full flex">
                                 <x-filament::button
-                                    type="submit"
+                                    wire:click="recordOutcome('{{ $outcome->name }}')"
+                                    wire:loading.attr="disabled"
                                     :color="$outcome->getColor()"
                                     size="sm"
                                     class="w-full h-full shadow-sm"
                                 >
                                     {{ $outcome->getLabel() }}
                                 </x-filament::button>
-                            </form>
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -28,18 +27,17 @@
                     <h4 class="text-xs font-bold uppercase tracking-wider text-warning-600 dark:text-warning-400 hidden">Inget Svar/Upptagen</h4>
                     <div class="grid grid-cols-4 gap-2 items-stretch">
                         @foreach(\App\Enums\Outcomes2::cases() as $outcome)
-                            <form method="POST" action="{{ route('ringa-data.outcome.store', ['tenant' => $this->tenant, 'id' => $record->id]) }}" class="w-full h-full flex">
-                                @csrf
-                                <input type="hidden" name="outcome" value="{{ $outcome->name }}" />
+                            <div class="w-full h-full flex">
                                 <x-filament::button
-                                    type="submit"
+                                    wire:click="recordOutcome('{{ $outcome->name }}')"
+                                    wire:loading.attr="disabled"
                                     :color="$outcome->getColor()"
                                     size="sm"
                                     class="w-full h-full shadow-sm"
                                 >
                                     {{ $outcome->getLabel() }}
                                 </x-filament::button>
-                            </form>
+                            </div>
                         @endforeach
                     </div>
                 </div>
@@ -55,18 +53,17 @@
                                 @elseif($outcome->name === 'Aterkommer')
                                     {{ ($this->aterkommerAction)(['class' => 'w-full shadow-sm', 'size' => 'sm']) }}
                                 @else
-                                    <form method="POST" action="{{ route('ringa-data.outcome.store', ['tenant' => $this->tenant, 'id' => $record->id]) }}" class="w-full h-full">
-                                        @csrf
-                                        <input type="hidden" name="outcome" value="{{ $outcome->name }}" />
+                                    <div class="w-full h-full">
                                         <x-filament::button
-                                            type="submit"
+                                            wire:click="recordOutcome('{{ $outcome->name }}')"
+                                            wire:loading.attr="disabled"
                                             :color="$outcome->getColor()"
                                             size="sm"
                                             class="w-full h-full shadow-sm"
                                         >
                                             {{ $outcome->getLabel() }}
                                         </x-filament::button>
-                                    </form>
+                                    </div>
                                 @endif
                             </div>
                         @endforeach
