@@ -4,30 +4,63 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use App\Filament\App\Pages\ManuSettings;
-use App\Models\BookingCalendar as BookingCalendarModel;
 use Livewire\Component;
+use Filament\Forms;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Schemas\Schema;
+use Inerba\DbConfig\AbstractPageSettings;
 
-final class ManusIconModal extends Component
+final class ManusIconModal extends AbstractPageSettings implements HasForms
 {
+    use InteractsWithForms;
+
     public ?int $currentUser = null;
+    
+    public ?array $data = [];
 
-    public function mount(): void
+    protected string $view = 'livewire.manus-icon-modal';
+
+    protected function settingName(): string
     {
-
+        return 'manus';
     }
 
-   public function getCachedSubNavigation(): array
+    public function getDefaultData(): array
     {
         return [];
     }
 
-    public function render()
+    public function form(Schema $schema): Schema
     {
-        $settingsPage = new ManuSettings();
-        
-        return view('livewire.manus-icon-modal', [
-            'form' => $settingsPage->form(new \Filament\Schemas\Schema()),
-        ]);
+        return $schema
+            ->components([
+                Forms\Components\RichEditor::make('site_name')
+                    ->label('Anteckningar')
+                    ->columnSpanFull(),
+            ])
+            ->statePath('data');
+    }
+
+    public function save(): void
+    {
+        try {
+            $this->form->validate();
+            parent::save();
+
+            $this->notification()->success()
+                ->title('Sparad')
+                ->send();
+        } catch (\Exception $e) {
+            $this->notification()->danger()
+                ->title('Fel')
+                ->body($e->getMessage())
+                ->send();
+        }
+    }
+
+    public function render(): \Illuminate\Contracts\View\View
+    {
+        return view('livewire.manus-icon-modal');
     }
 }
