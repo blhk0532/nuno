@@ -6,6 +6,14 @@
 position: absolute;
 }
 </style>
+<script>
+    // Safe no-op globals to prevent Alpine/Filament RichEditor ReferenceErrors
+    if (typeof window.editorUpdatedAt === 'undefined') window.editorUpdatedAt = 0;
+    if (typeof window.$getEditor === 'undefined') window.$getEditor = () => ({ isActive: () => false });
+    if (typeof window.isPanelActive === 'undefined') window.isPanelActive = () => false;
+    if (typeof window.isUploadingFile === 'undefined') window.isUploadingFile = () => false;
+    if (typeof window.fileValidationMessage === 'undefined') window.fileValidationMessage = null;
+</script>
 <div
     class="w-full"
     x-init="$nextTick(() => window.dispatchEvent(new Event('resize')))"
@@ -14,15 +22,15 @@ position: absolute;
 >
     <div class="user-notes-widget-wrapper m-1" id="user-notes-widget-wrapper">
 
-            <form class="space-y-6" wire:submit="save" @submit.prevent>
+            <div class="space-y-6">
                 {{ $this->form }}
 
                 <div class="flex justify-end">
-                    <x-filament::button type="submit">
-                        Spara Anteckningar
+                    <x-filament::button type="button" wire:click="save">
+                        Spara Anteckning
                     </x-filament::button>
                 </div>
-            </form>
+            </div>
 
     </div>
 </div>
