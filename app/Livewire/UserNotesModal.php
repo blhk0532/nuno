@@ -43,30 +43,48 @@ final class UserNotesModal extends Component implements HasForms
             $this->data = $settings;
         }
 
-        // Normalize `anteckningar` to a string if it was stored as an array/object.
-        if (isset($this->data['anteckningar']) && is_array($this->data['anteckningar'])) {
+        // Normalize `anteckningar` to a string if it was stored as an array/object or JSON string.
+        if (isset($this->data['anteckningar'])) {
             $a = $this->data['anteckningar'];
-            if (isset($a['html']) && is_string($a['html'])) {
-                $this->data['anteckningar'] = $a['html'];
-            } elseif (isset($a['content']) && is_string($a['content'])) {
-                $this->data['anteckningar'] = $a['content'];
-            } elseif (isset($a['type']) && $a['type'] === 'doc') {
-                $this->data['anteckningar'] = $this->prosemirrorDocToHtml($a);
-            } else {
-                $this->data['anteckningar'] = json_encode($a);
+            if (is_string($a)) {
+                // If it looks like a JSON ProseMirror doc, decode and convert.
+                if (str_contains($a, '"type":"doc"') || str_contains($a, '"content":')) {
+                    $decoded = json_decode($a, true);
+                    if (is_array($decoded) && isset($decoded['type']) && $decoded['type'] === 'doc') {
+                        $this->data['anteckningar'] = $this->prosemirrorDocToHtml($decoded);
+                    }
+                }
+            } elseif (is_array($a)) {
+                if (isset($a['html']) && is_string($a['html'])) {
+                    $this->data['anteckningar'] = $a['html'];
+                } elseif (isset($a['content']) && is_string($a['content'])) {
+                    $this->data['anteckningar'] = $a['content'];
+                } elseif (isset($a['type']) && $a['type'] === 'doc') {
+                    $this->data['anteckningar'] = $this->prosemirrorDocToHtml($a);
+                } else {
+                    $this->data['anteckningar'] = json_encode($a);
+                }
             }
         }
 
-            // Populate the Filament form with persisted settings so fields (RichEditor) are filled.
-            $this->form->fill($this->data ?? []);
+        // Populate the Filament form with persisted settings so fields (RichEditor) are filled.
+        $this->form->fill($this->data ?? []);
 
-            $this->anteckningar = is_string($this->data['anteckningar'] ?? null) ? $this->data['anteckningar'] : '';
+        // Ensure the simple property mirrors the filled form state so wire:model works.
+        $this->anteckningar = is_string($this->data['anteckningar'] ?? null) ? $this->data['anteckningar'] : '';
+
+        // Log mount details and the form state (safe).
+        try {
+            $formState = $this->form->getState();
+        } catch (\Throwable $t) {
+            $formState = null;
+        }
 
         Log::info('UserNotesModal mounted', [
             'user' => $this->currentUser,
             'data_keys' => is_array($this->data) ? array_keys($this->data) : null,
-                'data_preview' => is_string($this->data['anteckningar'] ?? null) ? mb_substr($this->data['anteckningar'], 0, 200) : null,
-            ]);
+            'data_preview' => is_string($this->data['anteckningar'] ?? null) ? mb_substr($this->data['anteckningar'], 0, 200) : null,
+            'form_state_keys' => is_array($formState) ? array_keys($formState) : null,
         ]);
     }
 
@@ -80,8 +98,16 @@ final class UserNotesModal extends Component implements HasForms
         return $schema
             ->components([
                 Forms\Components\RichEditor::make('anteckningar')
+                    ->toolbarButtons([
+                        ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                        ['blockquote', 'codeBlock', 'customBlocks', 'mergeTags', 'bulletList', 'orderedList'],
+                        ['table', 'attachFiles'],
+                        ['undo', 'redo'],
+                    ])
                     ->label('Mina Anteckningar!')
-                    ->columnSpan('full'),
+                    ->extraAttributes(['spellcheck' => 'false', 'wire:ignore' => true])
+                    ->columnSpanFull(),
             ])
             ->statePath('data');
     }

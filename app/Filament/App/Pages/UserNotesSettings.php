@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Filament\App\Pages;
 
 use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
@@ -16,6 +17,9 @@ final class UserNotesSettings extends AbstractPageSettings
      * @var array<string, mixed> | null
      */
     public ?array $data = [];
+
+    // Match parent property signature to avoid PHP fatal type mismatch
+    protected static BackedEnum|string|null $navigationIcon = null;
 
     protected static ?string $title = 'User Notes';
 
@@ -42,11 +46,35 @@ final class UserNotesSettings extends AbstractPageSettings
         return $schema
             ->components([
 
-                RichEditor::make('site_name')
-                    ->label('')
+                RichEditor::make('anteckningar')
+                    ->label('Mina Anteckningar!')
                     ->columnSpan('full'),
+                Action::make('save')
+                    ->action(function () {
+                        $this->save();
+                        \Filament\Notifications\Notification::make()
+                            ->success()
+                            ->title('Saved')
+                            ->send();
+                    })
+                    ->label('Save'),
             ])
             ->statePath('data');
+    }
+
+    public function getFormActions(): array
+    {
+        return [
+            Action::make('save')
+                ->action(function () {
+                    $this->save();
+                    \Filament\Notifications\Notification::make()
+                        ->success()
+                        ->title('Saved')
+                        ->send();
+                })
+                ->label('Save'),
+        ];
     }
 
     protected function settingName(): string

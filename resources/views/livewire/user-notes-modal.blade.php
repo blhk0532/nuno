@@ -7,12 +7,7 @@ position: absolute;
 }
 </style>
 <script>
-    // Safe no-op globals to prevent Alpine/Filament RichEditor ReferenceErrors
-    if (typeof window.editorUpdatedAt === 'undefined') window.editorUpdatedAt = 0;
-    if (typeof window.$getEditor === 'undefined') window.$getEditor = () => ({ isActive: () => false });
-    if (typeof window.isPanelActive === 'undefined') window.isPanelActive = () => false;
-    if (typeof window.isUploadingFile === 'undefined') window.isUploadingFile = () => false;
-    if (typeof window.fileValidationMessage === 'undefined') window.fileValidationMessage = null;
+    // Intentionally minimal — rely on Filament/Alpine assets for RichEditor initialization.
 </script>
 <div
     class="w-full"
@@ -22,25 +17,15 @@ position: absolute;
 >
     <div class="user-notes-widget-wrapper m-1" id="user-notes-widget-wrapper">
 
-            <div class="space-y-6">
-                {{-- DEBUG: show raw property and form state for troubleshooting --}}
-                <div class="mb-4 p-2 bg-gray-50 border rounded">
-                    <label class="block text-sm font-medium text-gray-700">Debug: anteckningar (wire:model)</label>
-                    <textarea wire:model.lazy="anteckningar" class="w-full h-28 p-2 border rounded mt-1"></textarea>
-                    <div class="mt-2 text-xs text-gray-600">
-                        <strong>Form state (data):</strong>
-                        <pre class="whitespace-pre-wrap">{{ json_encode($this->data) }}</pre>
-                    </div>
-                </div>
-
+            <form class="space-y-6" wire:submit="save" @submit.prevent>
                 {{ $this->form }}
 
                 <div class="flex justify-end">
-                    <x-filament::button type="button" wire:click="save">
+                    <x-filament::button type="submit">
                         Spara Anteckning
                     </x-filament::button>
                 </div>
-            </div>
+            </form>
 
     </div>
 </div>

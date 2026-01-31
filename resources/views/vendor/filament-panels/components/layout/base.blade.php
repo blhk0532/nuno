@@ -155,6 +155,14 @@
 
         {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::SCRIPTS_AFTER, scopes: $renderHookScopes) }}
 
+        {{-- Global modal for user notes so the modal component owns Livewire state --}}
+        <x-filament::modal id="user-notes-modal" class="user-notes-modal" slide-over width="4xl">
+            <x-slot name="heading">
+                Ateckningar
+            </x-slot>
+            @livewire(\App\Http\Livewire\UserNotesModal::class)
+        </x-filament::modal>
+
         {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::BODY_END, scopes: $renderHookScopes) }}
     </body>
 </html>
