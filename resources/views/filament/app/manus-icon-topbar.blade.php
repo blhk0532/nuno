@@ -1,3 +1,5 @@
+{{-- Placeholder view to avoid missing view exceptions from FilamentBookingPlugin --}}
+<div class="filament-manus-topbar-icon" style="display:none;"></div>
 @php
 $isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
 $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layout', 'sidebar');
@@ -16,7 +18,7 @@ $aSiderbar = $anderia === 'sidebar-no-topbar' ? true : false;
     @else
     class="fi-icon-btn fi-size-md fi-topbar-database-notifications-btn"
     @endif
-    wire:click="$dispatch('open-modal', { id: 'manus-calendar-modal' })"
+    wire:click="$dispatch('open-modal', { id: 'user-notes-modal' })"
 >
 
         <x-filament::icon
@@ -49,10 +51,5 @@ $aSiderbar = $anderia === 'sidebar-no-topbar' ? true : false;
 </div>
 </div>
 
-<x-filament::modal id="manus-calendar-modal" class="manus-modal" slide-over width="4xl">
-    <x-slot name="heading">
-
-    </x-slot>
-     @livewire('manus-icon-modal')
-
-</x-filament::modal>
+<!-- The global user-notes modal is mounted in the Filament base layout;
+    keep topbar as a trigger only to avoid Livewire entanglement. -->

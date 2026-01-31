@@ -1,3 +1,5 @@
+{{-- Placeholder view to avoid missing view exceptions from FilamentBookingPlugin --}}
+<div class="filament-calendar-topbar-icon" style="display:none;"></div>
 @php
 $isSidebarCollapsibleOnDesktop = filament()->isSidebarCollapsibleOnDesktop();
 $anderia = \Andreia\FilamentUiSwitcher\Support\UiPreferenceManager::get('ui.layout', 'sidebar');
