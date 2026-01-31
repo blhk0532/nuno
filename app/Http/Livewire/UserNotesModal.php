@@ -77,31 +77,8 @@ final class UserNotesModal extends Component implements HasForms
         return $schema
             ->components([
                 Forms\Components\RichEditor::make('anteckningar')
-                    ->toolbarButtons([
-                        ['attachFiles', 'bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link', 'bulletList', 'orderedList'],
-                        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-                        ['blockquote', 'table', 'codeBlock', 'customBlocks', 'mergeTags'],
-                        ['undo', 'redo'],
-                    ])
-                    ->floatingToolbars([
-                        'paragraph' => [
-                            'bold', 'italic', 'underline', 'strike', 'subscript', 'superscript',
-                        ],
-                        'heading' => [
-                            'h1', 'h2', 'h3',
-                        ],
-                        'table' => [
-                            'tableAddColumnBefore', 'tableAddColumnAfter', 'tableDeleteColumn',
-                            'tableAddRowBefore', 'tableAddRowAfter', 'tableDeleteRow',
-                            'tableMergeCells', 'tableSplitCell',
-                            'tableToggleHeaderRow', 'tableToggleHeaderCell',
-                            'tableDelete',
-                        ],
-                    ])
-                    ->label('Mina Anteckningar')
-                    ->extraAttributes(['spellcheck' => 'false'])
-                    ->resizableImages()
-                    ->columnSpanFull(),
+                    ->label('Mina Anteckningar!')
+                    ->columnSpan('full'),
             ])
             ->statePath('data');
     }
