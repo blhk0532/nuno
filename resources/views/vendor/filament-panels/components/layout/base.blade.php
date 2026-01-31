@@ -65,8 +65,6 @@
 
         @filamentStyles
 
-        {{-- Preload Filament rich-editor to avoid Alpine/asset race that causes ReferenceErrors --><link rel="modulepreload" href="/js/filament/forms/components/rich-editor.js">
-
         {{ filament()->getTheme()->getHtml() }}
         {{ filament()->getFontHtml() }}
         {{ filament()->getMonoFontHtml() }}
@@ -138,61 +136,7 @@
         {{ \Filament\Support\Facades\FilamentView::renderHook(\Filament\View\PanelsRenderHook::SCRIPTS_BEFORE, scopes: $renderHookScopes) }}
 
         @filamentScripts(withCore: true)
-        {{-- Ensure rich-editor Alpine trees are initialized if the module loads after Alpine (fixes hydration race) --><script>
-            (function () {
-                const selector = '[x-load-src*="rich-editor"], [x-data*="richEditorFormComponent("]';
 
-                const reinit = () => {
-                    try {
-                        if (! window.Alpine || typeof window.richEditorFormComponent !== 'function') {
-                            return;
-                        }
-
-                        document.querySelectorAll(selector).forEach((el) => {
-                            try {
-                                // Alpine marks initialized trees; avoid double-init
-                                if (! el.__x) {
-                                    window.Alpine.initTree(el);
-                                }
-                            } catch (err) {
-                                // swallow — worst case the real script will initialize later
-                                console.debug('rich-editor reinit error', err);
-                            }
-                        });
-
-                        // give TipTap/ProseMirror a tick to mount then notify layout
-                        setTimeout(() => window.dispatchEvent(new Event('resize')), 50);
-                    } catch (err) {
-                        console.error(err);
-                    }
-                };
-
-                // If the script tag is present, attach to its load event
-                Array.from(document.scripts).forEach((s) => {
-                    if (s.src && s.src.includes('rich-editor')) {
-                        s.addEventListener('load', reinit);
-                    }
-                });
-
-                // Observe head for dynamically injected script tags (x-load uses this)
-                new MutationObserver((records) => {
-                    for (const r of records) {
-                        for (const n of r.addedNodes) {
-                            if (n.tagName === 'SCRIPT' && n.src && n.src.includes('rich-editor')) {
-                                n.addEventListener('load', reinit);
-                            }
-                        }
-                    }
-                }).observe(document.head, { childList: true });
-
-                // Also try to reinit when Filament/schema components signal they're ready
-                window.addEventListener('schema-component-loaded', reinit);
-
-                // Fallback: attempt reinit on DOMContentLoaded and after a short delay
-                document.addEventListener('DOMContentLoaded', reinit);
-                setTimeout(reinit, 250);
-            })();
-        </script>
         @if (filament()->hasBroadcasting() && config('filament.broadcasting.echo'))
             <script data-navigate-once>
                 window.Echo = new window.EchoFactory(@js(config('filament.broadcasting.echo')))
