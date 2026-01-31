@@ -43,17 +43,19 @@ final class UserNotesModal extends Component implements HasForms
             $this->data = $settings;
         }
 
-            // Normalize `anteckningar` to a string if it was stored as an array/object.
-            if (isset($this->data['anteckningar']) && is_array($this->data['anteckningar'])) {
-                $a = $this->data['anteckningar'];
-                if (isset($a['html']) && is_string($a['html'])) {
-                    $this->data['anteckningar'] = $a['html'];
-                } elseif (isset($a['content']) && is_string($a['content'])) {
-                    $this->data['anteckningar'] = $a['content'];
-                } else {
-                    $this->data['anteckningar'] = json_encode($a);
-                }
+        // Normalize `anteckningar` to a string if it was stored as an array/object.
+        if (isset($this->data['anteckningar']) && is_array($this->data['anteckningar'])) {
+            $a = $this->data['anteckningar'];
+            if (isset($a['html']) && is_string($a['html'])) {
+                $this->data['anteckningar'] = $a['html'];
+            } elseif (isset($a['content']) && is_string($a['content'])) {
+                $this->data['anteckningar'] = $a['content'];
+            } elseif (isset($a['type']) && $a['type'] === 'doc') {
+                $this->data['anteckningar'] = $this->prosemirrorDocToHtml($a);
+            } else {
+                $this->data['anteckningar'] = json_encode($a);
             }
+        }
 
             // Populate the Filament form with persisted settings so fields (RichEditor) are filled.
             $this->form->fill($this->data ?? []);
@@ -142,5 +144,46 @@ final class UserNotesModal extends Component implements HasForms
         $userId = Auth::id() ?? 'guest';
 
         return "user_notes_{$userId}";
+    }
+
+    private function prosemirrorDocToHtml(array $node): string
+    {
+        $map = function ($n) use (&$map) {
+            if (!is_array($n)) {
+                return '';
+            }
+            $type = $n['type'] ?? null;
+            if ($type === 'text') {
+                return htmlspecialchars($n['text'] ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+            }
+            $children = '';
+            if (isset($n['content']) && is_array($n['content'])) {
+                foreach ($n['content'] as $c) {
+                    $children .= $map($c);
+                }
+            }
+            switch ($type) {
+                case 'paragraph':
+                    return '<p>' . $children . '</p>';
+                case 'heading':
+                    $level = $n['attrs']['level'] ?? 2;
+                    $level = is_int($level) ? max(1, min(6, $level)) : 2;
+                    return "<h{$level}>" . $children . "</h{$level}>";
+                case 'blockquote':
+                    return '<blockquote>' . $children . '</blockquote>';
+                case 'bulletList':
+                    return '<ul>' . $children . '</ul>';
+                case 'orderedList':
+                    return '<ol>' . $children . '</ol>';
+                case 'listItem':
+                    return '<li>' . $children . '</li>';
+                case 'doc':
+                    return $children;
+                default:
+                    return $children;
+            }
+        };
+
+        return $map($node);
     }
 }
