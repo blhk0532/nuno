@@ -1,9 +1,13 @@
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 
 // Import the advanced calendar system
 import { Calendar } from '@/components/calendar/calendar';
+
+type BreadcrumbItem = {
+    title: string;
+    href: string;
+};
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

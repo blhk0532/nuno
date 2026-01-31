@@ -56,20 +56,28 @@ class RingaDataResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $userId = auth()->id();
+        $query = parent::getEloquentQuery();
+        $user = auth()->user();
+
+        // Only super OR admin users see all records
+        if ($user && in_array($user->role, ['super', 'admin'])) {
+            return $query;
+        }
+
+        // Everyone else (booking users, regular users) see only their own records or team records
+        $userId = $user?->id;
         $tenantId = filament()->getTenant()?->id;
 
-        return parent::getEloquentQuery()
-            ->where(function (Builder $query) use ($userId, $tenantId) {
-                $query->where(function ($q) use ($userId) {
-                    $q->where('user_id', (string) $userId)
-                      ->orWhereRaw("FIND_IN_SET(?, user_id)", [$userId]);
-                });
-
-                if ($tenantId) {
-                    $query->orWhere('team_id', $tenantId);
-                }
+        return $query->where(function (Builder $q) use ($userId, $tenantId) {
+            $q->where(function ($nested) use ($userId) {
+                $nested->where('user_id', (string) $userId)
+                       ->orWhereRaw("FIND_IN_SET(?, user_id)", [$userId]);
             });
+
+            if ($tenantId) {
+                $q->orWhere('team_id', $tenantId);
+            }
+        });
     }
 
     public static function getRelations(): array

@@ -423,6 +423,17 @@
       0 => 'Hydrat\\TableLayoutToggle\\TableLayoutToggleServiceProvider',
     ),
   ),
+  'inerba/filament-db-config' => 
+  array (
+    'aliases' => 
+    array (
+      'DbConfig' => 'Inerba\\DbConfig\\Facades\\DbConfig',
+    ),
+    'providers' => 
+    array (
+      0 => 'Inerba\\DbConfig\\DbConfigServiceProvider',
+    ),
+  ),
   'inertiajs/inertia-laravel' => 
   array (
     'providers' => 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5ee0e1f4eb1e15f8d52642da7d1fe87",
+    "content-hash": "d29e144985c8e2685a0e386f725c95bf",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -931,20 +931,20 @@
         },
         {
             "name": "asmit/resized-column",
-            "version": "v1.1.0",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/AsmitNepali/resized-column.git",
-                "reference": "a40a270cf77a7a2048051dbeb7b7168b17b58b49"
+                "reference": "499beb144a54cb801af172544067845593faf61c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/AsmitNepali/resized-column/zipball/a40a270cf77a7a2048051dbeb7b7168b17b58b49",
-                "reference": "a40a270cf77a7a2048051dbeb7b7168b17b58b49",
+                "url": "https://api.github.com/repos/AsmitNepali/resized-column/zipball/499beb144a54cb801af172544067845593faf61c",
+                "reference": "499beb144a54cb801af172544067845593faf61c",
                 "shasum": ""
             },
             "require": {
-                "filament/support": "^3.2|^4.0"
+                "filament/support": "^3.2|^4.0|^5.0"
             },
             "type": "library",
             "extra": {
@@ -972,9 +972,9 @@
             "description": "Resizeable column for filament",
             "support": {
                 "issues": "https://github.com/AsmitNepali/resized-column/issues",
-                "source": "https://github.com/AsmitNepali/resized-column/tree/v1.1.0"
+                "source": "https://github.com/AsmitNepali/resized-column/tree/v2.1.0"
             },
-            "time": "2025-08-13T14:21:50+00:00"
+            "time": "2026-01-18T13:50:06+00:00"
         },
         {
             "name": "awcodes/filament-badgeable-column",
@@ -6827,6 +6827,75 @@
                 }
             ],
             "time": "2025-08-26T09:31:21+00:00"
+        },
+        {
+            "name": "inerba/filament-db-config",
+            "version": "v1.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/inerba/filament-db-config.git",
+                "reference": "de46c517059d34e55198b21e927ebb64f11d6bef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/inerba/filament-db-config/zipball/de46c517059d34e55198b21e927ebb64f11d6bef",
+                "reference": "de46c517059d34e55198b21e927ebb64f11d6bef",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0|^5.0",
+                "php": "^8.2",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.14",
+                "orchestra/testbench": "^10.0",
+                "pestphp/pest": "^4.0",
+                "phpstan/phpstan": "^2.1"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "aliases": {
+                        "DbConfig": "Inerba\\DbConfig\\Facades\\DbConfig"
+                    },
+                    "providers": [
+                        "Inerba\\DbConfig\\DbConfigServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "Inerba\\DbConfig\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Francesco Apruzzese",
+                    "email": "inerba@gmail.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "A Filament plugin for database-backed application settings and editable content, with caching and easy page generation.",
+            "homepage": "https://github.com/inerba/filament-db-config",
+            "keywords": [
+                "filament",
+                "filament-plugin",
+                "laravel",
+                "laravel-filament"
+            ],
+            "support": {
+                "issues": "https://github.com/inerba/filament-db-config/issues",
+                "source": "https://github.com/inerba/filament-db-config"
+            },
+            "time": "2026-01-11T14:57:02+00:00"
         },
         {
             "name": "inertiajs/inertia-laravel",

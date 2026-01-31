@@ -7,6 +7,7 @@ namespace App\Models;
 use Adultdate\Wirechat\Contracts\WirechatUser;
 use Adultdate\Wirechat\Panel as WirechatStandalonePanel;
 use Adultdate\Wirechat\Traits\InteractsWithWirechat;
+use Andreia\FilamentUiSwitcher\Models\Traits\HasUiPreferences;
 use App\Enums\UserActiveStatus;
 use App\Observers\UserObserver;
 use Exception;
@@ -28,22 +29,20 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Sanctum\HasApiTokens;
+use Laravel\Passport\Contracts\OAuthenticatable;
+use Laravel\Passport\Contracts\ScopeAuthorizable;  // Add this import
+use Laravel\Passport\PersonalAccessTokenResult;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
 use Zap\Models\Concerns\HasSchedules;
-use Laravel\Passport\Contracts\OAuthenticatable;
-use Illuminate\Database\Eloquent\Relations\MorphMany;  // Add this import
-use Laravel\Passport\PersonalAccessTokenResult;
-use Laravel\Passport\Contracts\ScopeAuthorizable;
-use Spatie\Activitylog\Traits\LogsActivity;
-use Spatie\Activitylog\LogOptions;
-use Andreia\FilamentUiSwitcher\Models\Traits\HasUiPreferences;
 
 /**
  * @property int $id
@@ -95,7 +94,7 @@ use Andreia\FilamentUiSwitcher\Models\Traits\HasUiPreferences;
  * @mixin \Eloquent
  */
 #[ObservedBy(UserObserver::class)]
-final class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, FilamentUser, HasAvatar, HasDefaultTenant, HasTenants, MustVerifyEmailContract, WirechatUser, OAuthenticatable
+final class User extends Model implements AuthenticatableContract, AuthorizableContract, CanResetPasswordContract, FilamentUser, HasAvatar, HasDefaultTenant, HasTenants, MustVerifyEmailContract, OAuthenticatable, WirechatUser
 {
     use Authenticatable;
     use Authorizable;
@@ -103,12 +102,12 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
     use HasFactory;
     use HasRoles;
     use HasSchedules;
+    use HasUiPreferences;
     use InteractsWithWirechat;
+    use LogsActivity;
     use MustVerifyEmail;
     use Notifiable;
     use TwoFactorAuthenticatable;
-    use LogsActivity;
-    use HasUiPreferences;
 
     protected $accessToken;
 
@@ -130,7 +129,7 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
         'phone',
         'status',
         'active_status',
-        'active_at'
+        'active_at',
     ];
 
     protected $hidden = [
@@ -163,6 +162,7 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
         if (in_array($role, ['admin', 'super', 'super_admin', 'superadmin'], true)) {
             return true;
         }
+
         return false;
     }
 
@@ -239,6 +239,16 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
         return $this->belongsToMany(Team::class, Membership::class)
             ->withTimestamps()
             ->as('membership');
+    }
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'author_id');
+    }
+
+    public function assignedTo(): BelongsTo
+    {
+        return $this->belongsTo(self::class, 'assigned_to_id');
     }
 
     public function phone_queues(): HasMany
@@ -330,54 +340,74 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
             ->exists();
     }
 
-public function oauthApps(): MorphMany  // Change return type from HasMany to MorphMany
-{
-    return $this->morphMany(\Laravel\Passport\Client::class, 'owner');  // Change from hasMany to morphMany with 'owner' as the morph name
-}
+    public function oauthApps(): MorphMany  // Change return type from HasMany to MorphMany
+    {
+        return $this->morphMany(\Laravel\Passport\Client::class, 'owner');  // Change from hasMany to morphMany with 'owner' as the morph name
+    }
 
-public function tokens(): HasMany
-{
-    return $this->hasMany(\Laravel\Passport\Token::class);
-}
+    public function tokens(): HasMany
+    {
+        return $this->hasMany(\Laravel\Passport\Token::class);
+    }
 
-public function tokenCan(string $scope): bool
-{
-    return $this->accessToken && $this->accessToken->can($scope);
-}
+    public function tokenCan(string $scope): bool
+    {
+        return $this->accessToken && $this->accessToken->can($scope);
+    }
 
-public function tokenCant(string $scope): bool
-{
-    return ! $this->tokenCan($scope);
-}
+    public function tokenCant(string $scope): bool
+    {
+        return ! $this->tokenCan($scope);
+    }
 
-public function createToken(string $name, array $scopes = []): \Laravel\Passport\PersonalAccessTokenResult
-{
-    $token = $this->tokens()->create([
-        'name' => $name,
-        'scopes' => $scopes,
-        'revoked' => false,
-    ]);
+    public function createToken(string $name, array $scopes = []): PersonalAccessTokenResult
+    {
+        $token = $this->tokens()->create([
+            'name' => $name,
+            'scopes' => $scopes,
+            'revoked' => false,
+        ]);
 
-    $plainTextToken = unpack('C*', \Illuminate\Support\Str::random(40));
+        $plainTextToken = unpack('C*', \Illuminate\Support\Str::random(40));
 
-    return new \Laravel\Passport\PersonalAccessTokenResult($plainTextToken, $token);
-}
+        return new PersonalAccessTokenResult($plainTextToken, $token);
+    }
 
-public function currentAccessToken(): ?ScopeAuthorizable
-{
-    return $this->accessToken;
-}
+    public function currentAccessToken(): ?ScopeAuthorizable
+    {
+        return $this->accessToken;
+    }
 
-public function withAccessToken(?ScopeAuthorizable $accessToken): static
-{
-    $this->accessToken = $accessToken;
+    public function withAccessToken(?ScopeAuthorizable $accessToken): static
+    {
+        $this->accessToken = $accessToken;
 
-    return $this;
-}
+        return $this;
+    }
 
     public function getProviderName(): string
     {
         return 'users';
+    }
+
+    public function isOnline(): bool
+    {
+        return $this->active_at && $this->active_at->gt(now()->subMinutes(5));
+    }
+
+    public function canBeImpersonated(): bool
+    {
+        return auth()->user()->role === 'super';
+    }
+
+    public function getNdsUserName(): string
+    {
+        return auth()->user()->name;
+    }
+
+    public function ringaData(): HasMany
+    {
+        return $this->hasMany(RingaData::class, 'user_id', 'id');
     }
 
     protected static function boot(): void
@@ -404,11 +434,6 @@ public function withAccessToken(?ScopeAuthorizable $accessToken): static
         ];
     }
 
-    public function isOnline(): bool
-    {
-        return $this->active_at && $this->active_at->gt(now()->subMinutes(5));
-    }
-
     protected function canManageTeam(): bool
     {
         return auth()->user()->role === 'super' || auth()->user()->role === 'admin' || auth()->user()->role === 'manager';
@@ -417,20 +442,5 @@ public function withAccessToken(?ScopeAuthorizable $accessToken): static
     protected function canRegisterTeam(): bool
     {
         return auth()->user()->role === 'super' || auth()->user()->role === 'admin' || auth()->user()->role === 'manager';
-    }
-
-    public function canBeImpersonated(): bool
-    {
-        return auth()->user()->role === 'super';
-    }
-
-        public function getNdsUserName(): string
-    {
-        return auth()->user()->name;
-    }
-
-    public function ringaData(): HasMany
-    {
-        return $this->hasMany(RingaData::class, 'user_id', 'id');
     }
 }

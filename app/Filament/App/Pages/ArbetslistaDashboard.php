@@ -8,12 +8,11 @@ use App\Filament\Admin\Widgets\AccountInfoStackWidget;
 use App\Filament\Admin\Widgets\WorldClockWidget;
 use App\Filament\App\Resources\Bookings\Widgets\BookingCalendar;
 use App\Models\BookingCalendar as BookingCalendarModel;
-use Filament\Pages\Page as BasePage;
-use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use BackedEnum;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
-use Filament\Pages\Dashboard as BaseDashboard;
+use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
+use Filament\Pages\Page as BasePage;
 use Filament\Panel;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
@@ -21,8 +20,9 @@ use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use UnitEnum;
-use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 use Wallacemartinss\FilamentIconPicker\Enums\Heroicons;
+use Wallacemartinss\FilamentIconPicker\Enums\Remix;
+
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseCache;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseExceptions;
 // use Dotswan\FilamentLaravelPulse\Widgets\PulseQueues;
@@ -40,23 +40,22 @@ final class ArbetslistaDashboard extends BasePage
 
     protected static ?string $slug = 'arbetslista';
 
-     protected static ?string $navigationLabel = 'NDSนอร์ดิก';
+    protected static ?string $navigationLabel = 'NDSนอร์ดิก';
 
-  //  protected string $view = 'filament.app.dashboard';
-
+    //  protected string $view = 'filament.app.dashboard';
 
     protected static ?int $navigationSort = 4;
 
     protected static ?int $sort = 4;
 
-  //   protected static string | UnitEnum | null $navigationGroup = ' ';
+    //   protected static string | UnitEnum | null $navigationGroup = ' ';
 
-  //  protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedUserCircle;
-  //  protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidUserCircle;
+    //  protected static string|BackedEnum|null $navigationIcon = Heroicons::OutlinedUserCircle;
+    //  protected static string|BackedEnum|null $activeNavigationIcon = Heroicons::SolidUserCircle;
 
     protected static string|BackedEnum|null $navigationIcon = Remix::RiGroup3Line;
-    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiGroup3Fill;
 
+    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiGroup3Fill;
 
     // Prevent this app-level Dashboard from being auto-discovered so that
     // the explicit `AdminDashboard` can be registered as the admin panel root.
@@ -64,44 +63,44 @@ final class ArbetslistaDashboard extends BasePage
 
     public static function shouldRegisterNavigation(): bool
     {
-        return true;
+        return false;
     }
 
-
-      public static function getNavigationBadge(): ?string
-      {
+    public static function getNavigationBadge(): ?string
+    {
         return 'GROUP';
-           // return  now()->timezone('Asia/Bangkok')->format('H:i') . ' 🇹🇭 ';
-      }
-      public static function getNavigationBadgeColor(): ?string
-      {
-          return 'primary';
-      }
+        // return  now()->timezone('Asia/Bangkok')->format('H:i') . ' 🇹🇭 ';
+    }
 
-  //  public static function getNavigationLabel(): string
-  //  {
-  //      return ''.Str::ucfirst(Auth::user()->name) ?? 'User';
-  //  }
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'primary';
+    }
 
- //  public static function getNavigationBadge(): ?string
- //  {
- //      return 'Online';
+    //  public static function getNavigationLabel(): string
+    //  {
+    //      return ''.Str::ucfirst(Auth::user()->name) ?? 'User';
+    //  }
 
- //  }
- //  public static function getNavigationBadgeColor(): ?string
- //  {
- //      return 'success';
- //  }
+    //  public static function getNavigationBadge(): ?string
+    //  {
+    //      return 'Online';
 
- //  public static function getNavigationSort(): ?int
- //  {
- //      return -1;
- //  }
+    //  }
+    //  public static function getNavigationBadgeColor(): ?string
+    //  {
+    //      return 'success';
+    //  }
 
- //  public static function getSort(): ?int
- //  {
- //      return -1;
- //  }
+    //  public static function getNavigationSort(): ?int
+    //  {
+    //      return -1;
+    //  }
+
+    //  public static function getSort(): ?int
+    //  {
+    //      return -1;
+    //  }
 
     public function filtersForm(Schema $schema): Schema
     {

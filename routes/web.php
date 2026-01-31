@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\CalendarBookingController;
 use App\Http\Controllers\Api\CalendarDataController;
 use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\CalendarResourceController;
+use App\Http\Controllers\QueueController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserEmailResetNotification;
@@ -43,6 +44,7 @@ Route::middleware(['web', 'inertia', 'auth', 'verified'])->group(function (): vo
     Route::get('dashboard', fn () => Inertia::render('dashboard'))->name('dashboard');
     Route::get('app', fn () => Inertia::render('app'))->name('app');
     Route::get('bokningar', fn () => Inertia::render('bokningar'))->name('bokningar');
+    Route::get('queue', QueueController::class)->name('queue');
 });
 
 Route::middleware(['web', 'inertia', 'auth', 'verified'])->group(function (): void {

@@ -147,7 +147,7 @@
                         <div class="space-y-3">
  <div class="pt-2 mt-2 border-t border-gray-100 dark:border-white/5">
                             <div>
-                                <p class="text-xs text-gray-500 uppercase dark:text-gray-400">Bostadstyp / Ägande</p>
+                                <p class="text-xs text-gray-500 uppercase dark:text-gray-400">Bostadstyp</p>
                                 <p class="text-sm font-semibold">{{ $this->record->bostadstyp ?? '-' }} ({{ $this->record->agandeform ?? '-' }})</p>
                             </div>
                             </div>
@@ -164,7 +164,7 @@
                                 </div>
 </div>
                             <div class="pt-2 mt-2 border-t border-gray-100 dark:border-white/5">
-                                <p class="text-xs text-gray-500 uppercase dark:text-gray-400">Personer</p>
+                                <p class="text-xs text-gray-500 uppercase dark:text-gray-400">Boarea</p>
                                 <div class="flex items-center gap-1">
                                     <span class="text-sm font-semibold">{{ $this->record->boarea }}</span>
                                 </div>

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\TeamUsers;
 
 use App\Filament\App\Resources\TeamUsers\Pages\ManageTeamUsers;
@@ -7,26 +9,22 @@ use App\Filament\User\Resources\Users\Schemas\UserForm;
 use App\Filament\User\Resources\Users\Schemas\UserInfolist;
 use App\Filament\User\Resources\Users\Tables\UsersTable;
 use App\Models\User;
-use AdultDate\FilamentWirechat\Filament\Pages\ChatPage;
 use BackedEnum;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
+use Filament\Actions\Action;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use Filament\Actions\Action;
 use Illuminate\Database\Eloquent\Builder;
+use UnitEnum;
 
-class TeamUserResource extends Resource
+final class TeamUserResource extends Resource
 {
     protected static ?string $model = User::class;
 
     protected static bool $isScopedToTenant = false;
 
-    protected static string|\BackedEnum|null $navigationIcon = Heroicon::Users;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Users;
 
     protected static ?string $navigationLabel = 'Teammedlemmar';
 
@@ -34,15 +32,14 @@ class TeamUserResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Teammedlemmar';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Projekt';
+    protected static string|UnitEnum|null $navigationGroup = 'Projekt';
 
     protected static ?int $navigationSort = 5;
 
     public static function getNavigationBadge(): ?string
     {
-        return (string) static::getEloquentQuery()->count();
+        return (string) self::getEloquentQuery()->count();
     }
-
 
     public static function shouldRegisterNavigation(): bool
     {
@@ -93,5 +90,12 @@ class TeamUserResource extends Resource
         return [
             'index' => ManageTeamUsers::route('/'),
         ];
+    }
+
+    public function getHeading(): string
+    {
+        $tenantName = filament()->getTenant()?->name ?? 'Team';
+
+        return "{$tenantName} - Teammedlemmar";
     }
 }

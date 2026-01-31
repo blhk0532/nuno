@@ -20,6 +20,7 @@ use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 use App\Filament\App\Resources\RingaDatas\Widgets\RingaDatasQueueTableWidget;
 use BackedEnum;
 use UnitEnum;
+use Filament\Notifications\Notification;
 
 class QueueRingaData extends Page
 {
@@ -29,9 +30,9 @@ class QueueRingaData extends Page
 
     protected static ?string $model = RingaData::class;
 
-    protected static ?string $navigationLabel = 'Ringlista';
+    protected static ?string $navigationLabel = 'Ringlistan';
 
-    protected static ?string $title = 'Ringlista';
+    protected static ?string $title = 'Ringlistan';
 
     public ?int $selectedRecordId = null;
 
@@ -71,6 +72,17 @@ class QueueRingaData extends Page
     public function mount(): void
     {
         try {
+            // Check if there are any pending records
+            $pendingCount = $this->getQuery()->count();
+            
+            if ($pendingCount === 0) {
+                // Get the current tenant
+                $tenant = filament()->getTenant();
+                
+                // Redirect to dashboard if no pending records
+                $this->redirect(route('filament.app.pages.app-dashboard', ['tenant' => $tenant]), navigate: true);
+            }
+
             if (!$this->selectedRecordId) {
                 $first = $this->getQuery()
                     ->orderBy('id')

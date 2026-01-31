@@ -1,44 +1,37 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\User\Resources\Users\Tables;
 
-use App\Enums\UserActiveStatus;
-use Deldius\UserField\UserColumn;
-use Filament\Support\Enums\Size;
-use Filament\Actions\DeleteAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Enums\Size;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Zvizvi\UserFields\Components\UserColumn;
 
-class UsersTable
+final class UsersTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->columns([
-
-                                TextColumn::make('teams.name')
-                    ->label('Team')
-                    ->badge()
-                    ->searchable()
-                    ->toggleable(),
-                                                 IconColumn::make('status')
+                IconColumn::make('status')
                     ->boolean()
                     ->label(' ')
                     ->trueIcon('heroicon-o-check-badge')
                     ->falseIcon('heroicon-o-x-circle')
                     ->sortable(),
-                UserColumn::make('id')
-                    ->showActiveState() // Show active/inactive indicator
-                    ->avatarUrl(fn ($record) => $record->getFilamentAvatarUrl())
-                    ->size(Size::Small) // Set avatar size
+
+                UserColumn::make('author')
                     ->label('Användare'),
+
                 TextColumn::make('active_status')
                     ->badge()
                     ->label('Status')
                     ->sortable(),
+
                 TextColumn::make('active_at')
                     ->dateTime()
                     ->since()
@@ -46,22 +39,26 @@ class UsersTable
                     ->sortable()
                     ->toggleable(),
 
-                TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
                 TextColumn::make('phone')
                     ->searchable()
                     ->sortable()
-                    ->toggleable(),
+                    ->copyable()
+                    ->copyMessage('Copied!')
+                    ->copyMessageDuration(1500)
+                    ->toggleable()
+                    ->wrap(),
+
                 TextColumn::make('email')
                     ->searchable()
                     ->sortable()
-                    ->toggleable(),
+                    ->toggleable()
+                    ->wrap(),
 
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
+
                 TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()

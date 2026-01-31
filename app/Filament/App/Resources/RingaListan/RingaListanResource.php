@@ -102,7 +102,7 @@ class RingaListanResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        $count = self::$model::query()
+        $count = static::getEloquentQuery()
             ->whereIn('outcome', self::getTrackedOutcomes())
             ->count();
 
