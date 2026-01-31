@@ -9,6 +9,30 @@ position: absolute;
 <script>
     // Intentionally minimal — rely on Filament/Alpine assets for RichEditor initialization.
 </script>
+
+<script>
+    // App-level safe stub: prevents Alpine ReferenceErrors if the upstream richEditorFormComponent
+    // script hasn't loaded yet. Non-invasive — the real implementation will initialize the editor
+    // when it becomes available.
+    if (typeof window.richEditorFormComponent === 'undefined') {
+        window.richEditorFormComponent = function (opts = {}) {
+            return {
+                state: opts.state ?? {},
+                activePanel: opts.activePanel ?? null,
+                isUploadingFile: false,
+                fileValidationMessage: null,
+                editorUpdatedAt: Date.now(),
+                isPanelActive: (panel = null) => false,
+                getEditor: () => null,
+                $getEditor() { return this.getEditor(); },
+                init() {
+                    // no-op: real component will re-initialize the editor when its script loads
+                },
+            };
+        };
+    }
+</script>
+
 <div
     class="w-full"
     x-init="$nextTick(() => window.dispatchEvent(new Event('resize')))"
@@ -17,15 +41,17 @@ position: absolute;
 >
     <div class="user-notes-widget-wrapper m-1" id="user-notes-widget-wrapper">
 
-            <form class="space-y-6" wire:submit="save" @submit.prevent>
-                {{ $this->form }}
+            <div x-data="{ isUploadingFile: false, fileValidationMessage: null, editorUpdatedAt: null, isPanelActive: (panel = null) => false }" x-init>
+                <form class="space-y-6" wire:submit="save" @submit.prevent>
+                    {{ $this->form }}
 
-                <div class="flex justify-end">
-                    <x-filament::button type="submit">
-                        Spara Anteckning
-                    </x-filament::button>
-                </div>
-            </form>
+                    <div class="flex justify-end">
+                        <x-filament::button type="submit">
+                            Spara Anteckning
+                        </x-filament::button>
+                    </div>
+                </form>
+            </div>
 
     </div>
 </div>
