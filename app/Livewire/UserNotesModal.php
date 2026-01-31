@@ -51,6 +51,7 @@ final class UserNotesModal extends Component implements HasForms
         Log::info('UserNotesModal mounted', [
             'user' => $this->currentUser,
             'data_keys' => is_array($this->data) ? array_keys($this->data) : null,
+            'data_preview' => is_array($this->data) && isset($this->data['anteckningar']) ? substr($this->data['anteckningar'], 0, 200) : null,
         ]);
     }
 
@@ -95,6 +96,8 @@ final class UserNotesModal extends Component implements HasForms
 
     public function save(): void
     {
+        Log::info('UserNotesModal save invoked', ['user' => $this->currentUser]);
+
         try {
             $this->form->validate();
 
