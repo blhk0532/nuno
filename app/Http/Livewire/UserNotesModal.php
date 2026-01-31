@@ -34,7 +34,10 @@ final class UserNotesModal extends Component implements HasForms
         $this->currentUser = Auth::id();
 
         $settingName = $this->settingName();
-        $row = DB::table('db_config')->where('key', $settingName)->first();
+        $row = DB::table('db_config')
+            ->where('group', 'user_notes')
+            ->where('key', $settingName)
+            ->first();
         if ($row && isset($row->settings)) {
             $settings = json_decode($row->settings, true) ?: [];
             $this->data = $settings;
@@ -116,8 +119,8 @@ final class UserNotesModal extends Component implements HasForms
 
             $key = $this->settingName();
             DB::table('db_config')->updateOrInsert(
-                ['key' => $key],
-                ['group' => 'user_notes', 'settings' => json_encode($this->data), 'updated_at' => now()]
+                ['group' => 'user_notes', 'key' => $key],
+                ['group' => 'user_notes', 'key' => $key, 'settings' => json_encode($this->data), 'updated_at' => now()]
             );
 
             \Filament\Notifications\Notification::make()
