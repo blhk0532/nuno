@@ -20,7 +20,7 @@ $aSiderbar = $anderia === 'sidebar-no-topbar' ? true : false;
 >
 
         <x-filament::icon
-            icon="heroicon-c-information-circle"
+            icon="heroicon-o-clipboard-document-list"
             class="fi-icon fi-size-lg"
         />
 @php
@@ -49,9 +49,9 @@ $aSiderbar = $anderia === 'sidebar-no-topbar' ? true : false;
 </div>
 </div>
 
-<x-filament::modal id="manus-calendar-modal" class="manus-modal" slide-over width="3xl">
+<x-filament::modal id="manus-calendar-modal" class="manus-modal" slide-over width="4xl">
     <x-slot name="heading">
-        Manus
+
     </x-slot>
      @livewire('manus-icon-modal')
 

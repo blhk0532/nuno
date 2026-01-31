@@ -783,6 +783,13 @@
       0 => 'Mokhosh\\FilamentRating\\FilamentRatingServiceProvider',
     ),
   ),
+  'muazzam/slick-scrollbar' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Muazzam\\SlickScrollbar\\SlickScrollbarServiceProvider',
+    ),
+  ),
   'mwguerra/filemanager' => 
   array (
     'providers' => 

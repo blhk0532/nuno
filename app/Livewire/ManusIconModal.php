@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire;
 
-use Livewire\Component;
+use Exception;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
@@ -21,11 +21,6 @@ final class ManusIconModal extends AbstractPageSettings implements HasForms
 
     protected string $view = 'livewire.manus-icon-modal';
 
-    protected function settingName(): string
-    {
-        return 'manus';
-    }
-
     public function getDefaultData(): array
     {
         return [];
@@ -37,14 +32,14 @@ final class ManusIconModal extends AbstractPageSettings implements HasForms
             ->components([
                 Forms\Components\RichEditor::make('site_name')
                     ->toolbarButtons([
-        ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-        ['table', 'attachFiles'],
-        ['undo', 'redo'],
-    ])
+                        ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+                        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+                        ['blockquote', 'codeBlock', 'customBlocks', 'mergeTags', 'bulletList', 'orderedList'],
+                        ['table', 'attachFiles'],
+                        ['undo', 'redo'],
+                    ])
                     ->label('Anteckningar')
-                    ->extraAttributes(['spellcheck' => 'false'])
+                    ->extraAttributes(['spellcheck' => 'false', 'wire:ignore' => true])
                     ->columnSpanFull(),
             ])
             ->statePath('data');
@@ -55,7 +50,8 @@ final class ManusIconModal extends AbstractPageSettings implements HasForms
         try {
             $this->form->validate();
             parent::save();
-        } catch (\Exception $e) {
+            $this->skipRender();
+        } catch (Exception $e) {
             \Filament\Notifications\Notification::make()
                 ->danger()
                 ->title('Fel')
@@ -67,5 +63,10 @@ final class ManusIconModal extends AbstractPageSettings implements HasForms
     public function render(): \Illuminate\Contracts\View\View
     {
         return view('livewire.manus-icon-modal');
+    }
+
+    protected function settingName(): string
+    {
+        return 'manus';
     }
 }

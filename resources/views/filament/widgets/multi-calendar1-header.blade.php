@@ -8,9 +8,9 @@
 @endphp
 <style>
 div.filament-fullcalendar.calendar-1 {
-min-height: 720px;
-    max-height: 720px;
-    height: 720px;
+
+    height: 715px;
+
 
 }
 .fc-timegrid-slot-label-cushion.fc-scrollgrid-shrink-cushion{

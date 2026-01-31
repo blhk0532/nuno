@@ -22,8 +22,8 @@ use App\Filament\App\Pages\ArbetslistaDashboard;
 use App\Filament\App\Pages\Dashboard;
 use App\Filament\App\Pages\InertiaCalendar;
 use App\Filament\App\Pages\TeamInvitationAccept;
-// use App\Filament\Data\Resources\RatsitDatas\RatsitDataResource;
 use App\Filament\App\Pages\Tenancy\EditTeamProfile;
+// use App\Filament\Data\Resources\RatsitDatas\RatsitDataResource;
 use App\Filament\App\Pages\Tenancy\RegisterTeam;
 use App\Filament\App\Resources\BookingDataLeads\BookingDataLeadResource;
 use App\Filament\App\Resources\RingaDatas\Pages\QueueRingaData;
@@ -68,6 +68,7 @@ use JeffersonGoncalves\Filament\RefreshSidebar\RefreshSidebarPlugin;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
+use Muazzam\SlickScrollbar\SlickScrollbarPlugin;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 
@@ -110,140 +111,141 @@ final class AppPanelProvider extends PanelProvider
                 body: 'Vängligen försök igen senare...',
             )
             ->navigationGroups([
-                    NavigationGroup::make('Kalendrar')
-                        ->icon('heroicon-c-squares-plus'),
-                    NavigationGroup::make('Bokningar Admin')
-                        ->icon('heroicon-o-document-text'),
-                    NavigationGroup::make('Mina Sidor')
-                        ->icon(Tabler::UserSquareRounded),
-                ])
+                NavigationGroup::make('Kalendrar')
+                    ->icon('heroicon-c-squares-plus'),
+                NavigationGroup::make('Bokningar Admin')
+                    ->icon('heroicon-o-document-text'),
+                NavigationGroup::make('Mina Sidor')
+                    ->icon(Tabler::UserSquareRounded),
+            ])
             ->pages([
-                    AppDashboard::class,
-                    ChatDashboard::class,
-                    InertiaCalendar::class,
-                    AppBookingSinleCalendar::class,
-                    AppBookingMultiCalendar::class,
-                    QueueRingaData::class,
-                    Scheman::class,
-                    ArbetslistaDashboard::class,
-                    AppDataHistory::class,
-                    //    AppRingLista::class,
-                    //    BookingCalendersX2::class,
-                    //    BookingCalendersX4::class,
-                    //    BookingCalendersX2::class,
-                    //    BookingCalendersX4::class,
-                    //    BookingCalendersX6::class,
-                ])
+                AppDashboard::class,
+                ChatDashboard::class,
+                InertiaCalendar::class,
+                AppBookingSinleCalendar::class,
+                AppBookingMultiCalendar::class,
+                QueueRingaData::class,
+                Scheman::class,
+                ArbetslistaDashboard::class,
+                AppDataHistory::class,
+                //    AppRingLista::class,
+                //    BookingCalendersX2::class,
+                //    BookingCalendersX4::class,
+                //    BookingCalendersX2::class,
+                //    BookingCalendersX4::class,
+                //    BookingCalendersX6::class,
+            ])
             ->widgets([
-                    WeatherWidget::class,
-                    //    Widgets\AccountWidget::class,
-                    //    Widgets\FilamentInfoWidget::class,
-                    //   RatsitDataStatsWidget::class,
-                ])
+                WeatherWidget::class,
+                //    Widgets\AccountWidget::class,
+                //    Widgets\FilamentInfoWidget::class,
+                //   RatsitDataStatsWidget::class,
+            ])
             ->resources([
-                    //    BookingDataLeadResource::class,
-                    // RatsitDataResource::class,
-                ])
+                //    BookingDataLeadResource::class,
+                // RatsitDataResource::class,
+            ])
             ->middleware([
-                    EncryptCookies::class,
-                    AddQueuedCookiesToResponse::class,
-                    StartSession::class,
-                    AuthenticateSession::class,
-                    ShareErrorsFromSession::class,
-                    VerifyCsrfToken::class,
-                    SubstituteBindings::class,
-                    DisableBladeIconComponents::class,
-                    DispatchServingFilamentEvent::class,
-                    FilamentPanelAccess::class,
-                ])
+                EncryptCookies::class,
+                AddQueuedCookiesToResponse::class,
+                StartSession::class,
+                AuthenticateSession::class,
+                ShareErrorsFromSession::class,
+                VerifyCsrfToken::class,
+                SubstituteBindings::class,
+                DisableBladeIconComponents::class,
+                DispatchServingFilamentEvent::class,
+                FilamentPanelAccess::class,
+            ])
             ->authMiddleware([
-                    Authenticate::class,
-                ])
+                Authenticate::class,
+            ])
             ->plugins([
-                    //    WeatherWidget::make(),
-                    FilamentErrorPagesPlugin::make()
-                        ->routes([
-                            'nds/*',
-                            'nds/app/*',
-                            'nds/app/team/*',
-                        ]),
-                ])
+                //    WeatherWidget::make(),
+                SlickScrollbarPlugin::make(),
+                FilamentErrorPagesPlugin::make()
+                    ->routes([
+                        'nds/*',
+                        'nds/app/*',
+                        'nds/app/team/*',
+                    ]),
+            ])
             ->plugins([
-                    //    FilamentShieldPlugin::make(),
-                ])
+                //    FilamentShieldPlugin::make(),
+            ])
             ->plugins([
-                    RefreshSidebarPlugin::make(),
-                    FilamentApexChartsPlugin::make(),
-                ])
+                RefreshSidebarPlugin::make(),
+                FilamentApexChartsPlugin::make(),
+            ])
             ->plugins([
-                    // ... other plugins
-                    ResizedColumnPlugin::make()
-                        ->preserveOnDB(), // Enable database storage (optional)
-                ])
+                // ... other plugins
+                ResizedColumnPlugin::make()
+                    ->preserveOnDB(), // Enable database storage (optional)
+            ])
             ->plugins([
-                    EasyFooterPlugin::make()
-                        ->hiddenFromPagesEnabled()
-                        ->hiddenFromPages(['sample-page', 'another-page', 'admin/login', 'admin/forgot-password', 'admin/register'])
-                        ->withBorder()
-                        ->withFooterPosition('sidebar.footer')
-                        ->withLogo(
-                            'https://static.cdnlogo.com/logos/l/23/laravel.svg', // Path to logo
-                            null,                                                // No link
-                            null,                                                // No text
-                            24                                                   // Logo height in pixels
-                        ),
-                    //    ->withLinks([
-                    //        ['title' => 'ndsth.com', 'url' => 'https://ndsth.com', 'target' => '_blank'],
-                    //    ]),
-                ])
+                EasyFooterPlugin::make()
+                    ->hiddenFromPagesEnabled()
+                    ->hiddenFromPages(['sample-page', 'another-page', 'admin/login', 'admin/forgot-password', 'admin/register'])
+                    ->withBorder()
+                    ->withFooterPosition('sidebar.footer')
+                    ->withLogo(
+                        'https://static.cdnlogo.com/logos/l/23/laravel.svg', // Path to logo
+                        null,                                                // No link
+                        null,                                                // No text
+                        24                                                   // Logo height in pixels
+                    ),
+                //    ->withLinks([
+                //        ['title' => 'ndsth.com', 'url' => 'https://ndsth.com', 'target' => '_blank'],
+                //    ]),
+            ])
             ->plugins([
                 TableLayoutTogglePlugin::make()
-                        ->setDefaultLayout('grid') // default layout for user seeing the table for the first time
-                        ->persistLayoutUsing(
-                            persister: \Hydrat\TableLayoutToggle\Persisters\LocalStoragePersister::class, // chose a persister to save the layout preference of the user
-                            cacheStore: 'redis', // optional, change the cache store for the Cache persister
-                            cacheTtl: 60 * 24, // optional, change the cache time for the Cache persister
-                        )
-                        ->shareLayoutBetweenPages(false) // allow all tables to share the layout option for this user
-                        ->displayToggleAction() // used to display the toggle action button automatically
-                        ->toggleActionHook('tables::toolbar.search.after') // chose the Filament view hook to render the button on
-                        ->listLayoutButtonIcon('heroicon-o-list-bullet')
-                        ->gridLayoutButtonIcon('heroicon-o-squares-2x2'),
+                    ->setDefaultLayout('grid') // default layout for user seeing the table for the first time
+                    ->persistLayoutUsing(
+                        persister: \Hydrat\TableLayoutToggle\Persisters\LocalStoragePersister::class, // chose a persister to save the layout preference of the user
+                        cacheStore: 'redis', // optional, change the cache store for the Cache persister
+                        cacheTtl: 60 * 24, // optional, change the cache time for the Cache persister
+                    )
+                    ->shareLayoutBetweenPages(false) // allow all tables to share the layout option for this user
+                    ->displayToggleAction() // used to display the toggle action button automatically
+                    ->toggleActionHook('tables::toolbar.search.after') // chose the Filament view hook to render the button on
+                    ->listLayoutButtonIcon('heroicon-o-list-bullet')
+                    ->gridLayoutButtonIcon('heroicon-o-squares-2x2'),
             ])
             ->plugins([
                 FilamentIconPickerPlugin::make(),
                 FilamentEditProfilePlugin::make()
-                        ->slug('my-profile')
-                        ->setTitle(__('My Profile'))
-                        ->setNavigationLabel(__('My Profile'))
-                        ->setNavigationGroup(__('Group Profile'))
-                        ->setIcon('heroicon-o-user')
-                        ->setSort(10)
-                        ->shouldRegisterNavigation(false)
-                        ->shouldShowEmailForm()
-                        ->shouldShowLocaleForm(options: [
-                            'en' => __('🇺🇸 English'),
-                            'sv' => __('🇸🇪 Svenska'),
-                            'th' => __('🇹🇭 ภาษาไทย'),
-                        ])
-                        ->shouldShowThemeColorForm(false)
-                        ->shouldShowSanctumTokens()
-                        ->shouldShowMultiFactorAuthentication()
-                        ->shouldShowBrowserSessionsForm()
-                        ->shouldShowAvatarForm(true, 'attachments')
-                        ->customProfileComponents([
-                            \App\Livewire\CustomProfileComponent::class,
-                        ]),
+                    ->slug('my-profile')
+                    ->setTitle(__('My Profile'))
+                    ->setNavigationLabel(__('My Profile'))
+                    ->setNavigationGroup(__('Group Profile'))
+                    ->setIcon('heroicon-o-user')
+                    ->setSort(10)
+                    ->shouldRegisterNavigation(false)
+                    ->shouldShowEmailForm()
+                    ->shouldShowLocaleForm(options: [
+                        'en' => __('🇺🇸 English'),
+                        'sv' => __('🇸🇪 Svenska'),
+                        'th' => __('🇹🇭 ภาษาไทย'),
+                    ])
+                    ->shouldShowThemeColorForm(false)
+                    ->shouldShowSanctumTokens()
+                    ->shouldShowMultiFactorAuthentication()
+                    ->shouldShowBrowserSessionsForm()
+                    ->shouldShowAvatarForm(true, 'attachments')
+                    ->customProfileComponents([
+                        \App\Livewire\CustomProfileComponent::class,
+                    ]),
             ])
             ->userMenuItems([
                 'profile' => Action::make('profile')
-                        ->label(fn () => Str::ucfirst(Auth::user()->getNdsUserName()))
-                        ->url(fn (): string => EditProfilePage::getUrl())
-                        ->icon('heroicon-o-user-circle'),
+                    ->label(fn () => Str::ucfirst(Auth::user()->getNdsUserName()))
+                    ->url(fn (): string => EditProfilePage::getUrl())
+                    ->icon('heroicon-o-user-circle'),
                 'wirechat' => Action::make('chats')
-                        ->label('Chat')
-                        ->url(fn (): string => ChatDashboard::getUrl())
-                        ->icon('heroicon-o-chat-bubble-left-right'),
+                    ->label('Chat')
+                    ->url(fn (): string => ChatDashboard::getUrl())
+                    ->icon('heroicon-o-chat-bubble-left-right'),
 
             ])
 
@@ -253,20 +255,20 @@ final class AppPanelProvider extends PanelProvider
             ], isPersistent: true)
             ->tenantMenuItems([
                 'register' => fn (Action $action) => $action->label('Register team')
-                        ->icon('heroicon-m-user-plus')
-                        ->visible(fn () => User::canRegisterTeam() !== false),
+                    ->icon('heroicon-m-user-plus')
+                    ->visible(fn () => User::canRegisterTeam() !== false),
                 'invitations' => Action::make('invitations')
-                        ->label('Team Invitation')
-                        ->url(fn (): string => TeamInvitationAccept::getUrl())
-                        ->icon('heroicon-m-users')
-                        ->visible(fn () => Filament::getTenant() !== null),
+                    ->label('Team Invitation')
+                    ->url(fn (): string => TeamInvitationAccept::getUrl())
+                    ->icon('heroicon-m-users')
+                    ->visible(fn () => Filament::getTenant() !== null),
                 'profile' => fn (Action $action) => $action->label('Edit team profile')
-                        ->visible(fn () => User::canManageTeam() !== false),
+                    ->visible(fn () => User::canManageTeam() !== false),
                 'team-users' => Action::make('team-users')
-                        ->label('Medlemmar')
-                        ->icon('heroicon-m-user-group')
-                        ->url(fn () => TeamUserResource::getUrl())
-                        ->visible(true),
+                    ->label('Medlemmar')
+                    ->icon('heroicon-m-user-group')
+                    ->url(fn () => TeamUserResource::getUrl())
+                    ->visible(true),
             ])
             ->plugin(
                 AuthDesignerPlugin::make()

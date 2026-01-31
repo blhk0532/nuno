@@ -141,12 +141,23 @@
 }
 
 @layer base {
+    html {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+            scrollbar-gutter: auto;
+    }
+
     * {
         @apply border-border;
     }
 
     body {
         @apply bg-background text-foreground;
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        overflow-x: hidden;
     }
 }
 
@@ -266,4 +277,10 @@ div.w-full.border.rounded-xl.flex.items-center.justify-center.h-96 {
     min-height:800px;
 }
 
+html {
+  scrollbar-gutter: auto!important;
+}
 
+.fi-sidebar-nav{
+    scrollbar-gutter: auto!important;
+}

@@ -25,10 +25,6 @@
 
 
 
-/* Prevent layout shift when modals toggle page scroll */
-html, body {
-    scrollbar-gutter: stable both-edges;
-}
 
 ::-webkit-scrollbar {
     width: .56vw !important;
@@ -299,7 +295,7 @@ div.filament-fullcalendar.filament-fullcalendar.fc.fc-media-screen.fc-direction-
         width: 100% !important;
 }
 div.filament-fullcalendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard.fc-liquid-hack {
-    max-height: 720px;
+    max-height: 760px;
 }
 
 .calendar-widget-wrapper {
@@ -336,6 +332,10 @@ width: 100% !important;
 }
 .filament-fullcalendar{
     overflow: hidden!important;
+}
+
+.fc-scroller {
+    overflow: hidden auto !important;
 }
 
 .fi-text-color-950{
