@@ -10,6 +10,10 @@ it('provides app-level Alpine defaults for the rich editor and does not modify u
     PHPUnit::assertStringContainsString('window.richEditorFormComponent', $appBlade);
     PHPUnit::assertStringContainsString("isPanelActive: (panel = null) => false", $appBlade);
 
+    $layout = file_get_contents(base_path('resources/views/vendor/filament-panels/components/layout/base.blade.php'));
+    PHPUnit::assertStringContainsString('modulepreload', $layout);
+    PHPUnit::assertStringContainsString('rich-editor', $layout);
+
     // Ensure we did not leave guarded typeof checks in Filament plugin files (we avoid editing upstream when possible)
     $pluginBlade = file_get_contents(base_path('plugins/filament/forms/resources/views/components/rich-editor.blade.php'));
     PHPUnit::assertStringNotContainsString("typeof isUploadingFile !== 'undefined'", $pluginBlade);
