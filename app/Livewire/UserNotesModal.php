@@ -43,15 +43,28 @@ final class UserNotesModal extends Component implements HasForms
             $this->data = $settings;
         }
 
-        // Populate the Filament form with persisted settings so fields (RichEditor) are filled.
-        $this->form->fill($this->data ?? []);
+            // Normalize `anteckningar` to a string if it was stored as an array/object.
+            if (isset($this->data['anteckningar']) && is_array($this->data['anteckningar'])) {
+                $a = $this->data['anteckningar'];
+                if (isset($a['html']) && is_string($a['html'])) {
+                    $this->data['anteckningar'] = $a['html'];
+                } elseif (isset($a['content']) && is_string($a['content'])) {
+                    $this->data['anteckningar'] = $a['content'];
+                } else {
+                    $this->data['anteckningar'] = json_encode($a);
+                }
+            }
 
-        $this->anteckningar = is_string($this->data['anteckningar'] ?? null) ? $this->data['anteckningar'] : '';
+            // Populate the Filament form with persisted settings so fields (RichEditor) are filled.
+            $this->form->fill($this->data ?? []);
+
+            $this->anteckningar = is_string($this->data['anteckningar'] ?? null) ? $this->data['anteckningar'] : '';
 
         Log::info('UserNotesModal mounted', [
             'user' => $this->currentUser,
             'data_keys' => is_array($this->data) ? array_keys($this->data) : null,
-            'data_preview' => is_array($this->data) && isset($this->data['anteckningar']) ? substr($this->data['anteckningar'], 0, 200) : null,
+                'data_preview' => is_string($this->data['anteckningar'] ?? null) ? mb_substr($this->data['anteckningar'], 0, 200) : null,
+            ]);
         ]);
     }
 
