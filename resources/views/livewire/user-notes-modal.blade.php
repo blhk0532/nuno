@@ -23,6 +23,16 @@ position: absolute;
     <div class="user-notes-widget-wrapper m-1" id="user-notes-widget-wrapper">
 
             <div class="space-y-6">
+                {{-- DEBUG: show raw property and form state for troubleshooting --}}
+                <div class="mb-4 p-2 bg-gray-50 border rounded">
+                    <label class="block text-sm font-medium text-gray-700">Debug: anteckningar (wire:model)</label>
+                    <textarea wire:model.lazy="anteckningar" class="w-full h-28 p-2 border rounded mt-1"></textarea>
+                    <div class="mt-2 text-xs text-gray-600">
+                        <strong>Form state (data):</strong>
+                        <pre class="whitespace-pre-wrap">{{ json_encode($this->data) }}</pre>
+                    </div>
+                </div>
+
                 {{ $this->form }}
 
                 <div class="flex justify-end">

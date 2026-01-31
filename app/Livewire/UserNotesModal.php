@@ -111,10 +111,12 @@ final class UserNotesModal extends Component implements HasForms
             ]);
 
             $key = $this->settingName();
-            DB::table('db_config')->updateOrInsert(
+            $result = DB::table('db_config')->updateOrInsert(
                 ['group' => 'user_notes', 'key' => $key],
                 ['group' => 'user_notes', 'key' => $key, 'settings' => json_encode($this->data), 'updated_at' => now()]
             );
+
+            Log::info('UserNotesModal db_updateOrInsert', ['user' => $this->currentUser, 'key' => $key, 'result' => $result]);
 
             \Filament\Notifications\Notification::make()
                 ->success()
