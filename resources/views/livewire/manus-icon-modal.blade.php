@@ -11,7 +11,7 @@
 
                 <div class="flex justify-end">
                     <x-filament::button type="submit">
-                        Spara ändringar
+                        Spara
                     </x-filament::button>
                 </div>
             </form>

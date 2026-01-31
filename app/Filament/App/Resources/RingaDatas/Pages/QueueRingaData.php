@@ -74,11 +74,11 @@ class QueueRingaData extends Page
         try {
             // Check if there are any pending records
             $pendingCount = $this->getQuery()->count();
-            
+
             if ($pendingCount === 0) {
                 // Get the current tenant
                 $tenant = filament()->getTenant();
-                
+
                 // Redirect to dashboard if no pending records
                 $this->redirect(route('filament.app.pages.app-dashboard', ['tenant' => $tenant]), navigate: true);
             }

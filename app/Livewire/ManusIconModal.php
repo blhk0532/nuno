@@ -16,7 +16,7 @@ final class ManusIconModal extends AbstractPageSettings implements HasForms
     use InteractsWithForms;
 
     public ?int $currentUser = null;
-    
+
     public ?array $data = [];
 
     protected string $view = 'livewire.manus-icon-modal';
@@ -36,7 +36,15 @@ final class ManusIconModal extends AbstractPageSettings implements HasForms
         return $schema
             ->components([
                 Forms\Components\RichEditor::make('site_name')
+                    ->toolbarButtons([
+        ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
+        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
+        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
+        ['table', 'attachFiles'],
+        ['undo', 'redo'],
+    ])
                     ->label('Anteckningar')
+                    ->extraAttributes(['spellcheck' => 'false'])
                     ->columnSpanFull(),
             ])
             ->statePath('data');
@@ -47,12 +55,9 @@ final class ManusIconModal extends AbstractPageSettings implements HasForms
         try {
             $this->form->validate();
             parent::save();
-
-            $this->notification()->success()
-                ->title('Sparad')
-                ->send();
         } catch (\Exception $e) {
-            $this->notification()->danger()
+            \Filament\Notifications\Notification::make()
+                ->danger()
                 ->title('Fel')
                 ->body($e->getMessage())
                 ->send();

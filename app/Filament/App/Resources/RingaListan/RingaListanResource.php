@@ -70,7 +70,7 @@ class RingaListanResource extends Resource
         return parent::getEloquentQuery()
             ->where(function (Builder $query) use ($userId, $tenantId) {
                 $query->where('user_id', $userId);
-                
+
                 if ($tenantId) {
                     $query->orWhere('team_id', $tenantId);
                 }
