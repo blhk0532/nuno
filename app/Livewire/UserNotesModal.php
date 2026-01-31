@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace App\Livewire;
 
 use Exception;
+use Illuminate\Support\Facades\Log;
 use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Schemas\Schema;
 use Illuminate\Support\Facades\Auth;
-use Inerba\DbConfig\AbstractPageSettings;
+use Illuminate\Support\Facades\DB;
+use Livewire\Component;
 
-final class UserNotesModal extends AbstractPageSettings implements HasForms
+final class UserNotesModal extends Component implements HasForms
 {
     use InteractsWithForms;
 
@@ -20,12 +22,33 @@ final class UserNotesModal extends AbstractPageSettings implements HasForms
 
     public ?array $data = [];
 
+    public string $anteckningar = '';
     protected string $view = 'livewire.user-notes-modal';
+
+    protected $listeners = [
+        'userNotesSave' => 'save',
+    ];
 
     public function mount(): void
     {
         $this->currentUser = Auth::id();
-        parent::mount();
+
+        $settingName = $this->settingName();
+        $row = DB::table('db_config')->where('key', $settingName)->first();
+        if ($row && isset($row->settings)) {
+            $settings = json_decode($row->settings, true) ?: [];
+            $this->data = $settings;
+        }
+
+        // Populate the Filament form with persisted settings so fields (RichEditor) are filled.
+        $this->form->fill($this->data ?? []);
+
+        $this->anteckningar = is_string($this->data['anteckningar'] ?? null) ? $this->data['anteckningar'] : '';
+
+        Log::info('UserNotesModal mounted', [
+            'user' => $this->currentUser,
+            'data_keys' => is_array($this->data) ? array_keys($this->data) : null,
+        ]);
     }
 
     public function getDefaultData(): array
@@ -60,7 +83,7 @@ final class UserNotesModal extends AbstractPageSettings implements HasForms
                         ],
                     ])
                     ->label('Mina Anteckningar')
-                    ->extraAttributes(['spellcheck' => 'false', 'wire:ignore' => true])
+                    ->extraAttributes(['spellcheck' => 'false'])
                     ->resizableImages()
                     ->columnSpanFull(),
             ])
@@ -71,8 +94,37 @@ final class UserNotesModal extends AbstractPageSettings implements HasForms
     {
         try {
             $this->form->validate();
-            parent::save();
-            $this->skipRender();
+
+            // Read the form state if available, otherwise fall back to the simple `anteckningar` property.
+            $state = null;
+            try {
+                $state = $this->form->getState();
+            } catch (\Throwable $t) {
+                $state = null;
+            }
+
+            if (is_array($state) && array_key_exists('anteckningar', $state)) {
+                $this->data = $state;
+            } else {
+                $this->data = array_merge($this->data ?? [], ['anteckningar' => $this->anteckningar]);
+            }
+
+            Log::info('UserNotesModal save called', [
+                'user' => $this->currentUser,
+                'state_keys' => is_array($state) ? array_keys($state) : null,
+            ]);
+
+            $key = $this->settingName();
+            DB::table('db_config')->updateOrInsert(
+                ['key' => $key],
+                ['group' => 'user_notes', 'settings' => json_encode($this->data), 'updated_at' => now()]
+            );
+
+            \Filament\Notifications\Notification::make()
+                ->success()
+                ->title('Sparat')
+                ->body('Anteckningar sparade.')
+                ->send();
         } catch (Exception $e) {
             \Filament\Notifications\Notification::make()
                 ->danger()
