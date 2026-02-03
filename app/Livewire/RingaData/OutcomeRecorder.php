@@ -228,7 +228,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
                 DB::transaction(function () use ($outcomeEnum, $scheduledAt) {
                     $this->record->is_active = false;
-                    $this->record->outcome = $outcomeEnum;
+                    $this->record->outcome = $outcomeEnum->value;
                     $this->record->aterkom_at = $scheduledAt;
                     $this->record->attempts = ($this->record->attempts ?? 0) + 1;
                     $this->record->is_outcome = true;
@@ -259,7 +259,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             // For other outcomes, just save
             DB::transaction(function () use ($outcomeEnum) {
                 $this->record->is_active = false;
-                $this->record->outcome = $outcomeEnum;
+                $this->record->outcome = $outcomeEnum->value;
                 $this->record->attempts = ($this->record->attempts ?? 0) + 1;
                 $this->record->is_outcome = true;
                 $this->record->save();
