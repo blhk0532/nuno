@@ -43,7 +43,7 @@ final class RingaDatasQueueTableWidget extends BaseWidget
         if (! $id) {
             $id = \App\Filament\App\Resources\RingaDatas\RingaDatasResource::getEloquentQuery()
                 ->where(function ($query) {
-                    $query->whereNull('outcome');
+                    $query->where('is_outcome', false);
                     //    ->orWhere('attempts', '<', 3);
                 })
                 ->where('available_at', '<=', now())

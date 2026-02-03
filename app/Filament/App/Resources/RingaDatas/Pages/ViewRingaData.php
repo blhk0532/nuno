@@ -1,24 +1,38 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\RingaDatas\Pages;
 
 use App\Filament\App\Resources\RingaDatas\RingaDatasResource;
-use Filament\Actions\EditAction;
-use Filament\Resources\Pages\ViewRecord;
-use App\Models\RingaData;
-use App\Filament\App\Resources\RingaDatas\Widgets\RingaDataPinpointWidget;
 use App\Filament\App\Resources\RingaDatas\Widgets\RingaDataDisplayWidget;
-use Filament\Actions\CreateAction;
-use Filament\Resources\Pages\ListRecords;
-use Filament\Actions;
-use Filament\Support\Enums\Width;
 use App\Filament\App\Resources\RingaDatas\Widgets\RingaDataOutcomeFormWidget;
+use App\Filament\App\Resources\RingaDatas\Widgets\RingaDataPinpointWidget;
+use App\Models\RingaData;
+use Filament\Resources\Pages\ViewRecord;
+use Filament\Support\Enums\Width;
 
-class ViewRingaData extends ViewRecord
+final class ViewRingaData extends ViewRecord
 {
+    public ?int $selectedRecordId = null;
+
     protected static string $resource = RingaDatasResource::class;
 
-    public ?int $selectedRecordId = null;
+    public function getHeaderWidgetsColumns(): int|array
+    {
+        return 2;
+    }
+
+    public function selectRecord(int $recordId): void
+    {
+        $this->selectedRecordId = $recordId;
+        $this->dispatch('record-selected', recordId: $recordId);
+    }
+
+    public function getMaxContentWidth(): Width
+    {
+        return Width::Full;
+    }
 
     protected function getHeaderActions(): array
     {
@@ -34,26 +48,10 @@ class ViewRingaData extends ViewRecord
         ];
     }
 
-    public function getHeaderWidgetsColumns(): int | array
-    {
-        return 2;
-    }
-
     protected function getHeaderWidgetsData(): array
     {
         return [
             'record' => $this->selectedRecordId ? RingaData::find($this->selectedRecordId) : null,
         ];
-    }
-
-    public function selectRecord(int $recordId): void
-    {
-        $this->selectedRecordId = $recordId;
-        $this->dispatch('record-selected', recordId: $recordId);
-    }
-
-    public function getMaxContentWidth(): Width
-    {
-        return Width::Full;
     }
 }

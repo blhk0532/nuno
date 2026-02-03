@@ -112,7 +112,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
         // Fallback: if no recordId passed, load first unprocessed record
         if (! $this->record && ! $this->recordId) {
-            $this->record = RingaData::whereNull('outcome')
+            $this->record = RingaData::where('is_outcome', false)
                 ->orderBy('id')
                 ->first();
             if ($this->record) {

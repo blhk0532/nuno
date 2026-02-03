@@ -1,29 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\RingaDatas\Widgets;
 
 use App\Models\RingaData;
 use Fahiem\FilamentPinpoint\Pinpoint;
-use Filament\Forms\Components\TextInput;
-use Filament\Notifications\Notification;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Schema;
 use Filament\Widgets\Widget;
 
-class RingaDataPinpointWidget extends Widget implements HasForms
+final class RingaDataPinpointWidget extends Widget implements HasForms
 {
     use InteractsWithForms;
+
+    public ?array $data = [];
+
+    public ?RingaData $record = null;
 
     protected string $view = 'filament.app.resources.ringa-data.widgets.ringa-data-pinpoint-widget';
 
     protected int|string|array $columnSpan = 'md';
 
     protected static ?string $heading = '';
-
-    public ?array $data = [];
-
-    public ?RingaData $record = null;
 
     protected $listeners = ['record-selected' => 'updateRecord'];
 
@@ -63,9 +64,9 @@ class RingaDataPinpointWidget extends Widget implements HasForms
 
         return $schema
             ->schema([
-                                Pinpoint::make('location')
-                ->height(300)
-                         ->label($this->record->gatuadress . ' ' . $this->record->postort ?? null)
+                Pinpoint::make('location')
+                    ->height(300)
+                    ->label($this->record->gatuadress.' '.$this->record->postort ?? null)
                     ->latField('lat')
                     ->lngField('lng')
                     ->addressField('address')

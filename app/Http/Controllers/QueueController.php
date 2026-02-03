@@ -8,12 +8,12 @@ use App\Models\RingaData;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
-class QueueController extends Controller
+final class QueueController extends Controller
 {
     public function __invoke(Request $request)
     {
-        // Get all RingaData records where outcome is null (pending records)
-        $records = RingaData::whereNull('outcome')
+        // Get all RingaData records where is_outcome is false (pending records)
+        $records = RingaData::where('is_outcome', false)
             ->orderBy('id')
             ->get()
             ->map(function ($record) {

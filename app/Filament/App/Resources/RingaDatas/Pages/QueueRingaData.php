@@ -50,7 +50,7 @@ final class QueueRingaData extends Page
     public static function getNavigationBadge(): ?string
     {
         return (string) self::getResource()::getEloquentQuery()
-            ->whereNull('outcome')
+            ->where('is_outcome', false)
             ->where('available_at', '<=', now())
             ->count();
     }

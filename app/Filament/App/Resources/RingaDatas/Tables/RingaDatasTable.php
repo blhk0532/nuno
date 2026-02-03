@@ -1,33 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\RingaDatas\Tables;
 
-use App\Models\RingaData;
-use Faker\Factory as Faker;
-use Filament\Actions\BulkActionGroup;
-use Filament\Actions\DeleteBulkAction;
+use Filament\Actions;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
-use Filament\Forms\Components\TextInput;
-use Filament\Notifications\Notification;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
 
-class RingaDatasTable
+final class RingaDatasTable
 {
     public static function configure(Table $table): Table
     {
         return $table
-                ->toolbarActions([
-        ])
+            ->toolbarActions([
+            ])
             ->headerActions([
 
-        ])
+            ])
             ->columns([
-                                TextColumn::make('gatuadress')
+                TextColumn::make('gatuadress')
                     ->sortable(),
                 TextColumn::make('fornamn')
                     ->sortable(),
@@ -61,7 +55,7 @@ class RingaDatasTable
                 //
             ])
             ->recordActions([
-                \Filament\Actions\Action::make('view_details')
+                Actions\Action::make('view_details')
                     ->label('Ring')
                     ->icon('heroicon-o-phone-arrow-up-right')
                     ->color('primary')
@@ -75,11 +69,10 @@ class RingaDatasTable
             ]);
     }
 
-    protected function getHeaderActions(): array
+    private function getHeaderActions(): array
     {
         return [
 
         ];
     }
-
 }

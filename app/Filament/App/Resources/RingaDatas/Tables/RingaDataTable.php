@@ -1,40 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\RingaDatas\Tables;
 
 use App\Models\RingaData;
 use Faker\Factory as Faker;
+use Filament\Actions;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Filament\Actions;
-use Filament\Resources\Pages\ListRecords;
 
-class RingaDataTable
+final class RingaDataTable
 {
     public static function configure(Table $table): Table
     {
         return $table
-                ->toolbarActions([
-                        \EightyNine\ExcelImport\ExcelImportAction::make()
-                ->color("primary"),
-            Actions\CreateAction::make(),
-        ])
-                ->headerActions([
-                          \EightyNine\ExcelImport\ExcelImportAction::make()
-                ->color("primary"),
-            Actions\CreateAction::make()
-                    ->label("+"),
-            static::generateFakeDataAction()
-            ->label(""),
+            ->toolbarActions([
+                \EightyNine\ExcelImport\ExcelImportAction::make()
+                    ->color('primary'),
+                Actions\CreateAction::make(),
+            ])
+            ->headerActions([
+                \EightyNine\ExcelImport\ExcelImportAction::make()
+                    ->color('primary'),
+                Actions\CreateAction::make()
+                    ->label('+'),
+                self::generateFakeDataAction()
+                    ->label(''),
 
-        ])
+            ])
             ->columns([
                 TextColumn::make('gatuadress')
                     ->sortable(),
@@ -46,7 +46,7 @@ class RingaDataTable
                 TextColumn::make('outcome')
                     ->sortable()
                     ->badge(),
-                            TextColumn::make('attempts')
+                TextColumn::make('attempts')
                     ->sortable()
                     ->alignCenter(),
                 TextColumn::make('expires_at')
@@ -68,7 +68,7 @@ class RingaDataTable
                 //
             ])
             ->recordActions([
-                \Filament\Actions\Action::make('view_details')
+                Actions\Action::make('view_details')
                     ->label('Ring')
                     ->icon('heroicon-o-phone-arrow-up-right')
                     ->color('primary')
@@ -87,18 +87,9 @@ class RingaDataTable
             ]);
     }
 
-    protected function getHeaderActions(): array
+    private static function generateFakeDataAction(): Actions\Action
     {
-        return [
-            \EightyNine\ExcelImport\ExcelImportAction::make()
-                ->color("primary"),
-            Actions\CreateAction::make(),
-        ];
-    }
-
-    private static function generateFakeDataAction(): \Filament\Actions\Action
-    {
-        return \Filament\Actions\Action::make('generateFakeData')
+        return Actions\Action::make('generateFakeData')
             ->label('Generate Fake Data')
             ->icon('heroicon-o-sparkles')
             ->color('warning')
@@ -175,5 +166,14 @@ class RingaDataTable
                     ->body("Successfully created {$created} fake RingaData records.")
                     ->send();
             });
+    }
+
+    private function getHeaderActions(): array
+    {
+        return [
+            \EightyNine\ExcelImport\ExcelImportAction::make()
+                ->color('primary'),
+            Actions\CreateAction::make(),
+        ];
     }
 }

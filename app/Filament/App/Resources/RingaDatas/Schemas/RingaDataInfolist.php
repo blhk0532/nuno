@@ -1,20 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\RingaDatas\Schemas;
 
-use Filament\Infolists\Components\IconEntry;
-use Filament\Infolists\Components\TextEntry;
-use Filament\Schemas\Schema;
 use Filament\Forms\Components\RichEditor;
-use Filament\Notifications\Notification;
-use Filament\Actions\Action;
-use Filament\Forms\Components\DateTimePicker;
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Textarea;
-use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Schema;
 
-class RingaDataInfolist
+final class RingaDataInfolist
 {
     public static function configure(Schema $schema): Schema
     {
