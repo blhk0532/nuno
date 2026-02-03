@@ -61,7 +61,7 @@ final class RingaOutcomeForm
                                                     ->success()
                                                     ->send();
 
-                                                // Redirect to the queue page to load the next record
+                                                // Full page reload to refresh badge and load next record
                                                 if ($component && method_exists($component, 'redirect')) {
                                                     $component->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
                                                 }
@@ -111,7 +111,7 @@ final class RingaOutcomeForm
                                                     ->success()
                                                     ->send();
 
-                                                // Redirect to the queue page to load the next record
+                                                // Full page reload to refresh badge and load next record
                                                 if ($component && method_exists($component, 'redirect')) {
                                                     $component->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
                                                 }
@@ -161,7 +161,7 @@ final class RingaOutcomeForm
                                                     ->success()
                                                     ->send();
 
-                                                // Redirect to the queue page to load the next record
+                                                // Full page reload to refresh badge and load next record
                                                 if ($component && method_exists($component, 'redirect')) {
                                                     $component->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
                                                 }
