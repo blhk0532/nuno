@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -9,7 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Log;
 
-class PersonerDataController extends Controller
+final class PersonerDataController extends Controller
 {
     public function bulkStore(Request $request): JsonResponse
     {
@@ -214,7 +216,7 @@ class PersonerDataController extends Controller
                             if (! in_array($recordData['personnamn'], $existingNames)) {
                                 $combinedNames = $existing->personnamn.', '.$recordData['personnamn'];
                                 // Truncate to fit within 255 character limit to prevent MySQL truncation error
-                                $personerData['personnamn'] = substr($combinedNames, 0, 255);
+                                $personerData['personnamn'] = mb_substr($combinedNames, 0, 255);
                             }
                         }
 
@@ -300,5 +302,28 @@ class PersonerDataController extends Controller
             ],
             'errors' => $errors,
         ]);
+    }
+
+    /**
+     * Alias for bulkStore - used by Node.js scripts
+     */
+    public function bulk(Request $request): JsonResponse
+    {
+        return $this->bulkStore($request);
+    }
+
+    /**
+     * Store single record - used by Node.js scripts
+     */
+    public function store(Request $request): JsonResponse
+    {
+        // Delegate to bulk store with single record wrapped in array
+        $singleRecordRequest = Request::create(
+            $request->getPathInfo(),
+            'POST',
+            ['records' => [$request->all()]]
+        );
+
+        return $this->bulkStore($singleRecordRequest);
     }
 }

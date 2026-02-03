@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\RingaDatas\Widgets;
 
 use App\Filament\App\Resources\RingaDatas\Tables\RingaDatasTable;
@@ -8,13 +10,13 @@ use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
 use Livewire\Attributes\On;
 
-class RingaDatasQueueTableWidget extends BaseWidget
+final class RingaDatasQueueTableWidget extends BaseWidget
 {
     public ?int $recordId = null;
 
     protected static ?string $heading = '';
 
-    protected int | string | array $columnSpan = 'full';
+    protected int|string|array $columnSpan = 'full';
 
     public function mount(?int $recordId = null): void
     {
@@ -38,13 +40,14 @@ class RingaDatasQueueTableWidget extends BaseWidget
         $id = $this->recordId ?? $pageId;
 
         // If still no ID, try to find the "current" one just like the page does
-        if (!$id) {
+        if (! $id) {
             $id = \App\Filament\App\Resources\RingaDatas\RingaDatasResource::getEloquentQuery()
                 ->where(function ($query) {
-                  $query->whereNull('outcome');
-                //    ->orWhere('attempts', '<', 3);
-            })
-                ->orderBy('id')
+                    $query->whereNull('outcome');
+                    //    ->orWhere('attempts', '<', 3);
+                })
+                ->where('available_at', '<=', now())
+                ->orderBy('gatuadress')
                 ->first()
                 ?->id;
         }
@@ -52,15 +55,16 @@ class RingaDatasQueueTableWidget extends BaseWidget
         logger()->info('RingaDatasQueueTableWidget table query', [
             'final_id' => $id,
             'local_id' => $this->recordId,
-            'page_id' => $pageId
+            'page_id' => $pageId,
         ]);
 
-        return \App\Filament\App\Resources\RingaDatas\Tables\RingaDatasTable::configure($table)
+        return RingaDatasTable::configure($table)
             ->query(function () use ($id) {
-                if (!$id) {
-                    return \App\Models\RingaData::query()->whereRaw('1=0');
+                if (! $id) {
+                    return RingaData::query()->whereRaw('1=0');
                 }
-                return \App\Filament\App\Resources\RingaDatas\RingaDatasResource::getEloquentQuery()->where('id', (int)$id);
+
+                return \App\Filament\App\Resources\RingaDatas\RingaDatasResource::getEloquentQuery()->where('id', (int) $id);
             })
             ->paginated(false)
             ->emptyStateHeading('Ingen aktuell post vald')

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -9,7 +11,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Log;
 
-class HittaSeController extends Controller
+final class HittaSeController extends Controller
 {
     public function store(Request $request)
     {
@@ -33,12 +35,91 @@ class HittaSeController extends Controller
         ]);
 
         // Prefer person table; only fall back to company table when gender missing AND model exists.
-        $isCompanyData = (! isset($validated['kon']) || empty(trim($validated['kon'] ?? '')))
-            && class_exists(\App\Models\HittaBolag::class);
+        $isCompanyData = (! isset($validated['kon']) || empty(mb_trim($validated['kon'] ?? '')))
+            && class_exists(HittaBolag::class);
 
         return $isCompanyData
             ? $this->storeToHittaBolag($validated)
             : $this->storeToHittaSe($validated);
+    }
+
+    public function batchStore(Request $request)
+    {
+        $validated = $request->validate([
+            'records' => 'required|array',
+            'records.*.personnamn' => 'nullable|string',
+            'records.*.alder' => 'nullable|string',
+            'records.*.kon' => 'nullable|string',
+            'records.*.gatuadress' => 'nullable|string',
+            'records.*.postnummer' => 'nullable|string',
+            'records.*.postort' => 'nullable|string',
+            'records.*.telefon' => 'nullable|array',
+            'records.*.telefon.*' => 'nullable|string',
+            'records.*.karta' => 'nullable|string',
+            'records.*.link' => 'nullable|string',
+            'records.*.bostadstyp' => 'nullable|string',
+            'records.*.bostadspris' => 'nullable|string',
+            'records.*.is_active' => 'boolean',
+            'records.*.is_telefon' => 'boolean',
+            'records.*.is_ratsit' => 'boolean',
+            'records.*.is_hus' => 'boolean',
+        ]);
+
+        $created = 0;
+        $updated = 0;
+        $failed = 0;
+        $seCreated = 0;
+        $seUpdated = 0;
+        $bolagCreated = 0;
+        $bolagUpdated = 0;
+
+        foreach ($validated['records'] as $recordData) {
+            try {
+                $isCompanyData = (! isset($recordData['kon']) || empty(mb_trim($recordData['kon'] ?? '')))
+                    && class_exists(HittaBolag::class);
+
+                if ($isCompanyData) {
+                    $result = $this->storeToHittaBolag($recordData);
+                    if ($result->getStatusCode() === 200) {
+                        $bolagUpdated++;
+                    } elseif ($result->getStatusCode() === 201) {
+                        $bolagCreated++;
+                    }
+                } else {
+                    $result = $this->storeToHittaSeBatch($recordData);
+                    if ($result['action'] === 'updated') {
+                        $seUpdated++;
+                    } elseif ($result['action'] === 'created') {
+                        $seCreated++;
+                    }
+                }
+            } catch (Exception $e) {
+                $failed++;
+                Log::error('Batch store failed for record: '.json_encode($recordData).' Error: '.$e->getMessage());
+            }
+        }
+
+        return response()->json([
+            'message' => 'Batch processing complete',
+            'hitta_se' => [
+                'created' => $seCreated,
+                'updated' => $seUpdated,
+            ],
+            'hitta_bolag' => [
+                'created' => $bolagCreated,
+                'updated' => $bolagUpdated,
+            ],
+            'failed' => $failed,
+            'total' => count($validated['records']),
+        ], 200);
+    }
+
+    /**
+     * Alias for batchStore - used by Node.js scripts
+     */
+    public function batch(Request $request)
+    {
+        return $this->batchStore($request);
     }
 
     /**
@@ -119,77 +200,6 @@ class HittaSeController extends Controller
             'message' => 'HittaBolag record created successfully',
             'data' => $record,
         ], 201);
-    }
-
-    public function batchStore(Request $request)
-    {
-        $validated = $request->validate([
-            'records' => 'required|array',
-            'records.*.personnamn' => 'nullable|string',
-            'records.*.alder' => 'nullable|string',
-            'records.*.kon' => 'nullable|string',
-            'records.*.gatuadress' => 'nullable|string',
-            'records.*.postnummer' => 'nullable|string',
-            'records.*.postort' => 'nullable|string',
-            'records.*.telefon' => 'nullable|array',
-            'records.*.telefon.*' => 'nullable|string',
-            'records.*.karta' => 'nullable|string',
-            'records.*.link' => 'nullable|string',
-            'records.*.bostadstyp' => 'nullable|string',
-            'records.*.bostadspris' => 'nullable|string',
-            'records.*.is_active' => 'boolean',
-            'records.*.is_telefon' => 'boolean',
-            'records.*.is_ratsit' => 'boolean',
-            'records.*.is_hus' => 'boolean',
-        ]);
-
-        $created = 0;
-        $updated = 0;
-        $failed = 0;
-        $seCreated = 0;
-        $seUpdated = 0;
-        $bolagCreated = 0;
-        $bolagUpdated = 0;
-
-        foreach ($validated['records'] as $recordData) {
-            try {
-                $isCompanyData = (! isset($recordData['kon']) || empty(trim($recordData['kon'] ?? '')))
-                    && class_exists(\App\Models\HittaBolag::class);
-
-                if ($isCompanyData) {
-                    $result = $this->storeToHittaBolag($recordData);
-                    if ($result->getStatusCode() === 200) {
-                        $bolagUpdated++;
-                    } elseif ($result->getStatusCode() === 201) {
-                        $bolagCreated++;
-                    }
-                } else {
-                    $result = $this->storeToHittaSeBatch($recordData);
-                    if ($result['action'] === 'updated') {
-                        $seUpdated++;
-                    } elseif ($result['action'] === 'created') {
-                        $seCreated++;
-                    }
-                }
-            } catch (Exception $e) {
-                $failed++;
-                Log::error('Batch store failed for record: '.json_encode($recordData).' Error: '.$e->getMessage());
-            }
-        }
-
-        return response()->json([
-            'message' => 'Batch processing complete',
-            'hitta_se' => [
-                'created' => $seCreated,
-                'updated' => $seUpdated,
-            ],
-            'hitta_bolag' => [
-                'created' => $bolagCreated,
-                'updated' => $bolagUpdated,
-            ],
-            'failed' => $failed,
-            'total' => count($validated['records']),
-        ], 200);
     }
 
     /**

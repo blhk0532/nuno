@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\PostNums\Actions;
 
 use App\Jobs\RunHittaPostOrtSplitJob;
@@ -9,7 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 
-class RunHittaPortOrtBulkAction extends BulkAction
+final class RunHittaPortOrtBulkAction extends BulkAction
 {
     public static function make(?string $name = 'runHittaPortOrt'): static
     {
@@ -38,7 +40,7 @@ class RunHittaPortOrtBulkAction extends BulkAction
                 // Create job batch
                 $batch = Bus::batch($jobs)
                     ->name('Bulk Hitta PostOrt (split) - '.now()->format('Y-m-d H:i:s'))
-                    ->onQueue('hitta-postort')
+                    ->onQueue('scrape')
                     ->then(function ($batch) {
                         // Update batch status to complete when all jobs finish
                         DB::table('job_batches')
@@ -55,7 +57,7 @@ class RunHittaPortOrtBulkAction extends BulkAction
                 // Update job names for newly created jobs
                 // Update job names for split jobs
                 $newJobs = DB::table('jobs')
-                    ->where('queue', 'hitta-postort')
+                    ->where('queue', 'scrape')
                     ->where('id', '>', $maxJobIdBefore)
                     ->orderBy('id')
                     ->get();

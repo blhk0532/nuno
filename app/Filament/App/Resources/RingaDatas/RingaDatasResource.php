@@ -1,33 +1,35 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\RingaDatas;
 
 use App\Filament\App\Resources\RingaDatas\Pages\CreateRingaData;
 use App\Filament\App\Resources\RingaDatas\Pages\EditRingaData;
 use App\Filament\App\Resources\RingaDatas\Pages\ListRingaData;
-use App\Filament\App\Resources\RingaDatas\Pages\ViewRingaData;
 use App\Filament\App\Resources\RingaDatas\Pages\QueueRingaData;
+use App\Filament\App\Resources\RingaDatas\Pages\ViewRingaData;
 use App\Filament\App\Resources\RingaDatas\Schemas\RingaDataForm;
 use App\Filament\App\Resources\RingaDatas\Schemas\RingaDataInfolist;
 use App\Filament\App\Resources\RingaDatas\Tables\RingaDataTable;
 use App\Models\RingaData;
-use Illuminate\Database\Eloquent\Builder;
 use BackedEnum;
-use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
-use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 use UnitEnum;
+use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 
-class RingaDatasResource extends Resource
+final class RingaDatasResource extends Resource
 {
+    public static bool $shouldRegisterNavigation = false;
+
     protected static ?string $model = RingaData::class;
 
     protected static string|BackedEnum|null $navigationIcon = Remix::RiTimerFlashLine;
-    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiTimerFlashFill;
 
+    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiTimerFlashFill;
 
     protected static ?string $navigationLabel = 'Återkomsten';
 
@@ -35,13 +37,13 @@ class RingaDatasResource extends Resource
 
     protected static ?string $slug = 'ringa/data';
 
-    protected static ?int $navigationSort = 10;
-
-    public static bool $shouldRegisterNavigation = false;
+    protected static ?int $navigationSort = 4;
 
     // Make this resource global (not tenant-scoped) since Ringa data is public information
     protected static ?string $tenantOwnershipRelationshipName = null;
+
     protected static bool $isScopedToTenant = false;
+
     public static function form(Schema $schema): Schema
     {
         return RingaDataForm::configure($schema);
@@ -65,7 +67,7 @@ class RingaDatasResource extends Resource
         return parent::getEloquentQuery()
             ->where(function (Builder $query) use ($userId, $tenantId) {
                 $query->where('user_id', $userId);
-                
+
                 if ($tenantId) {
                     $query->orWhere('team_id', $tenantId);
                 }

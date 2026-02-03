@@ -1,15 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\PostNums\Actions;
 
 use App\Jobs\RunMerinfoScript;
+use DB;
 use Filament\Actions\BulkAction;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Log;
 
-class QueueMerinfoBulkAction extends BulkAction
+final class QueueMerinfoBulkAction extends BulkAction
 {
     public static function make(?string $name = 'queueMerinfo'): static
     {
@@ -34,7 +37,7 @@ class QueueMerinfoBulkAction extends BulkAction
                         continue; // skip invalid formats
                     }
                     // Check existing batch by name
-                    $existing = \DB::table('job_batches')->where('name', $normalized)->first();
+                    $existing = DB::table('job_batches')->where('name', $normalized)->first();
                     if ($existing && ! $existing->finished_at && ! $existing->cancelled_at && (int) $existing->pending_jobs > 0) {
                         $skipped++;
 
@@ -42,29 +45,29 @@ class QueueMerinfoBulkAction extends BulkAction
                     }
 
                     // Get max job ID before dispatching
-                    $maxJobIdBefore = \DB::table('jobs')->max('id') ?? 0;
+                    $maxJobIdBefore = DB::table('jobs')->max('id') ?? 0;
 
                     Log::info('About to dispatch merinfo batch', ['postnummer' => $normalized, 'max_job_id_before' => $maxJobIdBefore]);
 
                     $batch = Bus::batch([
                         new RunMerinfoScript($normalized, 'merinfo'),
                     ])->name($normalized)
-                        ->onQueue('merinfo-queue')
+                        ->onQueue('scrape')
                         ->then(function ($batch) {
                             // Update batch status to complete when all jobs finish
-                            \DB::table('job_batches')
+                            DB::table('job_batches')
                                 ->where('id', $batch->id)
                                 ->update(['status' => 'complete']);
                         })
                         ->dispatch();
 
                     // Set batch status to pending
-                    \DB::table('job_batches')
+                    DB::table('job_batches')
                         ->where('id', $batch->id)
                         ->update(['status' => 'pending']);
 
                     // Update the newly created job's status to "pending"
-                    \DB::table('jobs')
+                    DB::table('jobs')
                         ->where('id', '>', $maxJobIdBefore)
                         ->where('payload', 'like', '%RunMerinfoScript%')
                         ->where('payload', 'like', '%merinfo%')

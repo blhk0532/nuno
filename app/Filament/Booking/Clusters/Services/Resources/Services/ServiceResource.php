@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Booking\Clusters\Services\Resources\Services;
 
-use App\Filament\Booking\Clusters\Services\ServicesCluster;
+use Adultdate\FilamentBooking\Models\Booking\Service;
 use App\Filament\Booking\Clusters\Services\Resources\Services\Pages\CreateService;
 use App\Filament\Booking\Clusters\Services\Resources\Services\Pages\EditService;
 use App\Filament\Booking\Clusters\Services\Resources\Services\Pages\ListServices;
@@ -10,15 +12,14 @@ use App\Filament\Booking\Clusters\Services\Resources\Services\RelationManagers\C
 use App\Filament\Booking\Clusters\Services\Resources\Services\Schemas\ServiceForm;
 use App\Filament\Booking\Clusters\Services\Resources\Services\Tables\ServicesTable;
 use App\Filament\Booking\Clusters\Services\Resources\Services\Widgets\ServiceStats;
-use Adultdate\FilamentBooking\Models\Booking\Service;
+use App\Filament\Booking\Clusters\Services\ServicesCluster;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-class ServiceResource extends Resource
+final class ServiceResource extends Resource
 {
     protected static ?string $model = Service::class;
 
@@ -26,7 +27,7 @@ class ServiceResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-wrench-screwdriver';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-wrench-screwdriver';
 
     // protected static ?string $navigationLabel = 'Tjänster';
 
@@ -85,13 +86,13 @@ class ServiceResource extends Resource
     {
         return [
             'Brand' => $record->brand?->name,
-            'Price' => $record->price ? '$' . number_format($record->price, 2) : null,
+            'Price' => $record->price ? '$'.number_format($record->price, 2) : null,
             'Status' => $record->status->getLabel(),
         ];
     }
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 }

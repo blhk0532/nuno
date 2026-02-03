@@ -93,6 +93,6 @@ final class ServiceResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return self::getModel()::count();
+        return (string) self::getModel()::count();
     }
 }

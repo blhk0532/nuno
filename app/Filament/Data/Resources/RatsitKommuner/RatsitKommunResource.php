@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\RatsitKommuner;
 
 use App\Filament\Data\Resources\RatsitKommuner\Pages\ListRatsitKommuner;
@@ -12,7 +14,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class RatsitKommunResource extends Resource
+final class RatsitKommunResource extends Resource
 {
     protected static ?string $model = RatsitKommun::class;
 
@@ -54,6 +56,6 @@ class RatsitKommunResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 }

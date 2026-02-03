@@ -1,14 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\RatsitDatas\Tables;
 
+use App\Actions\TransferRatsitDataToRingaDataAction;
 use App\Filament\Exports\RatsitDataExporter;
 use App\Models\RatsitData;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ExportBulkAction;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Enums\FiltersLayout;
@@ -16,10 +21,9 @@ use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
-use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction as FilamentExcelExportBulkAction;
-use pxlrbt\FilamentExcel\Exports\ExcelExport;
+use Illuminate\Support\Collection;
 
-class RatsitDatasTable
+final class RatsitDatasTable
 {
     public static function configure(Table $table): Table
     {
@@ -387,22 +391,30 @@ class RatsitDatasTable
             ], layout: FiltersLayout::AboveContentCollapsible)
             ->deferFilters()
             ->defaultSort('created_at', 'desc')
-            ->paginated([10, 25, 50, 100])
+            ->paginated([10, 25, 50, 100, 250, 500, 1000])
             ->defaultPaginationPageOption(25)
             ->recordActions([
                 EditAction::make(),
             ])
-            ->toolbarActions([
+            ->bulkActions([
                 BulkActionGroup::make([
-                    //    FilamentExcelExportBulkAction::make()
-                    //        ->exports([
-                    //            ExcelExport::make()
-                    //                ->fromTable()
-                    //                ->askForFilename()
-                    //                ->askForWriterType(),
-                    //        ]),
                     ExportBulkAction::make()
                         ->exporter(RatsitDataExporter::class),
+                    BulkAction::make('transferToRingaData')
+                        ->label('Transfer to Ringa Data')
+                        ->icon('heroicon-o-arrow-right')
+                        ->color('success')
+                        ->requiresConfirmation()
+                        ->action(function (Collection $records, array $data): void {
+                            $action = new TransferRatsitDataToRingaDataAction();
+                            $action->handle($records, $data);
+
+                            Notification::make()
+                                ->title('Success')
+                                ->body(count($records).' records transferred to Ringa Data')
+                                ->success()
+                                ->send();
+                        }),
                     DeleteBulkAction::make(),
                 ]),
             ]);

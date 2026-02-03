@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\PostNums\Actions;
 
 use App\Jobs\RunRatsitCheckCountsJob;
@@ -9,7 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 
-class RunRatsitCountsBulkAction extends BulkAction
+final class RunRatsitCountsBulkAction extends BulkAction
 {
     public static function make(?string $name = 'runRatsitCounts'): static
     {
@@ -31,10 +33,13 @@ class RunRatsitCountsBulkAction extends BulkAction
                     return new RunRatsitCheckCountsJob($record->post_nummer);
                 })->toArray();
 
+                // Get current max job ID before dispatching
+                $maxJobIdBefore = DB::table('jobs')->max('id') ?? 0;
+
                 // Create job batch
                 $batch = Bus::batch($jobs)
                     ->name('Bulk Ratsit Counts - '.now()->format('Y-m-d H:i:s'))
-                    ->onQueue('counts')
+                    ->onQueue('scrape')
                     ->then(function ($batch) {
                         // Update batch status to complete when all jobs finish
                         DB::table('job_batches')
@@ -48,14 +53,19 @@ class RunRatsitCountsBulkAction extends BulkAction
                     ->where('id', $batch->id)
                     ->update(['status' => 'pending']);
 
-                // Update job names in database after dispatching
-                foreach ($records as $record) {
-                    DB::table('jobs')
-                        ->where('queue', 'counts')
-                        ->whereNull('name')
-                        ->orderBy('id', 'desc')
-                        ->limit(1)
-                        ->update(['name' => $record->post_nummer.' - Ratsit Counts']);
+                // Update job names for newly created jobs
+                $newJobs = DB::table('jobs')
+                    ->where('queue', 'scrape')
+                    ->where('id', '>', $maxJobIdBefore)
+                    ->orderBy('id')
+                    ->get();
+
+                foreach ($records as $index => $record) {
+                    if (isset($newJobs[$index])) {
+                        DB::table('jobs')
+                            ->where('id', $newJobs[$index]->id)
+                            ->update(['name' => $record->post_nummer.' - Ratsit Counts', 'status' => 'pending']);
+                    }
                 }
 
                 Notification::make()

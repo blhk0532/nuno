@@ -1,22 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Booking\Clusters\Services\Resources\Categories;
 
-use App\Filament\Booking\Clusters\Services\ServicesCluster;
+use Adultdate\FilamentBooking\Models\Booking\Category;
 use App\Filament\Booking\Clusters\Services\Resources\Categories\Pages\CreateCategory;
 use App\Filament\Booking\Clusters\Services\Resources\Categories\Pages\EditCategory;
 use App\Filament\Booking\Clusters\Services\Resources\Categories\Pages\ListCategories;
 use App\Filament\Booking\Clusters\Services\Resources\Categories\RelationManagers\ServicesRelationManager;
 use App\Filament\Booking\Clusters\Services\Resources\Categories\Schemas\CategoryForm;
 use App\Filament\Booking\Clusters\Services\Resources\Categories\Tables\CategoriesTable;
-use Adultdate\FilamentBooking\Models\Booking\Category;
+use App\Filament\Booking\Clusters\Services\ServicesCluster;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
-class CategoryResource extends Resource
+final class CategoryResource extends Resource
 {
     protected static ?string $model = Category::class;
 
@@ -27,11 +29,11 @@ class CategoryResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-tag';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-tag';
 
     protected static ?string $navigationParentItem = 'Services';
 
-    protected static string | null $navigationLabel = 'Kategorier';
+    protected static ?string $navigationLabel = 'Kategorier';
 
     protected static ?int $navigationSort = 2;
 
@@ -80,6 +82,6 @@ class CategoryResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 }

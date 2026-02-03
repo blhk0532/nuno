@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\PostNums;
 
 use App\Filament\Data\Resources\PostNums\Pages\CreatePostNum;
@@ -17,7 +19,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class PostNumResource extends Resource
+final class PostNumResource extends Resource
 {
     protected static ?string $model = PostNum::class;
 
@@ -55,7 +57,7 @@ class PostNumResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 
     public static function getPages(): array

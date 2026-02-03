@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\PostNums\Actions;
 
 use App\Jobs\RunHittaSearchPersonsJob;
@@ -9,7 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 
-class RunHittaPersonerBulkAction extends BulkAction
+final class RunHittaPersonerBulkAction extends BulkAction
 {
     public static function make(?string $name = 'runHittaPersoner'): static
     {
@@ -38,7 +40,7 @@ class RunHittaPersonerBulkAction extends BulkAction
                 // Create job batch
                 $batch = Bus::batch($jobs)
                     ->name('Bulk Hitta Personer - '.now()->format('Y-m-d H:i:s'))
-                    ->onQueue('hitta-personer')
+                    ->onQueue('scrape')
                     ->then(function ($batch) {
                         // Update batch status to complete when all jobs finish
                         DB::table('job_batches')
@@ -54,7 +56,7 @@ class RunHittaPersonerBulkAction extends BulkAction
 
                 // Update job names for newly created jobs
                 $newJobs = DB::table('jobs')
-                    ->where('queue', 'hitta-personer')
+                    ->where('queue', 'scrape')
                     ->where('id', '>', $maxJobIdBefore)
                     ->orderBy('id')
                     ->get();

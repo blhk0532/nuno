@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\RatsitDatas;
 
 use App\Filament\Data\Resources\RatsitDatas\Pages\CreateRatsitData;
@@ -19,7 +21,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use UnitEnum;
 
-class RatsitDataResource extends Resource
+final class RatsitDataResource extends Resource
 {
     protected static ?string $model = RatsitData::class;
 
@@ -41,7 +43,7 @@ class RatsitDataResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 
     public static function form(Schema $schema): Schema

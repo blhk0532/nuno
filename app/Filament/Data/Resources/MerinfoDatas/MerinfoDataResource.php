@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\MerinfoDatas;
 
 use App\Filament\Data\Resources\MerinfoDatas\Pages\CreateMerinfoData;
@@ -15,7 +17,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class MerinfoDataResource extends Resource
+final class MerinfoDataResource extends Resource
 {
     protected static ?string $model = MerinfoData::class;
 
@@ -37,7 +39,7 @@ class MerinfoDataResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 
     public static function form(Schema $schema): Schema

@@ -27,6 +27,16 @@
         "
     >
         <div
+            x-data="{
+                editorUpdatedAt: Date.now(),
+                isPanelActive: (id = null) => false,
+                togglePanel: (id = null) => {},
+                editorSelection: { type: 'text', anchor: 1, head: 1 },
+                activePanel: null,
+                isUploadingFile: false,
+                fileValidationMessage: null,
+                $getEditor: () => null,
+            }"
             x-load
             x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('rich-editor', 'filament/forms') }}"
             x-data="richEditorFormComponent({
@@ -176,7 +186,7 @@
 
                                             $wire.mountAction(
                                                 'customBlock',
-                                                { editorSelection, id: @js($blockId), mode: 'insert' },
+                                                { editorSelection: (typeof editorSelection !== 'undefined' ? editorSelection : { type: 'text', anchor: 1, head: 1 }), id: @js($blockId), mode: 'insert' },
                                                 { schemaComponent: @js($key) },
                                             )
                                         "

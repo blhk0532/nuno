@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\RatsitDatas\Pages;
 
 use App\Filament\Data\Resources\RatsitDatas\RatsitDataResource;
-use App\Filament\Widgets\RatsitDataStatsWidget;
+use App\Filament\Data\Widgets\RatsitDataStatsWidget;
 use App\Jobs\BackupRatsitData;
 use App\Jobs\ImportRatsitData;
 use Exception;
@@ -16,7 +18,7 @@ use Filament\Forms\Set;
 use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 
-class ListRatsitDatas extends ListRecords
+final class ListRatsitDatas extends ListRecords
 {
     protected static string $resource = RatsitDataResource::class;
 

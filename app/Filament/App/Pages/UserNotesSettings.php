@@ -31,6 +31,11 @@ final class UserNotesSettings extends AbstractPageSettings
 
     protected string $view = 'filament.pages.user-notes-settings';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
+
     /**
      * Provide default values.
      *

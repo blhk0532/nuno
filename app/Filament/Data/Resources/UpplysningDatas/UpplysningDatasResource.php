@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\UpplysningDatas;
 
 use App\Filament\Data\Resources\UpplysningDatas\Pages\CreateUpplysningData;
@@ -16,7 +18,7 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class UpplysningDatasResource extends Resource
+final class UpplysningDatasResource extends Resource
 {
     protected static ?string $model = UpplysningData::class;
 
@@ -35,7 +37,7 @@ class UpplysningDatasResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 
     public static function form(Schema $schema): Schema

@@ -4,28 +4,13 @@ declare(strict_types=1);
 
 namespace App\Providers\Filament;
 
-use AlizHarb\ActivityLog\ActivityLogPlugin;
-use Cmsmaxinc\FilamentErrorPages\FilamentErrorPagesPlugin;
-use AchyutN\FilamentLogViewer\FilamentLogViewer;
-use Adultdate\FilamentBooking\Filament\Clusters\Services\Resources\Bookings\Pages\DashboardBooking;
-use Adultdate\FilamentBooking\Filament\Pages\CalendarSettingsPage;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\BookingOutcallQueues\BookingOutcallQueueResource;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\Customers\CustomerResource;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\DailyLocations\DailyLocationResource;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\DailyLocations\Widgets\EventCalendar;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\Orders\OrderResource;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\ServicePeriods\BookingServicePeriodResource;
-use Adultdate\FilamentBooking\Filament\Resources\Booking\Users\UserResource;
 use Adultdate\FilamentBooking\Filament\Resources\BookingCalendars\BookingCalendarResource;
-use Adultdate\FilamentBooking\Filament\Resources\BookingDataLeads\BookingDataLeadResource;
-use Adultdate\FilamentBooking\Filament\Widgets\BookingCalendarWidget;
-use Adultdate\FilamentBooking\Filament\Widgets\CustomersChart;
-use Adultdate\FilamentBooking\Filament\Widgets\LatestOrders;
-use Adultdate\FilamentBooking\Filament\Widgets\OrdersChart;
-use Adultdate\FilamentBooking\Filament\Widgets\StatsOverviewWidget;
 use Adultdate\FilamentBooking\FilamentBookingPlugin;
-use AdultDate\FilamentWirechat\Filament\Pages\ChatDashboard;
 use AdultDate\FilamentWirechat\FilamentWirechatPlugin;
+use AlizHarb\ActivityLog\ActivityLogPlugin;
+use AlizHarb\ActivityLog\Widgets\LatestActivityWidget;
+use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
+use App\Filament\Admin\Widgets\AccountInfoStackWidget;
 use App\Http\Middleware\FilamentPanelAccess;
 use App\Models\User;
 use Asmit\ResizedColumn\ResizedColumnPlugin;
@@ -48,6 +33,7 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
 use Filament\Widgets;
 use Hydrat\TableLayoutToggle\TableLayoutTogglePlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -56,27 +42,17 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use JeffersonGoncalves\Filament\WhatsappWidget\Resources\WhatsappAgentResource;
+use JeffersonGoncalves\Filament\WhatsappWidget\WhatsappWidgetPlugin;
 use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
+use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
+use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
+use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 use lockscreen\FilamentLockscreen\Lockscreen;
-use pxlrbt\FilamentSpotlight\SpotlightPlugin;
 use WallaceMartinss\FilamentEvolution\FilamentEvolutionPlugin;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
-use STS\FilamentImpersonate\Tables\Actions\Impersonate;
-use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
-use AlizHarb\ActivityLog\Widgets\LatestActivityWidget;
-use Joaopaulolndev\FilamentWorldClock\FilamentWorldClockPlugin;
-use JeffersonGoncalves\Filament\WhatsappWidget\WhatsappWidgetPlugin;
-use App\Filament\Panels\Widgets\WorldClockWidget;
-use JeffersonGoncalves\Filament\WhatsappWidget\Resources\WhatsappAgentResource;
-use Andreia\FilamentUiSwitcher\FilamentUiSwitcherPlugin;
-use Filament\View\PanelsRenderHook;
-use Joaopaulolndev\FilamentGeneralSettings\FilamentGeneralSettingsPlugin;
-use Illuminate\Support\Str;
-use Carbon\Carbon;
-use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
-
-use App\Filament\Admin\Widgets\AccountInfoStackWidget;
 
 final class AdminPanelProvider extends PanelProvider
 {
@@ -92,9 +68,9 @@ final class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Orange,
             ])
             ->sidebarCollapsibleOnDesktop(true)
-            ->brandLogo(fn() => view('filament.app.logo'))
-            ->favicon(fn() => asset('favicon.svg'))
-            ->brandLogoHeight(fn() => request()->is('admin/login', 'admin/password-reset/*') ? '68px' : '34px')
+            ->brandLogo(fn () => view('filament.app.logo'))
+            ->favicon(fn () => asset('favicon.svg'))
+            ->brandLogoHeight(fn () => request()->is('admin/login', 'admin/password-reset/*') ? '68px' : '34px')
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->brandName('Noridic Digital')
             ->defaultThemeMode(ThemeMode::Dark)
@@ -124,9 +100,9 @@ final class AdminPanelProvider extends PanelProvider
                 WhatsappAgentResource::class,
             ])
             ->widgets([
-            //    AccountInfoStackWidget::class,
-            //    OverlookWidget::class,
-            //    LatestActivityWidget::class,
+                //    AccountInfoStackWidget::class,
+                //    OverlookWidget::class,
+                //    LatestActivityWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -149,7 +125,7 @@ final class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 FilamentGeneralSettingsPlugin::make()
-                    ->canAccess(fn() => Auth::user()->role === 'super')
+                    ->canAccess(fn () => Auth::user()->role === 'super')
                     ->setSort(3)
                     ->setIcon('heroicon-o-cog')
                     ->setNavigationGroup('Settings')
@@ -199,12 +175,12 @@ final class AdminPanelProvider extends PanelProvider
             ->plugin(
                 AuthDesignerPlugin::make()
                     ->login(
-                        fn(AuthPageConfig $config) => $config
+                        fn (AuthPageConfig $config) => $config
                             ->media(asset('assets/background.jpg'))
                             ->mediaPosition(MediaPosition::Cover)
                             ->blur(1)
                             ->themeToggle()
-                            ->renderHook(AuthDesignerRenderHook::CardBefore, fn() => view('filament.logo-auth'))
+                            ->renderHook(AuthDesignerRenderHook::CardBefore, fn () => view('filament.logo-auth'))
                     )
             )
             ->plugins([
@@ -235,7 +211,11 @@ final class AdminPanelProvider extends PanelProvider
             ->plugins([
                 ResizedColumnPlugin::make(),
                 FilamentIconPickerPlugin::make(),
-
+                Lockscreen::make()
+                    ->enableRateLimit() // Enable rate limit for the lockscreen. Default: Enable, 5 attempts in 1 minute.
+                    ->enableIdleTimeout() // Enable auto lock during idle time. Default: Enable, 30 minutes.
+                    ->disableDisplayName() // Display the name of the user based on the attribute supplied. Default: name
+                    ->enablePlugin(), // Enable the plugin.
             ])
             ->plugins([
                 FilamentBookingPlugin::make(),
@@ -256,12 +236,12 @@ final class AdminPanelProvider extends PanelProvider
             ])
             ->userMenuItems([
                 'profile' => Action::make('profile')
-                    ->label(fn() => Str::ucfirst(Auth::user()->getNdsUserName()))
+                    ->label(fn () => Str::ucfirst(Auth::user()->getNdsUserName()))
                     ->url(fn (): string => EditProfilePage::getUrl())
                     ->icon('heroicon-o-user-circle'),
                 Action::make('sanctum')
                     ->label(trans('Auth Tokens'))
-                    ->url('/nds/admin/' . config('filament-sanctum.navigation.slug'))
+                    ->url('/nds/admin/'.config('filament-sanctum.navigation.slug'))
                     ->icon(config('filament-sanctum.navigation.icon', 'heroicon-o-finger-print')),
             ])
             ->plugin(
@@ -283,7 +263,7 @@ final class AdminPanelProvider extends PanelProvider
                     ]),
             ])
             ->plugin(FilamentUiSwitcherPlugin::make()
-             ->withModeSwitcher()
+                ->withModeSwitcher()
                 ->iconRenderHook(PanelsRenderHook::USER_MENU_BEFORE))
             ->unsavedChangesAlerts()
             ->passwordReset()

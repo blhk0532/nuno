@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\HittaDatas;
 
 use App\Filament\Data\Resources\HittaDatas\Pages\CreateHittaData;
@@ -15,7 +17,7 @@ use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class HittaDataResource extends Resource
+final class HittaDataResource extends Resource
 {
     protected static ?string $model = HittaData::class;
 
@@ -38,7 +40,7 @@ class HittaDataResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 
     public static function form(Schema $schema): Schema

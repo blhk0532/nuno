@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -14,7 +16,7 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Log;
 use Throwable;
 
-class RatsitDataController extends Controller
+final class RatsitDataController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -139,7 +141,7 @@ class RatsitDataController extends Controller
             Log::warning('RatsitDataController update - QueryException', ['id' => $ratsit_datum->id, 'message' => $msg]);
 
             // Detect duplicate key messages (MySQL / MariaDB / PostgreSQL variants)
-            if (str_contains($msg, 'Duplicate entry') || str_contains(strtolower($msg), 'unique') || str_contains(strtolower($msg), 'duplicate')) {
+            if (str_contains($msg, 'Duplicate entry') || str_contains(mb_strtolower($msg), 'unique') || str_contains(mb_strtolower($msg), 'duplicate')) {
                 // Try resolving by locating an existing record with same gatuadress and personnamn
                 $searchGatuadress = $validated['gatuadress'] ?? null;
                 $searchPersonnamn = $validated['personnamn'] ?? null;
@@ -189,20 +191,20 @@ class RatsitDataController extends Controller
             ]);
 
             return new RatsitDataResource($ratsit_datum);
-        } else {
-            Log::error('RatsitDataController update - Update failed', [
-                'model_errors' => method_exists($ratsit_datum, 'getErrors') ? $ratsit_datum->getErrors() : 'No getErrors method',
-                'model_attributes' => $ratsit_datum->getAttributes(),
-                'original_attributes' => $ratsit_datum->getOriginal(),
-            ]);
-
-            // Return error response instead of resource
-            return response()->json([
-                'success' => false,
-                'message' => 'Failed to update RatsitData',
-                'errors' => method_exists($ratsit_datum, 'getErrors') ? $ratsit_datum->getErrors() : null,
-            ], 422)->throwResponse();
         }
+        Log::error('RatsitDataController update - Update failed', [
+            'model_errors' => method_exists($ratsit_datum, 'getErrors') ? $ratsit_datum->getErrors() : 'No getErrors method',
+            'model_attributes' => $ratsit_datum->getAttributes(),
+            'original_attributes' => $ratsit_datum->getOriginal(),
+        ]);
+
+        // Return error response instead of resource
+        return response()->json([
+            'success' => false,
+            'message' => 'Failed to update RatsitData',
+            'errors' => method_exists($ratsit_datum, 'getErrors') ? $ratsit_datum->getErrors() : null,
+        ], 422)->throwResponse();
+
     }
 
     public function destroy(RatsitData $ratsitData): JsonResponse
@@ -325,5 +327,13 @@ class RatsitDataController extends Controller
             ],
             'errors' => $errors,
         ]);
+    }
+
+    /**
+     * Alias for bulkStore - used by Node.js scripts
+     */
+    public function bulk(Request $request): JsonResponse
+    {
+        return $this->bulkStore($request);
     }
 }

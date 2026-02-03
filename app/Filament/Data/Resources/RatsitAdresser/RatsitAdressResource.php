@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\RatsitAdresser;
 
 use App\Filament\Data\Resources\RatsitAdresser\Pages\ListRatsitAdresser;
@@ -12,7 +14,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class RatsitAdressResource extends Resource
+final class RatsitAdressResource extends Resource
 {
     protected static ?string $model = RatsitAdress::class;
 
@@ -56,6 +58,6 @@ class RatsitAdressResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 }

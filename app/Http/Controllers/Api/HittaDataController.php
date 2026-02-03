@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -12,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
-class HittaDataController extends Controller
+final class HittaDataController extends Controller
 {
     public function index(Request $request): AnonymousResourceCollection
     {
@@ -232,5 +234,13 @@ class HittaDataController extends Controller
             ],
             'errors' => $errors,
         ]);
+    }
+
+    /**
+     * Alias for bulkStore - used by Node.js scripts
+     */
+    public function bulk(Request $request): JsonResponse
+    {
+        return $this->bulkStore($request);
     }
 }

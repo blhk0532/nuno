@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\HittaSes;
 
 use App\Filament\Data\Resources\HittaSes\Pages\CreateHittaSe;
@@ -15,7 +17,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class HittaSeResource extends Resource
+final class HittaSeResource extends Resource
 {
     protected static ?string $model = HittaSe::class;
 
@@ -38,7 +40,7 @@ class HittaSeResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 
     public static function form(Schema $schema): Schema

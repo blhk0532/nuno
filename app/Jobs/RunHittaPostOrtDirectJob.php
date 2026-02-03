@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Models\HittaData;
@@ -13,7 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Process;
 use Throwable;
 
-class RunHittaPostOrtDirectJob implements ShouldQueue
+final class RunHittaPostOrtDirectJob implements ShouldQueue
 {
     use Dispatchable;
     use Queueable;
@@ -73,7 +75,7 @@ class RunHittaPostOrtDirectJob implements ShouldQueue
         ]);
 
         // First, compute total results using --onlyTotals
-        $script = base_path('jobs/hittaSearchPersons.mjs');
+        $script = base_path('jobs/hitta_post_ort.mjs');
         $command = [
             'node',
             $script,
@@ -146,11 +148,9 @@ class RunHittaPostOrtDirectJob implements ShouldQueue
             // Build Node command for this page
             $command = [
                 'node',
-                $script,
+                $script, // Uses hitta_post_ort.mjs
                 (string) $query,
                 '--startPage', (string) $page,
-                '--maxResults', '25',
-                '--json-output',
                 '--api-url', config('app.url'),
                 '--api-token', env('LARAVEL_API_TOKEN'),
             ];
@@ -168,9 +168,9 @@ class RunHittaPostOrtDirectJob implements ShouldQueue
                 'postNum' => $postNum->post_nummer,
                 'page' => $page,
                 'exit_code' => $exitCode,
-                'output_length' => strlen($output),
-                'error_output_length' => strlen($errorOutput),
-                'output_preview' => substr($output, -500), // Last 500 chars to see JSON
+                'output_length' => mb_strlen($output),
+                'error_output_length' => mb_strlen($errorOutput),
+                'output_preview' => mb_substr($output, -500), // Last 500 chars to see JSON
             ]);
 
             if (! $process->isSuccessful()) {
@@ -179,7 +179,7 @@ class RunHittaPostOrtDirectJob implements ShouldQueue
                     'page' => $page,
                     'exit_code' => $exitCode,
                     'error' => $process->getErrorOutput(),
-                    'output_last_1000' => substr($output, -1000),
+                    'output_last_1000' => mb_substr($output, -1000),
                 ]);
 
                 // Don't continue - if one page fails, likely all will fail
@@ -294,11 +294,11 @@ class RunHittaPostOrtDirectJob implements ShouldQueue
 
         try {
             // Look for JSON data in the output
-            $jsonStart = strpos($output, '[{');
-            $jsonEnd = strrpos($output, '}]');
+            $jsonStart = mb_strpos($output, '[{');
+            $jsonEnd = mb_strrpos($output, '}]');
 
             if ($jsonStart !== false && $jsonEnd !== false && $jsonEnd > $jsonStart) {
-                $jsonData = substr($output, $jsonStart, $jsonEnd - $jsonStart + 2);
+                $jsonData = mb_substr($output, $jsonStart, $jsonEnd - $jsonStart + 2);
 
                 $records = json_decode($jsonData, true);
 
@@ -334,14 +334,14 @@ class RunHittaPostOrtDirectJob implements ShouldQueue
                     Log::warning('Failed to parse JSON from script output', [
                         'json_error' => json_last_error_msg(),
                         'postNum' => $postNum->post_nummer,
-                        'output_sample' => substr($output, 0, 500),
+                        'output_sample' => mb_substr($output, 0, 500),
                     ]);
                 }
             } else {
                 Log::warning('No JSON data found in script output', [
                     'postNum' => $postNum->post_nummer,
-                    'output_length' => strlen($output),
-                    'output_sample' => substr($output, 0, 500),
+                    'output_length' => mb_strlen($output),
+                    'output_sample' => mb_substr($output, 0, 500),
                 ]);
             }
         } catch (Exception $e) {
@@ -437,13 +437,13 @@ class RunHittaPostOrtDirectJob implements ShouldQueue
     protected function isHouse(array $recordData): bool
     {
         // Check explicit house type
-        $bostadstyp = strtolower($recordData['bostadstyp'] ?? '');
+        $bostadstyp = mb_strtolower($recordData['bostadstyp'] ?? '');
         if (in_array($bostadstyp, ['hus', 'villa', 'radhus', 'friliggande', 'kedjehus'])) {
             return true;
         }
 
         // Check address for non-house indicators
-        $address = strtolower($recordData['gatuadress'] ?? '');
+        $address = mb_strtolower($recordData['gatuadress'] ?? '');
         $nonHousePatterns = [
             '/lgh\s*\d+/i',      // lägenhet/lgh with number
             '/\d+\s*tr/i',       // trappor (stairs)

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\PostNums\Actions;
 
 use App\Jobs\RunHittaCheckCountsJob;
@@ -12,7 +14,7 @@ use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 use Log;
 
-class RunAllCountsBulkAction extends BulkAction
+final class RunAllCountsBulkAction extends BulkAction
 {
     public static function make(?string $name = 'runAllCounts'): static
     {
@@ -65,7 +67,7 @@ class RunAllCountsBulkAction extends BulkAction
                     $batch = Bus::batch([
                         new RunMerinfoScript($normalized, 'merinfo-count'),
                     ])->name($normalized)
-                        ->onQueue('merinfo-count')
+                        ->onQueue('scrape')
                         ->then(function ($batch) {
                             // Update batch status to complete when all jobs finish
                             \DB::table('job_batches')
@@ -105,7 +107,7 @@ class RunAllCountsBulkAction extends BulkAction
                 // Create a batch with both types of jobs
                 $batch = Bus::batch($jobs)
                     ->name(str_replace(' ', '', $records->first()->post_nummer).' - 🖩H&R '.now()->format('Y-m-d H:i:s'))
-                    ->onQueue('default')
+                    ->onQueue('scrape')
                     ->then(function ($batch) {
                         // Update batch status to complete when all jobs finish
                         DB::table('job_batches')
@@ -121,7 +123,7 @@ class RunAllCountsBulkAction extends BulkAction
 
                 // Update job names for newly created jobs
                 $newJobs = DB::table('jobs')
-                    ->where('queue', 'default')
+                    ->where('queue', 'scrape')
                     ->where('id', '>', $maxJobIdBefore)
                     ->orderBy('id')
                     ->get();
@@ -138,7 +140,7 @@ class RunAllCountsBulkAction extends BulkAction
                     if (isset($newJobs[$jobIndex])) {
                         DB::table('jobs')
                             ->where('id', $newJobs[$jobIndex]->id)
-                            ->update(['name' => str_replace(' ', '', $records->first()->post_nummer).' 📟 Hitta', 'status' => 'pending', 'queue' => 'counts']);
+                            ->update(['name' => str_replace(' ', '', $records->first()->post_nummer).' 📟 Hitta', 'status' => 'pending']);
                         $jobIndex++;
                     }
 
@@ -146,7 +148,7 @@ class RunAllCountsBulkAction extends BulkAction
                     if (isset($newJobs[$jobIndex])) {
                         DB::table('jobs')
                             ->where('id', $newJobs[$jobIndex]->id)
-                            ->update(['name' => str_replace(' ', '', $records->first()->post_nummer).' 📟 Ratsit',  'status' => 'pending', 'queue' => 'counts']);
+                            ->update(['name' => str_replace(' ', '', $records->first()->post_nummer).' 📟 Ratsit', 'status' => 'pending']);
                         $jobIndex++;
                     }
                 }

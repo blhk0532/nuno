@@ -1,41 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\RingaData\Tables;
 
 use App\Models\RingaData;
+use App\Models\User;
 use Faker\Factory as Faker;
+use Filament\Actions;
+use Filament\Actions\Action;
+use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
-use Filament\Actions\ViewAction;
+use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-use Filament\Tables\Columns\IconColumn;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
-use Filament\Actions;
-use Filament\Actions\BulkAction;
-use Filament\Forms\Components\Select;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
-use Filament\Forms\Components\DatePicker;
-use App\Models\User;
+use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Collection;
-use Filament\Resources\Pages\ListRecords;
 use Shreejan\ActionableColumn\Tables\Columns\ActionableColumn;
-use Filament\Actions\Action;
-use Filament\Support\Icons\Heroicon;
 use Webbingbrasil\FilamentCopyActions\Tables\CopyableTextColumn;
+use Zvizvi\UserFields\Components\UserColumn;
 
-
-class RingaDataTable
+final class RingaDataTable
 {
     public static function configure(Table $table): Table
     {
         return $table
             ->toolbarActions([
                 \EightyNine\ExcelImport\ExcelImportAction::make()
-                    ->color("primary"),
+                    ->color('primary'),
                 Actions\CreateAction::make(),
             ])
             ->headerActions([
@@ -51,42 +50,44 @@ class RingaDataTable
                 TextColumn::make('personnamn')
                     ->searchable()
                     ->sortable(),
-                                    TextColumn::make('fodelsedag')
+                TextColumn::make('fodelsedag')
                     ->label('Age')
-                    ->state(fn(RingaData $record) => $record->fodelsedag ? \Carbon\Carbon::parse($record->fodelsedag)->age : '-')
+                    ->state(fn (RingaData $record) => $record->fodelsedag ? \Carbon\Carbon::parse($record->fodelsedag)->age : '-')
                     ->sortable(),
                 TextColumn::make('gatuadress')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('postnummer')
-                ->label('postnr')
+                    ->label('postnr')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('postort')
                     ->searchable()
                     ->sortable(),
 
-
-
                 CopyableTextColumn::make('telefon')
                     ->searchable()
-                        ->sortable(),
-                                    TextColumn::make('attempts')
+                    ->sortable(),
+
+                TextColumn::make('attempts')
                     ->label('Try')
                     ->sortable()
-                       ->toggleable(isToggledHiddenByDefault: true)
+                    ->toggleable(isToggledHiddenByDefault: false)
                     ->alignCenter(),
-                                   TextColumn::make('outcome')
-                                    ->label('🕻')
+                UserColumn::make('user')
+                    ->label('User'),
+
+                TextColumn::make('outcome')
+                    ->label('🕻')
                     ->sortable()
                     ->badge()
                     ->formatStateUsing(fn ($state) => null),
 
-                     ActionableColumn::make('status')
+                ActionableColumn::make('status')
                     ->badge()
-                        ->sortable()
-                      ->toggleable(false)
-                        ->label('🛈')                                  // Display as badge (or remove for simple text)
+                    ->sortable()
+                    ->toggleable(false)
+                    ->label('🛈')                                  // Display as badge (or remove for simple text)
                     ->color('success')                           // Badge/text color: success, danger, warning, info, primary
                     ->actionIcon(Heroicon::Clock)         // Action button icon (Heroicon enum or string)
                     ->actionIconColor('warning')                 // Icon color (independent from badge color)
@@ -100,19 +101,17 @@ class RingaDataTable
                                     ->options([
                                         'active' => 'Active',
                                         'disabled' => 'Disabled',
-                                         '⊘' => 'Quarantine',
+                                        '⊘' => 'Quarantine',
                                     ])
                                     ->required(),
                             ])
-                            ->fillForm(fn($record) => [
+                            ->fillForm(fn ($record) => [
                                 'status' => $record->status,
                             ])
                             ->action(function ($record, array $data) {
                                 $record->update($data);
                             })
                     ),
-
-
 
                 TextColumn::make('expires_at')
                     ->dateTime()
@@ -141,33 +140,33 @@ class RingaDataTable
                         return $query
                             ->when(
                                 $data['fodelsedag_min'] ?? null,
-                                fn($q, $date) => $q->whereDate('fodelsedag', '>=', $date),
+                                fn ($q, $date) => $q->whereDate('fodelsedag', '>=', $date),
                             )
                             ->when(
                                 $data['fodelsedag_max'] ?? null,
-                                fn($q, $date) => $q->whereDate('fodelsedag', '<=', $date),
+                                fn ($q, $date) => $q->whereDate('fodelsedag', '<=', $date),
                             );
                     }),
                 Filter::make('postnummer')
                     ->form([
-                        \Filament\Forms\Components\TextInput::make('postnummer')
+                        TextInput::make('postnummer')
                             ->label('Postnummer'),
                     ])
                     ->query(function ($query, array $data) {
                         return $query->when(
                             $data['postnummer'] ?? null,
-                            fn($q, $postnummer) => $q->where('postnummer', 'like', '%' . $postnummer . '%'),
+                            fn ($q, $postnummer) => $q->where('postnummer', 'like', '%'.$postnummer.'%'),
                         );
                     }),
                 SelectFilter::make('outcome')
                     ->label('Outcome'),
             ])
             ->recordActions([
-                \Filament\Actions\Action::make('view_details')
+                Action::make('view_details')
                     ->label('')
                     ->icon('heroicon-o-phone-arrow-up-right')
                     ->color('primary')
-                    ->url(fn(RingaData $record) => 'tel:' . $record->telefon),
+                    ->url(fn (RingaData $record) => 'tel:'.$record->telefon),
                 EditAction::make()
                     ->label(''),
             ])
@@ -196,22 +195,14 @@ class RingaDataTable
                                 ->success()
                                 ->send();
                         })
-                        ->visible(fn() => in_array(auth()->user()->role, ['admin', 'super', 'super_admin', 'superadmin', 'manager'])),
+                        ->visible(fn () => in_array(auth()->user()->role, ['admin', 'super', 'super_admin', 'superadmin', 'manager'])),
                 ]),
             ]);
     }
 
-    protected function getHeaderActions(): array
+    private static function generateFakeDataAction(): Action
     {
-        return [
-            \EightyNine\ExcelImport\ExcelImportAction::make()
-                ->color("primary"),
-        ];
-    }
-
-    private static function generateFakeDataAction(): \Filament\Actions\Action
-    {
-        return \Filament\Actions\Action::make('generateFakeData')
+        return Action::make('generateFakeData')
             ->label('Generate Fake Data')
             ->icon('heroicon-o-sparkles')
             ->color('warning')
@@ -288,5 +279,13 @@ class RingaDataTable
                     ->body("Successfully created {$created} fake RingaData records.")
                     ->send();
             });
+    }
+
+    private function getHeaderActions(): array
+    {
+        return [
+            \EightyNine\ExcelImport\ExcelImportAction::make()
+                ->color('primary'),
+        ];
     }
 }

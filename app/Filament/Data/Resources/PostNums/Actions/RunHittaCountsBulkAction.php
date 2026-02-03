@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\PostNums\Actions;
 
 use App\Jobs\RunHittaCheckCountsJob;
@@ -9,7 +11,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Bus;
 use Illuminate\Support\Facades\DB;
 
-class RunHittaCountsBulkAction extends BulkAction
+final class RunHittaCountsBulkAction extends BulkAction
 {
     public static function make(?string $name = 'runHittaCounts'): static
     {
@@ -37,7 +39,7 @@ class RunHittaCountsBulkAction extends BulkAction
                 // Create job batch
                 $batch = Bus::batch($jobs)
                     ->name('Bulk Hitta Counts - '.now()->format('Y-m-d H:i:s'))
-                    ->onQueue('counts')
+                    ->onQueue('scrape')
                     ->then(function ($batch) {
                         // Update batch status to complete when all jobs finish
                         DB::table('job_batches')
@@ -53,7 +55,7 @@ class RunHittaCountsBulkAction extends BulkAction
 
                 // Update job names for newly created jobs
                 $newJobs = DB::table('jobs')
-                    ->where('queue', 'counts')
+                    ->where('queue', 'scrape')
                     ->where('id', '>', $maxJobIdBefore)
                     ->orderBy('id')
                     ->get();
@@ -62,7 +64,7 @@ class RunHittaCountsBulkAction extends BulkAction
                     if (isset($newJobs[$index])) {
                         DB::table('jobs')
                             ->where('id', $newJobs[$index]->id)
-                            ->update(['name' => 'Postnummer: '.$record->post_nummer]);
+                            ->update(['name' => 'Postnummer: '.$record->post_nummer, 'status' => 'pending']);
                     }
                 }
 

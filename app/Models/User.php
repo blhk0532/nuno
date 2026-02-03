@@ -39,6 +39,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Passport\Contracts\OAuthenticatable;
 use Laravel\Passport\Contracts\ScopeAuthorizable;  // Add this import
 use Laravel\Passport\PersonalAccessTokenResult;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 use Spatie\Permission\Traits\HasRoles;
@@ -99,6 +100,7 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
     use Authenticatable;
     use Authorizable;
     use CanResetPassword;
+    use HasApiTokens;
     use HasFactory;
     use HasRoles;
     use HasSchedules;
@@ -134,6 +136,8 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
 
     protected $hidden = [
         'password',
+        'two_factor_secret',
+        'two_factor_recovery_codes',
         'remember_token',
     ];
 
@@ -408,6 +412,15 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
     public function ringaData(): HasMany
     {
         return $this->hasMany(RingaData::class, 'user_id', 'id');
+    }
+
+    public function initials(): string
+    {
+        return Str::of($this->name)
+            ->explode(' ')
+            ->take(2)
+            ->map(fn ($word) => Str::substr($word, 0, 1))
+            ->implode('');
     }
 
     protected static function boot(): void

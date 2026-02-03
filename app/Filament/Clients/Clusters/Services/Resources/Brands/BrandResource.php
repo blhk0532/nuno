@@ -1,8 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Clients\Clusters\Services\Resources\Brands;
 
-use App\Filament\Clients\Clusters\Services\ServicesCluster;
+use Adultdate\FilamentBooking\Models\Booking\Brand;
 use App\Filament\Clients\Clusters\Services\Resources\Brands\Pages\CreateBrand;
 use App\Filament\Clients\Clusters\Services\Resources\Brands\Pages\EditBrand;
 use App\Filament\Clients\Clusters\Services\Resources\Brands\Pages\ListBrands;
@@ -10,14 +12,14 @@ use App\Filament\Clients\Clusters\Services\Resources\Brands\RelationManagers\Add
 use App\Filament\Clients\Clusters\Services\Resources\Brands\RelationManagers\ServicesRelationManager;
 use App\Filament\Clients\Clusters\Services\Resources\Brands\Schemas\BrandForm;
 use App\Filament\Clients\Clusters\Services\Resources\Brands\Tables\BrandsTable;
-use Adultdate\FilamentBooking\Models\Booking\Brand;
+use App\Filament\Clients\Clusters\Services\ServicesCluster;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Model;
 
-class BrandResource extends Resource
+final class BrandResource extends Resource
 {
     protected static ?string $model = Brand::class;
 
@@ -25,13 +27,18 @@ class BrandResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
 
-    protected static string | BackedEnum | null $navigationIcon = 'heroicon-o-bookmark-square';
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-bookmark-square';
 
     protected static ?string $navigationParentItem = 'Services';
 
     protected static ?int $navigationSort = 1;
 
     protected static bool $isScopedToTenant = false;
+
+    protected static array $relations = [
+        ServicesRelationManager::class,
+        AddressesRelationManager::class,
+    ];
 
     public static function form(Schema $schema): Schema
     {
@@ -42,11 +49,6 @@ class BrandResource extends Resource
     {
         return BrandsTable::configure($table);
     }
-
-    protected static array $relations = [
-        ServicesRelationManager::class,
-        AddressesRelationManager::class,
-    ];
 
     public static function getPages(): array
     {
@@ -76,6 +78,6 @@ class BrandResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 }

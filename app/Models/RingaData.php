@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Casts\SwedishDateCast;
@@ -7,9 +9,8 @@ use App\Enums\Outcomes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Team;
 
-class RingaData extends Model
+final class RingaData extends Model
 {
     /** @use HasFactory<\Database\Factories\RatsitDataFactory> */
     use HasFactory;
@@ -38,22 +39,9 @@ class RingaData extends Model
         'attempts' => 'integer',
         'booked_at' => 'datetime',
         'aterkom_at' => 'datetime',
+        'available_at' => 'datetime',
+        'retry_count' => 'integer',
     ];
-
-    public function team()
-    {
-        return $this->belongsTo(Team::class);
-    }
-
-    public function booking()
-    {
-        return $this->belongsTo(Booking::class, 'booking_id');
-    }
-
-    public function calendar()
-    {
-        return $this->belongsTo(BookingCalendar::class, 'calendar_id');
-    }
 
     protected $fillable = [
         'gatuadress',
@@ -109,6 +97,26 @@ class RingaData extends Model
         'user_notes',
     ];
 
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class, 'booking_id');
+    }
+
+    public function calendar()
+    {
+        return $this->belongsTo(BookingCalendar::class, 'calendar_id');
+    }
+
     /** @return Builder<static> */
     public function scopeActive(Builder $query): Builder
     {
@@ -134,19 +142,22 @@ class RingaData extends Model
     {
         if ($value instanceof Outcomes) {
             $this->attributes['outcome'] = $value->value;
+
             return;
         }
 
         if (empty($value)) {
             $this->attributes['outcome'] = null;
+
             return;
         }
 
         // Try to convert string to enum to validate it
-        $enum = Outcomes::tryFrom((string)$value);
+        $enum = Outcomes::tryFrom((string) $value);
 
         if ($enum) {
             $this->attributes['outcome'] = $enum->value;
+
             return;
         }
 
@@ -154,11 +165,12 @@ class RingaData extends Model
         foreach (Outcomes::cases() as $case) {
             if ($case->name === $value) {
                 $this->attributes['outcome'] = $case->value;
+
                 return;
             }
         }
 
         // If it's a string that doesn't match any enum, store it as is
-        $this->attributes['outcome'] = (string)$value;
+        $this->attributes['outcome'] = (string) $value;
     }
 }

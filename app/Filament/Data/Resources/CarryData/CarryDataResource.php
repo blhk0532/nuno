@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\CarryData;
 
 use App\Filament\Data\Resources\CarryData\Pages\CreateCarryData;
@@ -15,7 +17,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class CarryDataResource extends Resource
+final class CarryDataResource extends Resource
 {
     protected static ?string $model = CarryData::class;
 
@@ -50,7 +52,7 @@ class CarryDataResource extends Resource
 
     public static function getNavigationBadge(): ?string
     {
-        return static::getModel()::count();
+        return (string) self::getModel()::count();
     }
 
     public static function getPages(): array

@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Pages;
 
 use BackedEnum;
-use Inerba\DbConfig\AbstractPageSettings;
-use Filament\Schemas\Components;
-use Filament\Schemas\Schema;
 use Filament\Forms\Components\RichEditor;
+use Filament\Schemas\Schema;
+use Inerba\DbConfig\AbstractPageSettings;
 
-class ManuSettings extends AbstractPageSettings
+final class ManuSettings extends AbstractPageSettings
 {
     /**
      * @var array<string, mixed> | null
@@ -25,9 +26,9 @@ class ManuSettings extends AbstractPageSettings
 
     protected string $view = 'filament.pages.manus-settings';
 
-    protected function settingName(): string
+    public static function shouldRegisterNavigation(): bool
     {
-        return 'manus';
+        return false;
     }
 
     /**
@@ -46,9 +47,14 @@ class ManuSettings extends AbstractPageSettings
             ->components([
 
                 RichEditor::make('site_name')
-                ->label('Anteckningar')
-                ->columnSpan('full'),
+                    ->label('Anteckningar')
+                    ->columnSpan('full'),
             ])
             ->statePath('data');
+    }
+
+    protected function settingName(): string
+    {
+        return 'manus';
     }
 }
