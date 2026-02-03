@@ -150,8 +150,7 @@ final class QueueRingaData extends Page
                 $query->where('outcome', null)
                     ->orWhere(function (Builder $subQuery) {
                         // Check that retry_count is less than the configured max for this outcome
-                        // We use a case statement to handle the retry count validation
-                        $subQuery->whereRaw('CAST(retry_count AS INTEGER) < (
+                        $subQuery->whereRaw('retry_count < (
                             SELECT COALESCE(max_retry_count, 3)
                             FROM outcome_delay_settings
                             WHERE outcome = ringa_data.outcome AND is_active = TRUE
