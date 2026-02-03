@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -25,9 +27,9 @@ return [
     |
     */
     'default' => [
-        'lat' => env('GOOGLE_MAPS_DEFAULT_LAT', -0.5050),
-        'lng' => env('GOOGLE_MAPS_DEFAULT_LNG', 117.1500),
-        'zoom' => env('GOOGLE_MAPS_DEFAULT_ZOOM', 13),
+        'lat' => (float) env('GOOGLE_MAPS_DEFAULT_LAT', -0.5050),
+        'lng' => (float) env('GOOGLE_MAPS_DEFAULT_LNG', 117.1500),
+        'zoom' => (int) env('GOOGLE_MAPS_DEFAULT_ZOOM', 13),
         'height' => env('GOOGLE_MAPS_DEFAULT_HEIGHT', 400),
     ],
 ];
