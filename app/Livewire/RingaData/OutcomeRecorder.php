@@ -225,14 +225,17 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                 $scheduledAt = Carbon::parse($aterkom_at);
 
                 $this->record->is_active = false;
+                $this->record->outcome = $outcomeEnum;
                 $this->record->aterkom_at = $scheduledAt;
                 $this->record->attempts = ($this->record->attempts ?? 0) + 1;
+                $this->record->is_outcome = true;
                 $this->record->save();
 
                 // Refresh to confirm save
                 $this->record->refresh();
                 Log::info('Outcome marked with return date', [
                     'recordId' => $this->record->id,
+                    'outcome' => $outcomeEnum->value,
                     'is_active' => $this->record->is_active,
                     'aterkom_at' => $this->record->aterkom_at,
                 ]);
@@ -250,13 +253,16 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
             // For other outcomes, just save
             $this->record->is_active = false;
+            $this->record->outcome = $outcomeEnum;
             $this->record->attempts = ($this->record->attempts ?? 0) + 1;
+            $this->record->is_outcome = true;
             $this->record->save();
 
             // Refresh to confirm save
             $this->record->refresh();
             Log::info('Outcome marked', [
                 'recordId' => $this->record->id,
+                'outcome' => $outcomeEnum->value,
                 'is_active' => $this->record->is_active,
             ]);
 
@@ -309,7 +315,23 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
     private function loadNextRecord(): void
     {
-        // Full page reload to refresh all widgets
-        $this->js('window.location.reload()');
+        // Load the next unprocessed record
+        $nextRecord = RingaData::where('is_active', true)
+            ->orderBy('id')
+            ->first();
+
+        if ($nextRecord) {
+            $this->recordId = $nextRecord->id;
+            $this->loadRecord();
+            Log::info('Loaded next record', ['recordId' => $this->recordId]);
+
+            // Dispatch event to update other widgets
+            $this->dispatch('record-selected', recordId: $nextRecord->id);
+        } else {
+            // No more records, redirect to dashboard
+            Log::info('No more records to process');
+            $tenant = filament()->getTenant();
+            $this->redirect(route('filament.app.pages.app-dashboard', ['tenant' => $tenant]), navigate: true);
+        }
     }
 }
