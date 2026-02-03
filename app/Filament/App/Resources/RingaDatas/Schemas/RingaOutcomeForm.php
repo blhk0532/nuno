@@ -39,15 +39,17 @@ final class RingaOutcomeForm
                                         ->color($outcome->getColor())
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
+                                                // Check if this outcome has a configured delay
+                                                $delayMinutes = OutcomeDelayService::getDelay($outcome->value);
+
                                                 $updateData = [
                                                     'outcome' => $outcome,
                                                     'attempts' => ($record->attempts ?? 0) + 1,
-                                                    'retry_count' => ($record->retry_count ?? 0) + 1,
                                                 ];
 
-                                                // Check if this outcome has a configured delay
-                                                $delayMinutes = OutcomeDelayService::getDelay($outcome->value);
+                                                // Only increment retry_count and set available_at if there's a delay
                                                 if ($delayMinutes !== null) {
+                                                    $updateData['retry_count'] = ($record->retry_count ?? 0) + 1;
                                                     $updateData['available_at'] = now()->addMinutes($delayMinutes);
                                                 }
 
@@ -89,15 +91,17 @@ final class RingaOutcomeForm
                                         ])
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
+                                                // Check if this outcome has a configured delay
+                                                $delayMinutes = OutcomeDelayService::getDelay($outcome->value);
+
                                                 $updateData = [
                                                     'outcome' => $outcome,
                                                     'attempts' => ($record->attempts ?? 0) + 1,
-                                                    'retry_count' => ($record->retry_count ?? 0) + 1,
                                                 ];
 
-                                                // Check if this outcome has a configured delay
-                                                $delayMinutes = OutcomeDelayService::getDelay($outcome->value);
+                                                // Only increment retry_count and set available_at if there's a delay
                                                 if ($delayMinutes !== null) {
+                                                    $updateData['retry_count'] = ($record->retry_count ?? 0) + 1;
                                                     $updateData['available_at'] = now()->addMinutes($delayMinutes);
                                                 }
 
@@ -139,15 +143,17 @@ final class RingaOutcomeForm
                                         ])
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
+                                                // Check if this outcome has a configured delay
+                                                $delayMinutes = OutcomeDelayService::getDelay($outcome->value);
+
                                                 $updateData = [
                                                     'outcome' => $outcome,
                                                     'attempts' => ($record->attempts ?? 0) + 1,
-                                                    'retry_count' => ($record->retry_count ?? 0) + 1,
                                                 ];
 
-                                                // Check if this outcome has a configured delay
-                                                $delayMinutes = OutcomeDelayService::getDelay($outcome->value);
+                                                // Only increment retry_count and set available_at if there's a delay
                                                 if ($delayMinutes !== null) {
+                                                    $updateData['retry_count'] = ($record->retry_count ?? 0) + 1;
                                                     $updateData['available_at'] = now()->addMinutes($delayMinutes);
                                                 }
 
