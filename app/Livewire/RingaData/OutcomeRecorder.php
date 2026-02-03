@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Livewire\RingaData;
 
 use App\Models\RingaData;
+use App\Services\OutcomeDelayService;
 use Exception;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
@@ -143,7 +144,10 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             return;
         }
 
-        if (! $this->record) {
+        $recordId = $this->recordId ?? $this->record?->id;
+        $record = $recordId ? RingaData::query()->find($recordId) : null;
+
+        if (! $record) {
             Notification::make()
                 ->title('No record selected')
                 ->danger()
@@ -154,7 +158,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
         try {
             Log::info('Recording outcome', [
-                'recordId' => $this->record->id,
+                'recordId' => $record->id,
                 'outcome' => $outcomeValue,
                 'aterkom_at' => $aterkom_at,
             ]);
@@ -226,22 +230,28 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
                 $scheduledAt = Carbon::parse($aterkom_at);
 
-                DB::transaction(function () use ($outcomeEnum, $scheduledAt) {
-                    $this->record->is_active = false;
-                    $this->record->outcome = $outcomeEnum->value;
-                    $this->record->aterkom_at = $scheduledAt;
-                    $this->record->attempts = ($this->record->attempts ?? 0) + 1;
-                    $this->record->is_outcome = true;
-                    $this->record->save();
+                DB::transaction(function () use ($outcomeEnum, $scheduledAt, $record) {
+                    $attempts = ($record->attempts ?? 0) + 1;
+
+                    RingaData::query()
+                        ->whereKey($record->id)
+                        ->update([
+                            'is_active' => false,
+                            'outcome' => $outcomeEnum->value,
+                            'aterkom_at' => $scheduledAt,
+                            'attempts' => $attempts,
+                            'is_outcome' => true,
+                        ]);
                 });
 
                 // Refresh to confirm save
-                $this->record->refresh();
+                $this->record = RingaData::query()->find($record->id);
+                $this->recordId = $record->id;
                 Log::info('Outcome marked with return date', [
-                    'recordId' => $this->record->id,
+                    'recordId' => $record->id,
                     'outcome' => $outcomeEnum->value,
-                    'is_active' => $this->record->is_active,
-                    'aterkom_at' => $this->record->aterkom_at,
+                    'is_active' => $this->record?->is_active,
+                    'aterkom_at' => $this->record?->aterkom_at,
                     'saved' => true,
                 ]);
 
@@ -256,21 +266,33 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                 return;
             }
 
-            // For other outcomes, just save
-            DB::transaction(function () use ($outcomeEnum) {
-                $this->record->is_active = false;
-                $this->record->outcome = $outcomeEnum->value;
-                $this->record->attempts = ($this->record->attempts ?? 0) + 1;
-                $this->record->is_outcome = true;
-                $this->record->save();
+            // For other outcomes, defer the record to the end of the queue
+            DB::transaction(function () use ($outcomeEnum, $record) {
+                $attempts = ($record->attempts ?? 0) + 1;
+                $retryCount = ($record->retry_count ?? 0) + 1;
+                $maxRetryCount = OutcomeDelayService::getMaxRetryCount($outcomeEnum->value);
+                $delayMinutes = OutcomeDelayService::getDelay($outcomeEnum->value) ?? 5;
+                $isActive = $retryCount < $maxRetryCount;
+
+                RingaData::query()
+                    ->whereKey($record->id)
+                    ->update([
+                        'is_active' => $isActive,
+                        'outcome' => $outcomeEnum->value,
+                        'attempts' => $attempts,
+                        'retry_count' => $retryCount,
+                        'available_at' => $isActive ? now()->addMinutes($delayMinutes) : $record->available_at,
+                        'is_outcome' => true,
+                    ]);
             });
 
             // Refresh to confirm save
-            $this->record->refresh();
+            $this->record = RingaData::query()->find($record->id);
+            $this->recordId = $record->id;
             Log::info('Outcome marked', [
-                'recordId' => $this->record->id,
+                'recordId' => $record->id,
                 'outcome' => $outcomeEnum->value,
-                'is_active' => $this->record->is_active,
+                'is_active' => $this->record?->is_active,
                 'saved' => true,
             ]);
 
@@ -286,7 +308,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             Log::error('Error recording outcome', [
                 'error' => $e->getMessage(),
                 'outcome' => $outcomeValue,
-                'recordId' => $this->record?->id,
+                'recordId' => $recordId,
                 'trace' => $e->getTraceAsString(),
             ]);
             Notification::make()

@@ -160,7 +160,8 @@ final class QueueRingaData extends Page
                     )');
                 });
             })
-            ->orderBy('gatuadress');
+            ->orderBy('available_at')
+            ->orderBy('id');
     }
 
     protected function getHeaderWidgets(): array

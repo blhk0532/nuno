@@ -5,6 +5,7 @@ namespace App\Filament\App\Resources\Bookings\Tables;
 use Adultdate\FilamentBooking\Models\Booking\Booking;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\DeleteAction;
 use Filament\Notifications\Notification;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
@@ -63,6 +64,7 @@ class BookingsTable
             ])
             ->recordActions([
                 EditAction::make(),
+                DeleteAction::make(),
             ])
             ->groupedBulkActions([
                 DeleteBulkAction::make()
