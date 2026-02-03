@@ -136,34 +136,4 @@ final class RingaData extends Model
 
         return Outcomes::tryFrom($value);
     }
-
-    /**
-     * Set the outcome attribute, converting enum to string or handling null/empty values.
-     */
-    public function setOutcomeAttribute($value): void
-    {
-        // Handle null/empty
-        if ($value === null || $value === '') {
-            $this->attributes['outcome'] = null;
-
-            return;
-        }
-
-        // If it's an enum, get value property
-        if (is_object($value)) {
-            if (property_exists($value, 'value')) {
-                $this->attributes['outcome'] = $value->value;
-            } elseif (method_exists($value, '__toString')) {
-                $this->attributes['outcome'] = (string) $value;
-            } else {
-                // Skip invalid objects
-                return;
-            }
-
-            return;
-        }
-
-        // String value - store as-is
-        $this->attributes['outcome'] = $value;
-    }
 }
