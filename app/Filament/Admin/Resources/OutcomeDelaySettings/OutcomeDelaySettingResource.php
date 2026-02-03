@@ -10,9 +10,11 @@ use App\Filament\Admin\Resources\OutcomeDelaySettings\Pages\ListOutcomeDelaySett
 use App\Filament\Admin\Resources\OutcomeDelaySettings\Schemas\OutcomeDelaySettingForm;
 use App\Filament\Admin\Resources\OutcomeDelaySettings\Tables\OutcomeDelaySettingsTable;
 use App\Models\OutcomeDelaySetting;
+use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
+use UnitEnum;
 
 final class OutcomeDelaySettingResource extends Resource
 {
@@ -24,7 +26,7 @@ final class OutcomeDelaySettingResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Outcome Delay Settings';
 
-    protected static ?string $navigationGroup = 'Call Management';
+    protected static string|UnitEnum|null $navigationGroup = 'Call Management';
 
     protected static ?int $navigationSort = 5;
 
