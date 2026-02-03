@@ -224,16 +224,16 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
                 $scheduledAt = Carbon::parse($aterkom_at);
 
-                $this->record->outcome = $outcomeEnum->value;
+                $this->record->is_outcome = true;
                 $this->record->aterkom_at = $scheduledAt;
                 $this->record->attempts = ($this->record->attempts ?? 0) + 1;
                 $this->record->save();
 
                 // Refresh to confirm save
                 $this->record->refresh();
-                Log::info('Outcome saved with return date', [
+                Log::info('Outcome marked with return date', [
                     'recordId' => $this->record->id,
-                    'outcome' => $this->record->outcome,
+                    'is_outcome' => $this->record->is_outcome,
                     'aterkom_at' => $this->record->aterkom_at,
                 ]);
 
@@ -249,16 +249,15 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             }
 
             // For other outcomes, just save
-            $this->record->outcome = $outcomeEnum->value;
+            $this->record->is_outcome = true;
             $this->record->attempts = ($this->record->attempts ?? 0) + 1;
             $this->record->save();
 
             // Refresh to confirm save
             $this->record->refresh();
-            Log::info('Outcome saved', [
+            Log::info('Outcome marked', [
                 'recordId' => $this->record->id,
-                'outcome' => $this->record->outcome,
-                'attempts' => $this->record->attempts,
+                'is_outcome' => $this->record->is_outcome,
             ]);
 
             Notification::make()

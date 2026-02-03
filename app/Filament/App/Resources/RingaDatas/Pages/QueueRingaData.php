@@ -139,14 +139,11 @@ final class QueueRingaData extends Page
     protected function getQuery(): Builder
     {
         return self::getResource()::getEloquentQuery()
-            ->whereNull('outcome')  // Only show records without an outcome set
+            ->where('is_outcome', false)  // Only show records without outcome
             ->where('available_at', '<=', now())  // Only show records that are due
             ->where(function (Builder $query) {
                 // Show records where retry_count < max_retry_count
-                // Since outcome is NULL, we check against all possible outcome max values
                 $query->where(function (Builder $subQuery) {
-                    // Get the maximum max_retry_count from all active outcome settings
-                    // This ensures we show records until they've been retried max times
                     $subQuery->whereRaw('retry_count < (
                         SELECT COALESCE(MAX(max_retry_count), 3)
                         FROM outcome_delay_settings
