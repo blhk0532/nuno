@@ -47,21 +47,24 @@ final class QueueRingaData extends Page
 
     protected string $view = 'filament.app.resources.ringa-data.pages.queue';
 
+    public static function shouldRegisterNavigation(array $parameters = []): bool
+    {
+        return true;
+    }
+
     public static function getNavigationBadge(): ?string
     {
-        return (string) self::getResource()::getEloquentQuery()
+        $count = self::getResource()::getEloquentQuery()
             ->where('is_active', true)
             ->where('available_at', '<=', now())
-            ->where(function (Builder $query) {
-                $query->where(function (Builder $subQuery) {
-                    $subQuery->whereRaw('retry_count < (
-                        SELECT COALESCE(MAX(max_retry_count), 3)
-                        FROM outcome_delay_settings
-                        WHERE is_active = TRUE
-                    )');
-                });
-            })
+            ->whereRaw('retry_count < (
+                SELECT COALESCE(MAX(max_retry_count), 3)
+                FROM outcome_delay_settings
+                WHERE is_active = TRUE AND outcome IS NULL
+            )')
             ->count();
+
+        return $count > 0 ? (string) $count : null;
     }
 
     public static function getNavigationBadgeColor(): ?string
@@ -156,7 +159,7 @@ final class QueueRingaData extends Page
                     $subQuery->whereRaw('retry_count < (
                         SELECT COALESCE(MAX(max_retry_count), 3)
                         FROM outcome_delay_settings
-                        WHERE is_active = TRUE
+                        WHERE is_active = TRUE AND outcome IS NULL
                     )');
                 });
             })
@@ -168,12 +171,12 @@ final class QueueRingaData extends Page
     {
         return [
 
-            RingaDataPinpointWidget::class,
-            RingaDataDisplayWidget::class,
-            RingaDataOutcomeFormWidget::class,
-            RingaDataOutcomeWidget::class,
-            RingaDataCalendar::class,
-            RingaDatasQueueTableWidget::class,
+               RingaDataPinpointWidget::class,
+               RingaDataDisplayWidget::class,
+      RingaDataOutcomeFormWidget::class,
+               RingaDataOutcomeWidget::class,
+               RingaDataCalendar::class,
+               RingaDatasQueueTableWidget::class,
         ];
     }
 }

@@ -1,6 +1,6 @@
 <style>
 .fi-input-wrp.fi-fo-rich-editor {
-    min-height: 80vh;
+    min-height: 20vh;
 }
 #user-notes-modal{
 position: absolute;

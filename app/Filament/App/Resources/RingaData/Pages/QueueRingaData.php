@@ -1,45 +1,36 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\RingaData\Pages;
 
 use App\Filament\App\Resources\RingaData\RingaDataResource;
-use Filament\Resources\Pages\Page;
-use App\Models\RingaData;
-use Illuminate\Database\Eloquent\Builder;
-use App\Filament\App\Resources\RingaData\Widgets\RingaDataPinpointWidget;
-use App\Filament\App\Resources\RingaData\Widgets\RingaDataDisplayWidget;
-use Filament\Support\Enums\Width;
-use App\Filament\App\Resources\RingaData\Widgets\RingaDataStatsWidget;
-use Livewire\Attributes\On;
-use App\Filament\App\Resources\RingaData\Widgets\RingaDataOutcomeWidget;
-use App\Filament\App\Resources\RingaData\Widgets\RingaDataOutcomeFormWidget;
-use App\Filament\App\Resources\Bookings\Widgets\BookingCalendar;
 use App\Filament\App\Resources\RingaData\Widgets\RingaDataCalendar;
+use App\Filament\App\Resources\RingaData\Widgets\RingaDataDisplayWidget;
+use App\Filament\App\Resources\RingaData\Widgets\RingaDataOutcomeFormWidget;
+use App\Filament\App\Resources\RingaData\Widgets\RingaDataOutcomeWidget;
+use App\Filament\App\Resources\RingaData\Widgets\RingaDataPinpointWidget;
 use App\Filament\App\Resources\RingaDatas\Widgets\RingaDatasQueueTableWidget;
+use Exception;
+use Filament\Resources\Pages\Page;
+use Filament\Support\Enums\Width;
+use Illuminate\Database\Eloquent\Builder;
+use Livewire\Attributes\On;
 
-class QueueRingaData extends Page
+final class QueueRingaData extends Page
 {
+    public ?int $selectedRecordId = null;
+
     protected static string $resource = RingaDataResource::class;
 
     protected static ?string $slug = 'qued';
 
-    public ?int $selectedRecordId = null;
-
     protected string $view = 'filament.app.resources.ringa-data.pages.queue';
-
-    protected function getQuery(): \Illuminate\Database\Eloquent\Builder
-    {
-        return static::getResource()::getEloquentQuery()
-            ->where(function (\Illuminate\Database\Eloquent\Builder $query) {
-                $query->whereNull('outcome');
-                //    ->orWhere('attempts', '<', 3);
-            });
-    }
 
     public function mount(): void
     {
         try {
-            if (!$this->selectedRecordId) {
+            if (! $this->selectedRecordId) {
                 $first = $this->getQuery()
                     ->orderBy('id')
                     ->first();
@@ -51,27 +42,13 @@ class QueueRingaData extends Page
             if ($this->selectedRecordId) {
                 $this->dispatch('record-selected', recordId: $this->selectedRecordId);
             }
-        } catch (\Exception $e) {
-            logger('QueueRingaData mount error: ' . $e->getMessage(), ['exception' => $e]);
+        } catch (Exception $e) {
+            logger('QueueRingaData mount error: '.$e->getMessage(), ['exception' => $e]);
             throw $e;
         }
     }
 
-    protected function getHeaderWidgets(): array
-    {
-        return [
-
-            RingaDataPinpointWidget::class,
-            RingaDataDisplayWidget::class,
-                 RingaDataOutcomeFormWidget::class,
-            RingaDataOutcomeWidget::class,
-
-            RingaDataCalendar::class,
-            RingaDatasQueueTableWidget::class,
-        ];
-    }
-
-    public function getHeaderWidgetsColumns(): int | array
+    public function getHeaderWidgetsColumns(): int|array
     {
         return 2;
     }
@@ -84,7 +61,7 @@ class QueueRingaData extends Page
             $record = $this->getQuery()->find($this->selectedRecordId);
         }
 
-        if (!$record) {
+        if (! $record) {
             $record = $this->getQuery()
                 ->orderBy('id')
                 ->first();
@@ -113,5 +90,27 @@ class QueueRingaData extends Page
     public function getMaxContentWidth(): Width
     {
         return Width::Full;
+    }
+
+    protected function getQuery(): Builder
+    {
+        return self::getResource()::getEloquentQuery()
+            ->where(function (Builder $query) {
+                $query->whereNull('outcome');
+                //    ->orWhere('attempts', '<', 3);
+            });
+    }
+
+    protected function getHeaderWidgets(): array
+    {
+        return [
+
+            //    RingaDataPinpointWidget::class,
+            //    RingaDataDisplayWidget::class,
+            //    RingaDataOutcomeFormWidget::class,
+            //    RingaDataOutcomeWidget::class,
+            //    RingaDataCalendar::class,
+            //    RingaDatasQueueTableWidget::class,
+        ];
     }
 }

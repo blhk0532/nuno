@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Filament\App\Resources\RingaData\Tables;
 
+use App\Enums\Outcomes;
 use App\Models\RingaData;
 use App\Models\User;
 use Faker\Factory as Faker;
@@ -13,12 +14,14 @@ use Filament\Actions\BulkAction;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ViewAction;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -46,43 +49,8 @@ final class RingaDataTable
 
             ])
             ->columns([
-
-                TextColumn::make('personnamn')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('fodelsedag')
-                    ->label('Age')
-                    ->state(fn (RingaData $record) => $record->fodelsedag ? \Carbon\Carbon::parse($record->fodelsedag)->age : '-')
-                    ->sortable(),
-                TextColumn::make('gatuadress')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('postnummer')
-                    ->label('postnr')
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('postort')
-                    ->searchable()
-                    ->sortable(),
-
-                CopyableTextColumn::make('telefon')
-                    ->searchable()
-                    ->sortable(),
-
-                TextColumn::make('attempts')
-                    ->label('Try')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: false)
-                    ->alignCenter(),
-                UserColumn::make('user')
+                 UserColumn::make('user')
                     ->label('User'),
-
-                TextColumn::make('outcome')
-                    ->label('🕻')
-                    ->sortable()
-                    ->badge()
-                    ->formatStateUsing(fn ($state) => null),
-
                 ActionableColumn::make('status')
                     ->badge()
                     ->sortable()
@@ -113,6 +81,69 @@ final class RingaDataTable
                             })
                     ),
 
+
+
+                TextColumn::make('personnamn')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('fodelsedag')
+                    ->label('Age')
+                    ->state(fn (RingaData $record) => $record->fodelsedag ? \Carbon\Carbon::parse($record->fodelsedag)->age : '-')
+                    ->sortable(),
+                TextColumn::make('gatuadress')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('postnummer')
+                    ->label('postnr')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('postort')
+                    ->searchable()
+                    ->sortable(),
+
+                CopyableTextColumn::make('telefon')
+                    ->searchable()
+                    ->sortable(),
+
+                TextColumn::make('outcome')
+                    ->label('Outcome')
+                    ->sortable()
+                    ->badge()
+                    ->color(static fn (?Outcomes $state) => $state?->getColor() ?? 'primary')
+                    ->action(
+                        Action::make('changeOutcome')
+                            ->label('Change Outcome')
+                            ->icon('heroicon-o-pencil')
+                            ->modalHeading('Change Outcome')
+                            ->modalSubmitActionLabel('Update')
+                            ->form([
+                                Select::make('outcome')
+                                    ->label('Select New Outcome')
+                                    ->options(fn () => collect(Outcomes::cases())->mapWithKeys(
+                                        fn (Outcomes $outcome) => [$outcome->value => $outcome->getLabel()]
+                                    )->toArray())
+                                    ->required()
+                                    ->native(false)
+                                    ->searchable(),
+                            ])
+                            ->action(function (RingaData $record, array $data): void {
+                                $record->update(['outcome' => $data['outcome']]);
+
+                                Notification::make()
+                                    ->title('Outcome Updated')
+                                    ->success()
+                                    ->send();
+                            })
+                    ),
+                TextColumn::make('attempts')
+                    ->label('Try')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: false)
+                    ->alignCenter(),
+                ToggleColumn::make('is_active')
+                    ->label('Active')
+                    ->sortable(),
                 TextColumn::make('expires_at')
                     ->dateTime()
                     ->hidden()
@@ -161,16 +192,23 @@ final class RingaDataTable
                 SelectFilter::make('outcome')
                     ->label('Outcome'),
             ])
-                        ->paginated([10, 25, 50, 100, 250, 500, 1000])
+            ->paginated([10, 25, 50, 100, 250, 500, 1000])
             ->defaultPaginationPageOption(25)
+            ->recordAction('view')
             ->recordActions([
+        EditAction::make()
+                    ->label(''),
+                ViewAction::make('view')
+                    ->label('')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Info')
+                    ->modalWidth('xl'),
                 Action::make('view_details')
                     ->label('')
                     ->icon('heroicon-o-phone-arrow-up-right')
                     ->color('primary')
                     ->url(fn (RingaData $record) => 'tel:'.$record->telefon),
-                EditAction::make()
-                    ->label(''),
+
             ])
             ->bulkActions([
                 BulkActionGroup::make([

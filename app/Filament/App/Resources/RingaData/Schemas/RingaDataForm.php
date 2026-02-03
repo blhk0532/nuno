@@ -1,18 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\RingaData\Schemas;
 
+use App\Enums\Outcomes;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
-class RingaDataForm
+final class RingaDataForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -62,119 +66,9 @@ class RingaDataForm
                                             ->send();
                                     }
                                 });
-                        }, \App\Enums\Outcomes::cases())
+                        }, Outcomes::cases()),
                     ]),
-                Section::make()
-                    ->description('')
-                    ->label('')
-                    ->extraAttributes([
-                        'class' => 'outcome-buttons-section',
-                    ])
-                    ->schema([
-                        // We'll add the outcome buttons as actions instead
-                    ])
-                    ->compact()
-                    ->headerActions([
-                        ...array_map(function ($outcome) {
-                            return Action::make("outcome_{$outcome->value}")
-                                ->label($outcome->getLabel())
-                                ->icon($outcome->getIcon())
-                                ->color($outcome->getColor())
-                                ->extraAttributes([
-                                    'class' => 'outcome-button',
-                                ])
-                                ->action(function ($record) use ($outcome) {
-                                    if ($record) {
-                                        $record->update([
-                                            'outcome' => $outcome,
-                                            'attempts' => ($record->attempts ?? 0) + 1,
-                                        ]);
 
-                                        Notification::make()
-                                            ->title('Outcome recorded')
-                                            ->body("Recorded outcome: {$outcome->getLabel()}")
-                                            ->icon($outcome->getIcon())
-                                            ->color($outcome->getColor())
-                                            ->success()
-                                            ->send();
-                                    }
-                                });
-                        }, \App\Enums\Outcomes2::cases())
-                    ]),
-                                Section::make()
-                    ->description('')
-                    ->label('')
-                    ->extraAttributes([
-                        'class' => 'outcome-buttons-section',
-                    ])
-                    ->schema([
-                        // We'll add the outcome buttons as actions instead
-                    ])
-                    ->compact()
-                    ->headerActions([
-                        ...array_map(function ($outcome) {
-                            return Action::make("outcome_{$outcome->value}")
-                                ->label($outcome->getLabel())
-                                ->icon($outcome->getIcon())
-                                ->extraAttributes([
-                                    'class' => 'outcome-button',
-                                ])
-                                ->color($outcome->getColor())
-                                ->action(function ($record) use ($outcome) {
-                                    if ($record) {
-                                        $record->update([
-                                            'outcome' => $outcome,
-                                            'attempts' => ($record->attempts ?? 0) + 1,
-                                        ]);
-
-                                        Notification::make()
-                                            ->title('Outcome recorded')
-                                            ->body("Recorded outcome: {$outcome->getLabel()}")
-                                            ->icon($outcome->getIcon())
-                                            ->color($outcome->getColor())
-                                            ->success()
-                                            ->send();
-                                    }
-                                });
-                        }, \App\Enums\Outcomes3::cases())
-                    ]),
-                Section::make()
-                    ->description('')
-                    ->label('')
-                    ->extraAttributes([
-                        'class' => 'outcome-buttons-section',
-                    ])
-                    ->schema([
-                        // We'll add the outcome buttons as actions instead
-                    ])
-                    ->compact()
-                    ->headerActions([
-                        ...array_map(function ($outcome) {
-                            return Action::make("outcome_{$outcome->value}")
-                                ->label($outcome->getLabel())
-                                ->icon($outcome->getIcon())
-                                ->color($outcome->getColor())
-                                ->extraAttributes([
-                                    'class' => 'outcome-button',
-                                ])
-                                ->action(function ($record) use ($outcome) {
-                                    if ($record) {
-                                        $record->update([
-                                            'outcome' => $outcome,
-                                            'attempts' => ($record->attempts ?? 0) + 1,
-                                        ]);
-
-                                        Notification::make()
-                                            ->title('Outcome recorded')
-                                            ->body("Recorded outcome: {$outcome->getLabel()}")
-                                            ->icon($outcome->getIcon())
-                                            ->color($outcome->getColor())
-                                            ->success()
-                                            ->send();
-                                    }
-                                });
-                        }, \App\Enums\Outcomes4::cases())
-                    ]),
                 Textarea::make('gatuadress')
                     ->columnSpanFull(),
                 Textarea::make('postnummer')
@@ -191,8 +85,7 @@ class RingaDataForm
                     ->columnSpanFull(),
                 Textarea::make('adressandring')
                     ->columnSpanFull(),
-                TextInput::make('telfonnummer')
-                    ->tel(),
+                TextInput::make('telfonnummer'),
                 Textarea::make('stjarntacken')
                     ->columnSpanFull(),
                 Textarea::make('fodelsedag')
@@ -248,6 +141,13 @@ class RingaDataForm
                     ->required(),
                 Toggle::make('is_queued')
                     ->required(),
+                Select::make('outcome')
+                    ->label('Outcome')
+                    ->options(fn () => collect(Outcomes::cases())->mapWithKeys(
+                        fn (Outcomes $outcome) => [$outcome->value => $outcome->getLabel()]
+                    )->toArray())
+                    ->searchable()
+                    ->native(false),
                 TextInput::make('status'),
                 TextInput::make('attempts')
                     ->numeric()

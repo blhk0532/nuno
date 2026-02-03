@@ -474,3 +474,8 @@ position: absolute;
   left: 172px;
   top: 6px;
 }
+
+.fi-modal-footer.fi-align-start{
+        display: flex;
+    justify-content: right;
+}
