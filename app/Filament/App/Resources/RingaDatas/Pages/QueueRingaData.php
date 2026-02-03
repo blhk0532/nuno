@@ -52,6 +52,15 @@ final class QueueRingaData extends Page
         return (string) self::getResource()::getEloquentQuery()
             ->where('is_active', true)
             ->where('available_at', '<=', now())
+            ->where(function (Builder $query) {
+                $query->where(function (Builder $subQuery) {
+                    $subQuery->whereRaw('retry_count < (
+                        SELECT COALESCE(MAX(max_retry_count), 3)
+                        FROM outcome_delay_settings
+                        WHERE is_active = TRUE
+                    )');
+                });
+            })
             ->count();
     }
 

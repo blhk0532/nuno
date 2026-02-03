@@ -14,6 +14,7 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Log;
 
@@ -202,6 +203,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             }
 
             if (! $outcomeEnum) {
+                Log::error('Invalid outcome value', ['value' => $outcomeValue]);
                 Notification::make()
                     ->title('Invalid outcome value: '.$outcomeValue)
                     ->danger()
@@ -224,12 +226,14 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
                 $scheduledAt = Carbon::parse($aterkom_at);
 
-                $this->record->is_active = false;
-                $this->record->outcome = $outcomeEnum;
-                $this->record->aterkom_at = $scheduledAt;
-                $this->record->attempts = ($this->record->attempts ?? 0) + 1;
-                $this->record->is_outcome = true;
-                $this->record->save();
+                DB::transaction(function () use ($outcomeEnum, $scheduledAt) {
+                    $this->record->is_active = false;
+                    $this->record->outcome = $outcomeEnum;
+                    $this->record->aterkom_at = $scheduledAt;
+                    $this->record->attempts = ($this->record->attempts ?? 0) + 1;
+                    $this->record->is_outcome = true;
+                    $this->record->save();
+                });
 
                 // Refresh to confirm save
                 $this->record->refresh();
@@ -238,6 +242,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                     'outcome' => $outcomeEnum->value,
                     'is_active' => $this->record->is_active,
                     'aterkom_at' => $this->record->aterkom_at,
+                    'saved' => true,
                 ]);
 
                 Notification::make()
@@ -252,11 +257,13 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             }
 
             // For other outcomes, just save
-            $this->record->is_active = false;
-            $this->record->outcome = $outcomeEnum;
-            $this->record->attempts = ($this->record->attempts ?? 0) + 1;
-            $this->record->is_outcome = true;
-            $this->record->save();
+            DB::transaction(function () use ($outcomeEnum) {
+                $this->record->is_active = false;
+                $this->record->outcome = $outcomeEnum;
+                $this->record->attempts = ($this->record->attempts ?? 0) + 1;
+                $this->record->is_outcome = true;
+                $this->record->save();
+            });
 
             // Refresh to confirm save
             $this->record->refresh();
@@ -264,6 +271,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                 'recordId' => $this->record->id,
                 'outcome' => $outcomeEnum->value,
                 'is_active' => $this->record->is_active,
+                'saved' => true,
             ]);
 
             Notification::make()
@@ -275,10 +283,15 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             $this->loadNextRecord();
 
         } catch (Exception $e) {
-            Log::error('Error recording outcome', ['error' => $e->getMessage(), 'outcome' => $outcomeValue]);
+            Log::error('Error recording outcome', [
+                'error' => $e->getMessage(),
+                'outcome' => $outcomeValue,
+                'recordId' => $this->record?->id,
+                'trace' => $e->getTraceAsString(),
+            ]);
             Notification::make()
                 ->title('Error recording outcome')
-                ->body('An error occurred while saving the outcome')
+                ->body('An error occurred while saving the outcome: '.$e->getMessage())
                 ->danger()
                 ->send();
         }
@@ -315,23 +328,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
     private function loadNextRecord(): void
     {
-        // Load the next unprocessed record
-        $nextRecord = RingaData::where('is_active', true)
-            ->orderBy('id')
-            ->first();
-
-        if ($nextRecord) {
-            $this->recordId = $nextRecord->id;
-            $this->loadRecord();
-            Log::info('Loaded next record', ['recordId' => $this->recordId]);
-
-            // Dispatch event to update other widgets
-            $this->dispatch('record-selected', recordId: $nextRecord->id);
-        } else {
-            // No more records, redirect to dashboard
-            Log::info('No more records to process');
-            $tenant = filament()->getTenant();
-            $this->redirect(route('filament.app.pages.app-dashboard', ['tenant' => $tenant]), navigate: true);
-        }
+        // Full page reload with cache buster to refresh navigation badge and load next record
+        $this->js("window.location.href = window.location.pathname + window.location.search + (window.location.search ? '&' : '?') + '_=' + Date.now()");
     }
 }
