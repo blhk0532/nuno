@@ -1,8 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Livewire\RingaData;
 
 use App\Models\RingaData;
+use Exception;
 use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
@@ -12,19 +15,23 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Carbon;
 use Livewire\Component;
+use Log;
 
-class OutcomeRecorder extends Component implements HasActions, HasForms
+final class OutcomeRecorder extends Component implements HasActions, HasForms
 {
     use InteractsWithActions;
     use InteractsWithForms;
 
-    protected $listeners = [
-        'externalRecordOutcome' => 'recordOutcome',
-    ];
     public ?int $recordId = null;
 
     public ?RingaData $record = null;
+
     public ?string $tenant = null;
+
+    protected $listeners = [
+        'externalRecordOutcome' => 'recordOutcome',
+    ];
+
     protected ?string $defaultReturnCallAt = null;
 
     public function returnCallAction(): Action
@@ -95,7 +102,7 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
 
     public function mount(): void
     {
-        \Log::info('OutcomeRecorder mount', ['recordId' => $this->recordId, 'tenant' => $this->tenant]);
+        Log::info('OutcomeRecorder mount', ['recordId' => $this->recordId, 'tenant' => $this->tenant]);
 
         $this->loadRecord();
 
@@ -104,13 +111,13 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
         }
 
         // Fallback: if no recordId passed, load first unprocessed record
-        if (!$this->record && !$this->recordId) {
+        if (! $this->record && ! $this->recordId) {
             $this->record = RingaData::whereNull('outcome')
                 ->orderBy('id')
                 ->first();
             if ($this->record) {
                 $this->recordId = $this->record->id;
-                \Log::info('Loaded fallback record', ['recordId' => $this->recordId]);
+                Log::info('Loaded fallback record', ['recordId' => $this->recordId]);
             }
         }
     }
@@ -122,44 +129,33 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
         }
     }
 
-    private function loadRecord(): void
-    {
-        if ($this->recordId) {
-            $this->record = RingaData::find($this->recordId);
-            \Log::info('Loaded record', ['recordId' => $this->recordId, 'found' => (bool)$this->record]);
-        } else {
-            $this->record = null;
-            \Log::info('No recordId provided');
-        }
-    }
-
-
-
     public function recordOutcome($outcomeValue, $aterkom_at = null): void
     {
         if (empty($outcomeValue)) {
-            \Log::error('recordOutcome called with empty value');
+            Log::error('recordOutcome called with empty value');
             Notification::make()
                 ->title('Invalid outcome value')
                 ->body('Empty outcome value received')
                 ->danger()
                 ->send();
+
             return;
         }
 
-        if (!$this->record) {
+        if (! $this->record) {
             Notification::make()
                 ->title('No record selected')
                 ->danger()
                 ->send();
+
             return;
         }
 
         try {
-            \Log::info('Recording outcome', [
+            Log::info('Recording outcome', [
                 'recordId' => $this->record->id,
                 'outcome' => $outcomeValue,
-                'aterkom_at' => $aterkom_at
+                'aterkom_at' => $aterkom_at,
             ]);
 
             // Find the actual Outcomes enum that matches this enum name
@@ -200,16 +196,17 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
                             }
                         }
                     }
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     // Not in this enum, continue
                 }
             }
 
-            if (!$outcomeEnum) {
+            if (! $outcomeEnum) {
                 Notification::make()
-                    ->title('Invalid outcome value: ' . $outcomeValue)
+                    ->title('Invalid outcome value: '.$outcomeValue)
                     ->danger()
                     ->send();
+
                 return;
             }
 
@@ -227,7 +224,7 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
 
                 $scheduledAt = Carbon::parse($aterkom_at);
 
-                $this->record->outcome = $outcomeEnum;
+                $this->record->outcome = $outcomeEnum->value;
                 $this->record->aterkom_at = $scheduledAt;
                 $this->record->attempts = ($this->record->attempts ?? 0) + 1;
                 $this->record->save();
@@ -239,11 +236,12 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
                     ->send();
 
                 $this->loadNextRecord();
+
                 return;
             }
 
             // For other outcomes, just save
-            $this->record->outcome = $outcomeEnum;
+            $this->record->outcome = $outcomeEnum->value;
             $this->record->attempts = ($this->record->attempts ?? 0) + 1;
             $this->record->save();
 
@@ -255,8 +253,8 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
 
             $this->loadNextRecord();
 
-        } catch (\Exception $e) {
-            \Log::error('Error recording outcome', ['error' => $e->getMessage(), 'outcome' => $outcomeValue]);
+        } catch (Exception $e) {
+            Log::error('Error recording outcome', ['error' => $e->getMessage(), 'outcome' => $outcomeValue]);
             Notification::make()
                 ->title('Error recording outcome')
                 ->body('An error occurred while saving the outcome')
@@ -278,14 +276,25 @@ class OutcomeRecorder extends Component implements HasActions, HasForms
         };
     }
 
+    public function render()
+    {
+        return view('livewire.ringa-data.outcome-recorder');
+    }
+
+    private function loadRecord(): void
+    {
+        if ($this->recordId) {
+            $this->record = RingaData::find($this->recordId);
+            Log::info('Loaded record', ['recordId' => $this->recordId, 'found' => (bool) $this->record]);
+        } else {
+            $this->record = null;
+            Log::info('No recordId provided');
+        }
+    }
+
     private function loadNextRecord(): void
     {
         // Full page reload to refresh all widgets
         $this->js('window.location.reload()');
-    }
-
-    public function render()
-    {
-        return view('livewire.ringa-data.outcome-recorder');
     }
 }
