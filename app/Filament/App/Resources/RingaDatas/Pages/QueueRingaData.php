@@ -139,24 +139,20 @@ final class QueueRingaData extends Page
     protected function getQuery(): Builder
     {
         return self::getResource()::getEloquentQuery()
+            ->whereNull('outcome')  // Only show records without an outcome set
+            ->where('available_at', '<=', now())  // Only show records that are due
             ->where(function (Builder $query) {
-                $query->whereNull('outcome');
-                //    ->orWhere('attempts', '<', 3);
-            })
-            ->where('available_at', '<=', now())
-            ->where(function (Builder $query) {
-                // Show records where retry_count < max_retry_count for their most recent outcome
-                // For records without an outcome, we check against the default max retry counts
-                $query->where('outcome', null)
-                    ->orWhere(function (Builder $subQuery) {
-                        // Check that retry_count is less than the configured max for this outcome
-                        $subQuery->whereRaw('retry_count < (
-                            SELECT COALESCE(max_retry_count, 3)
-                            FROM outcome_delay_settings
-                            WHERE outcome = ringa_data.outcome AND is_active = TRUE
-                            LIMIT 1
-                        )');
-                    });
+                // Show records where retry_count < max_retry_count
+                // Since outcome is NULL, we check against all possible outcome max values
+                $query->where(function (Builder $subQuery) {
+                    // Get the maximum max_retry_count from all active outcome settings
+                    // This ensures we show records until they've been retried max times
+                    $subQuery->whereRaw('retry_count < (
+                        SELECT COALESCE(MAX(max_retry_count), 3)
+                        FROM outcome_delay_settings
+                        WHERE is_active = TRUE
+                    )');
+                });
             })
             ->orderBy('gatuadress');
     }
