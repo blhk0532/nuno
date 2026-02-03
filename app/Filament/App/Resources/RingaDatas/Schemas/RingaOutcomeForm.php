@@ -63,10 +63,9 @@ final class RingaOutcomeForm
                                                     ->success()
                                                     ->send();
 
-                                                // Full page reload to refresh badge and load next record
-                                                if ($component && method_exists($component, 'redirect')) {
-                                                    $component->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
-                                                }
+                                                // Reload page to refresh badge and load next record
+                                                // Use JavaScript to force full page reload
+                                                $component->js('window.location.href = window.location.href');
                                             }
                                         });
                                 }, \App\Enums\Outcomes1::cases()),
@@ -115,10 +114,9 @@ final class RingaOutcomeForm
                                                     ->success()
                                                     ->send();
 
-                                                // Full page reload to refresh badge and load next record
-                                                if ($component && method_exists($component, 'redirect')) {
-                                                    $component->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
-                                                }
+                                                // Reload page to refresh badge and load next record
+                                                // Use JavaScript to force full page reload
+                                                $component->js('window.location.href = window.location.href');
                                             }
                                         });
                                 }, \App\Enums\Outcomes2::cases()),
@@ -167,10 +165,9 @@ final class RingaOutcomeForm
                                                     ->success()
                                                     ->send();
 
-                                                // Full page reload to refresh badge and load next record
-                                                if ($component && method_exists($component, 'redirect')) {
-                                                    $component->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
-                                                }
+                                                // Reload page to refresh badge and load next record
+                                                // Use JavaScript to force full page reload
+                                                $component->js('window.location.href = window.location.href');
                                             }
                                         });
                                 }, \App\Enums\Outcomes4::cases()),
