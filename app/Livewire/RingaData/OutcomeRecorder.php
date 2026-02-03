@@ -112,7 +112,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
         // Fallback: if no recordId passed, load first unprocessed record
         if (! $this->record && ! $this->recordId) {
-            $this->record = RingaData::where('is_outcome', false)
+            $this->record = RingaData::where('is_active', true)
                 ->orderBy('id')
                 ->first();
             if ($this->record) {
@@ -224,7 +224,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
                 $scheduledAt = Carbon::parse($aterkom_at);
 
-                $this->record->is_outcome = true;
+                $this->record->is_active = false;
                 $this->record->aterkom_at = $scheduledAt;
                 $this->record->attempts = ($this->record->attempts ?? 0) + 1;
                 $this->record->save();
@@ -233,7 +233,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                 $this->record->refresh();
                 Log::info('Outcome marked with return date', [
                     'recordId' => $this->record->id,
-                    'is_outcome' => $this->record->is_outcome,
+                    'is_active' => $this->record->is_active,
                     'aterkom_at' => $this->record->aterkom_at,
                 ]);
 
@@ -249,7 +249,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             }
 
             // For other outcomes, just save
-            $this->record->is_outcome = true;
+            $this->record->is_active = false;
             $this->record->attempts = ($this->record->attempts ?? 0) + 1;
             $this->record->save();
 
@@ -257,7 +257,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             $this->record->refresh();
             Log::info('Outcome marked', [
                 'recordId' => $this->record->id,
-                'is_outcome' => $this->record->is_outcome,
+                'is_active' => $this->record->is_active,
             ]);
 
             Notification::make()

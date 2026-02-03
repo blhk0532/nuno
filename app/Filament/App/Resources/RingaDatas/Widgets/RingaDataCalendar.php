@@ -1879,7 +1879,7 @@ final class RingaDataCalendar extends FullCalendarWidget implements HasCalendar
     {
         return \App\Filament\App\Resources\RingaDatas\RingaDatasResource::getEloquentQuery()
             ->where(function ($query) {
-                $query->where('is_outcome', false);
+                $query->where('is_active', true);
                 //    ->orWhere('attempts', '<', 3);
             });
     }

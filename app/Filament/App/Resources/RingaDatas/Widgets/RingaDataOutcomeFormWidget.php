@@ -30,7 +30,7 @@ final class RingaDataOutcomeFormWidget extends Widget
 
         // Load the first unprocessed record directly
         // This bypasses Filament's data-passing mechanism which isn't working
-        $this->record = RingaData::where('is_outcome', false)
+        $this->record = RingaData::where('is_active', true)
             ->orderBy('id')
             ->first();
     }

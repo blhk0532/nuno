@@ -12,8 +12,8 @@ final class QueueController extends Controller
 {
     public function __invoke(Request $request)
     {
-        // Get all RingaData records where is_outcome is false (pending records)
-        $records = RingaData::where('is_outcome', false)
+        // Get all RingaData records where is_active is true (pending records)
+        $records = RingaData::where('is_active', true)
             ->orderBy('id')
             ->get()
             ->map(function ($record) {

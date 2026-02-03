@@ -50,7 +50,7 @@ final class QueueRingaData extends Page
     public static function getNavigationBadge(): ?string
     {
         return (string) self::getResource()::getEloquentQuery()
-            ->where('is_outcome', false)
+            ->where('is_active', true)
             ->where('available_at', '<=', now())
             ->count();
     }
@@ -139,8 +139,8 @@ final class QueueRingaData extends Page
     protected function getQuery(): Builder
     {
         return self::getResource()::getEloquentQuery()
-            ->where('is_outcome', false)  // Only show records without outcome
-            ->where('available_at', '<=', now())  // Only show records that are due
+            ->where('is_active', true)
+            ->where('available_at', '<=', now())
             ->where(function (Builder $query) {
                 // Show records where retry_count < max_retry_count
                 $query->where(function (Builder $subQuery) {

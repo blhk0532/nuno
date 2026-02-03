@@ -38,7 +38,7 @@ final class RingaOutcomeForm
                                         ->color($outcome->getColor())
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
-                                                $record->update(['is_outcome' => true]);
+                                                $record->update(['is_active' => false, 'attempts' => ($record->attempts ?? 0) + 1]);
 
                                                 Notification::make()
                                                     ->title('Outcome recorded')
@@ -49,7 +49,6 @@ final class RingaOutcomeForm
                                                     ->send();
 
                                                 // Reload page to refresh badge and load next record
-                                                // Use JavaScript to force full page reload
                                                 $component->js('window.location.reload()');
                                             }
                                         });
@@ -75,7 +74,7 @@ final class RingaOutcomeForm
                                         ])
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
-                                                $record->update(['is_outcome' => true]);
+                                                $record->update(['is_active' => false, 'attempts' => ($record->attempts ?? 0) + 1]);
 
                                                 Notification::make()
                                                     ->title('Outcome recorded')
@@ -112,7 +111,7 @@ final class RingaOutcomeForm
                                         ])
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
-                                                $record->update(['is_outcome' => true]);
+                                                $record->update(['is_active' => false, 'attempts' => ($record->attempts ?? 0) + 1]);
 
                                                 Notification::make()
                                                     ->title('Outcome recorded')
