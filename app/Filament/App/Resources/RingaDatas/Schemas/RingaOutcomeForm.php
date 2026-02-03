@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Filament\App\Resources\RingaDatas\Schemas;
 
-use App\Services\OutcomeDelayService;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Grid;
@@ -39,19 +38,6 @@ final class RingaOutcomeForm
                                         ->color($outcome->getColor())
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
-                                                // Check if this outcome has a configured delay
-                                                $delayMinutes = OutcomeDelayService::getDelay($outcome->value);
-
-                                                $updateData = [
-                                                    'outcome' => $outcome->value,
-                                                    'attempts' => ($record->attempts ?? 0) + 1,
-                                                ];
-
-                                                // Only increment retry_count and set available_at if there's a delay
-                                                if ($delayMinutes !== null) {
-                                                    $updateData['retry_count'] = ($record->retry_count ?? 0) + 1;
-                                                    $updateData['available_at'] = now()->addMinutes($delayMinutes);
-                                                }
 
                                                 $record->update($updateData);
 
@@ -65,7 +51,7 @@ final class RingaOutcomeForm
 
                                                 // Reload page to refresh badge and load next record
                                                 // Use JavaScript to force full page reload
-                                                $component->js('window.location.href = window.location.href');
+                                                $component->js('window.location.reload()');
                                             }
                                         });
                                 }, \App\Enums\Outcomes1::cases()),
@@ -90,19 +76,6 @@ final class RingaOutcomeForm
                                         ])
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
-                                                // Check if this outcome has a configured delay
-                                                $delayMinutes = OutcomeDelayService::getDelay($outcome->value);
-
-                                                $updateData = [
-                                                    'outcome' => $outcome->value,
-                                                    'attempts' => ($record->attempts ?? 0) + 1,
-                                                ];
-
-                                                // Only increment retry_count and set available_at if there's a delay
-                                                if ($delayMinutes !== null) {
-                                                    $updateData['retry_count'] = ($record->retry_count ?? 0) + 1;
-                                                    $updateData['available_at'] = now()->addMinutes($delayMinutes);
-                                                }
 
                                                 $record->update($updateData);
 
@@ -116,7 +89,7 @@ final class RingaOutcomeForm
 
                                                 // Reload page to refresh badge and load next record
                                                 // Use JavaScript to force full page reload
-                                                $component->js('window.location.href = window.location.href');
+                                                $component->js('window.location.reload()');
                                             }
                                         });
                                 }, \App\Enums\Outcomes2::cases()),
@@ -141,19 +114,6 @@ final class RingaOutcomeForm
                                         ])
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
-                                                // Check if this outcome has a configured delay
-                                                $delayMinutes = OutcomeDelayService::getDelay($outcome->value);
-
-                                                $updateData = [
-                                                    'outcome' => $outcome->value,
-                                                    'attempts' => ($record->attempts ?? 0) + 1,
-                                                ];
-
-                                                // Only increment retry_count and set available_at if there's a delay
-                                                if ($delayMinutes !== null) {
-                                                    $updateData['retry_count'] = ($record->retry_count ?? 0) + 1;
-                                                    $updateData['available_at'] = now()->addMinutes($delayMinutes);
-                                                }
 
                                                 $record->update($updateData);
 
@@ -167,7 +127,7 @@ final class RingaOutcomeForm
 
                                                 // Reload page to refresh badge and load next record
                                                 // Use JavaScript to force full page reload
-                                                $component->js('window.location.href = window.location.href');
+                                                $component->js('window.location.reload()');
                                             }
                                         });
                                 }, \App\Enums\Outcomes4::cases()),
