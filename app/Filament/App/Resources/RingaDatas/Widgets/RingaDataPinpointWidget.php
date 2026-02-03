@@ -62,19 +62,20 @@ final class RingaDataPinpointWidget extends Widget implements HasForms
     {
         $defaults = config('filament-pinpoint.default');
 
+        $lat = (float) ($defaults['lat'] ?? -0.5050);
+        $lng = (float) ($defaults['lng'] ?? 117.1500);
+        $label = $this->record ? ($this->record->gatuadress.' '.$this->record->postort) : null;
+
         return $schema
             ->schema([
                 Pinpoint::make('location')
                     ->height(300)
-                    ->label($this->record->gatuadress.' '.$this->record->postort ?? null)
+                    ->label($label)
                     ->latField('lat')
                     ->lngField('lng')
                     ->addressField('address')
                     ->searchable(false)
-                    ->defaultLocation(
-                        $defaults['lat'] ?? -0.5050,
-                        $defaults['lng'] ?? 117.1500,
-                    )
+                    ->defaultLocation($lat, $lng)
                     ->defaultZoom($defaults['zoom'] ?? 13)
                     ->height($defaults['height'] ?? 400)
                     ->columnSpanFull(),
