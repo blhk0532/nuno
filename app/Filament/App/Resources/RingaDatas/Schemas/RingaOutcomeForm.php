@@ -43,7 +43,7 @@ final class RingaOutcomeForm
                                                 $delayMinutes = OutcomeDelayService::getDelay($outcome->value);
 
                                                 $updateData = [
-                                                    'outcome' => $outcome,
+                                                    'outcome' => $outcome->value,
                                                     'attempts' => ($record->attempts ?? 0) + 1,
                                                 ];
 
@@ -95,7 +95,7 @@ final class RingaOutcomeForm
                                                 $delayMinutes = OutcomeDelayService::getDelay($outcome->value);
 
                                                 $updateData = [
-                                                    'outcome' => $outcome,
+                                                    'outcome' => $outcome->value,
                                                     'attempts' => ($record->attempts ?? 0) + 1,
                                                 ];
 
@@ -147,7 +147,7 @@ final class RingaOutcomeForm
                                                 $delayMinutes = OutcomeDelayService::getDelay($outcome->value);
 
                                                 $updateData = [
-                                                    'outcome' => $outcome,
+                                                    'outcome' => $outcome->value,
                                                     'attempts' => ($record->attempts ?? 0) + 1,
                                                 ];
 
