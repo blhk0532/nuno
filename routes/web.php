@@ -23,11 +23,11 @@ use App\Http\Controllers\RingaDataOutcomeController;
 
 // Livewire routes - MUST be registered for Livewire to work
 Livewire::setScriptRoute(function ($handle) {
-    return Route::get('/livewire/livewire.min.js', $handle)->name('livewire.script');
+    return Route::get('/livewire/livewire.min.js', $handle)->name('default.livewire.script');
 });
 
 Livewire::setUpdateRoute(function ($handle) {
-    return Route::post('/livewire/update', $handle)->name('livewire.update');
+    return Route::post('/livewire/update', $handle)->name('default.livewire.update');
 });
 
 // Route::get('/', fn () => Inertia::render('welcome'))->name('home');
