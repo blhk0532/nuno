@@ -38,8 +38,7 @@ final class RingaOutcomeForm
                                         ->color($outcome->getColor())
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
-
-                                                $record->update($updateData);
+                                                $record->update(['is_outcome' => true]);
 
                                                 Notification::make()
                                                     ->title('Outcome recorded')
@@ -76,8 +75,7 @@ final class RingaOutcomeForm
                                         ])
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
-
-                                                $record->update($updateData);
+                                                $record->update(['is_outcome' => true]);
 
                                                 Notification::make()
                                                     ->title('Outcome recorded')
@@ -114,8 +112,7 @@ final class RingaOutcomeForm
                                         ])
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
-
-                                                $record->update($updateData);
+                                                $record->update(['is_outcome' => true]);
 
                                                 Notification::make()
                                                     ->title('Outcome recorded')
