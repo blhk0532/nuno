@@ -229,6 +229,14 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                 $this->record->attempts = ($this->record->attempts ?? 0) + 1;
                 $this->record->save();
 
+                // Refresh to confirm save
+                $this->record->refresh();
+                Log::info('Outcome saved with return date', [
+                    'recordId' => $this->record->id,
+                    'outcome' => $this->record->outcome,
+                    'aterkom_at' => $this->record->aterkom_at,
+                ]);
+
                 Notification::make()
                     ->title('Outcome recorded')
                     ->body("Recorded outcome: {$outcomeEnum->getLabel()} with return call scheduled for {$scheduledAt->format('Y-m-d H:i')}")
@@ -244,6 +252,14 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             $this->record->outcome = $outcomeEnum->value;
             $this->record->attempts = ($this->record->attempts ?? 0) + 1;
             $this->record->save();
+
+            // Refresh to confirm save
+            $this->record->refresh();
+            Log::info('Outcome saved', [
+                'recordId' => $this->record->id,
+                'outcome' => $this->record->outcome,
+                'attempts' => $this->record->attempts,
+            ]);
 
             Notification::make()
                 ->title('Outcome recorded')
