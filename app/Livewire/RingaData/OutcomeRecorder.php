@@ -47,67 +47,71 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
         $ringTillbakaOutcome = \App\Models\OutcomeSetting::where('outcome', 'RingTillbaka')->first();
 
-        return $this->cacheAction(
-            Action::make('returnCall')
-                ->label('Ring Tillbaka')
-                ->button()
-                ->size('sm')
-                ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$ringTillbakaOutcome?->color}; color: white;"])
-                ->modalHeading('Schemalägg återkommande samtal')
-                ->modalSubmitActionLabel('Schemalägg')
-                ->modalWidth('md')
-                ->form([
-                    DateTimePicker::make('aterkom_at')
-                        ->label('Datum och tid för återkommande samtal')
-                        ->default(fn () => $default)
-                        ->native(false)
-                        ->seconds(false)
-                        ->timezone(config('app.timezone'))
-                        ->required(),
-                ])
-                ->action(function (array $data): void {
-                    $this->recordOutcome('RingTillbaka', $data['aterkom_at'] ?? null);
-                })
-        );
+        return Action::make('returnCall')
+            ->label('Ring Tillbaka')
+            ->button()
+            ->color('gray')
+            ->size('sm')
+            ->extraAttributes([
+                'class' => 'w-full',
+                'style' => "background-color: {$ringTillbakaOutcome?->color} !important; color: white !important; border-color: {$ringTillbakaOutcome?->color} !important;",
+            ])
+            ->modalHeading('Schemalägg återkommande samtal')
+            ->modalSubmitActionLabel('Schemalägg')
+            ->modalWidth('md')
+            ->form([
+                DateTimePicker::make('aterkom_at')
+                    ->label('Datum och tid för återkommande samtal')
+                    ->default(fn () => $default)
+                    ->native(false)
+                    ->seconds(false)
+                    ->timezone(config('app.timezone'))
+                    ->required(),
+            ])
+            ->action(function (array $data): void {
+                $this->recordOutcome('RingTillbaka', $data['aterkom_at'] ?? null);
+            });
     }
 
     public function createBookingAction(): Action
     {
         $bokadOutcome = \App\Models\OutcomeSetting::where('outcome', 'Bokad')->first();
 
-        return $this->cacheAction(
-            Action::make('createBooking')
-                ->label('Bokad')
-                ->button()
-                ->size('sm')
-                ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$bokadOutcome?->color}; color: white;"])
-                ->modalHeading('Skapa bokning')
-                ->modalSubmitActionLabel('Skapa bokning')
-                ->modalWidth('md')
-                ->form([
-                    // Add booking form fields here - adjust based on your Booking model
-                    TextInput::make('booking_name')
-                        ->label('Namn')
-                        ->required(),
-                    TextInput::make('booking_phone')
-                        ->label('Telefon')
-                        ->tel()
-                        ->required(),
-                    DateTimePicker::make('booking_date')
-                        ->label('Bokningsdatum')
-                        ->native(false)
-                        ->seconds(false)
-                        ->timezone(config('app.timezone'))
-                        ->required(),
-                    TextInput::make('outcome_value')
-                        ->hidden()
-                        ->default('Bokad'),
-                ])
-                ->action(function (array $data): void {
-                    // Create booking and record outcome
-                    $this->recordOutcome($data['outcome_value'] ?? 'Bokad');
-                })
-        );
+        return Action::make('createBooking')
+            ->label('Bokad')
+            ->button()
+            ->color('gray')
+            ->size('sm')
+            ->extraAttributes([
+                'class' => 'w-full',
+                'style' => "background-color: {$bokadOutcome?->color} !important; color: white !important; border-color: {$bokadOutcome?->color} !important;",
+            ])
+            ->modalHeading('Skapa bokning')
+            ->modalSubmitActionLabel('Skapa bokning')
+            ->modalWidth('md')
+            ->form([
+                // Add booking form fields here - adjust based on your Booking model
+                TextInput::make('booking_name')
+                    ->label('Namn')
+                    ->required(),
+                TextInput::make('booking_phone')
+                    ->label('Telefon')
+                    ->tel()
+                    ->required(),
+                DateTimePicker::make('booking_date')
+                    ->label('Bokningsdatum')
+                    ->native(false)
+                    ->seconds(false)
+                    ->timezone(config('app.timezone'))
+                    ->required(),
+                TextInput::make('outcome_value')
+                    ->hidden()
+                    ->default('Bokad'),
+            ])
+            ->action(function (array $data): void {
+                // Create booking and record outcome
+                $this->recordOutcome($data['outcome_value'] ?? 'Bokad');
+            });
     }
 
     public function aterkommerAction(): Action
@@ -118,87 +122,91 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
         $aterkommerOutcome = \App\Models\OutcomeSetting::where('outcome', 'Aterkommer')->first();
 
-        return $this->cacheAction(
-            Action::make('aterkommer')
-                ->label('Återkommer')
-                ->color('info')
-                ->button()
-                ->size('sm')
-                ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$aterkommerOutcome?->color}; color: white;"])
-                ->modalHeading('Schemalägg återkommande samtal')
-                ->modalSubmitActionLabel('Schemalägg')
-                ->modalWidth('md')
-                ->form([
-                    DateTimePicker::make('aterkom_at')
-                        ->label('Datum och tid för återkommande samtal')
-                        ->default(fn () => $default)
-                        ->native(false)
-                        ->seconds(false)
-                        ->timezone(config('app.timezone'))
-                        ->required(),
-                ])
-                ->action(function (array $data): void {
-                    $this->recordOutcome('Aterkommer', $data['aterkom_at'] ?? null);
-                })
-        );
+        return Action::make('aterkommer')
+            ->label('Återkommer')
+            ->button()
+            ->color('gray')
+            ->size('sm')
+            ->extraAttributes([
+                'class' => 'w-full',
+                'style' => "background-color: {$aterkommerOutcome?->color} !important; color: white !important; border-color: {$aterkommerOutcome?->color} !important;",
+            ])
+            ->modalHeading('Schemalägg återkommande samtal')
+            ->modalSubmitActionLabel('Schemalägg')
+            ->modalWidth('md')
+            ->form([
+                DateTimePicker::make('aterkom_at')
+                    ->label('Datum och tid för återkommande samtal')
+                    ->default(fn () => $default)
+                    ->native(false)
+                    ->seconds(false)
+                    ->timezone(config('app.timezone'))
+                    ->required(),
+            ])
+            ->action(function (array $data): void {
+                $this->recordOutcome('Aterkommer', $data['aterkom_at'] ?? null);
+            });
     }
 
     public function nextGangAction(): Action
     {
         $nextGangOutcome = \App\Models\OutcomeSetting::where('outcome', 'NyligenGjort')->first();
-        $color = $nextGangOutcome?->color ? $this->colorToFilament($nextGangOutcome->color) : 'warning';
 
-        return $this->cacheAction(
-            Action::make('nextGang')
-                ->label('Nästa Gång')
-                ->button()
-                ->size('sm')
-                ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$nextGangOutcome?->color}; color: white;"])
-                ->modalHeading('Välj Nästa Gång')
-                ->modalSubmitActionLabel('Spara')
-                ->modalWidth('md')
-                ->form([
-                    Select::make('outcome_value')
-                        ->label('Resultat')
-                        ->options(fn () => collect(\App\Enums\Outcomes3::cases())
-                            ->mapWithKeys(fn (\App\Enums\Outcomes3 $case) => [$case->name => $case->getLabel()])
-                            ->toArray())
-                        ->required(),
-                ])
-                ->action(function (array $data): void {
-                    $this->recordOutcome($data['outcome_value']);
-                })
-        );
+        return Action::make('nextGang')
+            ->label('Nästa Gång')
+            ->button()
+            ->color('gray')
+            ->size('sm')
+            ->extraAttributes([
+                'class' => 'w-full',
+                'style' => "background-color: {$nextGangOutcome?->color} !important; color: white !important; border-color: {$nextGangOutcome?->color} !important;",
+            ])
+            ->modalHeading('Välj Nästa Gång')
+            ->modalSubmitActionLabel('Spara')
+            ->modalWidth('md')
+            ->form([
+                Select::make('outcome_value')
+                    ->label('Resultat')
+                    ->options(fn () => collect(\App\Enums\Outcomes3::cases())
+                        ->mapWithKeys(fn (\App\Enums\Outcomes3 $case) => [$case->name => $case->getLabel()])
+                        ->toArray())
+                    ->required(),
+            ])
+            ->action(function (array $data): void {
+                $this->recordOutcome($data['outcome_value']);
+            });
     }
 
     public function offertAction(): Action
     {
         $offertOutcome = \App\Models\OutcomeSetting::where('outcome', 'Offert')->first();
 
-        return $this->cacheAction(
-            Action::make('offert')
-                ->label('Offert')
-                ->button()
-                ->size('sm')
-                ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$offertOutcome?->color}; color: white;"])
-                ->modalHeading('Skapa Offert')
-                ->modalSubmitActionLabel('Spara Offert')
-                ->modalWidth('lg')
-                ->form([
-                    TextInput::make('subject')
-                        ->label('Ämne')
-                        ->placeholder('Offert ämne')
-                        ->required(),
-                    RichEditor::make('message')
-                        ->label('Meddelande')
-                        ->placeholder('Offert text...')
-                        ->required(),
-                ])
-                ->action(function (array $data): void {
-                    // TODO: Save offer and send email
-                    $this->recordOutcome('Offert');
-                })
-        );
+        return Action::make('offert')
+            ->label('Offert')
+            ->button()
+            ->color('gray')
+            ->size('sm')
+            ->extraAttributes([
+                'class' => 'w-full',
+                'style' => "background-color: {$offertOutcome?->color} !important; color: white !important; border-color: {$offertOutcome?->color} !important;",
+            ])
+            ->modalHeading('Skapa Offert')
+            ->modalSubmitActionLabel('Spara Offert')
+            ->modalWidth('lg')
+            ->form([
+                TextInput::make('subject')
+                    ->label('Ämne')
+                    ->placeholder('Offert ämne')
+                    ->required(),
+                RichEditor::make('message')
+                    ->label('Meddelande')
+                    ->placeholder('Offert text...')
+                    ->required(),
+            ])
+            ->action(function (array $data): void {
+                // TODO: Save offer and send email
+                $this->recordOutcome('Offert');
+            });
     }
 
     public function mount(): void
@@ -454,6 +462,14 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
     public function render()
     {
         return view('livewire.ringa-data.outcome-recorder');
+    }
+
+    public function getOutcomeButtons()
+    {
+        return \App\Models\OutcomeSetting::where('is_active', true)
+            ->whereNotNull('color')
+            ->orderBy('order')
+            ->get();
     }
 
     private function colorToFilament(string $hexColor): string

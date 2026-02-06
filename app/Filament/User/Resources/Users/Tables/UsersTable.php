@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Filament\User\Resources\Users\Tables;
 
 use Filament\Actions\ViewAction;
-use Filament\Support\Enums\Size;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
@@ -24,8 +23,11 @@ final class UsersTable
                     ->falseIcon('heroicon-o-x-circle')
                     ->sortable(),
 
-                UserColumn::make('author')
-                    ->label('Användare'),
+                UserColumn::make('user_display')
+                    ->label('Användare')
+                    ->getStateUsing(function ($record) {
+                        return $record; // Pass the user record itself
+                    }),
 
                 TextColumn::make('active_status')
                     ->badge()

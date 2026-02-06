@@ -16,7 +16,7 @@ final class OutcomeSettingSeeder extends Seeder
 
         foreach ($outcomes as $outcome) {
             OutcomeSetting::query()->updateOrCreate(
-                ['type' => $outcome->value],
+                ['outcome' => $outcome->name],
                 [
                     'type' => $outcome->value,
                     'outcome' => $outcome->name,
