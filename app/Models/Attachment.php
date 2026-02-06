@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace AdultDate\FilamentWirechat\Models;
+namespace App\Models;
 
 use Adultdate\Wirechat\Facades\Wirechat;
 use Eloquent;

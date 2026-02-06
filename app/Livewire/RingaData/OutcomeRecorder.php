@@ -50,7 +50,6 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
         return $this->cacheAction(
             Action::make('returnCall')
                 ->label('Ring Tillbaka')
-                ->color('primary')
                 ->button()
                 ->size('sm')
                 ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$ringTillbakaOutcome?->color}; color: white;"])
@@ -79,7 +78,6 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
         return $this->cacheAction(
             Action::make('createBooking')
                 ->label('Bokad')
-                ->color('success')
                 ->button()
                 ->size('sm')
                 ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$bokadOutcome?->color}; color: white;"])
@@ -153,7 +151,6 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
         return $this->cacheAction(
             Action::make('nextGang')
                 ->label('Nästa Gång')
-                ->color($color)
                 ->button()
                 ->size('sm')
                 ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$nextGangOutcome?->color}; color: white;"])
@@ -181,7 +178,6 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
         return $this->cacheAction(
             Action::make('offert')
                 ->label('Offert')
-                ->color('success')
                 ->button()
                 ->size('sm')
                 ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$offertOutcome?->color}; color: white;"])
@@ -274,46 +270,56 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                 'aterkom_at' => $aterkom_at,
             ]);
 
-            // Find the actual Outcomes enum that matches this enum name
+            // Find the actual Outcomes enum that matches this enum name or value
             $outcomeEnum = null;
 
-            // First try to find it in the display enums
-            $displayEnums = [
-                \App\Enums\Outcomes1::class,
-                \App\Enums\Outcomes2::class,
-                \App\Enums\Outcomes4::class,
-            ];
+            // First try to match directly against the main Outcomes enum by name or value
+            foreach (\App\Enums\Outcomes::cases() as $case) {
+                if ($case->name === $outcomeValue || $case->value === $outcomeValue) {
+                    $outcomeEnum = $case;
+                    break;
+                }
+            }
 
-            foreach ($displayEnums as $enumClass) {
-                try {
-                    // Find the enum case by name
-                    $displayEnum = null;
-                    foreach ($enumClass::cases() as $case) {
-                        if ($case->name === $outcomeValue) {
-                            $displayEnum = $case;
-                            break;
-                        }
-                    }
+            // If not found, try to find it in the display enums
+            if (! $outcomeEnum) {
+                $displayEnums = [
+                    \App\Enums\Outcomes1::class,
+                    \App\Enums\Outcomes2::class,
+                    \App\Enums\Outcomes4::class,
+                ];
 
-                    if ($displayEnum) {
-                        // Find the corresponding main enum by value
-                        foreach (\App\Enums\Outcomes::cases() as $case) {
-                            if ($case->value === $displayEnum->value) {
-                                $outcomeEnum = $case;
-                                break 2;
+                foreach ($displayEnums as $enumClass) {
+                    try {
+                        // Find the enum case by name
+                        $displayEnum = null;
+                        foreach ($enumClass::cases() as $case) {
+                            if ($case->name === $outcomeValue) {
+                                $displayEnum = $case;
+                                break;
                             }
                         }
 
-                        // Fallback: match by name
-                        foreach (\App\Enums\Outcomes::cases() as $case) {
-                            if ($case->name === $displayEnum->name) {
-                                $outcomeEnum = $case;
-                                break 2;
+                        if ($displayEnum) {
+                            // Find the corresponding main enum by value
+                            foreach (\App\Enums\Outcomes::cases() as $case) {
+                                if ($case->value === $displayEnum->value) {
+                                    $outcomeEnum = $case;
+                                    break 2;
+                                }
+                            }
+
+                            // Fallback: match by name
+                            foreach (\App\Enums\Outcomes::cases() as $case) {
+                                if ($case->name === $displayEnum->name) {
+                                    $outcomeEnum = $case;
+                                    break 2;
+                                }
                             }
                         }
+                    } catch (Exception $e) {
+                        // Not in this enum, continue
                     }
-                } catch (Exception $e) {
-                    // Not in this enum, continue
                 }
             }
 

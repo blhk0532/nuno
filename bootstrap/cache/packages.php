@@ -123,13 +123,6 @@
       0 => 'AymanAlhattami\\FilamentContextMenu\\FilamentContextMenuServiceProvider',
     ),
   ),
-  'barryvdh/laravel-ide-helper' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Barryvdh\\LaravelIdeHelper\\IdeHelperServiceProvider',
-    ),
-  ),
   'bezhansalleh/filament-exceptions' => 
   array (
     'providers' => 
@@ -651,10 +644,6 @@
   ),
   'laravel/reverb' => 
   array (
-    'aliases' => 
-    array (
-      'Output' => 'Laravel\\Reverb\\Output',
-    ),
     'providers' => 
     array (
       0 => 'Laravel\\Reverb\\ApplicationManagerServiceProvider',

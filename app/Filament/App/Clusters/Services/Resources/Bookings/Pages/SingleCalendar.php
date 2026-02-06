@@ -24,16 +24,16 @@ use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 class SingleCalendar extends BaseDashboard
 {
 
-   //     protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-calendar-days';
+    //     protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-calendar-days';
     protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarCheckLine;
     protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarCheckFill;
     protected static ?string $navigationLabel = 'Kalender';
 
-     protected static ?string $title = '';
+    protected static ?string $title = '';
 
-        protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 6;
 
-        protected static ?int $sort = 6;
+    protected static ?int $sort = 6;
 
     protected static string $routePath = 'single-calendar';
 
@@ -49,24 +49,24 @@ class SingleCalendar extends BaseDashboard
         logger()->info('SingleCalendar mount', ['full_url' => request()->fullUrl(), 'query' => request()->query(), 'calendarId' => $this->calendarId]);
     }
 
-     protected static string | UnitEnum | null $navigationGroup = '';
+    protected static string | UnitEnum | null $navigationGroup = '';
 
 
 
-  //   use HasFiltersForm;
-  //  protected static ?string $slug = 'dashboard';
+    //   use HasFiltersForm;
+    //  protected static ?string $slug = 'dashboard';
 
-        protected string $view = 'filament-booking::pages.page';
+    protected string $view = 'filament-booking::pages.page';
 
     public static function shouldRegisterNavigation(): bool
     {
         return true;
     }
 
-        public function getWidgets(): array
+    public function getWidgets(): array
     {
         return [
-                SingleCalendars::class,
+            SingleCalendars::class,
         ];
     }
 
@@ -79,46 +79,45 @@ class SingleCalendar extends BaseDashboard
         ];
     }
 
-public function getMaxContentWidth(): Width
-{
-    return Width::Full;
-}
-
-//    public static function getNavigationLabel(): string
-//    {
-//        return '' . Str::ucfirst('Kalendrar') ?? 'NDS Kalender';
-//    }
-
-//    public static function getNavigationBadge(): ?string
-//    {
-//        //  return now()->format('H:m');
-//     return 'x1';
-//    }
-//
-//    public static function getNavigationBadgeColor(): ?string
-//    {
-//        return 'gray';
-//    }
-
-//                public static function getNavigationSort(): ?int
-//   {
-//       return 2;
-//   }
-//
-//               public static function getSort(): ?int
-//   {
-//       return 2;
-//   }
-
-       public static function getNavigationBadge(): ?string
+    public function getMaxContentWidth(): Width
     {
-    //    return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
-                Carbon::setLocale('sv');
-
-    return now()
-        ->timezone('Europe/Stockholm')
-        ->translatedFormat('d M');
+        return Width::Full;
     }
+
+    //    public static function getNavigationLabel(): string
+    //    {
+    //        return '' . Str::ucfirst('Kalendrar') ?? 'NDS Kalender';
+    //    }
+
+    //    public static function getNavigationBadge(): ?string
+    //    {
+    //        //  return now()->format('H:m');
+    //     return 'x1';
+    //    }
+    //
+    //    public static function getNavigationBadgeColor(): ?string
+    //    {
+    //        return 'gray';
+    //    }
+
+    //                public static function getNavigationSort(): ?int
+    //   {
+    //       return 2;
+    //   }
+    //
+    //               public static function getSort(): ?int
+    //   {
+    //       return 2;
+    //   }
+
+//   public static function getNavigationBadge(): ?string
+//   {
+//       //    return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
+//       Carbon::setLocale('sv');
+//       return now()
+//           ->timezone('Europe/Stockholm')
+//           ->translatedFormat('d M');
+//   }
 
     public static function getNavigationBadgeColor(): ?string
     {
@@ -126,39 +125,37 @@ public function getMaxContentWidth(): Width
     }
 
 
-//    public function filtersForm(Schema $schema): Schema
-//    {
-//        return $schema
-//            ->components([
-//                Section::make()
-//                    ->schema([
-//                        Select::make('booking_calendars')
-//                            ->options(fn () => ['all' => 'Show All'] + BookingCalendarModel::pluck('name', 'id')->toArray())
-//                            ->label('Tekninker')
-//                            ->placeholder('Select a calendar owner')
-//                            ->searchable()
-//                            ->default('all')
-//                            ->reactive()
-//                            ->afterStateUpdated(function () {
-//                                $this->dispatch('refreshCalendar');
-//                            }),
-//
-//
-//                        DatePicker::make('startDate')
-//                            ->maxDate(fn (Get $get) => $get('endDate') ?: now()),
-//                        DatePicker::make('endDate')
-//                            ->minDate(fn (Get $get) => $get('startDate') ?: now())
-//                            ->maxDate(now()),
-//                    ])
-//                    ->columns(3)
-//                    ->columnSpanFull(),
-//            ]);
-//    }
+    //    public function filtersForm(Schema $schema): Schema
+    //    {
+    //        return $schema
+    //            ->components([
+    //                Section::make()
+    //                    ->schema([
+    //                        Select::make('booking_calendars')
+    //                            ->options(fn () => ['all' => 'Show All'] + BookingCalendarModel::pluck('name', 'id')->toArray())
+    //                            ->label('Tekninker')
+    //                            ->placeholder('Select a calendar owner')
+    //                            ->searchable()
+    //                            ->default('all')
+    //                            ->reactive()
+    //                            ->afterStateUpdated(function () {
+    //                                $this->dispatch('refreshCalendar');
+    //                            }),
+    //
+    //
+    //                        DatePicker::make('startDate')
+    //                            ->maxDate(fn (Get $get) => $get('endDate') ?: now()),
+    //                        DatePicker::make('endDate')
+    //                            ->minDate(fn (Get $get) => $get('startDate') ?: now())
+    //                            ->maxDate(now()),
+    //                    ])
+    //                    ->columns(3)
+    //                    ->columnSpanFull(),
+    //            ]);
+    //    }
 
     public function getPermissionCheckClosure(): \Closure
     {
-        return fn (string $widgetClass) => true;
+        return fn(string $widgetClass) => true;
     }
-
-
 }
