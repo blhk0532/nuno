@@ -58,6 +58,12 @@ min-height: 740px;
 div.fc-timegrid-slot-label-frame.fc-scrollgrid-shrink-frame{
   height:23px!important;
 }
+
+div.filament-fullcalendar.singlecalendar-0.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard{
+     max-height: 700px !important;
+}
+
+
 </style>
 
         <div class="get-heading flex justify-start flex-1 mb-4">

@@ -201,7 +201,7 @@ return [
     'defaults' => [
         'supervisor-1' => [
             'connection' => 'redis',
-            'queue' => ['scrape', 'default', 'hitta-counts', 'ratsit-counts', 'hitta-postort', 'hitta-personer', 'ratsit-personer', 'merinfo-queue', 'merinfo-count'],
+            'queue' => ['export', 'scrape', 'default', 'hitta-counts', 'ratsit-counts', 'hitta-postort', 'hitta-personer', 'ratsit-personer', 'merinfo-queue', 'merinfo-count'],
             'balance' => 'auto',
             'autoScalingStrategy' => 'time',
             'maxProcesses' => 5,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Exports;
 
 use App\Models\RatsitData;
@@ -8,7 +10,7 @@ use Filament\Actions\Exports\Exporter;
 use Filament\Actions\Exports\Models\Export;
 use Illuminate\Support\Number;
 
-class RatsitDataExporter extends Exporter
+final class RatsitDataExporter extends Exporter
 {
     protected static ?string $model = RatsitData::class;
 

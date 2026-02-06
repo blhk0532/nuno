@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "25625b71fed29b8d5511600f6ab757dc",
+    "content-hash": "d99abfa9d316adaae28e78f06a222a36",
     "packages": [
         {
             "name": "achyutn/filament-log-viewer",
@@ -3821,6 +3821,73 @@
                 "source": "https://github.com/davidhsianturi/blade-bootstrap-icons/tree/v2.1.0"
             },
             "time": "2025-06-18T12:39:09+00:00"
+        },
+        {
+            "name": "defstudio/filament-column-length-limiter",
+            "version": "v4.0.10",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/defstudio/filament-column-length-limiter.git",
+                "reference": "f6d4c15d21a3a1332c1715e353187ad871556338"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/defstudio/filament-column-length-limiter/zipball/f6d4c15d21a3a1332c1715e353187ad871556338",
+                "reference": "f6d4c15d21a3a1332c1715e353187ad871556338",
+                "shasum": ""
+            },
+            "require": {
+                "filament/support": "^4.0",
+                "filament/tables": "^4.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.15.0"
+            },
+            "require-dev": {
+                "laravel/pint": "^1.0",
+                "nunomaduro/collision": "^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "DefStudio\\FilamentColumnLengthLimiter\\FilamentColumnLengthLimiterServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DefStudio\\FilamentColumnLengthLimiter\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabio Ivona",
+                    "email": "fabio.ivona@defstudio.it",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Limit Filament columns length showing a tooltip when text exceeds",
+            "homepage": "https://github.com/defstudio/filament-column-length-limiter",
+            "keywords": [
+                "defstudio",
+                "filament-column-length-limiter",
+                "laravel"
+            ],
+            "support": {
+                "issues": "https://github.com/defstudio/filament-column-length-limiter/issues",
+                "source": "https://github.com/defstudio/filament-column-length-limiter"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/defstudio",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-11-04T13:47:28+00:00"
         },
         {
             "name": "defuse/php-encryption",

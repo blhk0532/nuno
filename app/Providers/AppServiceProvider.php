@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Filament\App\Widgets\TeamMembersWidget;
 use App\Http\Responses\CustomLoginResponse;
 use BezhanSalleh\PanelSwitch\PanelSwitch;
+use Filament\Forms\Components\Toggle;
+use Filament\View\PanelsRenderHook;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Fortify\Contracts\LoginResponse;
-use App\Filament\App\Widgets\TeamMembersWidget;
-use Filament\View\PanelsRenderHook;
 use Livewire\Livewire;
 
 final class AppServiceProvider extends ServiceProvider
@@ -27,6 +28,24 @@ final class AppServiceProvider extends ServiceProvider
     {
         Livewire::component('app.filament.app.widgets.team-members-widget', TeamMembersWidget::class);
         Livewire::component('team-members-widget', TeamMembersWidget::class);
+
+        // Backwards-compatibility: provide a `size()` macro for Filament Toggle
+        // Some templates/plugins call `->size(...)` which isn't available in this
+        // Filament version. Register a small macro that maps common sizes to CSS classes.
+        Toggle::macro('size', function (string $size) {
+            $classes = match ($size) {
+                'sm' => 'filament-toggle-sm',
+                'md' => 'filament-toggle-md',
+                'lg' => 'filament-toggle-lg',
+                default => $size,
+            };
+
+            // Append the class on the component; keep chainability. Merge into
+            // existing extra attributes so we don't overwrite required classes.
+            $this->extraAttributes(['class' => $classes], true);
+
+            return $this;
+        });
 
         $this->app->bind(\Filament\Auth\Http\Responses\Contracts\LoginResponse::class, function () {
             return new class implements \Filament\Auth\Http\Responses\Contracts\LoginResponse

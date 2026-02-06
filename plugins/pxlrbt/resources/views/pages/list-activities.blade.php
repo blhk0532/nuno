@@ -19,8 +19,8 @@
                         <div class="flex items-center gap-4">
                             @if ($activityItem->causer)
                                 @php
-                                    $causerUser = is_string($activityItem->causer) 
-                                        ? \App\Models\User::find($activityItem->causer) 
+                                    $causerUser = is_string($activityItem->causer)
+                                        ? \App\Models\User::find($activityItem->causer)
                                         : $activityItem->causer;
                                 @endphp
                                 <x-filament-panels::avatar.user :user="$causerUser" class="!w-7 !h-7"/>

@@ -10,6 +10,10 @@ return new class extends Migration
 {
     public function up(): void
     {
+        if (! Schema::hasTable('ringa_data')) {
+            return;
+        }
+
         Schema::table('ringa_data', function (Blueprint $table): void {
             $table->timestamp('aterkom_at')->nullable()->after('booked_at');
         });
@@ -17,6 +21,10 @@ return new class extends Migration
 
     public function down(): void
     {
+        if (! Schema::hasTable('ringa_data')) {
+            return;
+        }
+
         Schema::table('ringa_data', function (Blueprint $table): void {
             $table->dropColumn('aterkom_at');
         });

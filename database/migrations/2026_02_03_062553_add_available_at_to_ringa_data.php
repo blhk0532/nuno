@@ -13,6 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (! Schema::hasTable('ringa_data')) {
+            return;
+        }
+
         Schema::table('ringa_data', function (Blueprint $table) {
             $table->timestamp('available_at')->useCurrent()->after('aterkom_at');
         });
@@ -23,6 +27,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (! Schema::hasTable('ringa_data')) {
+            return;
+        }
+
         Schema::table('ringa_data', function (Blueprint $table) {
             $table->dropColumn('available_at');
         });

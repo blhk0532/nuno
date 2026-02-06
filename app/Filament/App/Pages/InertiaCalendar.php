@@ -49,12 +49,11 @@ final class InertiaCalendar extends Page
 
     }
 
-    public static function getNavigationBadge(): ?string
-    {
-        $role = Str::upper(Auth::user()->role);
-
-        return 'Öppen';
-    }
+    //    public static function getNavigationBadge(): ?string
+    //    {
+    //        $role = Str::upper(Auth::user()->role);
+    //        return 'Öppen';
+    //    }
 
     public static function getNavigationBadgeColor(): ?string
     {

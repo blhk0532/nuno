@@ -23,6 +23,8 @@ final class DatabaseBackupWidget extends Widget implements HasActions, HasForms
 
     protected int|string|array $columnSpan = 'full';
 
+    protected static bool $isDiscovered = false;
+
     public function backupAction(): Action
     {
         return Action::make('backup')

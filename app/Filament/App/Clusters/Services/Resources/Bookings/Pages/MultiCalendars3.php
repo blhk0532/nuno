@@ -52,16 +52,15 @@ final class MultiCalendars3 extends BaseDashboard
     //      return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
     //  }
 
-    public static function getNavigationBadge(): ?string
-    {
-        Carbon::setLocale('sv');
-
-        $day = now()
-            ->timezone('Europe/Stockholm')
-            ->translatedFormat('l');
-
-        return Str::ucfirst($day);
-    }
+    //    public static function getNavigationBadge(): ?string
+    //    {
+    //        Carbon::setLocale('sv');
+    //        $day = now()
+    //            ->timezone('Europe/Stockholm')
+    //            ->translatedFormat('l');
+    //
+    //        return Str::ucfirst($day);
+    //    }
 
     public static function getNavigationBadgeColor(): ?string
     {

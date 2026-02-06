@@ -11,13 +11,16 @@ use Filament\Actions\Action;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Livewire\Component;
-use Log;
 
 final class OutcomeRecorder extends Component implements HasActions, HasForms
 {
@@ -42,15 +45,15 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             ? Carbon::parse($this->defaultReturnCallAt)
             : now()->addHour();
 
-        $outcome = \App\Enums\Outcomes4::RingTillbaka;
+        $ringTillbakaOutcome = \App\Models\OutcomeSetting::where('outcome', 'RingTillbaka')->first();
 
         return $this->cacheAction(
             Action::make('returnCall')
                 ->label('Ring Tillbaka')
-                ->color($outcome->getColor())
+                ->color('primary')
                 ->button()
                 ->size('sm')
-                ->extraAttributes(['class' => 'w-full'])
+                ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$ringTillbakaOutcome?->color}; color: white;"])
                 ->modalHeading('Schemalägg återkommande samtal')
                 ->modalSubmitActionLabel('Schemalägg')
                 ->modalWidth('md')
@@ -69,21 +72,61 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
         );
     }
 
+    public function createBookingAction(): Action
+    {
+        $bokadOutcome = \App\Models\OutcomeSetting::where('outcome', 'Bokad')->first();
+
+        return $this->cacheAction(
+            Action::make('createBooking')
+                ->label('Bokad')
+                ->color('success')
+                ->button()
+                ->size('sm')
+                ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$bokadOutcome?->color}; color: white;"])
+                ->modalHeading('Skapa bokning')
+                ->modalSubmitActionLabel('Skapa bokning')
+                ->modalWidth('md')
+                ->form([
+                    // Add booking form fields here - adjust based on your Booking model
+                    TextInput::make('booking_name')
+                        ->label('Namn')
+                        ->required(),
+                    TextInput::make('booking_phone')
+                        ->label('Telefon')
+                        ->tel()
+                        ->required(),
+                    DateTimePicker::make('booking_date')
+                        ->label('Bokningsdatum')
+                        ->native(false)
+                        ->seconds(false)
+                        ->timezone(config('app.timezone'))
+                        ->required(),
+                    TextInput::make('outcome_value')
+                        ->hidden()
+                        ->default('Bokad'),
+                ])
+                ->action(function (array $data): void {
+                    // Create booking and record outcome
+                    $this->recordOutcome($data['outcome_value'] ?? 'Bokad');
+                })
+        );
+    }
+
     public function aterkommerAction(): Action
     {
         $default = $this->defaultReturnCallAt
             ? Carbon::parse($this->defaultReturnCallAt)
             : now()->addHour();
 
-        $outcome = \App\Enums\Outcomes4::Aterkommer;
+        $aterkommerOutcome = \App\Models\OutcomeSetting::where('outcome', 'Aterkommer')->first();
 
         return $this->cacheAction(
             Action::make('aterkommer')
                 ->label('Återkommer')
-                ->color($outcome->getColor())
+                ->color('info')
                 ->button()
                 ->size('sm')
-                ->extraAttributes(['class' => 'w-full'])
+                ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$aterkommerOutcome?->color}; color: white;"])
                 ->modalHeading('Schemalägg återkommande samtal')
                 ->modalSubmitActionLabel('Schemalägg')
                 ->modalWidth('md')
@@ -102,6 +145,66 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
         );
     }
 
+    public function nextGangAction(): Action
+    {
+        $nextGangOutcome = \App\Models\OutcomeSetting::where('outcome', 'NyligenGjort')->first();
+        $color = $nextGangOutcome?->color ? $this->colorToFilament($nextGangOutcome->color) : 'warning';
+
+        return $this->cacheAction(
+            Action::make('nextGang')
+                ->label('Nästa Gång')
+                ->color($color)
+                ->button()
+                ->size('sm')
+                ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$nextGangOutcome?->color}; color: white;"])
+                ->modalHeading('Välj Nästa Gång')
+                ->modalSubmitActionLabel('Spara')
+                ->modalWidth('md')
+                ->form([
+                    Select::make('outcome_value')
+                        ->label('Resultat')
+                        ->options(fn () => collect(\App\Enums\Outcomes3::cases())
+                            ->mapWithKeys(fn (\App\Enums\Outcomes3 $case) => [$case->name => $case->getLabel()])
+                            ->toArray())
+                        ->required(),
+                ])
+                ->action(function (array $data): void {
+                    $this->recordOutcome($data['outcome_value']);
+                })
+        );
+    }
+
+    public function offertAction(): Action
+    {
+        $offertOutcome = \App\Models\OutcomeSetting::where('outcome', 'Offert')->first();
+
+        return $this->cacheAction(
+            Action::make('offert')
+                ->label('Offert')
+                ->color('success')
+                ->button()
+                ->size('sm')
+                ->extraAttributes(['class' => 'w-full', 'style' => "background-color: {$offertOutcome?->color}; color: white;"])
+                ->modalHeading('Skapa Offert')
+                ->modalSubmitActionLabel('Spara Offert')
+                ->modalWidth('lg')
+                ->form([
+                    TextInput::make('subject')
+                        ->label('Ämne')
+                        ->placeholder('Offert ämne')
+                        ->required(),
+                    RichEditor::make('message')
+                        ->label('Meddelande')
+                        ->placeholder('Offert text...')
+                        ->required(),
+                ])
+                ->action(function (array $data): void {
+                    // TODO: Save offer and send email
+                    $this->recordOutcome('Offert');
+                })
+        );
+    }
+
     public function mount(): void
     {
         Log::info('OutcomeRecorder mount', ['recordId' => $this->recordId, 'tenant' => $this->tenant]);
@@ -114,7 +217,15 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
         // Fallback: if no recordId passed, load first unprocessed record
         if (! $this->record && ! $this->recordId) {
-            $this->record = RingaData::where('is_active', true)
+            $this->record = RingaData::query()
+                ->where('is_active', true)
+                ->where('available_at', '<=', now())
+                ->whereRaw('retry_count < (
+                    SELECT COALESCE(MAX(max_retry_count), 3)
+                    FROM outcome_settings
+                    WHERE is_active = TRUE
+                )')
+                ->orderBy('available_at')
                 ->orderBy('id')
                 ->first();
             if ($this->record) {
@@ -262,6 +373,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                     ->send();
 
                 $this->loadNextRecord();
+                $this->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
 
                 return;
             }
@@ -303,6 +415,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                 ->send();
 
             $this->loadNextRecord();
+            $this->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
 
         } catch (Exception $e) {
             Log::error('Error recording outcome', [
@@ -337,6 +450,19 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
         return view('livewire.ringa-data.outcome-recorder');
     }
 
+    private function colorToFilament(string $hexColor): string
+    {
+        // Map hex colors to Filament color names for consistency
+        return match ($hexColor) {
+            '#dc2626' => 'danger',
+            '#2563eb' => 'primary',
+            '#f59e0b' => 'warning',
+            '#16a34a' => 'success',
+            '#6b7280' => 'gray',
+            default => 'gray',
+        };
+    }
+
     private function loadRecord(): void
     {
         if ($this->recordId) {
@@ -350,7 +476,28 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
     private function loadNextRecord(): void
     {
-        // Full page reload with cache buster to refresh navigation badge and load next record
-        $this->js("window.location.href = window.location.pathname + window.location.search + (window.location.search ? '&' : '?') + '_=' + Date.now()");
+        $nextRecord = RingaData::query()
+            ->where('is_active', true)
+            ->where('available_at', '<=', now())
+            ->whereRaw('retry_count < (
+                SELECT COALESCE(MAX(max_retry_count), 3)
+                FROM outcome_settings
+                WHERE is_active = TRUE
+            )')
+            ->orderBy('available_at')
+            ->orderBy('id')
+            ->first();
+
+        if ($nextRecord) {
+            $this->recordId = $nextRecord->id;
+            $this->record = $nextRecord;
+            Log::info('Loaded next record', ['recordId' => $nextRecord->id]);
+
+            return;
+        }
+
+        $this->recordId = null;
+        $this->record = null;
+        Log::info('No more records available');
     }
 }

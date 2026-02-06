@@ -38,7 +38,12 @@ final class RingaOutcomeForm
                                         ->color($outcome->getColor())
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
-                                                $record->update(['is_active' => false, 'attempts' => ($record->attempts ?? 0) + 1]);
+                                                $record->update([
+                                                    'is_active' => false,
+                                                    'outcome' => $outcome->value,
+                                                    'is_outcome' => true,
+                                                    'attempts' => ($record->attempts ?? 0) + 1,
+                                                ]);
 
                                                 Notification::make()
                                                     ->title('Outcome recorded')
@@ -74,7 +79,12 @@ final class RingaOutcomeForm
                                         ])
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
-                                                $record->update(['is_active' => false, 'attempts' => ($record->attempts ?? 0) + 1]);
+                                                $record->update([
+                                                    'is_active' => false,
+                                                    'outcome' => $outcome->value,
+                                                    'is_outcome' => true,
+                                                    'attempts' => ($record->attempts ?? 0) + 1,
+                                                ]);
 
                                                 Notification::make()
                                                     ->title('Outcome recorded')
@@ -111,7 +121,12 @@ final class RingaOutcomeForm
                                         ])
                                         ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
-                                                $record->update(['is_active' => false, 'attempts' => ($record->attempts ?? 0) + 1]);
+                                                $record->update([
+                                                    'is_active' => false,
+                                                    'outcome' => $outcome->value,
+                                                    'is_outcome' => true,
+                                                    'attempts' => ($record->attempts ?? 0) + 1,
+                                                ]);
 
                                                 Notification::make()
                                                     ->title('Outcome recorded')

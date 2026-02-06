@@ -10,11 +10,11 @@ LOG_FILE="$APP_PATH/storage/logs/horizon-monitor.log"
 # Function to start Horizon
 start_horizon() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting Horizon..." >> "$LOG_FILE"
-    
+
     # Kill any existing Horizon processes
     pkill -f "php.*horizon" || true
     sleep 2
-    
+
     # Start fresh
     cd "$APP_PATH"
     nohup php artisan horizon > "$APP_PATH/storage/logs/horizon.log" 2>&1 &
@@ -46,7 +46,7 @@ start_horizon
 # Monitor loop
 while true; do
     sleep 5
-    
+
     if ! is_horizon_running; then
         echo "[$(date '+%Y-%m-%d %H:%M:%S')] Horizon not running, restarting..." >> "$LOG_FILE"
         start_horizon

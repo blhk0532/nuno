@@ -255,6 +255,13 @@
       0 => 'Davidhsianturi\\BladeBootstrapIcons\\BladeBootstrapIconsServiceProvider',
     ),
   ),
+  'defstudio/filament-column-length-limiter' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'DefStudio\\FilamentColumnLengthLimiter\\FilamentColumnLengthLimiterServiceProvider',
+    ),
+  ),
   'deldius/filament-user-field' => 
   array (
     'aliases' => 

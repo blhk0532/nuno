@@ -17,6 +17,7 @@ use Exception;
 use Filament\Resources\Pages\Page;
 use Filament\Support\Enums\Width;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\On;
 use UnitEnum;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
@@ -31,9 +32,9 @@ final class QueueRingaData extends Page
 
     protected static ?string $model = RingaData::class;
 
-    protected static ?string $navigationLabel = 'Ringlistan';
+    protected static ?string $navigationLabel = 'Ringlista';
 
-    protected static ?string $title = 'Ringlistan';
+    protected static ?string $title = 'Ringlista';
 
     // public static bool $shouldRegisterNavigation = true;
 
@@ -55,13 +56,10 @@ final class QueueRingaData extends Page
     public static function getNavigationBadge(): ?string
     {
         $count = self::getResource()::getEloquentQuery()
-            ->where('is_active', true)
-            ->where('available_at', '<=', now())
-            ->whereRaw('retry_count < (
-                SELECT COALESCE(MAX(max_retry_count), 3)
-                FROM outcome_delay_settings
-                WHERE is_active = TRUE AND outcome IS NULL
-            )')
+            ->whereNotNull('outcome')
+            ->where('outcome', false)
+            ->where('user_id', Auth::id())
+        //    ->whereDate('updated_at', today())
             ->count();
 
         return $count > 0 ? (string) $count : null;
@@ -88,7 +86,6 @@ final class QueueRingaData extends Page
 
             if (! $this->selectedRecordId) {
                 $first = $this->getQuery()
-                    ->orderBy('id')
                     ->first();
 
                 $this->selectedRecordId = $first?->id;
@@ -119,7 +116,6 @@ final class QueueRingaData extends Page
 
         if (! $record) {
             $record = $this->getQuery()
-                ->orderBy('id')
                 ->first();
 
             $this->selectedRecordId = $record?->id;
@@ -171,12 +167,12 @@ final class QueueRingaData extends Page
     {
         return [
 
-               RingaDataPinpointWidget::class,
-               RingaDataDisplayWidget::class,
-      RingaDataOutcomeFormWidget::class,
-               RingaDataOutcomeWidget::class,
-               RingaDataCalendar::class,
-               RingaDatasQueueTableWidget::class,
+            RingaDataPinpointWidget::class,
+            RingaDataDisplayWidget::class,
+            RingaDataOutcomeFormWidget::class,
+            RingaDataOutcomeWidget::class,
+            RingaDataCalendar::class,
+            RingaDatasQueueTableWidget::class,
         ];
     }
 }

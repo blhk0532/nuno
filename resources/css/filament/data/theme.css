@@ -160,3 +160,6 @@ a.fc-event.fc-event-draggable.fc-event-resizable.fc-event-start.fc-event-end.fc-
 div.logo-before{
    display:none!important;
 }
+.fi-header{
+display: none;
+}

@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nordic Digital Solutions</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <script type="module" async src="https://static.rocket.new/rocket-web.js?_cfg=https%3A%2F%2Fnordicsol5355back.builtwithrocket.new&_be=https%3A%2F%2Fappanalytics.rocket.new&_v=0.1.16"></script>
+  <script type="module" defer src="https://static.rocket.new/rocket-shot.js?v=0.0.2"></script>
+  </head>
+<body class="flex justify-center bg-center selection:bg-slate-900 selection:text-white xl:p-8 text-slate-800 bg-gradient-to-br from-slate-50 via-blue-50 to-slate-100 bg-cover px-0 py-0 relative">
+
+    <!-- Subtle Nordic Pattern Background -->
+    <div class="fixed inset-0 opacity-[0.03] pointer-events-none z-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%230F172A\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+
+    <!-- Main Frame Container -->
+    <main class="glass-panel flex flex-col xl:max-w-[1300px] z-10 h-max xl:border-blue-100 border-none xl:border xl:rounded-[2.5rem] md:pt-10 md:pr-10 md:pb-10 md:pl-10 xl:pt-12 xl:pr-12 xl:pb-12 xl:pl-12 xl:shadow-2xl xl:shadow-blue-900/10 w-full rounded-none pt-6 pr-6 pb-6 pl-6 relative animate-fade-scale">
+
+        <!-- Vertical Grid Lines -->
+        <div class="absolute inset-0 flex justify-between pointer-events-none z-0 px-6 md:px-10 xl:px-12 w-full h-full">
+            <div class="h-full w-[1px] bg-slate-900/5"></div>
+            <div class="h-full w-[1px] bg-slate-900/5 hidden md:block"></div>
+            <div class="h-full w-[1px] bg-slate-900/5 hidden lg:block"></div>
+            <div class="h-full w-[1px] bg-slate-900/5 hidden xl:block"></div>
+            <div class="h-full w-[1px] bg-slate-900/5"></div>
+        </div>
+
+        <!-- Header -->
+        <header class="flex md:mb-16 md:gap-0 z-10 mb-16 relative gap-x-6 gap-y-6 items-center justify-between animate-fade-up">
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2 text-slate-900 group cursor-pointer">
+                <div class="flex text-white bg-gradient-to-br from-blue-600 to-blue-400 w-8 h-8 rounded-lg items-center justify-center shadow-lg shadow-blue-500/30 transition-transform duration-500 group-hover:rotate-[360deg]">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="16 18 22 12 16 6"></polyline>
+                        <polyline points="8 6 2 12 8 18"></polyline>
+                    </svg>
+                </div>
+                <span class="text-sm font-semibold tracking-tight">Nordic <span class="text-blue-600 font-normal">Digital</span> Solutions</span>
+            </a>
+
+            <!-- Navigation -->
+            <nav class="hidden md:flex uppercase text-[10px] font-semibold text-slate-500 tracking-widest bg-white/50 border-blue-100 border rounded-full pt-2.5 pr-6 pb-2.5 pl-6 shadow-sm backdrop-blur-sm gap-x-8 items-center transition-all hover:shadow-md hover:bg-white/80">
+                <a href="#services" class="hover:text-blue-600 transition-colors duration-300 relative group">
+                    Services
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#tech" class="hover:text-blue-600 transition-colors duration-300 relative group">
+                    Technology
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#advantage" class="hover:text-blue-600 transition-colors duration-300 relative group">
+                    Why Us
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="#contact" class="hover:text-blue-600 transition-colors duration-300 relative group">
+                    Contact
+                    <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 group-hover:w-full"></span>
+                </a>
+            </nav>
+
+            <!-- CTA -->
+            <a href="#contact" class="flex items-center gap-2 group hover:bg-blue-50 text-xs font-medium text-slate-700 tracking-wide bg-white border border-blue-200 rounded-lg pt-2.5 pr-4 pb-2.5 pl-4 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 active:translate-y-0">
+                <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                </span>
+                <span class="uppercase tracking-wide text-[10px] font-semibold">We're Online</span>
+            </a>
+        </header>
+
+        <!-- Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 h-full flex-grow relative z-10 pb-8 lg:pb-0">
+
+            <!-- Left Column: Hero Content -->
+            <div class="lg:col-span-7 flex flex-col pt-4 relative justify-center">
+
+                <!-- Location Badge -->
+                <a href="#advantage" class="animate-fade-up delay-100 inline-flex bg-white/80 w-max rounded-full mb-8 pt-1.5 pr-4 pb-1.5 pl-1.5 shadow-sm backdrop-blur-sm items-center border border-blue-100 group cursor-pointer hover:border-blue-300 transition-all hover:scale-105 duration-300">
+                    <div class="flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-400 w-6 h-6 rounded-full border-2 border-white mr-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-white">
+                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                    </div>
+                    <span class="text-xs font-medium text-slate-600 tracking-wide mr-1">
+                        Operating from <span class="text-blue-600 font-semibold">Pattaya, Thailand</span> — regional teams in <span class="text-blue-600 font-semibold">Laos &amp; the Philippines</span>
+                    </span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-400 group-hover:translate-x-0.5 transition-transform">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                </a>
+
+                <!-- Headline -->
+                <h1 class="animate-fade-up delay-200 leading-[0.95] lg:text-[4.5rem] text-5xl font-semibold text-slate-900 tracking-tighter mb-8">
+                   Nordic Digital Solutions ᯓ➤
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-blue-400 font-light block"></span>
+                </h1>
+
+                <!-- Subheadline -->
+                <p class="animate-fade-up delay-300 text-sm text-slate-600 font-normal max-w-lg mb-10 leading-relaxed tracking-wide border-l-2 border-blue-200 pl-6 hover:border-blue-400 transition-colors duration-500">
+                    Hi — we're a friendly team combining Swedish standards with regional efficiency. With teammates across Thailand, Laos and the Philippines, we run a Swedish-speaking call center for sales and support, build custom web and cloud solutions, and partner with companies in Sweden. We support digital nomads and Nordic businesses alike — drop us a line and let's chat.
+                </p>
+
+                <!-- Action Buttons -->
+                <div class="animate-fade-up delay-400 flex flex-col sm:flex-row gap-3 lg:mb-24 mb-16 gap-x-3 gap-y-3">
+                    <a href="#contact" class="hover:bg-blue-700 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 flex group text-sm font-medium text-white bg-blue-600 rounded-full pt-3.5 pr-6 pb-3.5 pl-6 shadow-xl gap-x-3 gap-y-3 items-center justify-center min-w-[160px]">
+                        <span class="tracking-tight">Book Consultation</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:rotate-12 transition-transform duration-300">
+                            <rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect>
+                            <line x1="16" x2="16" y1="2" y2="6"></line>
+                            <line x1="8" x2="8" y1="2" y2="6"></line>
+                            <line x1="3" x2="21" y1="10" y2="10"></line>
+                        </svg>
+                    </a>
+                    <a href="#services" class="hover:bg-blue-50 hover:-translate-y-1 hover:shadow-md transition-all duration-300 flex text-sm font-medium text-slate-600 bg-white border border-blue-200 rounded-full pt-3.5 pr-6 pb-3.5 pl-6 shadow-sm gap-x-2 items-center justify-center group">
+                        <span class="tracking-tight">View Services</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-blue-600 transition-colors">
+                            <path d="m9 18 6-6-6-6"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Footer Stats -->
+                <div class="animate-fade-up delay-500 flex flex-wrap gap-2 md:gap-6 mt-auto gap-x-2 gap-y-2 items-center">
+                    <div class="flex items-center group cursor-default hover:-translate-y-0.5 transition-transform duration-300">
+                        <div class="px-1">
+                            <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1 group-hover:text-slate-600 transition-colors">Projects</p>
+                            <p class="text-sm text-slate-900 font-medium">50+ Delivered</p>
+                        </div>
+                        <div class="curve-separator opacity-60 ml-4 md:ml-8"></div>
+                    </div>
+                    <div class="flex items-center group cursor-default hover:-translate-y-0.5 transition-transform duration-300">
+                        <div class="px-1">
+                            <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1 group-hover:text-slate-600 transition-colors">Response</p>
+                            <p class="text-sm text-slate-900 font-medium">&lt; 2 Hours</p>
+                        </div>
+                        <div class="curve-separator md:ml-8 opacity-60 ml-4"></div>
+                    </div>
+                    <div class="flex items-center group cursor-default hover:-translate-y-0.5 transition-transform duration-300">
+                        <div class="px-1">
+                            <p class="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-1 group-hover:text-slate-600 transition-colors">Savings</p>
+                            <p class="text-sm text-slate-900 font-medium">30-40% Cost</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Visual Card with Floating Widgets -->
+            <div class="lg:col-span-5 h-full min-h-[400px] lg:min-h-0 relative group perspective-1000 animate-fade-scale delay-300">
+                <div class="absolute inset-0 rounded-[2rem] overflow-hidden shadow-2xl shadow-slate-900/10 transition-all duration-700 ease-out border border-blue-100 bg-gradient-to-br from-slate-900 to-blue-900 group-hover:shadow-[0_20px_50px_-12px_rgba(59,130,246,0.3)]">
+
+                    <!-- Background Tech Pattern -->
+                    <div class="absolute inset-0 opacity-10" style="background-image: url('data:image/svg+xml,%3Csvg width=\'30\' height=\'30\' viewBox=\'0 0 30 30\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M15 0l7.5 7.5L15 15l-7.5-7.5L15 0zm0 15l7.5 7.5L15 30l-7.5-7.5L15 15z\' fill=\'%23ffffff\' fill-opacity=\'1\' fill-rule=\'evenodd\'/%3E%3C/svg%3E');"></div>
+
+                    <!-- Gradient Overlay -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-blue-900/30 to-slate-900/10 opacity-80 group-hover:opacity-70 transition-opacity duration-700"></div>
+
+                    <!-- Overlay Content Container -->
+                    <div class="flex flex-col pt-8 pr-8 pb-8 pl-8 absolute top-0 right-0 bottom-0 left-0 justify-between">
+
+                        <!-- Top Row: Swedish Flag Badge -->
+                        <div class="flex items-start justify-end">
+                            <div class="flex gap-2 bg-black/30 backdrop-blur-md rounded-full pt-1.5 pr-3 pb-1.5 pl-3 items-center border border-white/10 shadow-lg animate-float">
+                                <div class="w-4 h-3 rounded-sm overflow-hidden border border-white/20">
+                                    <div class="h-full bg-blue-500"></div>
+                                    <div class="absolute top-0 left-0 right-0 h-[1px] bg-yellow-400"></div>
+                                    <div class="absolute bottom-0 left-0 right-0 h-[1px] bg-yellow-400"></div>
+                                    <div class="absolute left-0 top-0 bottom-0 left-[0%] w-[1px] bg-yellow-400"></div>
+                                    <div class="absolute right-0 top-0 bottom-0 right-[0%] w-[1px] bg-yellow-400"></div>
+                                </div>
+                                <span class="text-[10px] uppercase font-semibold text-white tracking-wide">Swe</span>
+                            </div>
+                        </div>
+
+                        <!-- Floating Widgets Container -->
+                        <div class="flex flex-col gap-4">
+
+                            <!-- Widget 1: Timezone Clock -->
+                            <div class="transform transition-transform duration-700 ease-out bg-white/10 w-full max-w-[240px] rounded-xl pt-4 pr-4 pb-4 pl-4 backdrop-blur-md border border-white/20 shadow-lg animate-float delay-300 group-hover:scale-105 self-start">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-6 h-6 rounded-full bg-blue-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <polyline points="12 6 12 12 16 14"></polyline>
+                                            </svg>
+                                        </div>
+                                        <span class="text-[10px] text-blue-200 uppercase tracking-wider">Business Hours</span>
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <div class="flex justify-between items-baseline">
+                                        <span class="text-[10px] text-blue-200 uppercase tracking-wider"> Bangkok / Pattaya</span>
+                                        <span class="text-base text-white font-mono font-medium" id="bangkok-time">14:30</span>
+                                    </div>
+                                    <div class="flex justify-between items-baseline">
+                                        <span class="text-[10px] text-blue-200 uppercase tracking-wider">Stockholm / Malmö</span>
+                                        <span class="text-base text-white font-mono font-medium" id="stockholm-time">08:30</span>
+                                    </div>
+                                    <div class="h-1 w-full bg-white/10 rounded-full overflow-hidden">
+                                        <div class="h-full bg-gradient-to-r from-blue-500 to-blue-400 rounded-full" style="width: 70%"></div>
+                                    </div>
+                                    <span class="text-[9px] text-blue-300 block">5-hour overlap daily</span>
+                                </div>
+                            </div>
+
+                            <!-- Widget 2: Code Terminal -->
+                            <div class="transform transition-transform duration-700 ease-out bg-white/10 w-full max-w-[280px] rounded-xl pt-3 pr-3 pb-3 pl-3 backdrop-blur-md border border-white/20 shadow-lg animate-float delay-500 group-hover:scale-105 self-end">
+                                <div class="flex items-center gap-2 mb-2">
+                                    <div class="w-2 h-2 rounded-full bg-red-400"></div>
+                                    <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                                    <div class="w-2 h-2 rounded-full bg-green-400"></div>
+                                    <span class="text-[9px] text-white/60 font-mono ml-auto">terminal.tsx</span>
+                                </div>
+                                <div class="bg-slate-950/50 rounded-lg p-3 font-mono text-[10px] leading-relaxed">
+                                    <div class="text-blue-300">Björn Karlsson</div>
+                                    <div class="text-green-400 mt-1">✓ +46 70 123 45 67</div>
+                                    <div class="text-white/60 mt-1">Storgatan 52</div>
+                                    <div class="text-white/60">130 32 Stockholm</div>
+                                </div>
+                            </div>
+
+                            <!-- Widget 3: Tech Stack Badges -->
+                            <div class="transform transition-transform duration-700 ease-out bg-white/10 w-full max-w-[240px] rounded-xl pt-3 pr-3 pb-3 pl-3 backdrop-blur-md border border-white/20 shadow-lg animate-float delay-700 group-hover:scale-105 self-start">
+                                <span class="text-[10px] text-blue-200 uppercase tracking-wider mb-2 block">Businiess Services</span>
+                                <div class="flex flex-wrap gap-2">
+                                    <span class="text-[9px] bg-white/20 text-white px-2 py-1 rounded-md font-medium">Next.js</span>
+                                    <span class="text-[9px] bg-white/20 text-white px-2 py-1 rounded-md font-medium">React</span>
+                                    <span class="text-[9px] bg-white/20 text-white px-2 py-1 rounded-md font-medium">TypeScript</span>
+                                    <span class="text-[9px] bg-white/20 text-white px-2 py-1 rounded-md font-medium">AWS</span>
+                                    <span class="text-[9px] bg-white/20 text-white px-2 py-1 rounded-md font-medium">Tailwind</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bottom: Cost Savings Indicator -->
+                        <div class="overflow-hidden w-full border-white/10 rounded-xl border-t mt-auto pt-4 relative group/link cursor-pointer transition-all duration-300 hover:bg-white/5">
+                            <div class="flex items-center justify-between">
+                                <div class="flex flex-col">
+                                    <span class="text-white text-xs font-semibold tracking-wide">Save 30-40% on Development</span>
+                                    <span class="text-white/60 text-[10px] uppercase tracking-wider">vs. Stockholm Rates</span>
+                                </div>
+                                <div class="flex items-center gap-1">
+                                    <span class="text-2xl text-green-400 font-bold">↓</span>
+                                    <span class="text-lg text-white font-semibold">35%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Divider -->
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent mt-16 lg:mt-24 mb-16 lg:mb-24 opacity-60"></div>
+
+        <!-- Services Section -->
+        <section id="services" class="flex flex-col gap-10 z-10 w-full relative gap-x-10 gap-y-10 animate-fade-up delay-200 scroll-mt-24">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 px-1">
+                <div class="max-w-2xl">
+                    <h2 class="md:text-4xl text-3xl font-medium text-slate-900 tracking-tighter mb-4">
+                        What We Do
+                    </h2>
+                    <p class="leading-relaxed text-base font-normal text-slate-500">
+                        We blend Swedish quality with Pattaya cost-efficiency: a Swedish-speaking call center for sales & support, bespoke full‑stack development, cloud infrastructure, and marketing that helps Nordic businesses grow. White‑label and partnership options available.
+                    </p>
+                </div>
+                <a href="#contact" class="group flex items-center gap-2 hover:text-blue-600 transition-colors text-sm font-medium text-slate-900 pb-1">
+                    Start a Project
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform">
+                        <path d="M5 12h14"></path>
+                        <path d="m12 5 7 7-7 7"></path>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Bento Grid: Services -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 overflow-hidden shadow-slate-900/5 bg-slate-100 rounded-[2rem] gap-px border border-blue-100">
+
+                <!-- Service 1: Custom IT Solutions (Large) -->
+                <div class="group relative bg-white hover:bg-blue-50 transition-colors p-8 flex flex-col justify-between h-full min-h-[300px] md:col-span-2 overflow-hidden hover:shadow-lg z-10">
+                    <div class="relative z-10 max-w-md">
+                        <div class="w-10 h-10 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-center mb-6 shadow-sm text-blue-600 group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-blue-500/20 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 2v4"></path>
+                                <path d="m16.2 7.8 2.9-2.9"></path>
+                                <path d="M18 12h4"></path>
+                                <path d="m16.2 16.2 2.9 2.9"></path>
+                                <path d="M12 18v4"></path>
+                                <path d="m4.9 19.1 2.9-2.9"></path>
+                                <path d="M2 12h4"></path>
+                                <path d="m4.9 4.9 2.9 2.9"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2 tracking-tight">
+                            Custom-Tailored IT Solutions
+                        </h3>
+                        <p class="text-sm text-slate-500 font-normal leading-relaxed">
+                            Bespoke web applications, enterprise software, and digital transformation solutions designed specifically for your business needs. From concept to deployment with Next.js 14, React 18, and cutting-edge cloud architecture.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">Next.js</span>
+                            <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">React</span>
+                            <span class="text-xs bg-blue-100 text-blue-700 px-3 py-1 rounded-full font-medium">TypeScript</span>
+                            <span class="text-xs bg-purple-100 text-purple-700 px-3 py-1 rounded-full font-medium">Custom Solutions</span>
+                        </div>
+                    </div>
+                    <div class="absolute right-0 bottom-0 top-0 w-1/2 bg-gradient-to-l from-blue-50 to-transparent pointer-events-none"></div>
+                    <div class="absolute bottom-8 right-8 w-32 h-32 opacity-5 group-hover:opacity-10 transition-opacity duration-500">
+                        <svg viewBox="0 0 100 100" class="w-full h-full animate-spin-slow">
+                            <path d="M50 50 L50 0 A50 50 0 0 1 100 50 Z" fill="currentColor" class="text-blue-600"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Service 2: Cloud Solutions -->
+                <div class="group hover:bg-blue-50 transition-all duration-300 flex flex-col min-h-[300px] bg-white h-full p-8 relative justify-between hover:shadow-lg z-10">
+                    <div>
+                        <div class="w-10 h-10 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-center mb-6 shadow-sm text-blue-600 group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-blue-500/20 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2 tracking-tight">
+                            Cloud Infrastructure
+                        </h3>
+                        <p class="text-sm text-slate-500 font-normal leading-relaxed">
+                            AWS and Azure deployment, CI/CD pipelines, containerization, and scalable architecture for growing businesses.
+                        </p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full border border-blue-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-8 right-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Service 3: Telemarketing & Sales -->
+                <div class="group hover:bg-blue-50 transition-all duration-300 flex flex-col min-h-[300px] bg-white h-full p-8 relative justify-between hover:shadow-lg z-10">
+                    <div>
+                        <div class="w-10 h-10 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-center mb-6 shadow-sm text-blue-600 group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-blue-500/20 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2 tracking-tight">
+                            Pattaya Call Center — Swedish-speaking
+                        </h3>
+                        <p class="text-sm text-slate-500 font-normal leading-relaxed">
+                            Our Pattaya-based call center, together with partner teams in Laos and the Philippines, delivers Swedish-speaking sales, B2B lead generation, appointment booking and customer support. Staff are trained to Nordic standards and ready to represent your brand in Sweden and international markets.
+                        </p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full border border-blue-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-8 right-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Service 4: Digital Marketing -->
+                <div class="group hover:bg-blue-50 transition-all duration-300 flex flex-col min-h-[300px] bg-white h-full p-8 relative justify-between hover:shadow-lg z-10">
+                    <div>
+                        <div class="w-10 h-10 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-center mb-6 shadow-sm text-blue-600 group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-blue-500/20 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2 tracking-tight">
+                            Digital Marketing Solutions
+                        </h3>
+                        <p class="text-sm text-slate-500 font-normal leading-relaxed">
+                            Tailored marketing strategies for digital nomads and international businesses. SEO, content marketing, and social media campaigns for global reach.
+                        </p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full border border-blue-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-8 right-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Service 5: Nordic Partnerships -->
+                <div class="group hover:bg-blue-50 transition-all duration-300 flex flex-col min-h-[300px] bg-white h-full p-8 relative justify-between hover:shadow-lg z-10">
+                    <div>
+                        <div class="w-10 h-10 bg-blue-50 rounded-lg border border-blue-200 flex items-center justify-center mb-6 shadow-sm text-blue-600 group-hover:scale-110 group-hover:rotate-3 group-hover:shadow-md group-hover:shadow-blue-500/20 transition-all duration-300">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold text-slate-900 mb-2 tracking-tight">
+                            Partners in Sweden
+                        </h3>
+                        <p class="text-sm text-slate-500 font-normal leading-relaxed">
+                            We collaborate with Swedish companies on white‑label projects, co‑development and reseller partnerships. If you're in Sweden and want a reliable technical or call center partner, let's explore how we can help.
+                        </p>
+                    </div>
+                    <div class="w-8 h-8 rounded-full border border-blue-200 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 absolute bottom-8 right-8">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent mt-16 lg:mt-24 mb-16 lg:mb-24 opacity-60"></div>
+
+        <!-- Nordic-Thai Advantage Section -->
+        <section id="advantage" class="w-full max-w-7xl mx-auto mb-32 scroll-mt-24">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+
+                <!-- Left: Text Content -->
+                <div class="flex flex-col justify-center">
+                    <h2 class="text-4xl md:text-5xl font-medium text-slate-900 tracking-tight mb-8 leading-tight">
+                        The Pattaya <span class="text-blue-600">Advantage</span>
+                    </h2>
+
+                    <div class="space-y-6">
+                        <!-- Advantage 1 -->
+                        <div class="flex items-start gap-4 group cursor-default">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-200 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600">
+                                    <path d="M12 2v20M2 12h20"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-900 mb-1">Swedish Quality Standards</h3>
+                                <p class="text-sm text-slate-600 leading-relaxed">Stockholm-trained developers with Nordic work culture: punctuality, transparency, and attention to detail. Perfect for digital nomads seeking professional excellence.</p>
+                            </div>
+                        </div>
+
+                        <!-- Advantage 2 -->
+                        <div class="flex items-start gap-4 group cursor-default">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-200 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600">
+                                    <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-900 mb-1">Pattaya Cost Efficiency</h3>
+                                <p class="text-sm text-slate-600 leading-relaxed">Operating from Pattaya reduces overhead by 30-40% compared to Stockholm rates. Ideal for businesses and digital nomads seeking premium quality at competitive prices.</p>
+                            </div>
+                        </div>
+
+                        <!-- Advantage 3 -->
+                        <div class="flex items-start gap-4 group cursor-default">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-200 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-900 mb-1">Global Timezone Flexibility</h3>
+                                <p class="text-sm text-slate-600 leading-relaxed">5-hour overlap with Nordic markets (08:00-13:00 CET = 14:00-19:00 Pattaya) plus support for Asian-Pacific and American time zones. True 24/7 global coverage.</p>
+                            </div>
+                        </div>
+
+                        <!-- Advantage 4 -->
+                        <div class="flex items-start gap-4 group cursor-default">
+                            <div class="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 group-hover:bg-blue-200 transition-colors">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-600">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path>
+                                    <path d="M2 12h20"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-slate-900 mb-1">Digital Nomad Hub</h3>
+                                <p class="text-sm text-slate-600 leading-relaxed">Pattaya's thriving digital nomad community provides access to international talent, networking opportunities, and a lifestyle that attracts open-minded professionals worldwide.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA -->
+                    <a href="#contact" class="mt-8 inline-flex items-center gap-2 text-blue-600 font-medium text-sm hover:text-blue-700 transition-colors group">
+                        Explore Partnership Opportunities
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:translate-x-1 transition-transform">
+                            <path d="M5 12h14"></path>
+                            <path d="m12 5 7 7-7 7"></path>
+                        </svg>
+                    </a>
+                </div>
+
+                <!-- Right: Visual Comparison -->
+                <div class="flex flex-col gap-6">
+                    <!-- Comparison Card -->
+                    <div class="bg-gradient-to-br from-blue-50 to-white border border-blue-100 rounded-[2rem] p-8 shadow-lg">
+                        <h3 class="font-semibold text-slate-900 mb-6 text-lg">Cost Comparison</h3>
+
+                        <div class="space-y-4">
+                            <!-- Stockholm Rate -->
+                            <div class="flex items-center justify-between pb-4 border-b border-blue-100">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-3 h-3 rounded-full bg-slate-400"></div>
+                                    <span class="text-sm font-medium text-slate-700">Stockholm Agency</span>
+                                </div>
+                                <span class="text-lg font-bold text-slate-900">€80-120/hr</span>
+                            </div>
+
+                            <!-- Nordic Solutions Rate -->
+                            <div class="flex items-center justify-between pb-4 border-b border-blue-100">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-3 h-3 rounded-full bg-blue-600"></div>
+                                    <span class="text-sm font-medium text-blue-900">Nordic Solutions (Pattaya)</span>
+                                </div>
+                                <span class="text-lg font-bold text-blue-600">€50-75/hr</span>
+                            </div>
+
+                            <!-- Savings -->
+                            <div class="flex items-center justify-between pt-2">
+                                <span class="text-sm font-semibold text-green-700">Your Savings</span>
+                                <div class="flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-600">
+                                        <path d="m7 11 5-5 5 5"></path>
+                                        <path d="m7 18 5-5 5 5"></path>
+                                    </svg>
+                                    <span class="text-xl font-bold text-green-600">35%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timezone Visual -->
+                    <div class="bg-gradient-to-br from-slate-50 to-white border border-slate-200 rounded-[2rem] p-8 shadow-lg">
+                        <h3 class="font-semibold text-slate-900 mb-6 text-lg">Daily Overlap</h3>
+
+                        <div class="space-y-3">
+                            <!-- Stockholm Time -->
+                            <div class="flex items-center gap-3">
+                                <div class="w-24 text-xs font-medium text-slate-600">Stockholm</div>
+                                <div class="flex-1 h-8 bg-slate-100 rounded-lg overflow-hidden flex">
+                                    <div class="w-[33%] bg-slate-200"></div>
+                                    <div class="w-[21%] bg-blue-500"></div>
+                                    <div class="w-[46%] bg-slate-200"></div>
+                                </div>
+                            </div>
+
+                            <!-- Pattaya Time -->
+                            <div class="flex items-center gap-3">
+                                <div class="w-24 text-xs font-medium text-slate-600">Pattaya</div>
+                                <div class="flex-1 h-8 bg-slate-100 rounded-lg overflow-hidden flex">
+                                    <div class="w-[58%] bg-slate-200"></div>
+                                    <div class="w-[21%] bg-blue-500"></div>
+                                    <div class="w-[21%] bg-slate-200"></div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-2 pt-2">
+                                <div class="w-3 h-3 rounded-sm bg-blue-500"></div>
+                                <span class="text-xs text-slate-600">5-hour working overlap (08:00-13:00 CET)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <div class="w-full h-px bg-gradient-to-r from-transparent via-blue-200 to-transparent mt-16 lg:mt-24 mb-16 lg:mb-24 opacity-60"></div>
+
+        <!-- Footer -->
+        <footer id="contact" class="z-10 w-full relative animate-fade-up delay-500 scroll-mt-24">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+                <div class="flex flex-col gap-4">
+                    <h2 class="text-xl font-semibold text-slate-900 tracking-tight flex items-center gap-2">
+                        <div class="flex text-white bg-gradient-to-br from-blue-600 to-blue-400 w-6 h-6 rounded-lg items-center justify-center shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="16 18 22 12 16 6"></polyline>
+                                <polyline points="8 6 2 12 8 18"></polyline>
+                            </svg>
+                        </div>
+                        Nordic Solutions
+                    </h2>
+                    <p class="text-sm text-slate-500 leading-relaxed">
+                        We combine Swedish work culture with regional efficiency across Thailand, Laos and the Philippines — clear communication, reliable delivery, and a collaborative approach. Call center services and custom IT for digital nomads and Nordic businesses, delivered with care.
+                    </p>
+                    <div class="flex gap-3 mt-2">
+                        <a href="mailto:hello@nordicsolutions.dev" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-blue-100 flex items-center justify-center transition-colors group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-600 group-hover:text-blue-600">
+                                <rect width="20" height="16" x="2" y="4" rx="2"></rect>
+                                <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                            </svg>
+                        </a>
+                        <a href="#" class="w-8 h-8 rounded-full bg-slate-100 hover:bg-blue-100 flex items-center justify-center transition-colors group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-slate-600 group-hover:text-blue-600">
+                                <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+                                <rect width="4" height="12" x="2" y="9"></rect>
+                                <circle cx="4" cy="4" r="2"></circle>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <h4 class="font-medium text-slate-900 text-sm">Services</h4>
+                    <a href="#services" class="text-sm text-slate-500 hover:text-blue-600 transition-colors hover:translate-x-1 duration-300 inline-block">Custom IT Solutions</a>
+                    <a href="#services" class="text-sm text-slate-500 hover:text-blue-600 transition-colors hover:translate-x-1 duration-300 inline-block">Cloud Infrastructure</a>
+                    <a href="#services" class="text-sm text-slate-500 hover:text-blue-600 transition-colors hover:translate-x-1 duration-300 inline-block">Telemarketing</a>
+                    <a href="#services" class="text-sm text-slate-500 hover:text-blue-600 transition-colors hover:translate-x-1 duration-300 inline-block">Digital Marketing</a>
+                    <a href="#services" class="text-sm text-slate-500 hover:text-blue-600 transition-colors hover:translate-x-1 duration-300 inline-block">Nordic Partnerships</a>
+                </div>
+
+                <div class="flex flex-col gap-3">
+                    <h4 class="font-medium text-slate-900 text-sm">Contact & Careers</h4>
+                    <p class="text-sm text-slate-500">
+                        <strong>Regional Offices:</strong><br>
+                        Pattaya, Thailand • Laos • Philippines<br>
+                        <em>Serving digital nomads across Thailand, Laos and the Philippines</em>
+                    </p>
+                    <a href="mailto:hello@nordicsolutions.dev" class="text-sm text-blue-600 font-medium hover:underline">hello@nordicsolutions.dev</a>
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-3 mt-2">
+                        <p class="text-xs font-semibold text-green-800 mb-1">🚀 Join Us — Coworkers & Partners</p>
+                        <p class="text-xs text-green-700">Looking for Swedish-speaking sales agents, telemarketing partners, IT collaborators and digital nomads. Interested in coworking, partnership or remote roles? Email us a short note and CV/portfolio — we reply quickly.</p>
+                    </div>
+                    <p class="text-xs text-slate-400 mt-2">
+                        Available: Mon-Fri<br>
+                        08:00-17:00 CET / 14:00-23:00 Pattaya
+                    </p>
+                </div>
+            </div>
+
+            <!-- Copyright Bar -->
+            <div class="flex flex-col md:flex-row border-slate-200 border-t pt-8 gap-4 items-center justify-between">
+                <p class="text-slate-400 text-xs font-normal">
+                    © 2026 Nordic Solutions Pattaya. Swedish quality, Thailand efficiency.
+                </p>
+                <div class="flex items-center gap-6 text-xs text-slate-400">
+                    <a href="#" class="hover:text-blue-600 transition-colors">Privacy Policy</a>
+                    <a href="#" class="hover:text-blue-600 transition-colors">Terms of Service</a>
+                    <a href="#" class="hover:text-blue-600 transition-colors">Careers</a>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Timezone Clock Update
+        function updateTimezones() {
+            const now = new Date();
+
+            // Pattaya time (UTC+7)
+            const pattayaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Bangkok' }));
+            const pattayaHours = pattayaTime.getHours().toString().padStart(2, '0');
+            const pattayaMinutes = pattayaTime.getMinutes().toString().padStart(2, '0');
+
+            // Stockholm time (UTC+1 or UTC+2 depending on DST)
+            const stockholmTime = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Stockholm' }));
+            const stockholmHours = stockholmTime.getHours().toString().padStart(2, '0');
+            const stockholmMinutes = stockholmTime.getMinutes().toString().padStart(2, '0');
+
+            document.getElementById('bangkok-time').textContent = `${pattayaHours}:${pattayaMinutes}`;
+            document.getElementById('stockholm-time').textContent = `${stockholmHours}:${stockholmMinutes}`;
+        }
+
+        // Update immediately and then every minute
+        updateTimezones();
+        setInterval(updateTimezones, 60000);
+    </script>
+<script id="dhws-dataInjector" src="/public/dhws-data-injector.js"></script>
+</body>
+</html>

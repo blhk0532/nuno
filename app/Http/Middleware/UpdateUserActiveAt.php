@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Symfony\Component\HttpFoundation\Response;
 
-class UpdateUserActiveAt
+final class UpdateUserActiveAt
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
@@ -45,8 +45,8 @@ class UpdateUserActiveAt
         // Use saveQuietly to avoid triggering observers/activity logs for this frequent update
         $user->forceFill([
             'active_at' => now(),
-            'active_status' => $user->active_status === UserActiveStatus::Offline 
-                ? UserActiveStatus::Online 
+            'active_status' => $user->active_status === UserActiveStatus::Offline
+                ? UserActiveStatus::Online
                 : ($user->active_status ?? UserActiveStatus::Online),
         ])->saveQuietly();
 

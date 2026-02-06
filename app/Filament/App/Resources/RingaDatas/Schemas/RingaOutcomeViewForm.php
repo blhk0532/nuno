@@ -29,17 +29,18 @@ final class RingaOutcomeViewForm
                             ])
                             ->compact()
                             ->headerActions([
-                                ...array_map(function ($outcome) {
+                                ...array_map(function ($outcome) use ($component) {
                                     return Action::make("outcome_{$outcome->value}")
                                         ->label($outcome->getLabel())
                                         ->extraAttributes([
                                             'class' => 'outcome-button',
                                         ])
                                         ->color($outcome->getColor())
-                                        ->action(function ($record) use ($outcome) {
+                                        ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
                                                 $record->update([
-                                                    'outcome' => $outcome,
+                                                    'outcome' => $outcome->value,
+                                                    'is_outcome' => true,
                                                     'attempts' => ($record->attempts ?? 0) + 1,
                                                 ]);
 
@@ -52,7 +53,9 @@ final class RingaOutcomeViewForm
                                                     ->send();
 
                                                 // Redirect to the queue page to load the next record
-                                                $this->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
+                                                if ($component && method_exists($component, 'redirect')) {
+                                                    $component->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
+                                                }
                                             }
                                         });
                                 }, \App\Enums\Outcomes1::cases()),
@@ -68,17 +71,18 @@ final class RingaOutcomeViewForm
                             ])
                             ->compact()
                             ->headerActions([
-                                ...array_map(function ($outcome) {
+                                ...array_map(function ($outcome) use ($component) {
                                     return Action::make("outcome_{$outcome->value}")
                                         ->label($outcome->getLabel())
                                         ->color($outcome->getColor())
                                         ->extraAttributes([
                                             'class' => 'outcome-button',
                                         ])
-                                        ->action(function ($record) use ($outcome) {
+                                        ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
                                                 $record->update([
-                                                    'outcome' => $outcome,
+                                                    'outcome' => $outcome->value,
+                                                    'is_outcome' => true,
                                                     'attempts' => ($record->attempts ?? 0) + 1,
                                                 ]);
 
@@ -91,7 +95,9 @@ final class RingaOutcomeViewForm
                                                     ->send();
 
                                                 // Redirect to the queue page to load the next record
-                                                $this->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
+                                                if ($component && method_exists($component, 'redirect')) {
+                                                    $component->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
+                                                }
                                             }
                                         });
                                 }, \App\Enums\Outcomes2::cases()),
@@ -107,17 +113,18 @@ final class RingaOutcomeViewForm
                             ])
                             ->compact()
                             ->headerActions([
-                                ...array_map(function ($outcome) {
+                                ...array_map(function ($outcome) use ($component) {
                                     return Action::make("outcome_{$outcome->value}")
                                         ->label($outcome->getLabel())
                                         ->color($outcome->getColor())
                                         ->extraAttributes([
                                             'class' => 'outcome-button',
                                         ])
-                                        ->action(function ($record) use ($outcome) {
+                                        ->action(function ($record) use ($outcome, $component) {
                                             if ($record) {
                                                 $record->update([
-                                                    'outcome' => $outcome,
+                                                    'outcome' => $outcome->value,
+                                                    'is_outcome' => true,
                                                     'attempts' => ($record->attempts ?? 0) + 1,
                                                 ]);
 
@@ -130,7 +137,9 @@ final class RingaOutcomeViewForm
                                                     ->send();
 
                                                 // Redirect to the queue page to load the next record
-                                                $this->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
+                                                if ($component && method_exists($component, 'redirect')) {
+                                                    $component->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
+                                                }
                                             }
                                         });
                                 }, \App\Enums\Outcomes4::cases()),

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
 use App\Models\PostNum;
@@ -10,10 +12,12 @@ use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Process\Process;
 
-class RunHittaSearchPersonsOptimizedJob implements ShouldQueue
+final class RunHittaSearchPersonsOptimizedJob implements ShouldQueue
 {
     use Batchable;
     use Queueable;
+
+    public $timeout = 1000000; //  minutes
 
     protected $postNumId;
 
@@ -26,6 +30,26 @@ class RunHittaSearchPersonsOptimizedJob implements ShouldQueue
     {
         $this->postNumId = $postNumId;
         $this->includeRatsit = $includeRatsit;
+    }
+
+    /**
+     * Custom serialization for PHP 8.1+ compatibility
+     */
+    public function __serialize(): array
+    {
+        return [
+            'postNumId' => $this->postNumId,
+            'includeRatsit' => $this->includeRatsit,
+        ];
+    }
+
+    /**
+     * Custom unserialization for PHP 8.1+ compatibility
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->postNumId = $data['postNumId'];
+        $this->includeRatsit = $data['includeRatsit'];
     }
 
     /**
@@ -94,30 +118,13 @@ class RunHittaSearchPersonsOptimizedJob implements ShouldQueue
 
             // Update status to failed
             if ($postNum = PostNum::find($this->postNumId)) {
-                $postNum->update(['status' => 'failed']);
+                $postNum->update([
+                    'status' => 'failed',
+                    'updated_at' => now(),
+                ]);
             }
 
             throw $e;
         }
-    }
-
-    /**
-     * Custom serialization for PHP 8.1+ compatibility
-     */
-    public function __serialize(): array
-    {
-        return [
-            'postNumId' => $this->postNumId,
-            'includeRatsit' => $this->includeRatsit,
-        ];
-    }
-
-    /**
-     * Custom unserialization for PHP 8.1+ compatibility
-     */
-    public function __unserialize(array $data): void
-    {
-        $this->postNumId = $data['postNumId'];
-        $this->includeRatsit = $data['includeRatsit'];
     }
 }

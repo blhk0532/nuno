@@ -13,22 +13,19 @@ use App\Models\OutcomeDelaySetting;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
+use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
-use UnitEnum;
 
 final class OutcomeDelaySettingResource extends Resource
 {
     protected static ?string $model = OutcomeDelaySetting::class;
 
-    protected static ?string $navigationLabel = 'Outcome Delay Settings';
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
-    protected static ?string $modelLabel = 'Outcome Delay Setting';
-
-    protected static ?string $pluralModelLabel = 'Outcome Delay Settings';
-
-    protected static string|UnitEnum|null $navigationGroup = 'Call Management';
-
-    protected static ?int $navigationSort = 5;
+    public static function shouldRegisterNavigation(): bool
+    {
+        return false;
+    }
 
     public static function form(Schema $schema): Schema
     {

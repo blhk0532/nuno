@@ -90,7 +90,7 @@ Test coverage includes:
 - `ratsit_data` table
 - Does not have user_id or team_id by default
 
-### RingaData Table  
+### RingaData Table
 - Stores internal call tracking records
 - `ringa_data` table
 - Includes user_id, team_id for multi-tenancy

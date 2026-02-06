@@ -38,6 +38,7 @@
         "daacreators/creators-ticketing": "@dev",
         "dashed/filament-numpad-field": "@dev",
         "davidhsianturi/blade-bootstrap-icons": "^2.1",
+        "defstudio/filament-column-length-limiter": "^4.0",
         "deldius/filament-user-field": "^1.1.0",
         "devonab/filament-easy-footer": "@dev",
         "devtical/filament-sanctum": "^1.0",

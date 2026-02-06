@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\PostNums\Actions;
 
-use App\Jobs\RunHittaPostOrtDirectJob;
+use App\Jobs\RunHittaSearchPersonsOptimizedJob;
 use Exception;
 use Filament\Actions\BulkAction;
 use Filament\Notifications\Notification;
 use Illuminate\Support\Collection;
 
-class RunHittaPortOrtDirectBulkAction extends BulkAction
+final class RunHittaPortOrtDirectBulkAction extends BulkAction
 {
     public static function make(?string $name = 'runHittaPortOrtDirect'): static
     {
@@ -30,7 +32,7 @@ class RunHittaPortOrtDirectBulkAction extends BulkAction
                         $record->update(['status' => 'running', 'hitta_personer_queue' => true]);
 
                         // Dispatch direct job
-                        RunHittaPostOrtDirectJob::dispatch($record->id);
+                        RunHittaSearchPersonsOptimizedJob::dispatch($record->id);
 
                         $dispatchedCount++;
                     } catch (Exception $e) {

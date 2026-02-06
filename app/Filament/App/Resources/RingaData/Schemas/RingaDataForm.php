@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace App\Filament\App\Resources\RingaData\Schemas;
 
 use App\Enums\Outcomes;
-use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
-use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
@@ -21,150 +19,207 @@ final class RingaDataForm
     public static function configure(Schema $schema): Schema
     {
         return $schema
+            ->columns(2)
             ->components([
-                RichEditor::make('user_notes')
-                    ->columnSpanFull()
-                    ->toolbarButtons([
-                        ['bold', 'italic', 'underline', 'strike', 'subscript', 'superscript', 'link'],
-                        ['h2', 'h3', 'alignStart', 'alignCenter', 'alignEnd'],
-                        ['blockquote', 'codeBlock', 'bulletList', 'orderedList'],
-                        ['table', 'attachFiles'], // The `customBlocks` and `mergeTags` tools are also added here if those features are used.
-                        ['undo', 'redo'],
-                    ]),
-                Section::make()
-                    ->description('')
-                    ->label('')
-                    ->extraAttributes([
-                        'class' => 'outcome-buttons-section',
-                    ])
+                Section::make('Primary')
                     ->schema([
-                        // We'll add the outcome buttons as actions instead
+                        Grid::make(3)
+                            ->schema([
+                                TextInput::make('personnamn')
+                                    ->label('Full name')
+                                    ->columnSpan(2)
+                                    ->required(),
+
+                                TextInput::make('fodelsedag')
+                                    ->label('Birthdate')
+                                    ->placeholder('YYYY-MM-DD')
+                                    ->columnSpan(1),
+
+                                TextInput::make('telefon')
+                                    ->label('Phone')
+                                    ->tel()
+                                    ->columnSpan(1),
+
+                                TextInput::make('epost_adress')
+                                    ->label('Email')
+                                    ->email()
+                                    ->columnSpan(1),
+
+                                TextInput::make('personnummer')
+                                    ->label('Personnummer')
+                                    ->columnSpan(1),
+                                TextInput::make('alder')
+                                    ->label('Age')
+                                    ->numeric()
+                                    ->columnSpan(1),
+                            ])
+                            ->columns(3),
                     ])
                     ->compact()
-                    ->headerActions([
-                        ...array_map(function ($outcome) {
-                            return Action::make("outcome_{$outcome->value}")
-                                ->label($outcome->getLabel())
-                                ->icon($outcome->getIcon())
-                                ->extraAttributes([
-                                    'class' => 'outcome-button',
-                                ])
-                                ->color($outcome->getColor())
-                                ->action(function ($record) use ($outcome) {
-                                    if ($record) {
-                                        $record->update([
-                                            'outcome' => $outcome,
-                                            'attempts' => ($record->attempts ?? 0) + 1,
-                                        ]);
+                    ->collapsible()
+                    ->collapsed(true)
+                    ->columnSpan(1),
 
-                                        Notification::make()
-                                            ->title('Outcome recorded')
-                                            ->body("Recorded outcome: {$outcome->getLabel()}")
-                                            ->icon($outcome->getIcon())
-                                            ->color($outcome->getColor())
-                                            ->success()
-                                            ->send();
-                                    }
-                                });
-                        }, Outcomes::cases()),
-                    ]),
+                Section::make('Flags & routing')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                Toggle::make('is_active')
+                                    ->label('Active')
+                                    ->columnSpan(1),
 
-                Textarea::make('gatuadress')
-                    ->columnSpanFull(),
-                Textarea::make('postnummer')
-                    ->columnSpanFull(),
-                Textarea::make('postort')
-                    ->columnSpanFull(),
-                Textarea::make('forsamling')
-                    ->columnSpanFull(),
-                Textarea::make('kommun')
-                    ->columnSpanFull(),
-                Textarea::make('kommun_ratsit')
-                    ->columnSpanFull(),
-                Textarea::make('lan')
-                    ->columnSpanFull(),
-                Textarea::make('adressandring')
-                    ->columnSpanFull(),
-                TextInput::make('telfonnummer'),
-                Textarea::make('stjarntacken')
-                    ->columnSpanFull(),
-                Textarea::make('fodelsedag')
-                    ->columnSpanFull(),
-                Textarea::make('personnummer')
-                    ->columnSpanFull(),
-                Textarea::make('alder')
-                    ->columnSpanFull(),
-                Textarea::make('kon')
-                    ->columnSpanFull(),
-                Textarea::make('civilstand')
-                    ->columnSpanFull(),
-                Textarea::make('fornamn')
-                    ->columnSpanFull(),
-                Textarea::make('efternamn')
-                    ->columnSpanFull(),
-                Textarea::make('personnamn')
-                    ->columnSpanFull(),
-                Textarea::make('telefon')
-                    ->columnSpanFull(),
-                TextInput::make('epost_adress'),
-                Textarea::make('agandeform')
-                    ->columnSpanFull(),
-                Textarea::make('bostadstyp')
-                    ->columnSpanFull(),
-                Textarea::make('boarea')
-                    ->columnSpanFull(),
-                Textarea::make('byggar')
-                    ->columnSpanFull(),
-                Textarea::make('fastighet')
-                    ->columnSpanFull(),
-                TextInput::make('personer'),
-                TextInput::make('foretag'),
-                TextInput::make('grannar'),
-                TextInput::make('fordon'),
-                TextInput::make('hundar'),
-                TextInput::make('bolagsengagemang'),
-                Textarea::make('longitude')
-                    ->columnSpanFull(),
-                Textarea::make('latitud')
-                    ->columnSpanFull(),
-                Textarea::make('google_maps')
-                    ->columnSpanFull(),
-                Textarea::make('google_streetview')
-                    ->columnSpanFull(),
-                Textarea::make('ratsit_se')
-                    ->columnSpanFull(),
-                Toggle::make('is_active')
-                    ->required(),
-                Toggle::make('is_hus')
-                    ->required(),
-                Toggle::make('is_telefon')
-                    ->required(),
-                Toggle::make('is_queued')
-                    ->required(),
-                Select::make('outcome')
-                    ->label('Outcome')
-                    ->options(fn () => collect(Outcomes::cases())->mapWithKeys(
-                        fn (Outcomes $outcome) => [$outcome->value => $outcome->getLabel()]
-                    )->toArray())
-                    ->searchable()
-                    ->native(false),
-                TextInput::make('status'),
-                TextInput::make('attempts')
-                    ->numeric()
-                    ->default(0),
-                TextInput::make('booking_id')
-                    ->numeric(),
-                TextInput::make('calendar_id')
-                    ->numeric(),
-                DateTimePicker::make('booked_at'),
-                Textarea::make('user_id')
-                    ->columnSpanFull(),
-                Textarea::make('service_user_id')
-                    ->columnSpanFull(),
-                DateTimePicker::make('started_at')
-                    ->required(),
-                DateTimePicker::make('expires_at')
-                    ->required(),
+                                Toggle::make('is_queued')
+                                    ->label('Queued')
+                                    ->columnSpan(1),
+
+                                Select::make('outcome')
+                                    ->label('Outcome')
+                                    ->options(fn () => collect(Outcomes::cases())->mapWithKeys(
+                                        fn (Outcomes $outcome) => [$outcome->value => $outcome->getLabel()]
+                                    )->toArray())
+                                    ->searchable()
+                                    ->native(false)
+                                    ->columnSpan(1),
+                            ])
+                            ->columns(3),
+                    ])
+                    ->compact()
+                    ->collapsible()
+                    ->collapsed(true)
+                    ->columnSpan(1),
+
+                Section::make('Address')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextInput::make('gatuadress')->label('Street')->columnSpan(2),
+                                TextInput::make('postnummer')->label('ZIP')->columnSpan(1),
+                                TextInput::make('postort')->label('City')->columnSpan(1),
+                                TextInput::make('kommun')->label('Municipality')->columnSpan(1),
+                                TextInput::make('lan')->label('County')->columnSpan(1),
+                                TextInput::make('adressandring')->label('Address change')->columnSpan(1),
+                            ])
+                            ->columns(3),
+                    ])
+                    ->compact()
+                    ->collapsible()
+                    ->collapsed(true)
+                    ->columnSpan(1),
+
+                Section::make('Property')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextInput::make('bostadstyp')->label('Type')->columnSpan(1),
+                                TextInput::make('boarea')->label('Area (m²)')->numeric()->columnSpan(1),
+                                TextInput::make('byggar')->label('Built year')->columnSpan(1),
+                                TextInput::make('fastighet')->label('Property')->columnSpan(2),
+                                TextInput::make('agandeform')->label('Ownership')->columnSpan(1),
+                            ])
+                            ->columns(3),
+                    ])
+                    ->compact()
+                    ->collapsible()
+                    ->collapsed(true)
+                    ->columnSpan(1),
+
+                Section::make('Household & extras')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextInput::make('personer')->label('People')->numeric()->columnSpan(1),
+                                TextInput::make('foretag')->label('Companies')->columnSpan(1),
+                                TextInput::make('grannar')->label('Neighbors')->columnSpan(1),
+                                TextInput::make('fordon')->label('Vehicles')->columnSpan(1),
+                                TextInput::make('hundar')->label('Dogs')->columnSpan(1),
+                                TextInput::make('bolagsengagemang')->label('Holdings')->columnSpan(1),
+                            ])
+                            ->columns(3),
+                    ])
+                    ->compact()
+                    ->collapsible()
+                    ->collapsed(true)
+                    ->columnSpan(1),
+
+                Section::make('More details')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextInput::make('fornamn')->label('First name')->columnSpan(1),
+                                TextInput::make('efternamn')->label('Last name')->columnSpan(1),
+                                TextInput::make('telfonnummer')->label('Alt. phone')->columnSpan(1),
+                                TextInput::make('kon')->label('Gender')->columnSpan(1),
+                                TextInput::make('civilstand')->label('Civil status')->columnSpan(1),
+                                TextInput::make('stjarntacken')->label('Notes (public)')->columnSpan(1),
+                                TextInput::make('forsamling')->label('Parish')->columnSpan(1),
+                                TextInput::make('kommun_ratsit')->label('Kommun (Ratsit)')->columnSpan(1),
+                            ])
+                            ->columns(3),
+                    ])
+                    ->collapsible()
+                    ->collapsed(true)
+                    ->columnSpan(1),
+
+                Section::make('Location & external')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextInput::make('latitud')->label('Latitude')->columnSpan(1),
+                                TextInput::make('longitude')->label('Longitude')->columnSpan(1),
+                                TextInput::make('ratsit_se')->label('Ratsit URL')->columnSpan(1),
+                                TextInput::make('google_maps')->label('Google Maps')->columnSpan(2),
+                                TextInput::make('google_streetview')->label('Streetview')->columnSpan(1),
+                            ])
+                            ->columns(3),
+                    ])
+                    ->collapsed(true)
+                    ->collapsible(true)
+                    ->columnSpan(1),
+
+                Section::make('Administrative')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextInput::make('status')->columnSpan(1),
+                                TextInput::make('attempts')->numeric()->columnSpan(1),
+                                TextInput::make('booking_id')->numeric()->columnSpan(1),
+                                TextInput::make('calendar_id')->numeric()->columnSpan(1),
+                                DateTimePicker::make('booked_at')->columnSpan(1),
+                                DateTimePicker::make('started_at')->required()->columnSpan(1),
+                                DateTimePicker::make('expires_at')->required()->columnSpan(1),
+                            ])
+                            ->columns(3),
+                    ])
+                    ->compact()
+                    ->collapsed(true)
+                    ->collapsible(true)
+                    ->columnSpan(1),
+
+                Section::make('Notes')
+                    ->schema([
+                        RichEditor::make('user_notes')
+                            ->label('Notes')
+                            ->columnSpanFull()
+                            ->toolbarButtons([
+                                ['bold', 'italic', 'underline', 'link'],
+                                ['bulletList', 'orderedList'],
+                                ['undo', 'redo'],
+                            ]),
+                    ])
+                    ->collapsible()
+                    ->collapsed(true)
+                    ->columnSpan(1),
+
+                Section::make('Internal / integration')
+                    ->schema([
+                        TextInput::make('user_id')->columnSpan(1),
+                        TextInput::make('service_user_id')->columnSpan(1),
+
+                    ])
+                    ->collapsible()
+                    ->collapsed(true)
+                    ->columns(2)
+                    ->columnSpan(1),
             ]);
     }
 }

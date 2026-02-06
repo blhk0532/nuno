@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\RingaData\Widgets;
 
 use App\Enums\Outcomes;
@@ -11,17 +13,17 @@ use Filament\Notifications\Notification;
 use Filament\Schemas\Schema;
 use Filament\Widgets\Widget;
 
-class RingaDataOutcomeWidget extends Widget implements HasForms
+final class RingaDataOutcomeWidget extends Widget implements HasForms
 {
     use InteractsWithForms;
+
+    public ?RingaData $record = null;
 
     protected string $view = 'filament.app.resources.ringa-data.widgets.ringa-data-outcome-widget';
 
     protected int|string|array $columnSpan = '1/2';
 
     protected static ?string $heading = null;
-
-    public ?RingaData $record = null;
 
     protected $listeners = ['record-selected' => 'updateRecord'];
 
@@ -32,27 +34,30 @@ class RingaDataOutcomeWidget extends Widget implements HasForms
 
     public function selectOutcome(string $outcomeValue): void
     {
-        if (!$this->record) {
+        if (! $this->record) {
             Notification::make()
                 ->title('No record selected')
                 ->body('Please select a record first.')
                 ->warning()
                 ->send();
+
             return;
         }
 
         $outcome = Outcomes::tryFrom($outcomeValue);
-        if (!$outcome) {
+        if (! $outcome) {
             Notification::make()
                 ->title('Invalid outcome')
                 ->body('The selected outcome is not valid.')
                 ->danger()
                 ->send();
+
             return;
         }
 
         $this->record->update([
-            'outcome' => $outcome,
+            'outcome' => $outcome->value,
+            'is_outcome' => true,
             'attempts' => ($this->record->attempts ?? 0) + 1,
         ]);
 

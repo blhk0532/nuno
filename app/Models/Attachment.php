@@ -1,8 +1,11 @@
 <?php
 
-namespace App\Models;
+declare(strict_types=1);
+
+namespace AdultDate\FilamentWirechat\Models;
 
 use Adultdate\Wirechat\Facades\Wirechat;
+use Eloquent;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -20,7 +23,7 @@ use Illuminate\Support\Facades\Storage;
  * @property string $mime_type
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read Model|\Eloquent $attachable
+ * @property-read Model|Eloquent $attachable
  * @property-read string $clean_mime_type
  *
  * @method static \Illuminate\Database\Eloquent\Builder|Attachment newModelQuery()
@@ -39,7 +42,7 @@ use Illuminate\Support\Facades\Storage;
  *
  * @mixin \Eloquent
  */
-class Attachment extends Model
+final class Attachment extends Model
 {
     use HasFactory;
 
@@ -50,6 +53,19 @@ class Attachment extends Model
         $this->table = Wirechat::formatTableName('attachments');
 
         parent::__construct($attributes);
+    }
+
+    /**
+     * Get the attachable model instance.
+     */
+    public function attachable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function getCleanMimeTypeAttribute(): string
+    {
+        return explode('/', $this->mime_type)[1] ?? 'unknown';
     }
 
     /**
@@ -67,7 +83,7 @@ class Attachment extends Model
         parent::boot();
 
         // listen to deleted
-        static::deleted(function (Attachment $media) {
+        self::deleted(function (Attachment $media) {
 
             $disk = Wirechat::storage()->disk();
 
@@ -118,18 +134,5 @@ class Attachment extends Model
 
         // Fallback: return the file path if url() is not available
         return $path;
-    }
-
-    /**
-     * Get the attachable model instance.
-     */
-    public function attachable(): MorphTo
-    {
-        return $this->morphTo();
-    }
-
-    public function getCleanMimeTypeAttribute(): string
-    {
-        return explode('/', $this->mime_type)[1] ?? 'unknown';
     }
 }

@@ -13,6 +13,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        if (! Schema::hasTable('ringa_data')) {
+            return;
+        }
+
         Schema::table('ringa_data', function (Blueprint $table) {
             $table->integer('retry_count')->default(0);
         });
@@ -23,6 +27,10 @@ return new class extends Migration
      */
     public function down(): void
     {
+        if (! Schema::hasTable('ringa_data')) {
+            return;
+        }
+
         Schema::table('ringa_data', function (Blueprint $table) {
             $table->dropColumn('retry_count');
         });

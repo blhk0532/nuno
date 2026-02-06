@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\CarryData\Tables;
 
+use App\Filament\Exports\CarryDataExporter;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Actions\ExportBulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 
-class CarryDataTable
+final class CarryDataTable
 {
     public static function configure(Table $table): Table
     {
@@ -68,6 +72,8 @@ class CarryDataTable
             ])
             ->toolbarActions([
                 BulkActionGroup::make([
+                    ExportBulkAction::make()
+                        ->exporter(CarryDataExporter::class),
                     DeleteBulkAction::make(),
                 ]),
             ])
