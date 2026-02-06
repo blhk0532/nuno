@@ -26,6 +26,21 @@ final class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        // Configure Livewire routes to work properly across all contexts
+        // Use the $handle callback provided by Livewire instead of trying to instantiate it
+        Livewire::setUpdateRoute(function ($handle) {
+            return \Illuminate\Support\Facades\Route::post('/livewire/update', $handle)
+                ->name('livewire.update')
+                ->middleware('web')
+                ->withoutMiddleware(\Illuminate\Csrf\VerifyCsrfToken::class);
+        });
+
+        Livewire::setScriptRoute(function ($handle) {
+            return \Illuminate\Support\Facades\Route::get('/livewire/livewire.min.js', $handle)
+                ->name('livewire.script')
+                ->middleware('web');
+        });
+
         Livewire::component('app.filament.app.widgets.team-members-widget', TeamMembersWidget::class);
         Livewire::component('team-members-widget', TeamMembersWidget::class);
 

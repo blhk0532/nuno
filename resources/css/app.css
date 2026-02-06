@@ -145,7 +145,7 @@
         width: 100%;
         margin: 0;
         padding: 0;
-            scrollbar-gutter: auto;
+            scrollbar-gutter: stable;
     }
 
     * {
@@ -278,9 +278,9 @@ div.w-full.border.rounded-xl.flex.items-center.justify-center.h-96 {
 }
 
 html {
-  scrollbar-gutter: auto!important;
+  scrollbar-gutter: stable!important;
 }
 
 .fi-sidebar-nav{
-    scrollbar-gutter: auto!important;
+    scrollbar-gutter: stable!important;
 }

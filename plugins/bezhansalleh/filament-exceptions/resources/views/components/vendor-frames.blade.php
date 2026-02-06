@@ -18,7 +18,7 @@
         <x-filament-exceptions::icons.folder-open class="w-3 h-3 text-blue-500 dark:text-emerald-500" x-show="expanded" />
 
         <div class="flex-1 font-mono text-xs leading-3 text-neutral-900 dark:text-neutral-400">
-            {{ count($frames)}} vendor {{ Str::plural('frame', count($frames))}}
+            {{ count($frames)}} vendor {{ \Illuminate\Support\Str::plural('frame', count($frames))}}
         </div>
 
         <button

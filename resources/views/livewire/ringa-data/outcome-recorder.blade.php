@@ -13,23 +13,22 @@
                 <div class="space-y-2">
                     <div class="grid grid-cols-4 gap-2 items-stretch">
                         @foreach($outcomes as $outcome)
-                            <div class="w-full h-full flex">
+                            <div class="w-full h-full flex" wire:key="outcome-{{ $outcome->id }}">
                                 @if($outcome->outcome === 'RingTillbaka')
-                                    {{ ($this->returnCallAction)(['class' => 'w-full shadow-sm', 'size' => 'sm']) }}
+                                    {{ ($this->returnCallAction)(['class' => 'w-full shadow-sm']) }}
                                 @elseif($outcome->outcome === 'Aterkommer')
-                                    {{ ($this->aterkommerAction)(['class' => 'w-full shadow-sm', 'size' => 'sm']) }}
+                                    {{ ($this->aterkommerAction)(['class' => 'w-full shadow-sm']) }}
                                 @elseif($outcome->outcome === 'NyligenGjort')
-                                    {{ ($this->nextGangAction)(['class' => 'w-full shadow-sm', 'size' => 'sm', 'outlined' => false]) }}
+                                    {{ ($this->nextGangAction)(['class' => 'w-full shadow-sm']) }}
                                 @elseif($outcome->outcome === 'Offert')
-                                    {{ ($this->offertAction)(['class' => 'w-full shadow-sm', 'size' => 'sm']) }}
-                                @elseif($outcome->bokad)
-                                    {{ ($this->createBookingAction)(['class' => 'w-full shadow-sm', 'size' => 'sm']) }}
+                                    {{ ($this->offertAction)(['class' => 'w-full shadow-sm']) }}
+                                @elseif($outcome->outcome === 'Bokad')
+                                    {{ ($this->bokadAction)(['class' => 'w-full shadow-sm']) }}
                                 @else
                                     <button
                                         wire:click="recordOutcome('{{ $outcome->outcome }}')"
-                                        wire:loading.attr="disabled"
                                         style="background-color: {{ $outcome->color }} !important; color: white !important;"
-                                        class="w-full h-full px-3 py-2 rounded-lg font-semibold text-sm shadow-sm hover:shadow-md transition-shadow disabled:opacity-50 disabled:cursor-not-allowed"
+                                        class="w-full h-full px-3 py-2 rounded-lg font-semibold text-sm shadow-sm hover:shadow-md transition-opacity"
                                     >
                                         {{ $outcome->title ?? $outcome->type }}
                                     </button>
@@ -53,6 +52,13 @@
 
     <x-filament-actions::modals />
 </div>
+
+<style>
+    /* Prevent Filament action buttons from dimming when component has wire:loading state */
+    .outcome-recorder .fi-btn {
+        opacity: 1 !important;
+    }
+</style>
 
 
 

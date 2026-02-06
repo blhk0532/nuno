@@ -39,13 +39,15 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
     protected ?string $defaultReturnCallAt = null;
 
+    protected array $outcomeColors = [];
+
     public function returnCallAction(): Action
     {
         $default = $this->defaultReturnCallAt
             ? Carbon::parse($this->defaultReturnCallAt)
             : now()->addHour();
 
-        $ringTillbakaOutcome = \App\Models\OutcomeSetting::where('outcome', 'RingTillbaka')->first();
+        $color = $this->outcomeColors['RingTillbaka'] ?? '#2563eb';
 
         return Action::make('returnCall')
             ->label('Ring Tillbaka')
@@ -54,7 +56,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             ->size('sm')
             ->extraAttributes([
                 'class' => 'w-full',
-                'style' => "background-color: {$ringTillbakaOutcome?->color} !important; color: white !important; border-color: {$ringTillbakaOutcome?->color} !important;",
+                'style' => "background-color: {$color} !important; color: white !important; border-color: {$color} !important;",
             ])
             ->modalHeading('Schemalägg återkommande samtal')
             ->modalSubmitActionLabel('Schemalägg')
@@ -73,44 +75,32 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             });
     }
 
-    public function createBookingAction(): Action
+    public function bokadAction(): Action
     {
-        $bokadOutcome = \App\Models\OutcomeSetting::where('outcome', 'Bokad')->first();
+        $color = $this->outcomeColors['Bokad'] ?? '#16a34a';
 
-        return Action::make('createBooking')
+        return Action::make('bokad')
             ->label('Bokad')
             ->button()
             ->color('gray')
             ->size('sm')
             ->extraAttributes([
                 'class' => 'w-full',
-                'style' => "background-color: {$bokadOutcome?->color} !important; color: white !important; border-color: {$bokadOutcome?->color} !important;",
+                'style' => "background-color: {$color} !important; color: white !important; border-color: {$color} !important;",
             ])
-            ->modalHeading('Skapa bokning')
-            ->modalSubmitActionLabel('Skapa bokning')
-            ->modalWidth('md')
+            ->modalHeading('Bokad')
             ->form([
-                // Add booking form fields here - adjust based on your Booking model
-                TextInput::make('booking_name')
-                    ->label('Namn')
-                    ->required(),
-                TextInput::make('booking_phone')
-                    ->label('Telefon')
-                    ->tel()
-                    ->required(),
-                DateTimePicker::make('booking_date')
-                    ->label('Bokningsdatum')
-                    ->native(false)
-                    ->seconds(false)
-                    ->timezone(config('app.timezone'))
-                    ->required(),
-                TextInput::make('outcome_value')
-                    ->hidden()
-                    ->default('Bokad'),
+                \Filament\Forms\Components\Textarea::make('notes')
+                    ->label('Anteckningar')
+                    ->rows(3),
             ])
             ->action(function (array $data): void {
-                // Create booking and record outcome
-                $this->recordOutcome($data['outcome_value'] ?? 'Bokad');
+                $this->recordOutcome('Bokad');
+
+                Notification::make()
+                    ->title('Bokad')
+                    ->success()
+                    ->send();
             });
     }
 
@@ -120,7 +110,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             ? Carbon::parse($this->defaultReturnCallAt)
             : now()->addHour();
 
-        $aterkommerOutcome = \App\Models\OutcomeSetting::where('outcome', 'Aterkommer')->first();
+        $color = $this->outcomeColors['Aterkommer'] ?? '#6b7280';
 
         return Action::make('aterkommer')
             ->label('Återkommer')
@@ -129,7 +119,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             ->size('sm')
             ->extraAttributes([
                 'class' => 'w-full',
-                'style' => "background-color: {$aterkommerOutcome?->color} !important; color: white !important; border-color: {$aterkommerOutcome?->color} !important;",
+                'style' => "background-color: {$color} !important; color: white !important; border-color: {$color} !important;",
             ])
             ->modalHeading('Schemalägg återkommande samtal')
             ->modalSubmitActionLabel('Schemalägg')
@@ -150,7 +140,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
     public function nextGangAction(): Action
     {
-        $nextGangOutcome = \App\Models\OutcomeSetting::where('outcome', 'NyligenGjort')->first();
+        $color = $this->outcomeColors['NyligenGjort'] ?? '#6b7280';
 
         return Action::make('nextGang')
             ->label('Nästa Gång')
@@ -159,7 +149,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             ->size('sm')
             ->extraAttributes([
                 'class' => 'w-full',
-                'style' => "background-color: {$nextGangOutcome?->color} !important; color: white !important; border-color: {$nextGangOutcome?->color} !important;",
+                'style' => "background-color: {$color} !important; color: white !important; border-color: {$color} !important;",
             ])
             ->modalHeading('Välj Nästa Gång')
             ->modalSubmitActionLabel('Spara')
@@ -179,7 +169,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
     public function offertAction(): Action
     {
-        $offertOutcome = \App\Models\OutcomeSetting::where('outcome', 'Offert')->first();
+        $color = $this->outcomeColors['Offert'] ?? '#16a34a';
 
         return Action::make('offert')
             ->label('Offert')
@@ -188,7 +178,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
             ->size('sm')
             ->extraAttributes([
                 'class' => 'w-full',
-                'style' => "background-color: {$offertOutcome?->color} !important; color: white !important; border-color: {$offertOutcome?->color} !important;",
+                'style' => "background-color: {$color} !important; color: white !important; border-color: {$color} !important;",
             ])
             ->modalHeading('Skapa Offert')
             ->modalSubmitActionLabel('Spara Offert')
@@ -212,6 +202,9 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
     public function mount(): void
     {
         Log::info('OutcomeRecorder mount', ['recordId' => $this->recordId, 'tenant' => $this->tenant]);
+
+        // Load outcome colors ONCE
+        $this->outcomeColors = \App\Models\OutcomeSetting::pluck('color', 'outcome')->toArray();
 
         $this->loadRecord();
 

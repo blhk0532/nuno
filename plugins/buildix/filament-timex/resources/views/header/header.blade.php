@@ -130,7 +130,7 @@
                         />
                         <div class="hidden lg:flex">
                             {{trans('filament::resources/pages/create-record.title',
-                                    ['label' => Str::lower(__('timex::timex.model.label'))])}}
+                                    ['label' => \Illuminate\Support\Str::lower(__('timex::timex.model.label'))])}}
                         </div>
                     </div>
             </x-filament-support::button>
