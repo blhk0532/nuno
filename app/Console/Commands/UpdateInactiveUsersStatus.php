@@ -15,7 +15,7 @@ final class UpdateInactiveUsersStatus extends Command
      *
      * @var string
      */
-    protected $signature = 'users:update-inactive-status {--minutes=10 : Minutes of inactivity before setting to offline}';
+    protected $signature = 'users:update-inactive-status {--minutes=5 : Minutes of inactivity before setting to offline}';
 
     /**
      * The console command description.
@@ -27,7 +27,7 @@ final class UpdateInactiveUsersStatus extends Command
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
         $minutes = (int) $this->option('minutes');
 
@@ -40,5 +40,7 @@ final class UpdateInactiveUsersStatus extends Command
             ]);
 
         $this->info("Updated {$inactiveUsers} users to offline status.");
+
+        return self::SUCCESS;
     }
 }

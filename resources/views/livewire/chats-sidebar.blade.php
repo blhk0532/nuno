@@ -10,7 +10,6 @@
     close-button
 >
     <x-slot name="heading">
-        {{ __('Chats') }}
         @if($unreadCount > 0)
             <x-filament::badge color="primary" size="xs">
                 {{ $unreadCount > 99 ? '99+' : $unreadCount }}

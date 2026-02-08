@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Finance\Resources\Users\Schemas;
 
 use App\Enums\AuthRole;
@@ -10,9 +12,7 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
-use function filled;
-
-class UserForm
+final class UserForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -41,7 +41,8 @@ class UserForm
                             ->columnSpan(1)
                             ->tel(),
                         DateTimePicker::make('email_verified_at')
-                            ->columnSpan(2),
+                            ->columnSpan(2)
+                            ->native(true),
                         TextInput::make('password')
                             ->password()
                             ->required()

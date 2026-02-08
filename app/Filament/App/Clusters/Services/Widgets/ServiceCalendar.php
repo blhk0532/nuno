@@ -24,6 +24,7 @@ use Adultdate\FilamentBooking\Models\Booking\Service;
 use Adultdate\FilamentBooking\Models\BookingServicePeriod;
 use Adultdate\FilamentBooking\Models\CalendarSettings;
 use Adultdate\FilamentBooking\ValueObjects\FetchInfo;
+use App\Models\BookingCalendar as BookingCalendarModel;
 use App\Models\User;
 use App\UserRole;
 use Carbon\Carbon;
@@ -58,9 +59,8 @@ final class ServiceCalendar extends FullCalendarWidget implements HasCalendar
 
         InteractsWithEventRecord::getEloquentQuery insteadof InteractsWithRecords;
 
-
         // Resolve method collisions from InteractsWithEvents vs InteractsWithCalendar
-InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
+        InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         InteractsWithEvents::onDateSelectLegacy insteadof InteractsWithCalendar;
         InteractsWithEvents::onEventDropLegacy insteadof InteractsWithCalendar;
         InteractsWithEvents::onEventResizeLegacy insteadof InteractsWithCalendar;
@@ -88,7 +88,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
     public function getHeading(): string|Htmlable
     {
-        $calendar = $this->selectedCalendar ? \App\Models\BookingCalendar::find($this->selectedCalendar)?->name : 'All Calendars';
+        $calendar = $this->selectedCalendar ? BookingCalendarModel::find($this->selectedCalendar)?->name : 'All Calendars';
 
         return 'Calendar - '.$calendar;
     }
@@ -220,7 +220,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
         $data['start_time'] = $startDate->format('H:i');
         if ($end) {
-            $data['end_time'] = \Carbon\Carbon::parse($end, $timezone)->format('H:i');
+            $data['end_time'] = Carbon::parse($end, $timezone)->format('H:i');
         }
 
         if ($allDay) {
@@ -280,8 +280,8 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                         if ($this->calendarData['allDay']) {
                             $startTime = '00:00';
                             $endTime = '23:59';
-            $data['start_time'] = '00:00';
-            $data['end_time'] = '23:59';
+                            $data['start_time'] = '00:00';
+                            $data['end_time'] = '23:59';
                         } else {
                             $startTime = Carbon::parse($this->calendarData['start_val'])->format('H:i');
                             $endTime = Carbon::parse($this->calendarData['end_val'])->format('H:i');
@@ -310,8 +310,8 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                         if ($this->calendarData['allDay']) {
                             $startTime = '00:00';
                             $endTime = '23:59';
-            $data['start_time'] = '00:00';
-            $data['end_time'] = '23:59';
+                            $data['start_time'] = '00:00';
+                            $data['end_time'] = '23:59';
                         } else {
                             $startTime = Carbon::parse($this->calendarData['start'])->format('H:i');
                             $endTime = Carbon::parse($this->calendarData['end'])->format('H:i');
@@ -376,6 +376,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
                 return [
                     'date' => $data['date_val'] ?? $data['service_date'] ?? $data['date'] ?? now()->format('Y-m-d'),
+                    'service_user_id' => $data['service_user_id'] ?? $this->getSelectedCalendarServiceUserId(),
                     'created_by' => Auth::id(),
                 ];
             })
@@ -782,7 +783,10 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 ->native(false),
             Select::make('service_user_id')
                 ->label('Service User')
-                ->relationship('serviceUser', 'name')
+                ->options($this->getServiceUserOptions())
+                ->searchable()
+                ->preload()
+                ->default(fn () => $this->getSelectedCalendarServiceUserId())
                 ->afterStateUpdated(function ($state, callable $set, callable $get) {
                     $date = $get('date');
                     if ($date && $state) {
@@ -1053,5 +1057,47 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
     protected function generateNumber(): string
     {
         return 'BK-'.now()->format('Ymd').'-'.Str::upper(Str::random(6));
+    }
+
+    private function getSelectedCalendarServiceUserId(): ?int
+    {
+        $selectedCalendarId = $this->selectedCalendar ?? null;
+
+        if (! $selectedCalendarId || $selectedCalendarId === 'all') {
+            return null;
+        }
+
+        $calendar = BookingCalendarModel::find($selectedCalendarId);
+
+        return $calendar?->owner_id;
+    }
+
+    private function getServiceUserOptions(): array
+    {
+        $tenantId = filament()->getTenant()?->id
+            ?? auth()->user()?->current_team_id;
+
+        return User::withoutGlobalScopes()
+            ->where('role', 'service')
+            ->when($tenantId, function (Builder $query) use ($tenantId) {
+                $query->where(function (Builder $query) use ($tenantId) {
+                    $query->where('current_team_id', $tenantId)
+                        ->orWhereExists(function ($sub) use ($tenantId) {
+                            $sub->selectRaw(1)
+                                ->from('membership')
+                                ->whereColumn('membership.user_id', 'users.id')
+                                ->where('membership.team_id', $tenantId);
+                        })
+                        ->orWhereExists(function ($sub) use ($tenantId) {
+                            $sub->selectRaw(1)
+                                ->from('teams')
+                                ->whereColumn('teams.user_id', 'users.id')
+                                ->where('teams.id', $tenantId);
+                        });
+                });
+            })
+            ->when(! $tenantId, fn (Builder $query) => $query->whereRaw('1 = 0'))
+            ->pluck('name', 'id')
+            ->toArray();
     }
 }

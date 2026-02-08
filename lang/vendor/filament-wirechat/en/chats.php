@@ -6,7 +6,7 @@ return [
      * Chats
      *------------------------*/
     'labels' => [
-        'heading' => 'Chats',
+        'heading' => ' ',
         'no_conversations_yet' => 'No conversations yet',
         'you' => 'You',
         'attachment' => 'Attachment',

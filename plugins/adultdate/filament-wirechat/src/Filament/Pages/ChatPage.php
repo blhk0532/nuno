@@ -1,23 +1,24 @@
 <?php
 
+declare(strict_types=1);
+
 namespace AdultDate\FilamentWirechat\Filament\Pages;
 
-use AdultDate\FilamentWirechat\Livewire\Chat\Chat as ChatComponent;
 use AdultDate\FilamentWirechat\Models\Conversation;
 use Filament\Pages\Page;
 use Illuminate\Support\Facades\Auth;
 
-class ChatPage extends Page
+final class ChatPage extends Page
 {
+    public ?Conversation $conversation = null;
+
     protected string $view = 'filament-wirechat::livewire.pages.chat';
 
     protected static bool $shouldRegisterNavigation = false;
 
-    protected static ?string $title = 'Chats';
+    protected static ?string $title = ' ';
 
     protected static ?string $slug = 'chats/{conversation}';
-
-    public ?Conversation $conversation = null;
 
     public function mount(Conversation $conversation): void
     {
@@ -62,7 +63,6 @@ class ChatPage extends Page
     protected function getViewData(): array
     {
         return [
-            'chatComponent' => ChatComponent::class,
             'conversation' => $this->conversation,
         ];
     }

@@ -6,6 +6,7 @@ namespace App\Filament\App\Resources\RingaDatas\Widgets;
 
 use App\Models\RingaData;
 use Filament\Widgets\Widget;
+use Livewire\Attributes\On;
 
 final class RingaDataOutcomeFormWidget extends Widget
 {
@@ -33,5 +34,11 @@ final class RingaDataOutcomeFormWidget extends Widget
         $this->record = RingaData::where('is_active', true)
             ->orderBy('id')
             ->first();
+    }
+
+    #[On('record-selected')]
+    public function updateRecord(int $recordId): void
+    {
+        $this->record = RingaData::find($recordId);
     }
 }

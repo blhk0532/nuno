@@ -20,7 +20,7 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
     )
     ->withSchedule(function (Schedule $schedule): void {
-        $schedule->command('users:update-inactive-status')->everyFiveMinutes();
+        $schedule->command('users:update-inactive-status --minutes=5')->everyFiveMinutes();
     })
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);

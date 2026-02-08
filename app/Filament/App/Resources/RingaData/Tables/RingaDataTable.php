@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Filament\App\Resources\RingaData\Tables;
 
 use App\Enums\Outcomes;
+use App\Models\BookingCalendar;
 use App\Models\RingaData;
-use App\Models\User;
 use Faker\Factory as Faker;
 use Filament\Actions;
 use Filament\Actions\Action;
@@ -35,29 +35,30 @@ final class RingaDataTable
     public static function configure(Table $table): Table
     {
         return $table
-            ->toolbarActions([
+            ->headerActions([
                 \EightyNine\ExcelImport\ExcelImportAction::make()
                     ->color('primary'),
                 Actions\CreateAction::make(),
             ])
-            ->headerActions([
-
-                // Actions\CreateAction::make()
-                //         ->label("+"),
-                //    static::generateFakeDataAction()
-                //    ->label(""),
-
-            ])
             ->columns([
-                 UserColumn::make('user')
-                    ->label('User'),
+                UserColumn::make('user')
+                    ->label('Användare'),
                 ActionableColumn::make('status')
                     ->badge()
                     ->sortable()
+                    ->default('...')
                     ->toggleable(false)
-                    ->label('🛈')                                  // Display as badge (or remove for simple text)
-                    ->color('success')                           // Badge/text color: success, danger, warning, info, primary
-                    ->actionIcon(Heroicon::Clock)         // Action button icon (Heroicon enum or string)
+                    ->label('Utfall')                                  // Display as badge (or remove for simple text)
+                    ->color(
+                        static fn ($state) => $state instanceof Outcomes
+                            ? $state->getColor()
+                            : (is_string($state) ? Outcomes::tryFrom($state)?->getColor() ?? 'success' : 'success')
+                    )                           // Badge/text color: success, danger, warning, info, primary
+                    ->actionIcon(
+                        static fn ($state) => $state instanceof Outcomes
+                            ? $state->getIcon()
+                            : (is_string($state) ? Outcomes::tryFrom($state)?->getIcon() ?? 'heroicon-o-clock' : 'heroicon-o-clock')
+                    )         // Action button icon (Heroicon enum or string)
                     ->actionIconColor('warning')                 // Icon color (independent from badge color)
                     ->clickableColumn()                          // Make entire column clickable (or remove for button-only)
                     ->tapAction(
@@ -66,11 +67,9 @@ final class RingaDataTable
                             ->tooltip('Click to change status')
                             ->schema([
                                 Select::make('status')
-                                    ->options([
-                                        'active' => 'Active',
-                                        'disabled' => 'Disabled',
-                                        '⊘' => 'Quarantine',
-                                    ])
+                                    ->options(fn () => collect(Outcomes::cases())->mapWithKeys(
+                                        fn (Outcomes $outcome) => [$outcome->value => $outcome->getLabel()]
+                                    )->toArray())
                                     ->required(),
                             ])
                             ->fillForm(fn ($record) => [
@@ -80,8 +79,6 @@ final class RingaDataTable
                                 $record->update($data);
                             })
                     ),
-
-
 
                 TextColumn::make('personnamn')
                     ->searchable()
@@ -109,8 +106,13 @@ final class RingaDataTable
                 TextColumn::make('outcome')
                     ->label('Outcome')
                     ->sortable()
+                    ->hidden()
                     ->badge()
-                    ->color(static fn (?Outcomes $state) => $state?->getColor() ?? 'primary')
+                    ->color(
+                        static fn ($state) => $state instanceof Outcomes
+                            ? $state->getColor()
+                            : (is_string($state) ? Outcomes::tryFrom($state)?->getColor() ?? 'primary' : 'primary')
+                    )
                     ->action(
                         Action::make('changeOutcome')
                             ->label('Change Outcome')
@@ -195,8 +197,8 @@ final class RingaDataTable
             ->paginated([10, 25, 50, 100, 250, 500, 1000])
             ->defaultPaginationPageOption(25)
             ->recordAction('view')
-            ->recordActions([
-        EditAction::make()
+            ->actions([
+                EditAction::make()
                     ->label(''),
                 ViewAction::make('view')
                     ->label('')
@@ -221,13 +223,71 @@ final class RingaDataTable
                                 ->label('Välj användare')
                                 ->multiple()
                                 ->searchable()
-                                ->options(User::all()->pluck('name', 'id'))
+                                ->options(function () {
+                                    $tenantId = filament()->getTenant()?->id
+                                        ?? auth()->user()?->current_team_id;
+
+                                    if (! $tenantId) {
+                                        return [];
+                                    }
+
+                                    // Force fresh query evaluation
+                                    $users = \Illuminate\Support\Facades\DB::table('users')
+                                        ->where(function ($query) use ($tenantId) {
+                                            $query->where('current_team_id', $tenantId)
+                                                ->orWhereExists(function ($sub) use ($tenantId) {
+                                                    $sub->selectRaw(1)
+                                                        ->from('membership')
+                                                        ->whereColumn('membership.user_id', 'users.id')
+                                                        ->where('membership.team_id', $tenantId);
+                                                })
+                                                ->orWhereExists(function ($sub) use ($tenantId) {
+                                                    $sub->selectRaw(1)
+                                                        ->from('teams')
+                                                        ->whereColumn('teams.user_id', 'users.id')
+                                                        ->where('teams.id', $tenantId);
+                                                });
+                                        })
+                                        ->orderBy('name')
+                                        ->pluck('name', 'id')
+                                        ->toArray();
+
+                                    return $users;
+                                })
+                                ->validationMessages([
+                                    'required' => 'Detta fält är obligatoriskt.',
+                                ])
+                                ->required(),
+                            Select::make('calendar_id')
+                                ->label('Välj kalender')
+                                ->searchable()
+                                ->options(BookingCalendar::all()->pluck('name', 'id'))
+                                ->validationMessages([
+                                    'required' => 'Detta fält är obligatoriskt.',
+                                ])
+                                ->required(),
+                            DatePicker::make('started_at')
+                                ->default(today())
+                                ->label('Startdatum')
+                                ->validationMessages([
+                                    'required' => 'Detta fält är obligatoriskt.',
+                                ])
+                                ->required(),
+                            DatePicker::make('expires_at')
+                                ->default(today()->addMonth())
+                                ->label('Slutdatum')
+                                ->validationMessages([
+                                    'required' => 'Detta fält är obligatoriskt.',
+                                ])
                                 ->required(),
                         ])
                         ->action(function (Collection $records, array $data): void {
                             $userIds = implode(',', $data['users']);
                             foreach ($records as $record) {
-                                $record->update(['user_id' => $userIds]);
+                                $record->update([
+                                    'user_id' => $userIds,
+                                    'calendar_id' => $data['calendar_id'],
+                                ]);
                             }
 
                             Notification::make()

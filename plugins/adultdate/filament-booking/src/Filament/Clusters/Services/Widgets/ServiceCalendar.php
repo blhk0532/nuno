@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adultdate\FilamentBooking\Filament\Clusters\Services\Widgets;
 
 use Adultdate\FilamentBooking\Concerns\CanRefreshCalendar;
@@ -40,22 +42,10 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Throwable;
 
-class ServiceCalendar extends FullCalendarWidget implements HasCalendar
+final class ServiceCalendar extends FullCalendarWidget implements HasCalendar
 {
-    public ?int $recordId = null;
-
-    public Model|string|null $model = null;
-
-    protected $settings;
-
-    //    protected bool $eventDragEnabled = true;
-    //    protected bool $eventResizeEnabled = true;
-    //    protected bool $dateClickEnabled = true;
-    //    protected bool $dateSelectEnabled = true;
-
-    protected static ?int $sort = -1;
-
     use CanBeConfigured, CanRefreshCalendar, HasOptions, HasSchema, InteractsWithCalendar, InteractsWithEventRecord, InteractsWithEvents, InteractsWithRawJS, InteractsWithRecords {
         // Prefer the contract-compatible refreshRecords (chainable) from CanRefreshCalendar
         CanRefreshCalendar::refreshRecords insteadof InteractsWithEvents;
@@ -76,12 +66,30 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
         InteractsWithEvents::refreshRecords insteadof InteractsWithCalendar;
     }
 
+    public ?int $recordId = null;
+
+    public Model|string|null $model = null;
+
+    public ?array $calendarData = null;
+
+    protected $settings;
+
+    //    protected bool $eventDragEnabled = true;
+    //    protected bool $eventResizeEnabled = true;
+    //    protected bool $dateClickEnabled = true;
+    //    protected bool $dateSelectEnabled = true;
+
+    protected static ?int $sort = -1;
+
     protected string $view = 'adultdate/filament-booking::service-periods-fullcalendar';
 
-   public function getHeading(): string|Htmlable
+    protected int|string|array $columnSpan = 'full';
+
+    public function getHeading(): string|Htmlable
     {
         $calendar = $this->selectedCalendar ? \App\Models\BookingCalendar::find($this->selectedCalendar)?->name : 'All Calendars';
-        return 'Calendar - ' . $calendar;
+
+        return 'Calendar - '.$calendar;
     }
 
     public function getFooterActions(): array
@@ -119,13 +127,6 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
     {
         return $this->record instanceof Model ? $this->record : null;
     }
-
-    protected function getEloquentQuery(): Builder
-    {
-        return $this->getModel()::query();
-    }
-
-    protected int|string|array $columnSpan = 'full';
 
     public function config(): array
     {
@@ -173,7 +174,7 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
 
     public function onDateClick(string $date, bool $allDay, ?array $view, ?array $resource): void
     {
-        $startDate = \Carbon\Carbon::parse($date);
+        $startDate = Carbon::parse($date);
 
         $this->mountAction('create', [
             'service_date' => $startDate->format('Y-m-d'),
@@ -252,8 +253,6 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
         $this->dispatch('sync-action-modals', id: $this->getId(), newActionNestingIndex: $newIndex);
     }
 
-    public ?array $calendarData = null;
-
     public function adminAction(): Action
     {
         return Action::make('admin')
@@ -273,24 +272,24 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
                     ->color('success')
                     ->icon('heroicon-o-calendar-days')
                     ->action(function () {
-                        $startDate = \Carbon\Carbon::parse($this->calendarData['start'])->format('Y-m-d');
+                        $startDate = Carbon::parse($this->calendarData['start'])->format('Y-m-d');
                         $startVal = $this->calendarData['start_val'];
                         $endVal = $this->calendarData['end_val'];
                         $dateVal = $this->calendarData['date_val'];
                         $timeStamp = time();
                         $dateStamp = date('dmY', $timeStamp);
-                        $bookingNumber = Str::upper(Auth::user()->name) . $timeStamp;
+                        $bookingNumber = Str::upper(Auth::user()->name).$timeStamp;
                         if ($this->calendarData['allDay']) {
                             $startTime = '00:00';
                             $endTime = '23:59';
                         } else {
-                            $startTime = \Carbon\Carbon::parse($this->calendarData['start_val'])->format('H:i');
-                            $endTime = \Carbon\Carbon::parse($this->calendarData['end_val'])->format('H:i');
+                            $startTime = Carbon::parse($this->calendarData['start_val'])->format('H:i');
+                            $endTime = Carbon::parse($this->calendarData['end_val'])->format('H:i');
                         }
                         if ($endTime === $startTime) {
-                            $startDate = \Carbon\Carbon::parse($dateVal)->format('Y-m-d');
-                            $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
-                            $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
+                            $startDate = Carbon::parse($dateVal)->format('Y-m-d');
+                            $startTime = Carbon::parse($startVal)->format('H:i');
+                            $endTime = Carbon::parse($endVal)->format('H:i');
                         }
                         $data = ['number' => $bookingNumber, 'notes' => '', 'service_user_id' => null, 'booking_client_id' => null, 'date' => $startDate->format('Y-m-d'), 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate->format('Y-m-d'), 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: B BOOK DATA', $data);
@@ -304,7 +303,7 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
                     ->color('primary')
                     ->icon('heroicon-o-map-pin')
                     ->action(function () {
-                        $startDate = \Carbon\Carbon::parse($this->calendarData['start'])->format('Y-m-d');
+                        $startDate = Carbon::parse($this->calendarData['start'])->format('Y-m-d');
                         $startVal = $this->calendarData['start_val'];
                         $endVal = $this->calendarData['end_val'];
                         $dateVal = $this->calendarData['date_val'];
@@ -312,13 +311,13 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
                             $startTime = '00:00';
                             $endTime = '23:59';
                         } else {
-                            $startTime = \Carbon\Carbon::parse($this->calendarData['start'])->format('H:i');
-                            $endTime = \Carbon\Carbon::parse($this->calendarData['end'])->format('H:i');
+                            $startTime = Carbon::parse($this->calendarData['start'])->format('H:i');
+                            $endTime = Carbon::parse($this->calendarData['end'])->format('H:i');
                         }
                         if ($endTime === $startTime) {
-                            $startDate = \Carbon\Carbon::parse($dateVal)->format('Y-m-d');
-                            $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
-                            $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
+                            $startDate = Carbon::parse($dateVal)->format('Y-m-d');
+                            $startTime = Carbon::parse($startVal)->format('H:i');
+                            $endTime = Carbon::parse($endVal)->format('H:i');
                         }
                         $data = ['date' => $startDate->format('Y-m-d'), 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate->format('Y-m-d'), 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: LOCATION DATA', $data);
@@ -332,16 +331,16 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
                     ->color('danger')
                     ->icon('heroicon-o-clock')
                     ->action(function () {
-                        $startDate = \Carbon\Carbon::parse($this->calendarData['start'])->format('Y-m-d');
-                        $startTime = \Carbon\Carbon::parse($this->calendarData['start'])->format('H:i');
-                        $endTime = \Carbon\Carbon::parse($this->calendarData['end'])->format('H:i');
+                        $startDate = Carbon::parse($this->calendarData['start'])->format('Y-m-d');
+                        $startTime = Carbon::parse($this->calendarData['start'])->format('H:i');
+                        $endTime = Carbon::parse($this->calendarData['end'])->format('H:i');
                         $startVal = $this->calendarData['start_val'];
                         $endVal = $this->calendarData['end_val'];
                         $dateVal = $this->calendarData['date_val'];
                         if ($endTime === $startTime) {
-                            $startDate = \Carbon\Carbon::parse($dateVal)->format('Y-m-d');
-                            $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
-                            $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
+                            $startDate = Carbon::parse($dateVal)->format('Y-m-d');
+                            $startTime = Carbon::parse($startVal)->format('H:i');
+                            $endTime = Carbon::parse($endVal)->format('H:i');
                         }
                         $data = ['date' => $startDate->format('Y-m-d'), 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate->format('Y-m-d'), 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: BLOCK PERIOD DATA', $data);
@@ -531,8 +530,8 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
                         return null;
                     }
                     try {
-                        return \Carbon\Carbon::parse($raw)->format('H:i');
-                    } catch (\Throwable $e) {
+                        return Carbon::parse($raw)->format('H:i');
+                    } catch (Throwable $e) {
                         return preg_match('/^(\d{2}:\d{2})/', (string) $raw, $m) ? $m[1] : (string) $raw;
                     }
                 };
@@ -545,9 +544,9 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
                 $serviceUser = data_get($data, 'service_user') ?: ($data['service_user_name'] ?? data_get($data, 'extendedProps.service_user'));
                 if (! $serviceUser && ! empty($data['service_user_id'])) {
                     try {
-                        $svcUser = \App\Models\User::find($data['service_user_id']);
+                        $svcUser = User::find($data['service_user_id']);
                         $serviceUser = $svcUser?->name ?: $serviceUser;
-                    } catch (\Throwable $e) {
+                    } catch (Throwable $e) {
                         // ignore
                     }
                 }
@@ -559,7 +558,7 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
                 }
 
                 if ($start) {
-                    return $bookingUser ? "{$prefix}{$start} — {$bookingUser}" : ($prefix ? trim($prefix) : $start);
+                    return $bookingUser ? "{$prefix}{$start} — {$bookingUser}" : ($prefix ? mb_trim($prefix) : $start);
                 }
 
                 return 'Edit booking';
@@ -590,7 +589,7 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
                         }
                         $name = $it['booking_service_name'] ?? $it['service_name'] ?? $it['name'] ?? null;
                         if (! $name && isset($it['booking_service_id'])) {
-                            $svc = \Adultdate\FilamentBooking\Models\Booking\Service::find($it['booking_service_id']);
+                            $svc = Service::find($it['booking_service_id']);
                             $name = $svc?->name;
                         }
                         $qty = isset($it['qty']) ? (int) $it['qty'] : (isset($it['quantity']) ? (int) $it['quantity'] : 1);
@@ -689,7 +688,7 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
         logger()->info('xxx: EVENT zzz PAYLOAD', ['event' => $event]);
         //    logger()->info('BookingCalendarWidget: EVENT CLICK PAYLOAD', ['title' => $event['title']]);
 
-        if ($event['title'] == 'ⓘ upptagen') {
+        if ($event['title'] === 'ⓘ upptagen') {
 
             $recId = $event['extendedProps']['booking_id'] ?? null;
             $this->model = BookingServicePeriod::class;
@@ -721,7 +720,7 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
                 'data' => $payload,
             ]);
         }
-        if ($event['title'] != 'ⓘ upptagen' && (! isset($event['allDay']) || $event['allDay'] === false)) {
+        if ($event['title'] !== 'ⓘ upptagen' && (! isset($event['allDay']) || $event['allDay'] === false)) {
             //  dd($event)  ;
             $recId = $event['id'] ?? null;
             $this->model = Booking::class;
@@ -733,31 +732,13 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
             $payload['service_date'] = $this->record->service_date?->format('Y-m-d') ?? ($payload['service_date'] ?? null);
             $booking = $this->record;
             $user = Auth::user();
-            $canEdit = $user->id == $booking->booking_user_id || Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin';
+            $canEdit = $user->id === $booking->booking_user_id || Auth::user()->role === 'admin' || Auth::user()->role === 'super_admin';
             $action = $canEdit ? 'options' : '';
             $payload['booking_user_name'] = $this->record->bookingUser?->name ?? ($payload['booking_user_name'] ?? null);
             $this->mountAction($action, [
                 'data' => $payload,
             ]);
         }
-    }
-
-    protected function getDateClickContextMenuActions(): array
-    {
-        $user = Auth::user();
-
-        if (! $user || ! $this->isAdmin($user)) {
-            return [];
-        }
-
-        return [
-            $this->adminAction(),
-        ];
-    }
-
-    protected function isAdmin(User $user): bool
-    {
-        return $user->role === UserRole::ADMIN || $user->role === UserRole::SUPER_ADMIN;
     }
 
     public function getFormPeriod(): array
@@ -800,6 +781,8 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
             Select::make('service_user_id')
                 ->label('Service User')
                 ->relationship('serviceUser', 'name')
+                ->searchable()
+                ->preload()
                 ->afterStateUpdated(function ($state, callable $set, callable $get) {
                     $date = $get('date');
                     if ($date && $state) {
@@ -939,31 +922,6 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
         ];
     }
 
-    protected function getDefaultFormData(array $seed = []): array
-    {
-        return array_replace([
-            'number' => $this->generateNumber(),
-            'booking_client_id' => null,
-            'service_id' => null,
-            'booking_user_id' => null,
-            'booking_location_id' => null,
-            'service_user_id' => null,
-            'service_date' => null,
-            'start_time' => null,
-            'end_time' => null,
-            'status' => BookingStatus::Booked->value,
-            'total_price' => null,
-            'notes' => null,
-            'service_note' => null,
-            'items' => [],
-        ], $seed);
-    }
-
-    protected function generateNumber(): string
-    {
-        return 'BK-'.now()->format('Ymd').'-'.Str::upper(Str::random(6));
-    }
-
     public function getEvents(FetchInfo $info): Collection|array|Builder
     {
         $start = $info->start->toMutable()->startOfDay();
@@ -1043,9 +1001,57 @@ class ServiceCalendar extends FullCalendarWidget implements HasCalendar
     public function mount(): void
     {
         $this->eventClickEnabled = true;
-    //    $this->dateClickEnabled = true;
+        //    $this->dateClickEnabled = true;
         $this->eventDragEnabled = true;
         $this->eventResizeEnabled = true;
         $this->dateSelectEnabled = true;
+    }
+
+    protected function getEloquentQuery(): Builder
+    {
+        return $this->getModel()::query();
+    }
+
+    protected function getDateClickContextMenuActions(): array
+    {
+        $user = Auth::user();
+
+        if (! $user || ! $this->isAdmin($user)) {
+            return [];
+        }
+
+        return [
+            $this->adminAction(),
+        ];
+    }
+
+    protected function isAdmin(User $user): bool
+    {
+        return $user->role === UserRole::ADMIN || $user->role === UserRole::SUPER_ADMIN;
+    }
+
+    protected function getDefaultFormData(array $seed = []): array
+    {
+        return array_replace([
+            'number' => $this->generateNumber(),
+            'booking_client_id' => null,
+            'service_id' => null,
+            'booking_user_id' => null,
+            'booking_location_id' => null,
+            'service_user_id' => null,
+            'service_date' => null,
+            'start_time' => null,
+            'end_time' => null,
+            'status' => BookingStatus::Booked->value,
+            'total_price' => null,
+            'notes' => null,
+            'service_note' => null,
+            'items' => [],
+        ], $seed);
+    }
+
+    protected function generateNumber(): string
+    {
+        return 'BK-'.now()->format('Ymd').'-'.Str::upper(Str::random(6));
     }
 }

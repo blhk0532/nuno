@@ -46,7 +46,7 @@ final class RingaDataPinpointWidget extends Widget implements HasForms
 
     public function mount(): void
     {
-        if ($this->record) {
+        if ($this->record && ($this->record->latitud || $this->record->longitude)) {
             $this->data = [
                 'location' => null,
                 'lat' => $this->record->latitud ?? $this->getDefaultState()['lat'],
@@ -54,12 +54,17 @@ final class RingaDataPinpointWidget extends Widget implements HasForms
                 'address' => $this->record->gatuadress ?? null,
             ];
         } else {
-            $this->data = $this->getDefaultState();
+            $this->data = [];
         }
     }
 
     public function form(Schema $schema): Schema
     {
+        // Only show map when we have a record with coordinates
+        if (! $this->record || (! $this->record->latitud && ! $this->record->longitude)) {
+            return $schema->schema([]);
+        }
+
         $defaults = config('filament-pinpoint.default');
 
         $lat = (float) ($defaults['lat'] ?? -0.5050);

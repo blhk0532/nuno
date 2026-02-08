@@ -26,7 +26,7 @@
                                     {{ ($this->bokadAction)(['class' => 'w-full shadow-sm']) }}
                                 @else
                                     <button
-                                        wire:click="recordOutcome('{{ $outcome->outcome }}')"
+                                        wire:click="recordOutcome({{ json_encode($outcome->outcome) }})"
                                         style="background-color: {{ $outcome->color }} !important; color: white !important;"
                                         class="w-full h-full px-3 py-2 rounded-lg font-semibold text-sm shadow-sm hover:shadow-md transition-opacity"
                                     >
@@ -42,7 +42,7 @@
         @else
             <div class="p-4 text-center text-gray-500 flex-grow flex items-center justify-center">
                 @if(!$this->tenant)
-                    Error: Tenant not found
+                   zzz...
                 @else
                     No record loaded
                 @endif

@@ -237,7 +237,7 @@ final class AdminPanelProvider extends PanelProvider
             ->userMenuItems([
                 'profile' => Action::make('profile')
                     ->label(fn () => Str::ucfirst(Auth::user()->getNdsUserName()))
-                    ->url(fn (): string => EditProfilePage::getUrl())
+                    ->url(fn (): string => EditProfilePage::getUrl(tenant: filament()->getTenant()))
                     ->icon('heroicon-o-user-circle'),
                 Action::make('sanctum')
                     ->label(trans('Auth Tokens'))

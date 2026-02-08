@@ -30,6 +30,7 @@
         </div>
     </div>
 
+
     {{-- Start Date --}}
     <div class="fi-fo-field-wrp w-full flex-shrink-0 sm:flex-1 sm:min-w-0">
         <div class="grid gap-y-2">
@@ -62,22 +63,24 @@
         </div>
     </div>
 
-    {{-- Link Button --}}
+        {{-- Link Button --}}
     <div class="flex items-center justify-end flex-shrink-0">
+
 <a
     x-data
     :href="(() => {
         const url = new URL(window.location.href)
         const parts = url.pathname.split('/').filter(Boolean)
 
-        parts[parts.length - 1] = 'multi-calendars-3'
+        parts[parts.length - 1] = 'multi-calendars-2'
 
         return url.origin + '/' + parts.join('/')
     })()"
-    class="fi-btn fi-btn-color-primary relative flex items-center justify-center gap-1 font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-primary fi-size-md fi-btn-size-md gap-x-2 px-3 py-2 text-sm text-white shadow-sm bg-primary-600 hover:bg-primary-500 focus-visible:ring-primary-500/50 sm:whitespace-nowrap w-full sm:w-auto"
->
+    class="fi-btn fi-btn-color-primary relative flex items-center justify-center gap-1 font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-primary fi-size-md fi-btn-size-md gap-x-2 px-3 py-2 text-sm text-white shadow-sm bg-primary-600 hover:bg-primary-500 focus-visible:ring-primary-500/50 sm:whitespace-nowrap w-full sm:w-auto hidden"
+    style="display: none;"
+    >
     <x-filament::icon icon="heroicon-m-calendar-days" class="w-5 h-5 text-white color-white" />
-     x2
+    2
 </a>
 <a
     x-data
@@ -89,12 +92,31 @@
 
         return url.origin + '/' + parts.join('/')
     })()"
-    class="ml-2  fi-btn fi-btn-color-primary relative flex items-center justify-center gap-1 font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-primary fi-size-md fi-btn-size-md gap-x-2 px-3 py-2 text-sm text-white shadow-sm bg-primary-600 hover:bg-primary-500 focus-visible:ring-primary-500/50 sm:whitespace-nowrap w-full sm:w-auto"
+    class="mr-3 fi-btn fi-btn-color-primary relative flex items-center justify-center gap-1 font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-primary fi-size-md fi-btn-size-md gap-x-2 px-3 py-2 text-sm text-white shadow-sm bg-primary-600 hover:bg-primary-500 focus-visible:ring-primary-500/50 sm:whitespace-nowrap w-full sm:w-auto"
 >
     <x-filament::icon icon="heroicon-m-calendar-days" class="w-5 h-5 text-white color-white" />
-     x3
+    3
+</a>
+
+        <a
+    x-data
+    :href="(() => {
+        const url = new URL(window.location.href)
+        const parts = url.pathname.split('/').filter(Boolean)
+
+        parts[parts.length - 1] = 'bokning-kalender'
+
+        return url.origin + '/' + parts.join('/')
+    })()"
+    onclick="window.location.reload()"
+    class="mr-0 ml-0 fi-btn cursor-pointer fi-btn-color-primary relative flex items-center justify-center gap-1 font-semibold outline-none transition duration-75 focus-visible:ring-2 rounded-lg fi-color-primary fi-size-md fi-btn-size-md gap-x-2 px-3 py-2 text-sm text-white shadow-sm bg-primary-600 hover:bg-primary-500 focus-visible:ring-primary-500/50 sm:whitespace-nowrap w-full sm:w-auto"
+>
+    <x-filament::icon icon="heroicon-m-calendar-days" class="w-5 h-5 text-white color-white" />
+        Bokningen
+
 </a>
     </div>
+
 </div>
 
 <script>

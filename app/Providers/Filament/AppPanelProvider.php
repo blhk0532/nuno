@@ -69,6 +69,7 @@ use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
 use Leandrocfe\FilamentApexCharts\FilamentApexChartsPlugin;
 use Muazzam\SlickScrollbar\SlickScrollbarPlugin;
+use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 use Wallacemartinss\FilamentIconPicker\Enums\Tabler;
 use Wallacemartinss\FilamentIconPicker\FilamentIconPickerPlugin;
 
@@ -106,6 +107,7 @@ final class AppPanelProvider extends PanelProvider
             ->discoverResources(in: app_path('Filament/App/Resources'), for: 'App\\Filament\\App\\Resources')
             ->discoverWidgets(in: app_path('Filament/App/Widgets'), for: 'App\\Filament\\App\\Widgets')
             ->profile(null)
+            ->spa()
             ->registerErrorNotification(
                 title: 'Oops! Något gick fel',
                 body: 'Vängligen försök igen senare...',
@@ -115,6 +117,8 @@ final class AppPanelProvider extends PanelProvider
                     ->icon('heroicon-c-squares-plus'),
                 NavigationGroup::make('Bokningar Admin')
                     ->icon('heroicon-o-document-text'),
+                NavigationGroup::make('Administration')
+                    ->icon(Tabler::ShieldCheckF),
                 NavigationGroup::make('Mina Sidor')
                     ->icon(Tabler::UserSquareRounded),
             ])
@@ -240,7 +244,7 @@ final class AppPanelProvider extends PanelProvider
             ->userMenuItems([
                 'profile' => Action::make('profile')
                     ->label(fn () => Str::ucfirst(Auth::user()->getNdsUserName()))
-                    ->url(fn (): string => EditProfilePage::getUrl())
+                    ->url(fn (): string => EditProfilePage::getUrl(tenant: filament()->getTenant()))
                     ->icon('heroicon-o-user-circle'),
                 'wirechat' => Action::make('chats')
                     ->label('Chat')
@@ -254,6 +258,7 @@ final class AppPanelProvider extends PanelProvider
                 CurrentTenant::class,
             ], isPersistent: true)
             ->tenantMenuItems([
+
                 'register' => fn (Action $action) => $action->label('Register team')
                     ->icon('heroicon-m-user-plus')
                     ->visible(fn () => User::canRegisterTeam() !== false),
@@ -261,13 +266,16 @@ final class AppPanelProvider extends PanelProvider
                     ->label('Team Invitation')
                     ->url(fn (): string => TeamInvitationAccept::getUrl())
                     ->icon('heroicon-m-users')
-                    ->visible(fn () => Filament::getTenant() !== null),
+                    ->visible(fn () => User::canManageTeam() !== false),
                 'profile' => fn (Action $action) => $action->label('Edit team profile')
+                    ->sort(-1)
                     ->visible(fn () => User::canManageTeam() !== false),
                 'team-users' => Action::make('team-users')
-                    ->label('Medlemmar')
-                    ->icon('heroicon-m-user-group')
+                    ->label('Dashboard')
+                    ->badge(fn () => now()->timezone('Asia/Bangkok')->format('H:i').' 🇹🇭')
+                    ->icon(Remix::RiDashboard2Line)
                     ->url(fn () => TeamUserResource::getUrl())
+                    ->sort(-1)
                     ->visible(true),
             ])
             ->plugin(

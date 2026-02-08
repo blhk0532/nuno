@@ -255,7 +255,7 @@ form.fi-modal-window.fi-modal-window-has-close-btn.fi-modal-window-has-content.f
 }
 
 .fi-sidebar-nav{
-    padding-top: 1.2rem;
+    padding-top: 0.6rem;
 }
 
 .filament-fullcalendar.fc.fc-media-screen.fc-direction-ltr.fc-theme-standard.fc-liquid-hack{
@@ -478,4 +478,23 @@ position: absolute;
 .fi-modal-footer.fi-align-start{
         display: flex;
     justify-content: right;
+}
+html{
+    scrollbar-gutter: auto!important;
+    overflow: hidden;
+    max-height: 100vh;
+
+}
+.fi-sidebar.fi-main-sidebar.fi-sidebar-opened{
+    overflow: hidden;
+}
+.fi-main-ctn.fi-main-ctn-sidebar-open{
+        display: flex;
+    max-height: 90vh;
+    opacity: 1;
+    overflow: auto;
+}
+
+.fi-dropdown-panel.fi-scrollable{
+    min-width: 288px;
 }

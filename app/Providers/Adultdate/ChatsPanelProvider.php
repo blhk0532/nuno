@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers\Adultdate;
 
 use Adultdate\Wirechat\Panel;
@@ -7,7 +9,7 @@ use Adultdate\Wirechat\PanelProvider;
 use Adultdate\Wirechat\Support\Color;
 use Adultdate\Wirechat\Support\Enums\EmojiPickerPosition;
 
-class ChatsPanelProvider extends PanelProvider
+final class ChatsPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
@@ -34,7 +36,7 @@ class ChatsPanelProvider extends PanelProvider
                 'success' => Color::Emerald,
                 'warning' => Color::Orange,
             ])
-            ->heading('Chats')
+            ->heading(' ')
             ->favicon(url: asset('favicon.ico'))
             ->createChatAction()
             ->redirectToHomeAction()

@@ -97,7 +97,7 @@
         {{-- Map Container --}}
         <div class="relative rounded-lg overflow-hidden border border-gray-300 dark:border-gray-700">
             <div x-ref="map" style="height: {{ $height }}px; width: 100%;" class="bg-gray-100 dark:bg-gray-800">
-                <div x-show="!isMapLoaded"
+                <div x-show="!(isMapLoaded ?? false)"
                     style="display: flex; align-items: center; justify-content: center; height: 100%;">
                     <div style="display: flex; align-items: center; gap: 8px;" class="text-gray-500 dark:text-gray-400">
                         <svg style="animation: spin 1s linear infinite; width: 20px; height: 20px;"

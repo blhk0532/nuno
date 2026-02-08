@@ -76,13 +76,28 @@ final class TeamUserResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        $tenantId = filament()->getTenant()?->id;
+        $tenantId = filament()->getTenant()?->id
+            ?? auth()->user()?->current_team_id;
 
         return parent::getEloquentQuery()
-            ->where(function (Builder $query) use ($tenantId) {
-                $query->whereHas('teams', fn (Builder $q) => $q->where('teams.id', $tenantId))
-                    ->orWhereHas('ownedTeams', fn (Builder $q) => $q->where('teams.id', $tenantId));
-            });
+            ->when($tenantId, function (Builder $query) use ($tenantId) {
+                $query->where(function (Builder $query) use ($tenantId) {
+                    $query->where('current_team_id', $tenantId)
+                        ->orWhereExists(function ($sub) use ($tenantId) {
+                            $sub->selectRaw(1)
+                                ->from('membership')
+                                ->whereColumn('membership.user_id', 'users.id')
+                                ->where('membership.team_id', $tenantId);
+                        })
+                        ->orWhereExists(function ($sub) use ($tenantId) {
+                            $sub->selectRaw(1)
+                                ->from('teams')
+                                ->whereColumn('teams.user_id', 'users.id')
+                                ->where('teams.id', $tenantId);
+                        });
+                });
+            })
+            ->when(! $tenantId, fn (Builder $query) => $query->whereRaw('1 = 0'));
     }
 
     public static function getPages(): array

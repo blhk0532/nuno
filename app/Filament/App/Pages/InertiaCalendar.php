@@ -19,7 +19,7 @@ final class InertiaCalendar extends Page
     //  protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedCalendarDateRange;
     // protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-clipboard-document-check';
 
-    protected static ?string $navigationLabel = 'Bokning';
+    protected static ?string $navigationLabel = 'Schema';
 
     protected static ?string $title = '';
 
@@ -32,20 +32,23 @@ final class InertiaCalendar extends Page
     //      protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
     //  protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;
 
-    protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarTodoLine;
+    //  protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarTodoLine;
+    //  protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarTodoFill;
 
-    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarTodoFill;
+    protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
+
+    protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;
 
     //  protected static string | UnitEnum | null $navigationGroup = 'Kalendrar';
-    protected static string|UnitEnum|null $navigationGroup = '';
+    protected static string|UnitEnum|null $navigationGroup = ' ';
 
     public static function shouldRegisterNavigation(): bool
     {
-        if (Auth::user()->role === 'booking' || Auth::user()->role === 'admin' || Auth::user()->role === 'super' || Auth::user()->role === 'manager') {
-            return true;
-        }
+        //    if (Auth::user()->role === 'booking' || Auth::user()->role === 'admin' || Auth::user()->role === 'super' || Auth::user()->role === 'manager') {
+        //        return true;
+        //    }
 
-        return false;
+        return true;
 
     }
 

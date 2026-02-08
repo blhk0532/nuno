@@ -15,6 +15,7 @@ use Filament\Actions\ViewAction;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
@@ -36,7 +37,10 @@ final class RingaDataTable
                 TextColumn::make('outcome')
                     ->sortable()
                     ->badge()
-                    ->color(static fn (?Outcomes $state) => $state?->getColor() ?? 'primary')
+                    ->color(static fn ($state) => $state instanceof Outcomes
+                            ? $state->getColor()
+                            : (is_string($state) ? Outcomes::tryFrom($state)?->getColor() ?? 'primary' : 'primary')
+                    )
                     ->action(
                         Actions\Action::make('changeOutcome')
                             ->label('Change Outcome')
@@ -79,6 +83,15 @@ final class RingaDataTable
                     ->sortable()
                     ->hidden()
                     ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->emptyStateHeading('≽ ^⎚ ˕ ⎚^ ≼')
+            ->emptyStateDescription('Inga Återkomster')
+            ->emptyStateActions([
+                Actions\Action::make('RingaListan')
+                    ->label('Ringlista')
+                    ->url(route('dashboard'))
+                    ->icon('heroicon-m-phone-arrow-up-right')
+                    ->button(),
             ])
             ->filters([
                 //

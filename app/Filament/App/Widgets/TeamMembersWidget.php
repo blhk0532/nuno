@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Filament\App\Widgets;
 
+use App\Filament\App\Resources\TeamUsers\TeamUserResource;
 use App\Filament\User\Resources\Users\Tables\UsersTable;
 use App\Models\Team;
 use App\Models\User;
 use Filament\Actions\Action;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
-use Illuminate\Database\Eloquent\Builder;
 
 final class TeamMembersWidget extends BaseWidget
 {
@@ -18,18 +18,31 @@ final class TeamMembersWidget extends BaseWidget
 
     public function table(Table $table): Table
     {
-        $tenantId = filament()->getTenant()?->id;
+        $tenantId = filament()->getTenant()?->id
+            ?? auth()->user()?->current_team_id;
         $tenantName = $tenantId ? Team::find($tenantId)?->name ?? 'Team' : 'Team';
+
+        // Log for debugging
+        \Illuminate\Support\Facades\Log::info('TeamMembersWidget query', [
+            'tenant_id' => $tenantId,
+            'tenant_name' => $tenantName,
+            'auth_user_id' => auth()->user()?->id,
+            'auth_current_team' => auth()->user()?->current_team_id,
+        ]);
 
         return UsersTable::configure($table)
             ->heading("{$tenantName} - Teammedlemmar")
-            ->query(
-                User::query()
-                    ->where(function (Builder $query) use ($tenantId) {
-                        $query->whereHas('teams', fn (Builder $q) => $q->where('teams.id', $tenantId))
-                            ->orWhereHas('ownedTeams', fn (Builder $q) => $q->where('teams.id', $tenantId));
-                    })
-            )
+            ->query(function () use ($tenantId) {
+                $query = TeamUserResource::getEloquentQuery()->orderBy('name');
+                \Illuminate\Support\Facades\Log::info('TeamMembersWidget executed query', [
+                    'tenant_id' => $tenantId,
+                    'sql' => $query->toSql(),
+                    'bindings' => $query->getBindings(),
+                    'count' => $query->count(),
+                ]);
+
+                return $query;
+            })
             ->recordActions([
                 Action::make('start_team_chat')
                     ->label('Chat')

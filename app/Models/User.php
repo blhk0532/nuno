@@ -61,6 +61,7 @@ use Zap\Models\Concerns\HasSchedules;
  * @property string|null $theme_color
  * @property UserActiveStatus $active_status
  * @property \Illuminate\Support\Carbon|null $active_at
+ * @property string|null $notes
  * @property int|null $current_team_id
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -133,6 +134,7 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
         'status',
         'active_status',
         'active_at',
+        'notes',
     ];
 
     protected $hidden = [
@@ -241,7 +243,8 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
 
     public function teams(): BelongsToMany
     {
-        return $this->belongsToMany(Team::class, Membership::class)
+        return $this->belongsToMany(Team::class, 'membership')
+            ->using(Membership::class)
             ->withTimestamps()
             ->as('membership');
     }
@@ -373,7 +376,7 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
             'revoked' => false,
         ]);
 
-        $plainTextToken = unpack('C*', \Illuminate\Support\Str::random(40));
+        $plainTextToken = unpack('C*', Str::random(40));
 
         return new PersonalAccessTokenResult($plainTextToken, $token);
     }
@@ -430,7 +433,7 @@ final class User extends Model implements AuthenticatableContract, AuthorizableC
 
         self::creating(function ($model) {
             if (empty($model->ulid)) {
-                $model->ulid = (string) \Illuminate\Support\Str::ulid();
+                $model->ulid = (string) Str::ulid();
             }
         });
     }

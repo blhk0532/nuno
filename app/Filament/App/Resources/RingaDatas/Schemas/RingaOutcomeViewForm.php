@@ -12,7 +12,7 @@ use Filament\Schemas\Schema;
 
 final class RingaOutcomeViewForm
 {
-    public static function configure(Schema $schema, $component = null): Schema
+    public static function configure(Schema $schema, $record = null, $component = null): Schema
     {
         return $schema
             ->components([
@@ -29,17 +29,18 @@ final class RingaOutcomeViewForm
                             ])
                             ->compact()
                             ->headerActions([
-                                ...array_map(function ($outcome) use ($component) {
+                                ...array_map(function ($outcome) use ($record, $component) {
                                     return Action::make("outcome_{$outcome->value}")
                                         ->label($outcome->getLabel())
                                         ->extraAttributes([
                                             'class' => 'outcome-button',
                                         ])
                                         ->color($outcome->getColor())
-                                        ->action(function ($record) use ($outcome, $component) {
+                                        ->action(function () use ($outcome, $record, $component) {
                                             if ($record) {
                                                 $record->update([
                                                     'outcome' => $outcome->value,
+                                                    'outcome_category' => $outcome->name,
                                                     'is_outcome' => true,
                                                     'attempts' => ($record->attempts ?? 0) + 1,
                                                 ]);
@@ -71,17 +72,18 @@ final class RingaOutcomeViewForm
                             ])
                             ->compact()
                             ->headerActions([
-                                ...array_map(function ($outcome) use ($component) {
+                                ...array_map(function ($outcome) use ($record, $component) {
                                     return Action::make("outcome_{$outcome->value}")
                                         ->label($outcome->getLabel())
                                         ->color($outcome->getColor())
                                         ->extraAttributes([
                                             'class' => 'outcome-button',
                                         ])
-                                        ->action(function ($record) use ($outcome, $component) {
+                                        ->action(function () use ($outcome, $record, $component) {
                                             if ($record) {
                                                 $record->update([
                                                     'outcome' => $outcome->value,
+                                                    'outcome_category' => $outcome->name,
                                                     'is_outcome' => true,
                                                     'attempts' => ($record->attempts ?? 0) + 1,
                                                 ]);
@@ -113,17 +115,18 @@ final class RingaOutcomeViewForm
                             ])
                             ->compact()
                             ->headerActions([
-                                ...array_map(function ($outcome) use ($component) {
+                                ...array_map(function ($outcome) use ($record, $component) {
                                     return Action::make("outcome_{$outcome->value}")
                                         ->label($outcome->getLabel())
                                         ->color($outcome->getColor())
                                         ->extraAttributes([
                                             'class' => 'outcome-button',
                                         ])
-                                        ->action(function ($record) use ($outcome, $component) {
+                                        ->action(function () use ($outcome, $record, $component) {
                                             if ($record) {
                                                 $record->update([
                                                     'outcome' => $outcome->value,
+                                                    'outcome_category' => $outcome->name,
                                                     'is_outcome' => true,
                                                     'attempts' => ($record->attempts ?? 0) + 1,
                                                 ]);

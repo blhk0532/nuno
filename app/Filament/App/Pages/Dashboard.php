@@ -41,7 +41,7 @@ final class Dashboard extends BaseDashboard
     //   protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarScheduleLine;
     //   protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarScheduleFill;
 
-    //  protected static string|UnitEnum|null $navigationGroup = '';
+    //  protected static string|UnitEnum|null $navigationGroup = ' ';
     protected static ?int $navigationSort = -2;
 
     public static function getNavigationLabel(): string
@@ -115,7 +115,7 @@ final class Dashboard extends BaseDashboard
     {
         return [
             SingleCalendars::class,
-            WeatherWidget::class,
+            //    WeatherWidget::class,
         ];
     }
 }

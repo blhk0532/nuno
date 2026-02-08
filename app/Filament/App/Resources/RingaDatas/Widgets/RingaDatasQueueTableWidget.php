@@ -21,14 +21,18 @@ final class RingaDatasQueueTableWidget extends BaseWidget
     public function mount(?int $recordId = null): void
     {
         logger()->info('RingaDatasQueueTableWidget mount', ['recordId' => $recordId]);
-        $this->recordId = $recordId;
+        // Always reset to null to use the page's selectedRecordId
+        $this->recordId = null;
     }
 
     #[On('record-selected')]
     public function updateRecordId(int $recordId): void
     {
         logger()->info('RingaDatasQueueTableWidget updateRecordId', ['recordId' => $recordId]);
-        $this->recordId = $recordId;
+        // Reset to null to force using the page's selectedRecordId from getPage()
+        $this->recordId = null;
+        // Force table refresh
+        $this->dispatch('refresh-table');
     }
 
     public function table(Table $table): Table
@@ -43,11 +47,13 @@ final class RingaDatasQueueTableWidget extends BaseWidget
         if (! $id) {
             $id = \App\Filament\App\Resources\RingaDatas\RingaDatasResource::getEloquentQuery()
                 ->where(function ($query) {
-                    $query->where('is_active', true);
-                    //    ->orWhere('attempts', '<', 3);
+                    $query->where('is_active', true)
+                    ->whereNull('outcome_category')
+                    ->whereNull('outcome')
+                    ->where('available_at', '<=', now());
                 })
                 ->where('available_at', '<=', now())
-                ->orderBy('gatuadress')
+                ->orderBy('id', 'desc')
                 ->first()
                 ?->id;
         }

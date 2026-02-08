@@ -1,18 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\RingaListan\Schemas;
 
 use Filament\Actions\Action;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\RichEditor;
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
-class RingaDataForm
+final class RingaDataForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -62,7 +64,7 @@ class RingaDataForm
                                             ->send();
                                     }
                                 });
-                        }, \App\Enums\Outcomes::cases())
+                        }, \App\Enums\Outcomes::cases()),
                     ]),
                 Textarea::make('gatuadress')
                     ->columnSpanFull(),
@@ -145,15 +147,18 @@ class RingaDataForm
                     ->numeric(),
                 TextInput::make('calendar_id')
                     ->numeric(),
-                DateTimePicker::make('booked_at'),
+                DateTimePicker::make('booked_at')
+                    ->native(true),
                 Textarea::make('user_id')
                     ->columnSpanFull(),
                 Textarea::make('service_user_id')
                     ->columnSpanFull(),
                 DateTimePicker::make('started_at')
-                    ->required(),
+                    ->required()
+                    ->native(true),
                 DateTimePicker::make('expires_at')
-                    ->required(),
+                    ->required()
+                    ->native(true),
             ]);
     }
 }

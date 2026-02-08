@@ -38,7 +38,7 @@ final class QueueRingaData extends Page
 
     // public static bool $shouldRegisterNavigation = true;
 
-    protected static UnitEnum|string|null $navigationGroup = ' ';
+    protected static UnitEnum|string|null $navigationGroup = '';
 
     protected static ?int $navigationSort = 4;
 
@@ -73,6 +73,9 @@ final class QueueRingaData extends Page
     public function mount(): void
     {
         try {
+            // Always reset selectedRecordId on mount to avoid stale state
+            $this->selectedRecordId = null;
+
             // Check if there are any pending records
             $pendingCount = $this->getQuery()->count();
 
@@ -84,12 +87,11 @@ final class QueueRingaData extends Page
                 $this->redirect(route('filament.app.pages.app-dashboard', ['tenant' => $tenant]), navigate: true);
             }
 
-            if (! $this->selectedRecordId) {
-                $first = $this->getQuery()
-                    ->first();
+            // Get first record based on current ordering
+            $first = $this->getQuery()
+                ->first();
 
-                $this->selectedRecordId = $first?->id;
-            }
+            $this->selectedRecordId = $first?->id;
 
             // Dispatch event to inform widgets of the selected record
             if ($this->selectedRecordId) {
@@ -139,6 +141,24 @@ final class QueueRingaData extends Page
         $this->selectedRecordId = $recordId;
     }
 
+    #[On('outcome-recorded')]
+    public function handleOutcomeRecorded(int $recordId): void
+    {
+        // If a new record was loaded by OutcomeRecorder, select it
+        if ($recordId > 0) {
+            $this->selectedRecordId = $recordId;
+        } else {
+            // Otherwise get the first pending record
+            $first = $this->getQuery()->first();
+            $this->selectedRecordId = $first?->id;
+        }
+
+        // Dispatch event to inform widgets of the selected record
+        if ($this->selectedRecordId) {
+            $this->dispatch('record-selected', recordId: $this->selectedRecordId);
+        }
+    }
+
     public function getMaxContentWidth(): Width
     {
         return Width::Full;
@@ -146,21 +166,47 @@ final class QueueRingaData extends Page
 
     protected function getQuery(): Builder
     {
-        return self::getResource()::getEloquentQuery()
-            ->where('is_active', true)
-            ->where('available_at', '<=', now())
+        $now = now();
+
+        $query = self::getResource()::getEloquentQuery()
+            // Only records for current user or team
             ->where(function (Builder $query) {
-                // Show records where retry_count < max_retry_count
-                $query->where(function (Builder $subQuery) {
-                    $subQuery->whereRaw('retry_count < (
-                        SELECT COALESCE(MAX(max_retry_count), 3)
-                        FROM outcome_delay_settings
-                        WHERE is_active = TRUE AND outcome IS NULL
-                    )');
-                });
+                $query->where('user_id', Auth::id());
+                if (filament()->getTenant()) {
+                    $query->orWhere('team_id', filament()->getTenant()->id);
+                }
             })
-            ->orderBy('available_at')
-            ->orderBy('id');
+            // Only active records
+            ->where('is_active', true)
+            // Only records where current date is between started_at and expires_at
+            ->whereDate('started_at', '<=', $now)
+        //    ->whereDate('expires_at', '>=', $now)
+            // Only records where attempts < max_retry_count from outcome_settings
+            ->where(function (Builder $query) {
+                $query->whereRaw('attempts < COALESCE((
+                    SELECT MAX(max_retry_count)
+                    FROM outcome_settings
+                    WHERE is_active = TRUE
+                ), 3)');
+            })
+            // Only records where current datetime is after available_at OR available_at is null
+            ->where(function (Builder $query) use ($now) {
+                $query->whereNull('available_at')
+                    ->orWhere('available_at', '<=', $now);
+            })
+            // Only records where current datetime is after aterkom_at OR aterkom_at is null
+            ->where(function (Builder $query) use ($now) {
+                $query->whereNull('aterkom_at')
+                    ->orWhere('aterkom_at', '<=', $now);
+            })
+            // Only records that haven't been processed (no outcome_category set)
+            ->whereNull('outcome_category')
+            // Also ensure no outcome is set
+            ->whereNull('outcome')
+            // Order by id ascending (lowest ID first)
+            ->orderBy('id', 'desc');
+
+        return $query;
     }
 
     protected function getHeaderWidgets(): array
@@ -171,8 +217,9 @@ final class QueueRingaData extends Page
             RingaDataDisplayWidget::class,
             RingaDataOutcomeFormWidget::class,
             RingaDataOutcomeWidget::class,
+                    RingaDatasQueueTableWidget::class,
             RingaDataCalendar::class,
-            RingaDatasQueueTableWidget::class,
+
         ];
     }
 }

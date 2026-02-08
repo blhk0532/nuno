@@ -52,10 +52,10 @@ final class RingaData extends Model
         'kommun',
         'kommun_ratsit',
         'lan',
-        'adressandring', // Date of address change from Ratsit
+        'adressandring',
         'fodelsedag',
         'personnummer',
-        'stjarntacken', // Zodiac sign
+        'stjarntacken',
         'alder',
         'kon',
         'civilstand',
@@ -78,9 +78,9 @@ final class RingaData extends Model
         'hundar',
         'longitude',
         'latitud',
-        'google_maps', // Google Maps navigation URL
-        'google_streetview', // Google Street View URL
-        'ratsit_se', // Source profile URL
+        'google_maps',
+        'google_streetview',
+        'ratsit_se',
         'is_active',
         'is_telefon',
         'is_hus',
@@ -91,11 +91,15 @@ final class RingaData extends Model
         'team_id',
         'status',
         'outcome',
+        'outcome_category',
         'attempts',
         'booking_id',
         'calendar_id',
         'booked_at',
         'aterkom_at',
+        'available_at',
+        'started_at',
+        'expires_at',
         'user_notes',
     ];
 

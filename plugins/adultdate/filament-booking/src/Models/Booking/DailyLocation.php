@@ -34,7 +34,8 @@ final class DailyLocation extends Model implements Eventable
 
     public function serviceUser()
     {
-        return $this->belongsTo(\App\Models\User::class, 'service_user_id');
+        return $this->belongsTo(\App\Models\User::class, 'service_user_id')
+            ->where('role', 'service');
     }
 
     public function creator()

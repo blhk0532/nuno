@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adultdate\FilamentBooking\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\User;
 
-class BookingServicePeriod extends Model
+final class BookingServicePeriod extends Model
 {
     use HasFactory;
 
@@ -45,12 +47,14 @@ class BookingServicePeriod extends Model
     {
         return $this->attributes['status'] ?? null;
     }
+
     /**
      * The user this service period belongs to.
      */
     public function serviceUser(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(User::class, 'service_user_id');
+        return $this->belongsTo(User::class, 'service_user_id')
+            ->where('role', 'service');
     }
 
     /**
@@ -66,11 +70,11 @@ class BookingServicePeriod extends Model
      */
     public function items(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
-        return $this->hasMany(\Adultdate\FilamentBooking\Models\Booking\Booking::class, 'service_user_id', 'service_user_id')
+        return $this->hasMany(Booking\Booking::class, 'service_user_id', 'service_user_id')
             ->where('service_date', $this->service_date);
     }
 
-        public function toCalendarEvent(): array
+    public function toCalendarEvent(): array
     {
         $start = null;
         $end = null;
@@ -127,7 +131,7 @@ class BookingServicePeriod extends Model
                 'location' => method_exists($this, 'location') ? $this->location?->name : null,
                 'displayLocation' => method_exists($this, 'location') ? $this->location?->name : null,
                 // Model FQCN used by calendar to select custom event content
-                'model' => static::class,
+                'model' => self::class,
                 'status' => $this->status?->value,
                 'total_price' => $attrs['total_price'] ?? null,
                 'currency' => $attrs['currency'] ?? null,
@@ -136,6 +140,4 @@ class BookingServicePeriod extends Model
             ],
         ];
     }
-
-
 }

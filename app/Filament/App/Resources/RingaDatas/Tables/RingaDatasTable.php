@@ -15,6 +15,7 @@ final class RingaDatasTable
     public static function configure(Table $table): Table
     {
         return $table
+            ->defaultSort('gatuadress', 'asc')
             ->toolbarActions([
             ])
             ->headerActions([

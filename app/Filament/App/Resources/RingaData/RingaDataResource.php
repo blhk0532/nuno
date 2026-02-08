@@ -42,6 +42,16 @@ final class RingaDataResource extends Resource
 
     protected static bool $isScopedToTenant = false;
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        if (auth()->user()->role === 'admin' || auth()->user()->role === 'super' || auth()->user()->role === 'manager') {
+            return true;
+        }
+
+        return false;
+
+    }
+
     public static function form(Schema $schema): Schema
     {
         return RingaDataForm::configure($schema);

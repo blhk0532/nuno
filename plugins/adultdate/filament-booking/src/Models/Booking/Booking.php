@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Adultdate\FilamentBooking\Models\Booking;
 
 use Adultdate\FilamentBooking\Enums\BookingStatus;
-use Adultdate\FilamentBooking\Models\Booking\OrderAddress as OrderAddress;
-use Adultdate\FilamentBooking\Models\Booking\Service;
 use App\Models\User;
 use Database\Factories\Booking\BookingFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -16,10 +16,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Spatie\ModelStates\HasStates;
 
-class Booking extends Model
+final class Booking extends Model
 {
     /** @use HasFactory<BookingFactory> */
     use HasFactory;
+
     use HasStates;
     use SoftDeletes;
 
@@ -52,13 +53,6 @@ class Booking extends Model
         'schedulable_type',
         'schedulable_id',
     ];
-    /**
-     * Get the admin who created the booking (if any).
-     */
-    public function admin(): BelongsTo
-    {
-        return $this->belongsTo(\App\Models\Admin::class, 'admin_id');
-    }
 
     protected $casts = [
         'status' => BookingStatus::class,
@@ -79,28 +73,12 @@ class Booking extends Model
         'is_active' => true,
     ];
 
-    protected static function booted(): void
+    /**
+     * Get the admin who created the booking (if any).
+     */
+    public function admin(): BelongsTo
     {
-        static::creating(function (Booking $booking): void {
-            $user = Auth::user();
-            if (! $booking->booking_user_id && $user && $user instanceof \App\Models\User) {
-                $booking->booking_user_id = $user->id;
-                logger('Booking::creating - Set booking_user_id from Auth::user()', [
-                    'user_id' => $user->id,
-                    'booking_id' => $booking->id ?? null,
-                ]);
-            } else {
-                logger('Booking::creating - booking_user_id not set or user is not App\\Models\\User', [
-                    'auth_user' => $user ? get_class($user) : null,
-                    'booking_id' => $booking->id ?? null,
-                ]);
-            }
-        });
-    }
-
-    protected function registerStates(): void
-    {
-        $this->addState('state', \Adultdate\FilamentBooking\Enums\BookingState::class);
+        return $this->belongsTo(\App\Models\Admin::class, 'admin_id');
     }
 
     /** @return MorphOne<OrderAddress, $this> */
@@ -115,7 +93,7 @@ class Booking extends Model
         return $this->belongsTo(Client::class, 'booking_client_id');
     }
 
-    /** @return BelongsTo<\Adultdate\FilamentBooking\Models\Booking\Service, $this> */
+    /** @return BelongsTo<Service, $this> */
     public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class, 'service_id');
@@ -124,7 +102,8 @@ class Booking extends Model
     /** @return BelongsTo<User, $this> */
     public function serviceUser(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'service_user_id');
+        return $this->belongsTo(User::class, 'service_user_id')
+            ->where('role', 'service');
     }
 
     /** @return BelongsTo<User, $this> */
@@ -197,10 +176,10 @@ class Booking extends Model
         } elseif ($this->ends_at) {
             $end = $this->ends_at->toIso8601String();
         }
-                        $timeStamp = time();
-                        $dateStamp = date('m-d-Y', $timeStamp);
-                        $bookingNumber = 'BK-' . strrev($timeStamp) . '-NDS-' . $dateStamp . '-' . $timeStamp;
-        $baseTitle = ($this->client?->address ?? '') . '  '  . ($this->client?->city ?? '');
+        $timeStamp = time();
+        $dateStamp = date('m-d-Y', $timeStamp);
+        $bookingNumber = 'BK-'.strrev((string) $timeStamp).'-NDS-'.$dateStamp.'-'.$timeStamp;
+        $baseTitle = ($this->client?->address ?? '').'  '.($this->client?->city ?? '');
 
         return [
             'id' => $this->id,
@@ -227,7 +206,7 @@ class Booking extends Model
                 'location' => $this->bookingLocation?->name ?? $this->location,
                 'displayLocation' => $this->bookingLocation?->name ?? $this->location,
                 // Model FQCN used by calendar to select custom event content
-                'model' => static::class,
+                'model' => self::class,
                 'status' => $this->status?->value,
                 'total_price' => $this->total_price,
                 'currency' => $this->currency,
@@ -236,8 +215,32 @@ class Booking extends Model
         ];
     }
 
+    protected static function booted(): void
+    {
+        self::creating(function (Booking $booking): void {
+            $user = Auth::user();
+            if (! $booking->booking_user_id && $user && $user instanceof User) {
+                $booking->booking_user_id = $user->id;
+                logger('Booking::creating - Set booking_user_id from Auth::user()', [
+                    'user_id' => $user->id,
+                    'booking_id' => $booking->id ?? null,
+                ]);
+            } else {
+                logger('Booking::creating - booking_user_id not set or user is not App\\Models\\User', [
+                    'auth_user' => $user ? get_class($user) : null,
+                    'booking_id' => $booking->id ?? null,
+                ]);
+            }
+        });
+    }
+
     protected static function newFactory()
     {
         return \Adultdate\FilamentBooking\Database\Factories\Booking\BookingFactory::new();
+    }
+
+    protected function registerStates(): void
+    {
+        $this->addState('state', \Adultdate\FilamentBooking\Enums\BookingState::class);
     }
 }

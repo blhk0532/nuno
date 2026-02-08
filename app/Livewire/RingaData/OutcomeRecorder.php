@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Livewire\RingaData;
 
+use App\Filament\App\Resources\RingaDatas\RingaDatasResource;
 use App\Models\RingaData;
 use App\Services\OutcomeDelayService;
 use Exception;
@@ -65,7 +66,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                 DateTimePicker::make('aterkom_at')
                     ->label('Datum och tid för återkommande samtal')
                     ->default(fn () => $default)
-                    ->native(false)
+                    ->native(true)
                     ->seconds(false)
                     ->timezone(config('app.timezone'))
                     ->required(),
@@ -128,7 +129,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                 DateTimePicker::make('aterkom_at')
                     ->label('Datum och tid för återkommande samtal')
                     ->default(fn () => $default)
-                    ->native(false)
+                    ->native(true)
                     ->seconds(false)
                     ->timezone(config('app.timezone'))
                     ->required(),
@@ -334,6 +335,9 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                 return;
             }
 
+            // Determine the outcome category based on the outcome value
+            $outcomeCategory = $this->getOutcomeCategory($outcomeEnum->value);
+
             // If outcome is "Ring Tillbaka" or "Återkommer" we expect a scheduled datetime from the action form
             if (in_array($outcomeEnum->value, ['Ring Tillbaka', 'Återkommer'])) {
                 if (blank($aterkom_at)) {
@@ -348,7 +352,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
                 $scheduledAt = Carbon::parse($aterkom_at);
 
-                DB::transaction(function () use ($outcomeEnum, $scheduledAt, $record) {
+                DB::transaction(function () use ($outcomeEnum, $outcomeCategory, $scheduledAt, $record) {
                     $attempts = ($record->attempts ?? 0) + 1;
 
                     RingaData::query()
@@ -356,6 +360,7 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                         ->update([
                             'is_active' => false,
                             'outcome' => $outcomeEnum->value,
+                            'outcome_category' => $outcomeCategory,
                             'aterkom_at' => $scheduledAt,
                             'attempts' => $attempts,
                             'is_outcome' => true,
@@ -380,24 +385,34 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                     ->send();
 
                 $this->loadNextRecord();
-                $this->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
+                // Dispatch event to page to load next record
+                $this->dispatch('outcome-recorded', recordId: $this->recordId);
 
                 return;
             }
 
-            // For other outcomes, defer the record to the end of the queue
-            DB::transaction(function () use ($outcomeEnum, $record) {
+            // For other outcomes, handle based on category
+            DB::transaction(function () use ($outcomeEnum, $outcomeCategory, $record) {
                 $attempts = ($record->attempts ?? 0) + 1;
                 $retryCount = ($record->retry_count ?? 0) + 1;
                 $maxRetryCount = OutcomeDelayService::getMaxRetryCount($outcomeEnum->value);
                 $delayMinutes = OutcomeDelayService::getDelay($outcomeEnum->value) ?? 5;
-                $isActive = $retryCount < $maxRetryCount;
+
+                // Set is_active based on category
+                $isActive = match ($outcomeCategory) {
+                    'Later' => false, // Permanently deactivate
+                    'Return' => false, // Already scheduled for return call
+                    'Maybe' => true, // Keep active for potential follow-up
+                    'Retry' => $retryCount < $maxRetryCount, // Keep active until max retries
+                    default => true, // Default to active
+                };
 
                 RingaData::query()
                     ->whereKey($record->id)
                     ->update([
                         'is_active' => $isActive,
                         'outcome' => $outcomeEnum->value,
+                        'outcome_category' => $outcomeCategory,
                         'attempts' => $attempts,
                         'retry_count' => $retryCount,
                         'available_at' => $isActive ? now()->addMinutes($delayMinutes) : $record->available_at,
@@ -422,7 +437,10 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
                 ->send();
 
             $this->loadNextRecord();
-            $this->redirect(\App\Filament\App\Resources\RingaDatas\RingaDatasResource::getUrl('queue'));
+            // Dispatch event to page to load next record
+            $this->dispatch('outcome-recorded', recordId: $this->recordId ?? 0);
+            // Use SPA navigation to refresh the page
+            $this->redirect(RingaDatasResource::getUrl('queue'), navigate: true);
 
         } catch (Exception $e) {
             Log::error('Error recording outcome', [
@@ -491,16 +509,21 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
 
     private function loadNextRecord(): void
     {
+        $now = now();
+        $userId = auth()->id();
+        $tenantId = filament()->getTenant()?->id;
+
         $nextRecord = RingaData::query()
+            ->where(function ($q) use ($userId, $tenantId) {
+                $q->where('user_id', $userId);
+                if ($tenantId) {
+                    $q->orWhere('team_id', $tenantId);
+                }
+            })
             ->where('is_active', true)
-            ->where('available_at', '<=', now())
-            ->whereRaw('retry_count < (
-                SELECT COALESCE(MAX(max_retry_count), 3)
-                FROM outcome_settings
-                WHERE is_active = TRUE
-            )')
-            ->orderBy('available_at')
-            ->orderBy('id')
+            ->whereNull('outcome_category')
+            ->where('id', '!=', $this->recordId) // Exclude current record
+            ->orderBy('id', 'asc')
             ->first();
 
         if ($nextRecord) {
@@ -514,5 +537,13 @@ final class OutcomeRecorder extends Component implements HasActions, HasForms
         $this->recordId = null;
         $this->record = null;
         Log::info('No more records available');
+    }
+
+    private function getOutcomeCategory(string $outcomeValue): ?string
+    {
+        // Get category from outcome_settings table
+        return \App\Models\OutcomeSetting::where('outcome', $outcomeValue)
+            ->where('is_active', true)
+            ->value('category');
     }
 }

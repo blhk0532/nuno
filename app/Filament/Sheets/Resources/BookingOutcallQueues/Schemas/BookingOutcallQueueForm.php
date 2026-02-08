@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Sheets\Resources\BookingOutcallQueues\Schemas;
 
 use Filament\Forms\Components\DatePicker;
@@ -9,7 +11,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 
-class BookingOutcallQueueForm
+final class BookingOutcallQueueForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -43,8 +45,10 @@ class BookingOutcallQueueForm
                     ->numeric(),
                 TextInput::make('booking_user_id')
                     ->numeric(),
-                DateTimePicker::make('start_time'),
-                DateTimePicker::make('end_time'),
+                DateTimePicker::make('start_time')
+                    ->native(true),
+                DateTimePicker::make('end_time')
+                    ->native(true),
                 Toggle::make('is_active')
                     ->required(),
             ]);

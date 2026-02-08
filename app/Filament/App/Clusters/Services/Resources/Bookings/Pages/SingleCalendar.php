@@ -1,32 +1,40 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Clusters\Services\Resources\Bookings\Pages;
 
+use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\SingleCalendars;
+use App\Models\BookingCalendar as BookingCalendarModel;
+use BackedEnum;
+use Carbon\Carbon;
+use Closure;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Pages\Dashboard as BaseDashboard;
 use Filament\Pages\Dashboard\Concerns\HasFiltersForm;
 use Filament\Schemas\Components\Section;
-use BackedEnum;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
-use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\SingleCalendars;
-use App\Models\BookingCalendar as BookingCalendarModel;
-use App\UserRole;
 use Filament\Support\Enums\Width;
+use Filament\Support\Icons\Heroicon;
+use Illuminate\Support\Str;
 use UnitEnum;
-use Carbon\Carbon;
 use Wallacemartinss\FilamentIconPicker\Enums\Remix;
 
-class SingleCalendar extends BaseDashboard
+final class SingleCalendar extends BaseDashboard
 {
+    public ?string $calendarId = null;
+
+    public ?string $startDate = null;
+
+    public ?string $endDate = null;
 
     //     protected static string|BackedEnum|null $navigationIcon = 'heroicon-c-calendar-days';
     protected static string|BackedEnum|null $navigationIcon = Remix::RiCalendarCheckLine;
+
     protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiCalendarCheckFill;
+
     protected static ?string $navigationLabel = 'Kalender';
 
     protected static ?string $title = '';
@@ -37,21 +45,7 @@ class SingleCalendar extends BaseDashboard
 
     protected static string $routePath = 'single-calendar';
 
-    public ?string $calendarId = null;
-    public ?string $startDate = null;
-    public ?string $endDate = null;
-
-    public function mount(): void
-    {
-        $this->calendarId = request()->query('booking_calendars') ?? BookingCalendarModel::first()?->id;
-        $this->startDate = request()->query('startDate') ?? now()->startOfWeek()->toDateString();
-        $this->endDate = request()->query('endDate') ?? now()->endOfWeek()->toDateString();
-        logger()->info('SingleCalendar mount', ['full_url' => request()->fullUrl(), 'query' => request()->query(), 'calendarId' => $this->calendarId]);
-    }
-
-    protected static string | UnitEnum | null $navigationGroup = '';
-
-
+    protected static string|UnitEnum|null $navigationGroup = ' ';
 
     //   use HasFiltersForm;
     //  protected static ?string $slug = 'dashboard';
@@ -61,27 +55,6 @@ class SingleCalendar extends BaseDashboard
     public static function shouldRegisterNavigation(): bool
     {
         return true;
-    }
-
-    public function getWidgets(): array
-    {
-        return [
-            SingleCalendars::class,
-        ];
-    }
-
-    public function getWidgetData(): array
-    {
-        return [
-            'calendar_id' => $this->calendarId,
-            'startDate' => $this->startDate,
-            'endDate' => $this->endDate,
-        ];
-    }
-
-    public function getMaxContentWidth(): Width
-    {
-        return Width::Full;
     }
 
     //    public static function getNavigationLabel(): string
@@ -110,20 +83,49 @@ class SingleCalendar extends BaseDashboard
     //       return 2;
     //   }
 
-//   public static function getNavigationBadge(): ?string
-//   {
-//       //    return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
-//       Carbon::setLocale('sv');
-//       return now()
-//           ->timezone('Europe/Stockholm')
-//           ->translatedFormat('d M');
-//   }
+    //   public static function getNavigationBadge(): ?string
+    //   {
+    //       //    return '🇹🇭 ' . now()->timezone('Asia/Bangkok')->format('H:i');
+    //       Carbon::setLocale('sv');
+    //       return now()
+    //           ->timezone('Europe/Stockholm')
+    //           ->translatedFormat('d M');
+    //   }
 
     public static function getNavigationBadgeColor(): ?string
     {
         return 'gray';
     }
 
+    public function mount(): void
+    {
+        $calendarId = request()->query('booking_calendars') ?? BookingCalendarModel::first()?->id;
+        $this->calendarId = $calendarId !== null ? (string) $calendarId : null;
+        $this->startDate = request()->query('startDate') ?? now()->startOfWeek()->toDateString();
+        $this->endDate = request()->query('endDate') ?? now()->endOfWeek()->toDateString();
+        logger()->info('SingleCalendar mount', ['full_url' => request()->fullUrl(), 'query' => request()->query(), 'calendarId' => $this->calendarId]);
+    }
+
+    public function getWidgets(): array
+    {
+        return [
+            SingleCalendars::class,
+        ];
+    }
+
+    public function getWidgetData(): array
+    {
+        return [
+            'calendar_id' => $this->calendarId,
+            'startDate' => $this->startDate,
+            'endDate' => $this->endDate,
+        ];
+    }
+
+    public function getMaxContentWidth(): Width
+    {
+        return Width::Full;
+    }
 
     //    public function filtersForm(Schema $schema): Schema
     //    {
@@ -154,8 +156,8 @@ class SingleCalendar extends BaseDashboard
     //            ]);
     //    }
 
-    public function getPermissionCheckClosure(): \Closure
+    public function getPermissionCheckClosure(): Closure
     {
-        return fn(string $widgetClass) => true;
+        return fn (string $widgetClass) => true;
     }
 }

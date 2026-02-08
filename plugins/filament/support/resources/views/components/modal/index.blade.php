@@ -97,20 +97,20 @@
             })"
     @if ($id)
         data-fi-modal-id="{{ $id }}"
-        x-on:{{ $closeEventName }}.window="if (($event.detail.id === @js($id)) && isOpen) close()"
-        x-on:{{ $closeQuietlyEventName }}.window="if (($event.detail.id === @js($id)) && isOpen) closeQuietly()"
-        x-on:{{ $openEventName }}.window="if (($event.detail.id === @js($id)) && (! isOpen)) open()"
+        x-on:{{ $closeEventName }}.window="if (($event.detail.id === @js($id)) && (isOpen ?? false)) close()"
+        x-on:{{ $closeQuietlyEventName }}.window="if (($event.detail.id === @js($id)) && (isOpen ?? false)) closeQuietly()"
+        x-on:{{ $openEventName }}.window="if (($event.detail.id === @js($id)) && (! (isOpen ?? false))) open()"
     @else
-        x-on:{{ $closeEventName }}.stop="if (isOpen) close()"
-        x-on:{{ $closeQuietlyEventName }}.stop="if (isOpen) closeQuietly()"
-        x-on:{{ $openEventName }}.stop="if (! isOpen) open()"
+        x-on:{{ $closeEventName }}.stop="if (isOpen ?? false) close()"
+        x-on:{{ $closeQuietlyEventName }}.stop="if (isOpen ?? false) closeQuietly()"
+        x-on:{{ $openEventName }}.stop="if (! (isOpen ?? false)) open()"
     @endif
     x-bind:class="{
-        'fi-modal-open': isOpen,
+        'fi-modal-open': isOpen ?? false,
     }"
     x-cloak
-    x-show="isOpen"
-    x-trap.noscroll{{ $autofocus ? '' : '.noautofocus' }}="isOpen"
+    x-show="isOpen ?? false"
+    x-trap.noscroll{{ $autofocus ? '' : '.noautofocus' }}="isOpen ?? false"
     {{
         $attributes->class([
             'fi-modal',
@@ -142,7 +142,7 @@
             @if ($closeByEscaping)
                 x-on:keydown.window.escape="{{ $closeEventHandler }}"
             @endif
-            x-show="isWindowVisible"
+            x-show="isWindowVisible ?? false"
             x-transition:enter="fi-transition-enter"
             x-transition:leave="fi-transition-leave"
             @if ($width !== Width::Screen)

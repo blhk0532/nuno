@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Clusters\Services\Resources\Bookings\Widgets;
 
 use Adultdate\FilamentBooking\Concerns\CanRefreshCalendar;
@@ -9,15 +11,12 @@ use Adultdate\FilamentBooking\Concerns\InteractsWithCalendar;
 use Adultdate\FilamentBooking\Concerns\InteractsWithEventRecord;
 use Adultdate\FilamentBooking\Contracts\HasCalendar;
 use Adultdate\FilamentBooking\Enums\BookingStatus;
-use App\Filament\App\Clusters\Services\Resources\Bookings\Schemas\BookingForm;
 use Adultdate\FilamentBooking\Filament\Widgets\Concerns\CanBeConfigured;
 use Adultdate\FilamentBooking\Filament\Widgets\Concerns\InteractsWithEvents;
 use Adultdate\FilamentBooking\Filament\Widgets\Concerns\InteractsWithRawJS;
 use Adultdate\FilamentBooking\Filament\Widgets\Concerns\InteractsWithRecords;
-use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Adultdate\FilamentBooking\Filament\Widgets\FullCalendarWidget;
 use Adultdate\FilamentBooking\Models\Booking\Booking;
-use Adultdate\FilamentBooking\Models\Booking\BookingLocation;
 use Adultdate\FilamentBooking\Models\Booking\Client;
 use Adultdate\FilamentBooking\Models\Booking\DailyLocation;
 use Adultdate\FilamentBooking\Models\Booking\Service;
@@ -25,35 +24,60 @@ use Adultdate\FilamentBooking\Models\BookingServicePeriod;
 use Adultdate\FilamentBooking\Models\CalendarSettings;
 use Adultdate\FilamentBooking\ValueObjects\EventResizeInfo;
 use Adultdate\FilamentBooking\ValueObjects\FetchInfo;
-use App\Models\User;
+use App\Filament\App\Clusters\Services\Resources\Bookings\Schemas\BookingForm;
 use App\Models\BookingCalendar as BookingCalendarModel;
-use App\UserRole;
+use App\Models\User;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
+use Exception;
 use Filament\Actions\Action;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Repeater\TableColumn;
-use Filament\Schemas\Components\Section;
-use Filament\Schemas\Components\Group;
 use Filament\Forms\Components\Select;
-use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\TimePicker;
 use Filament\Notifications\Notification;
+use Filament\Schemas\Components\Group;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Set;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Illuminate\Contracts\Support\Htmlable;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Support\HtmlString;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\HtmlString;
 use Illuminate\Support\Str;
-use Filament\Schemas\Components\Utilities\Set;
+use Throwable;
+use UnitEnum;
 
-
-class SingleCalendars extends FullCalendarWidget implements HasCalendar
+final class SingleCalendars extends FullCalendarWidget implements HasCalendar
 {
+    use CanBeConfigured, CanRefreshCalendar, HasOptions, HasSchema, InteractsWithCalendar, InteractsWithEventRecord, InteractsWithEvents, InteractsWithPageFilters, InteractsWithRawJS, InteractsWithRecords {
+        // Prefer the contract-compatible refreshRecords (chainable) from CanRefreshCalendar
+        CanRefreshCalendar::refreshRecords insteadof InteractsWithEvents;
+
+        // Keep the frontend-only refresh available under an alias if needed
+        InteractsWithEvents::refreshRecords as refreshRecordsFrontend;
+
+        // Resolve __get collision: prefer InteractsWithPageFilters for pageFilters access
+        InteractsWithPageFilters::__get insteadof InteractsWithCalendar;
+
+        // Resolve getOptions collision: prefer HasOptions' getOptions which merges config and options
+        HasOptions::getOptions insteadof CanBeConfigured;
+
+        InteractsWithEventRecord::getEloquentQuery insteadof InteractsWithRecords;
+
+        // Resolve method collisions from InteractsWithEvents vs InteractsWithCalendar
+        InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
+        InteractsWithEvents::onDateSelectLegacy insteadof InteractsWithCalendar;
+        InteractsWithEvents::onEventDropLegacy insteadof InteractsWithCalendar;
+        InteractsWithEvents::onEventResizeLegacy insteadof InteractsWithCalendar;
+        InteractsWithEvents::refreshRecords insteadof InteractsWithCalendar;
+    }
+
     public ?int $recordId = null;
 
     public ?array $lastMountedData = null;
@@ -70,6 +94,8 @@ class SingleCalendars extends FullCalendarWidget implements HasCalendar
 
     public $selectedTechnician = null;
 
+    public ?array $calendarData = null;
+
     protected $settings;
 
     protected $listeners = ['refreshCalendar' => 'refreshCalendar'];
@@ -81,36 +107,14 @@ class SingleCalendars extends FullCalendarWidget implements HasCalendar
 
     protected static ?int $sort = -1;
 
-    use CanBeConfigured, CanRefreshCalendar, HasOptions, HasSchema, InteractsWithCalendar, InteractsWithEventRecord, InteractsWithEvents, InteractsWithPageFilters, InteractsWithRawJS, InteractsWithRecords {
-        // Prefer the contract-compatible refreshRecords (chainable) from CanRefreshCalendar
-        CanRefreshCalendar::refreshRecords insteadof InteractsWithEvents;
-
-        // Keep the frontend-only refresh available under an alias if needed
-        InteractsWithEvents::refreshRecords as refreshRecordsFrontend;
-
-        // Resolve __get collision: prefer InteractsWithPageFilters for pageFilters access
-        InteractsWithPageFilters::__get insteadof InteractsWithCalendar;
-
-        // Resolve getOptions collision: prefer HasOptions' getOptions which merges config and options
-        HasOptions::getOptions insteadof CanBeConfigured;
-
-        InteractsWithEventRecord::getEloquentQuery insteadof InteractsWithRecords;
-
-
-        // Resolve method collisions from InteractsWithEvents vs InteractsWithCalendar
-InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
-        InteractsWithEvents::onDateSelectLegacy insteadof InteractsWithCalendar;
-        InteractsWithEvents::onEventDropLegacy insteadof InteractsWithCalendar;
-        InteractsWithEvents::onEventResizeLegacy insteadof InteractsWithCalendar;
-        InteractsWithEvents::refreshRecords insteadof InteractsWithCalendar;
-    }
-
     protected string $view = 'adultdate/filament-booking::single-fullcalendar';
+
+    protected int|string|array $columnSpan = 'full';
 
     public function getHeading(): string|Htmlable
     {
         return new HtmlString(view('filament.widgets.single-booking-calendar-header', [
-            'calendars' => \App\Models\BookingCalendar::all()->pluck('name', 'id'),
+            'calendars' => BookingCalendarModel::all()->pluck('name', 'id'),
             'selectedTechnician' => $this->selectedTechnician,
             'startDate' => $this->startDate,
             'endDate' => $this->endDate,
@@ -172,7 +176,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     BookingServicePeriod::whereKey($id)->update($data);
                 }
                 $this->refreshRecords();
-                \Filament\Notifications\Notification::make()
+                Notification::make()
                     ->title('Period updated successfully')
                     ->success()
                     ->send();
@@ -180,7 +184,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
             ->modalSubmitActionLabel('Update')
             ->modalCancelActionLabel('Cancel')
             ->extraModalFooterActions([
-                \Filament\Actions\Action::make('deleteFromModal')
+                Action::make('deleteFromModal')
                     ->label('Delete')
                     ->color('danger')
                     ->requiresConfirmation()
@@ -193,7 +197,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                             BookingServicePeriod::whereKey($id)->delete();
                         }
                         $this->refreshRecords();
-                        \Filament\Notifications\Notification::make()
+                        Notification::make()
                             ->title('Period deleted successfully')
                             ->success()
                             ->send();
@@ -216,7 +220,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     BookingServicePeriod::whereKey($id)->delete();
                 }
                 $this->refreshRecords();
-                \Filament\Notifications\Notification::make()
+                Notification::make()
                     ->title('Period deleted successfully')
                     ->success()
                     ->send();
@@ -247,13 +251,6 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
     {
         return $this->record instanceof Model ? $this->record : null;
     }
-
-    protected function getEloquentQuery(): Builder
-    {
-        return $this->getModel()::query();
-    }
-
-    protected int|string|array $columnSpan = 'full';
 
     public function config(): array
     {
@@ -317,7 +314,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
     public function onDateClick(string $date, bool $allDay, ?array $view, ?array $resource): void
     {
-        $startDate = \Carbon\Carbon::parse($date);
+        $startDate = Carbon::parse($date);
 
         $action = $this->resolveDateSelectAction($allDay, $view);
 
@@ -325,6 +322,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
             $this->mountAction('createDailyLocation', [
                 'date' => $startDate->format('Y-m-d'),
             ]);
+
             return;
         }
 
@@ -368,6 +366,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
             $this->mountAction('createDailyLocation', [
                 'date' => $dateVal->format('Y-m-d'),
             ]);
+
             return;
         }
 
@@ -377,7 +376,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
         $data['start_time'] = $startDate->format('H:i');
         if ($end) {
-            $data['end_time'] = \Carbon\Carbon::parse($end, $timezone)->format('H:i');
+            $data['end_time'] = Carbon::parse($end, $timezone)->format('H:i');
         }
 
         if ($allDay) {
@@ -390,7 +389,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
         $serviceUserId = $this->getSelectedServiceUserId();
         if ($resource && isset($resource['id'])) {
-            $calendar = \App\Models\BookingCalendar::find($resource['id']);
+            $calendar = BookingCalendarModel::find($resource['id']);
             $serviceUserId = $calendar?->owner_id ?? $serviceUserId;
         }
 
@@ -402,7 +401,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
             $bookingCalendarId = $selectedCalendarId;
         } elseif ($serviceUserId) {
             // Find calendar for this service user
-            $calendar = \App\Models\BookingCalendar::where('owner_id', $serviceUserId)->first();
+            $calendar = BookingCalendarModel::where('owner_id', $serviceUserId)->first();
             $bookingCalendarId = $calendar?->id;
         }
 
@@ -506,12 +505,13 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 // bundle currently shipped with this plugin (which treats
                 // `true` as a revert signal).
                 return false;
-            } catch (\Throwable $e) {
+            } catch (Throwable $e) {
                 logger()->error('Error persisting resized booking', ['err' => $e->getMessage()]);
                 Notification::make()
                     ->title('Failed to update booking')
                     ->danger()
                     ->send();
+
                 return false;
             }
         }
@@ -521,8 +521,6 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
         return false;
     }
-
-    public ?array $calendarData = null;
 
     public function adminAction(): Action
     {
@@ -543,7 +541,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     ->color('success')
                     ->icon('heroicon-o-calendar-days')
                     ->action(function () {
-                        $startDate = \Carbon\Carbon::parse($this->calendarData['start']);
+                        $startDate = Carbon::parse($this->calendarData['start']);
                         $startVal = $this->calendarData['start_val'];
                         $endVal = $this->calendarData['end_val'];
                         $dateVal = $this->calendarData['date_val'];
@@ -551,18 +549,18 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                         $timeStamp = time();
                         $dateStamp = date('Ymd', $timeStamp);
                         $startStamp = date('Ymd', $startDate->timestamp);
-                        $bookingNumber = Str::upper(Auth::user()->name) . $timeStamp;
+                        $bookingNumber = Str::upper(Auth::user()->name).$timeStamp;
                         if ($this->calendarData['allDay']) {
                             $startTime = '00:00';
                             $endTime = '23:59';
                         } else {
-                            $startTime = \Carbon\Carbon::parse($this->calendarData['start_val'])->format('H:i');
-                            $endTime = \Carbon\Carbon::parse($this->calendarData['end_val'])->format('H:i');
+                            $startTime = Carbon::parse($this->calendarData['start_val'])->format('H:i');
+                            $endTime = Carbon::parse($this->calendarData['end_val'])->format('H:i');
                         }
                         if ($endTime === $startTime) {
-                            $startDate = \Carbon\Carbon::parse($dateVal);
-                            $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
-                            $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
+                            $startDate = Carbon::parse($dateVal);
+                            $startTime = Carbon::parse($startVal)->format('H:i');
+                            $endTime = Carbon::parse($endVal)->format('H:i');
                         }
                         $data = ['number' => $bookingNumber, 'notes' => '', 'service_user_id' => $serviceUserId, 'booking_client_id' => null, 'booking_calendar_id' => $this->calendarData['booking_calendar_id'] ?? null, 'date' => $startDate->format('Y-m-d'), 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate->format('Y-m-d'), 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: B BOOK DATA', $data);
@@ -576,7 +574,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     ->color('primary')
                     ->icon('heroicon-o-map-pin')
                     ->action(function () {
-                        $startDate = \Carbon\Carbon::parse($this->calendarData['start']);
+                        $startDate = Carbon::parse($this->calendarData['start']);
                         $startVal = $this->calendarData['start_val'];
                         $endVal = $this->calendarData['end_val'];
                         $dateVal = $this->calendarData['date_val'];
@@ -584,13 +582,13 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                             $startTime = '00:00';
                             $endTime = '23:59';
                         } else {
-                            $startTime = \Carbon\Carbon::parse($this->calendarData['start'])->format('H:i');
-                            $endTime = \Carbon\Carbon::parse($this->calendarData['end'])->format('H:i');
+                            $startTime = Carbon::parse($this->calendarData['start'])->format('H:i');
+                            $endTime = Carbon::parse($this->calendarData['end'])->format('H:i');
                         }
                         if ($endTime === $startTime) {
-                            $startDate = \Carbon\Carbon::parse($dateVal);
-                            $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
-                            $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
+                            $startDate = Carbon::parse($dateVal);
+                            $startTime = Carbon::parse($startVal)->format('H:i');
+                            $endTime = Carbon::parse($endVal)->format('H:i');
                         }
                         $data = ['date' => $startDate->format('Y-m-d'), 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate->format('Y-m-d'), 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: LOCATION DATA', $data);
@@ -604,16 +602,16 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     ->color('danger')
                     ->icon('heroicon-o-clock')
                     ->action(function () {
-                        $startDate = \Carbon\Carbon::parse($this->calendarData['start']);
-                        $startTime = \Carbon\Carbon::parse($this->calendarData['start'])->format('H:i');
-                        $endTime = \Carbon\Carbon::parse($this->calendarData['end'])->format('H:i');
+                        $startDate = Carbon::parse($this->calendarData['start']);
+                        $startTime = Carbon::parse($this->calendarData['start'])->format('H:i');
+                        $endTime = Carbon::parse($this->calendarData['end'])->format('H:i');
                         $startVal = $this->calendarData['start_val'];
                         $endVal = $this->calendarData['end_val'];
                         $dateVal = $this->calendarData['date_val'];
                         if ($endTime === $startTime) {
-                            $startDate = \Carbon\Carbon::parse($dateVal);
-                            $startTime = \Carbon\Carbon::parse($startVal)->format('H:i');
-                            $endTime = \Carbon\Carbon::parse($endVal)->format('H:i');
+                            $startDate = Carbon::parse($dateVal);
+                            $startTime = Carbon::parse($startVal)->format('H:i');
+                            $endTime = Carbon::parse($endVal)->format('H:i');
                         }
                         $data = ['date' => $startDate->format('Y-m-d'), 'start' => $startTime, 'end' => $endTime, 'service_date' => $startDate->format('Y-m-d'), 'start_time' => $startTime, 'end_time' => $endTime, 'start_val' => $startVal, 'end_val' => $endVal, 'date_val' => $dateVal];
                         logger()->info('BookingCalendarWidget: BLOCK PERIOD DATA', $data);
@@ -622,12 +620,12 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                         $this->dispatch('sync-action-modals', ['id' => $this->getId(), 'newActionNestingIndex' => $newIndex]);
                     }),
 
-                 Action::make('close')
-                 ->label('')
-                 ->color('gray')
-                 ->icon('heroicon-o-x-circle')
-                 ->close(true)
-                 ->action(function () { }),
+                Action::make('close')
+                    ->label('')
+                    ->color('gray')
+                    ->icon('heroicon-o-x-circle')
+                    ->close(true)
+                    ->action(function () {}),
 
             ]);
     }
@@ -655,7 +653,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 $data['created_by'] = Auth::id();
                 DailyLocation::updateOrCreate(['date' => $data['date'], 'service_user_id' => $data['service_user_id']], $data);
                 $this->refreshRecords();
-                \Filament\Notifications\Notification::make()
+                Notification::make()
                     ->title('Location saved successfully')
                     ->success()
                     ->send();
@@ -689,7 +687,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     DailyLocation::whereKey($id)->update($data);
                 }
                 $this->refreshRecords();
-                \Filament\Notifications\Notification::make()
+                Notification::make()
                     ->title('Location updated successfully')
                     ->success()
                     ->send();
@@ -697,7 +695,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
             ->modalSubmitActionLabel('Update')
             ->extraModalFooterActions(function (array $arguments) {
                 $id = $arguments['data']['id'] ?? null;
-                if (!$id) {
+                if (! $id) {
                     return [];
                 }
 
@@ -709,7 +707,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                         ->action(function () use ($id) {
                             DailyLocation::whereKey($id)->delete();
                             $this->refreshRecords();
-                            \Filament\Notifications\Notification::make()
+                            Notification::make()
                                 ->title('Location deleted successfully')
                                 ->success()
                                 ->send();
@@ -754,7 +752,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     $data
                 );
                 $this->refreshRecords();
-                \Filament\Notifications\Notification::make()
+                Notification::make()
                     ->title('Period saved successfully')
                     ->success()
                     ->send();
@@ -775,25 +773,26 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 $defaults = $this->getDefaultFormData();
                 $merged = array_merge($defaults, $data, $arguments);
                 $user = Auth::user();
-                $roleValue = $user && $user->role instanceof \UnitEnum ? $user->role->value : (string) $user->role;
+                $roleValue = $user && $user->role instanceof UnitEnum ? $user->role->value : (string) $user->role;
                 $isAdmin = in_array($roleValue, ['admin', 'super', 'super_admin'], true);
                 // Preserve service_user_id from data if provided (from calendar context), otherwise use current user
-                if (!isset($merged['service_user_id']) || empty($merged['service_user_id'])) {
+                if (! isset($merged['service_user_id']) || empty($merged['service_user_id'])) {
                     $merged['service_user_id'] = Auth::id();
                 }
+
                 return $merged;
             })
             ->schema($this->getFormSchema())
             ->action(function (array $data) {
                 // Ensure number exists
-                if (!isset($data['number']) || empty($data['number'])) {
+                if (! isset($data['number']) || empty($data['number'])) {
                     $data['number'] = $this->generateNumber();
                 }
 
                 // Always set booking_calendar_id from selected or default if missing or null
-                if (!isset($data['booking_calendar_id']) || empty($data['booking_calendar_id'])) {
+                if (! isset($data['booking_calendar_id']) || empty($data['booking_calendar_id'])) {
                     $calendarId = method_exists($this, 'getSelectedCalendarId') ? $this->getSelectedCalendarId() : null;
-                    if (!$calendarId && method_exists($this, 'getDefaultCalendarId')) {
+                    if (! $calendarId && method_exists($this, 'getDefaultCalendarId')) {
                         $calendarId = $this->getDefaultCalendarId();
                     }
                     $data['booking_calendar_id'] = $calendarId;
@@ -805,17 +804,17 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
                 // Build proper starts_at and ends_at from service_date + times
                 if (isset($data['service_date']) && isset($data['start_time'])) {
-                    $startDateTime = \Carbon\Carbon::parse(\Carbon\Carbon::parse($data['service_date'])->format('Y-m-d') . ' ' . $data['start_time']);
+                    $startDateTime = Carbon::parse(Carbon::parse($data['service_date'])->format('Y-m-d').' '.$data['start_time']);
                     $data['starts_at'] = $startDateTime->toDateTimeString();
                 }
                 if (isset($data['service_date']) && isset($data['end_time'])) {
-                    $endDateTime = \Carbon\Carbon::parse(\Carbon\Carbon::parse($data['service_date'])->format('Y-m-d') . ' ' . $data['end_time']);
+                    $endDateTime = Carbon::parse(Carbon::parse($data['service_date'])->format('Y-m-d').' '.$data['end_time']);
                     $data['ends_at'] = $endDateTime->toDateTimeString();
                 }
 
                 logger()->info('BookingCalendarWidget: BEFORE Booking::create()', [
                     'booking_calendar_id' => $data['booking_calendar_id'] ?? 'NOT SET',
-                    'full_data' => $data
+                    'full_data' => $data,
                 ]);
                 $booking = Booking::create($data);
                 logger()->info('BookingCalendarWidget: AFTER Booking::create()', [
@@ -840,7 +839,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 // The Observer will handle Google Calendar sync and WhatsApp notification automatically
 
                 $this->refreshRecords();
-                \Filament\Notifications\Notification::make()
+                Notification::make()
                     ->title('Booking created successfully')
                     ->success()
                     ->send();
@@ -877,7 +876,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     ->action(function () use ($widget) {
                         $widget->record->delete();
                         $widget->refreshRecords();
-                        \Filament\Notifications\Notification::make()
+                        Notification::make()
                             ->title('Service period deleted successfully')
                             ->success()
                             ->send();
@@ -902,8 +901,8 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                         return null;
                     }
                     try {
-                        return \Carbon\Carbon::parse($raw)->format('H:i');
-                    } catch (\Throwable $e) {
+                        return Carbon::parse($raw)->format('H:i');
+                    } catch (Throwable $e) {
                         // Fallback: take first 5 characters if looks like HH:MM
                         return preg_match('/^(\d{2}:\d{2})/', (string) $raw, $m) ? $m[1] : (string) $raw;
                     }
@@ -917,9 +916,9 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 $serviceUser = data_get($data, 'service_user') ?: ($data['service_user_name'] ?? data_get($data, 'extendedProps.service_user'));
                 if (! $serviceUser && ! empty($data['service_user_id'])) {
                     try {
-                        $svcUser = \App\Models\User::find($data['service_user_id']);
+                        $svcUser = User::find($data['service_user_id']);
                         $serviceUser = $svcUser?->name ?: $serviceUser;
-                    } catch (\Throwable $e) {
+                    } catch (Throwable $e) {
                         // ignore
                     }
                 }
@@ -931,7 +930,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 }
 
                 if ($start) {
-                    return $bookingUser ? "{$prefix}{$start} — {$bookingUser}" : ($prefix ? trim($prefix) : $start);
+                    return $bookingUser ? "{$prefix}{$start} — {$bookingUser}" : ($prefix ? mb_trim($prefix) : $start);
                 }
 
                 return 'Manage Update Booking';
@@ -955,7 +954,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                         }
                         $name = $it['booking_service_name'] ?? $it['service_name'] ?? $it['name'] ?? null;
                         if (! $name && isset($it['booking_service_id'])) {
-                            $svc = \Adultdate\FilamentBooking\Models\Booking\Service::find($it['booking_service_id']);
+                            $svc = Service::find($it['booking_service_id']);
                             $name = $svc?->name;
                         }
                         $qty = isset($it['qty']) ? (int) $it['qty'] : (isset($it['quantity']) ? (int) $it['quantity'] : 1);
@@ -1024,8 +1023,6 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                         $newIndex = max(0, count($this->mountedActions) - 1);
                         $this->dispatch('sync-action-modals', id: $this->getId(), newActionNestingIndex: $newIndex);
                     }),
-
-
 
             ]);
     }
@@ -1124,11 +1121,11 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
     {
         logger()->info('zzz: onEventClick', ['events' => $event]);
 
-         $title = $event['title'] ?? null;
-         $start = $event['start'] ?? null;
-         $end = $event['end'] ?? null;
-         $view = $event['view'] ?? null;
-         $resource = $event['resource'] ?? null;
+        $title = $event['title'] ?? null;
+        $start = $event['start'] ?? null;
+        $end = $event['end'] ?? null;
+        $view = $event['view'] ?? null;
+        $resource = $event['resource'] ?? null;
         // logger()->info('zzz: onEventClick', ['events' => $start . ' ' . $end . ' ' . ($allDay ? 'allDay' : 'notAllDay')]);
 
         $allDay = (bool) ($event['allDay']);
@@ -1151,8 +1148,9 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 $recId = $event['extendedProps']['booking_id'] ?? null;
                 logger()->info('BookingCalendarWidget: Blocking period click', ['recId' => $recId]);
 
-                if (!$recId) {
+                if (! $recId) {
                     logger()->error('BookingCalendarWidget: No record ID found for blocking period');
+
                     return;
                 }
 
@@ -1162,12 +1160,13 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     // Directly query the record instead of using resolveRecord
                     $this->record = BookingServicePeriod::find($recId);
 
-                    if (!$this->record) {
+                    if (! $this->record) {
                         logger()->error('BookingCalendarWidget: Record not found', ['id' => $recId]);
-                        \Filament\Notifications\Notification::make()
+                        Notification::make()
                             ->title('Period not found')
                             ->danger()
                             ->send();
+
                         return;
                     }
 
@@ -1177,25 +1176,27 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                         $payload = $this->record->toArray();
                     } else {
                         logger()->error('BookingCalendarWidget: Record is not a valid Model instance', ['record' => $this->record]);
-                        \Filament\Notifications\Notification::make()
+                        Notification::make()
                             ->title('Invalid record type')
                             ->danger()
                             ->send();
+
                         return;
                     }
 
                     $user = Auth::user();
-                    if (!$user) {
+                    if (! $user) {
                         logger()->error('BookingCalendarWidget: No authenticated user');
-                        \Filament\Notifications\Notification::make()
+                        Notification::make()
                             ->title('Authentication required')
                             ->danger()
                             ->send();
+
                         return;
                     }
 
                     $userRole = $user->role;
-                    if ($userRole instanceof \UnitEnum) {
+                    if ($userRole instanceof UnitEnum) {
                         $roleValue = $userRole->value;
                     } else {
                         $roleValue = (string) $userRole;
@@ -1217,18 +1218,18 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                         logger()->info('BookingCalendarWidget: User does not have permission to edit blocking period', [
                             'userRole' => $roleValue,
                         ]);
-                        \Filament\Notifications\Notification::make()
+                        Notification::make()
                             ->title('Permission denied')
                             ->body('You do not have permission to edit this period')
                             ->warning()
                             ->send();
                     }
-                } catch (\Exception $e) {
+                } catch (Exception $e) {
                     logger()->error('BookingCalendarWidget: Exception in blocking case', [
                         'message' => $e->getMessage(),
                         'trace' => $e->getTraceAsString(),
                     ]);
-                    \Filament\Notifications\Notification::make()
+                    Notification::make()
                         ->title('Error loading period')
                         ->body($e->getMessage())
                         ->danger()
@@ -1242,8 +1243,8 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                     try {
                         $this->model = DailyLocation::class;
                         $this->record = DailyLocation::find($recId);
-                        if (!$this->record) {
-                            throw new \Exception("Location record not found: {$recId}");
+                        if (! $this->record) {
+                            throw new Exception("Location record not found: {$recId}");
                         }
                         if ($this->record instanceof Model) {
                             $this->eventRecord = $this->record;
@@ -1251,30 +1252,31 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                             $payload = $this->record->toArray();
                         }
                         $user = Auth::user();
-                        if (!$user) {
+                        if (! $user) {
                             logger()->error('BookingCalendarWidget: No authenticated user for location');
-                            \Filament\Notifications\Notification::make()
+                            Notification::make()
                                 ->title('Authentication required')
                                 ->danger()
                                 ->send();
+
                             return;
                         }
 
-                    $userRole = $user->role;
-                    if ($userRole instanceof \UnitEnum) {
-                        $roleValue = $userRole->value;
-                    } else {
-                        $roleValue = (string) $userRole;
-                    }
+                        $userRole = $user->role;
+                        if ($userRole instanceof UnitEnum) {
+                            $roleValue = $userRole->value;
+                        } else {
+                            $roleValue = (string) $userRole;
+                        }
 
-                    $canEdit = in_array($roleValue, ['admin', 'super', 'super_admin'], true);
+                        $canEdit = in_array($roleValue, ['admin', 'super', 'super_admin'], true);
 
-                    // For bookings we mount the booking `options` action below
-                    // based on the user's permissions; do not mount the
-                    // service-period editor here (copy/paste leftover).
+                        // For bookings we mount the booking `options` action below
+                        // based on the user's permissions; do not mount the
+                        // service-period editor here (copy/paste leftover).
 
                         $userRole = $user->role;
-                        if ($userRole instanceof \UnitEnum) {
+                        if ($userRole instanceof UnitEnum) {
                             $roleValue = $userRole->value;
                         } else {
                             $roleValue = (string) $userRole;
@@ -1292,12 +1294,12 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                                 'data' => $payload,
                             ]);
                         }
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         \Illuminate\Support\Facades\Log::error('BookingCalendarWidget: Location error', [
                             'error' => $e->getMessage(),
                             'recId' => $recId,
                         ]);
-                        \Filament\Notifications\Notification::make()
+                        Notification::make()
                             ->title('Error loading location')
                             ->body($e->getMessage())
                             ->danger()
@@ -1308,13 +1310,13 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
             case 'booking':
             default:
-                if (!$allDay) {
+                if (! $allDay) {
                     $recId = $event['id'] ?? null;
                     try {
                         $this->model = Booking::class;
                         $this->record = Booking::find($recId);
-                        if (!$this->record) {
-                            throw new \Exception("Booking record not found: {$recId}");
+                        if (! $this->record) {
+                            throw new Exception("Booking record not found: {$recId}");
                         }
                         if ($this->record instanceof Model) {
                             $this->eventRecord = $this->record;
@@ -1327,44 +1329,44 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                             $payload['address'] = $this->record->client?->address ?? ($payload['address'] ?? null);
                             $payload['phone'] = $this->record->client?->phone ?? ($payload['phone'] ?? null);
                         }
-                            $payload['service_date'] = $this->record->service_date?->format('Y-m-d') ?? ($payload['service_date'] ?? null);
-                            // Ensure booking user name is available for the modal header
-                            $payload['booking_user_name'] = $this->record->bookingUser?->name ?? ($payload['booking_user_name'] ?? null);
+                        $payload['service_date'] = $this->record->service_date?->format('Y-m-d') ?? ($payload['service_date'] ?? null);
+                        // Ensure booking user name is available for the modal header
+                        $payload['booking_user_name'] = $this->record->bookingUser?->name ?? ($payload['booking_user_name'] ?? null);
                         $booking = $this->record;
                         $user = Auth::user();
 
-                        if (!$user) {
+                        if (! $user) {
                             logger()->error('BookingCalendarWidget: No authenticated user for booking');
-                            \Filament\Notifications\Notification::make()
+                            Notification::make()
                                 ->title('Authentication required')
                                 ->danger()
                                 ->send();
+
                             return;
                         }
 
-
-                    $userRole = $user->role;
-                    if ($userRole instanceof \UnitEnum) {
-                        $roleValue = $userRole->value;
-                    } else {
-                        $roleValue = (string) $userRole;
-                    }
-
-                    // Intentionally do not mount the service-period editor here.
-                    // Booking-specific actions are mounted further below
-                    // (see the $action = $canEdit ? 'options' : '' logic).
-
                         $userRole = $user->role;
-                        if ($userRole instanceof \UnitEnum) {
+                        if ($userRole instanceof UnitEnum) {
                             $roleValue = $userRole->value;
                         } else {
                             $roleValue = (string) $userRole;
                         }
 
-                        $canEdit = $user->id == $booking->booking_user_id || in_array($roleValue, ['admin', 'super', 'super_admin'], true);
+                        // Intentionally do not mount the service-period editor here.
+                        // Booking-specific actions are mounted further below
+                        // (see the $action = $canEdit ? 'options' : '' logic).
+
+                        $userRole = $user->role;
+                        if ($userRole instanceof UnitEnum) {
+                            $roleValue = $userRole->value;
+                        } else {
+                            $roleValue = (string) $userRole;
+                        }
+
+                        $canEdit = $user->id === $booking->booking_user_id || in_array($roleValue, ['admin', 'super', 'super_admin'], true);
                         \Illuminate\Support\Facades\Log::info('BookingCalendarWidget: Booking click', [
                             'canEdit' => $canEdit,
-                            'isBookingOwner' => $user->id == $booking->booking_user_id,
+                            'isBookingOwner' => $user->id === $booking->booking_user_id,
                             'userRole' => $roleValue,
                             'recordId' => $recId,
                         ]);
@@ -1375,12 +1377,12 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                                 'data' => $payload,
                             ]);
                         }
-                    } catch (\Exception $e) {
+                    } catch (Exception $e) {
                         \Illuminate\Support\Facades\Log::error('BookingCalendarWidget: Booking error', [
                             'error' => $e->getMessage(),
                             'recId' => $recId,
                         ]);
-                        \Filament\Notifications\Notification::make()
+                        Notification::make()
                             ->title('Error loading booking')
                             ->body($e->getMessage())
                             ->danger()
@@ -1412,24 +1414,26 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         ]);
 
         // Only allow admins to drag and drop
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             logger('BookingCalendarWidget: Not authenticated');
             $this->dispatch('notify', 'error', 'You must be authenticated to modify events.');
+
             return;
         }
 
         $user = Auth::user();
         logger('BookingCalendarWidget: User authenticated', ['user_id' => $user->id, 'user_class' => get_class($user)]);
         $userRole = $user->role;
-        if ($userRole instanceof \UnitEnum) {
+        if ($userRole instanceof UnitEnum) {
             $roleValue = $userRole->value;
         } else {
             $roleValue = (string) $userRole;
         }
 
-        if (!in_array($roleValue, ['admin', 'super', 'super_admin'], true)) {
+        if (! in_array($roleValue, ['admin', 'super', 'super_admin'], true)) {
             logger('BookingCalendarWidget: Insufficient permissions', ['role' => $roleValue]);
             $this->dispatch('notify', 'error', 'You do not have permission to modify events.');
+
             return;
         }
 
@@ -1451,6 +1455,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 // Timed events cannot be dropped to all-day row
                 if ($allDay) {
                     $this->dispatch('notify', 'error', 'Timed events cannot be moved to the all-day row.');
+
                     return;
                 }
                 $startTime = $start->format('H:i:s');
@@ -1459,8 +1464,9 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
             case 'location':
                 // Location events are always all-day and should stay that way
-                if (!$allDay) {
+                if (! $allDay) {
                     $this->dispatch('notify', 'error', 'Location events can only be moved within the all-day row.');
+
                     return;
                 }
                 $startTime = null;
@@ -1469,6 +1475,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
             default:
                 $this->dispatch('notify', 'error', 'Unknown event type.');
+
                 return;
         }
 
@@ -1548,39 +1555,6 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         $this->eventDropped((string) $id, (string) $start, $end ? (string) $end : null, (string) $type, (bool) $allDay);
     }
 
-    protected function getDateClickContextMenuActions(): array
-    {
-        $user = Auth::user();
-
-        if (! $user || ! $this->isAdmin($user)) {
-            return [];
-        }
-
-        return [
-            $this->adminAction(),
-        ];
-    }
-
-    protected function isAdmin(\Illuminate\Contracts\Auth\Authenticatable $user): bool
-    {
-        // If it's an Admin model, always return true
-        if ($user instanceof \App\Models\Admin) {
-            return true;
-        }
-
-        // For User model, check the role attribute
-        $userRole = $user->role;
-
-        // Handle enum instances
-        if ($userRole instanceof \UnitEnum) {
-            $roleValue = $userRole->value;
-        } else {
-            $roleValue = (string) $userRole;
-        }
-
-        return in_array($roleValue, ['admin', 'super', 'super_admin'], true);
-    }
-
     public function resolveDateSelectAction(bool $allDay, ?array $view): string
     {
         $user = Auth::user();
@@ -1590,6 +1564,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
             if ($allDay) {
                 return 'createDailyLocation';
             }
+
             return 'admin';
         }
 
@@ -1601,7 +1576,9 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         return [
             Select::make('service_user_id')
                 ->label('Service User')
-                ->relationship('serviceUser', 'name')
+                ->options($this->getServiceUserOptions())
+                ->searchable()
+                ->preload()
                 ->required(),
             TextInput::make('service_location')
                 ->label('Location')
@@ -1635,7 +1612,9 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 ->native(false),
             Select::make('service_user_id')
                 ->label('Service User')
-                ->relationship('serviceUser', 'name')
+                ->options($this->getServiceUserOptions())
+                ->searchable()
+                ->preload()
                 ->afterStateUpdated(function ($state, callable $set, callable $get) {
                     $date = $get('date');
                     if ($date && $state) {
@@ -1672,6 +1651,208 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
                 ])
                 ->columnSpan(['lg' => 3]),
         ];
+    }
+
+    public function getEvents(FetchInfo $info): Collection|array|Builder
+    {
+        $start = $info->start->toMutable()->startOfDay();
+        $end = $info->end->toMutable()->endOfDay();
+
+        if ($this->startDate) {
+            $filterStart = Carbon::parse($this->startDate)->startOfDay();
+            if ($filterStart->gt($start)) {
+                $start = $filterStart;
+            }
+        }
+
+        if ($this->endDate) {
+            $filterEnd = Carbon::parse($this->endDate)->endOfDay();
+            if ($filterEnd->lt($end)) {
+                $end = $filterEnd;
+            }
+        }
+
+        $filters = $this->pageFilters;
+        $selectedCalendarId = $this->getSelectedCalendarId();
+        $showAllDayEvents = $filters['show_all_day_events'] ?? true;
+
+        $serviceUserId = $this->getSelectedServiceUserId();
+
+        $blockingPeriods = BookingServicePeriod::query()
+            ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
+            ->where('period_type', '=', 'unavailable')
+            ->get();
+
+        $blockingEvents = $blockingPeriods->map(fn (BookingServicePeriod $blockingPeriod) => $blockingPeriod->toCalendarEvent())->toArray();
+
+        $bookings = Booking::query()
+            ->with(['client', 'service', 'serviceUser', 'bookingUser', 'location'])
+            ->when($selectedCalendarId, fn ($query) => $query->where('booking_calendar_id', $selectedCalendarId))
+            ->where(function ($query) use ($start, $end) {
+                $query->whereBetween('service_date', [$start->toDateString(), $end->toDateString()])
+                    ->when(
+                        Schema::hasColumn('booking_bookings', 'starts_at'),
+                        fn ($q) => $q->orWhereBetween('starts_at', [$start, $end]),
+                    );
+            })
+            ->where('is_active', true)
+            ->get();
+
+        // Transform bookings to calendar events
+        $bookingEvents = $bookings->map(fn (Booking $booking) => $booking->toCalendarEvent())->toArray();
+
+        // Also include DailyLocation entries as all-day events on calendar
+        $locationEvents = [];
+        if ($showAllDayEvents) {
+            $dailyLocations = DailyLocation::query()
+                ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
+                ->whereBetween('date', [$start, $end])
+                ->with(['serviceUser'])
+                ->get();
+
+            $locationEvents = $dailyLocations->map(function (DailyLocation $loc) {
+                $title = $loc->location ?: ($loc->serviceUser?->name ?? 'Location');
+
+                return [
+                    'id' => $loc->id,
+                    'title' => $title,
+                    'eventsType' => 'location',
+                    'type' => 'location', 'start' => $loc->date?->toDateString(), 'number' => 0, 'allDay' => true, 'backgroundColor' => '#ffffff', 'borderColor' => '#e5e7eb', 'textColor' => '#111827',
+                    'extendedProps' => [
+                        'is_location' => true,
+                        'type' => 'location',
+                        'daily_location_id' => $loc->id,
+                        'service_user_id' => $loc->service_user_id,
+                        'location' => $loc->location,
+                    ],
+                ];
+            })->toArray();
+        }
+
+        return collect(array_merge($bookingEvents, $locationEvents, $blockingEvents));
+    }
+
+    public function fetchEvents(array $info): array
+    {
+        // FullCalendar may send `start`/`end` without `startStr`/`endStr`; ensure both for FetchInfo VO.
+        $info['startStr'] ??= $info['start'] ?? null;
+        $info['endStr'] ??= $info['end'] ?? null;
+
+        if (! ($info['startStr'] && $info['endStr'])) {
+            return [];
+        }
+
+        return $this->getEventsJs($info);
+    }
+
+    public function getDateSelectContextMenuActions(): array
+    {
+        return [
+            $this->adminAction(),
+        ];
+    }
+
+    public function refreshCalendar()
+    {
+        $this->selectedTechnician = $this->pageFilters['booking_calendars'] ?? $this->selectedTechnician;
+        $this->startDate = $this->pageFilters['startDate'] ?? $this->startDate;
+        $this->endDate = $this->pageFilters['endDate'] ?? $this->endDate;
+        $this->refreshRecords();
+    }
+
+    public function onEventResizeLegacy(array $event, array $oldEvent, array $relatedEvents, array $startDelta, array $endDelta): bool
+    {
+        if ($this->getModel()) {
+            $this->record = $this->resolveRecord($event['id']);
+        }
+
+        // Handle the resize by updating the booking
+        if ($this->record instanceof Booking) {
+            $endDeltaMs = $endDelta['milliseconds'] ?? 0;
+            $newEnd = Carbon::parse($oldEvent['end'])->addMilliseconds($endDeltaMs);
+
+            $this->record->forceFill([
+                'ends_at' => $newEnd,
+            ])->save();
+
+            $this->refreshRecords();
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function mount(): void
+    {
+        // Check URL parameter first, then widget data, then page filters, then default
+        $urlParam = request()->query('booking_calendars');
+        // If the Livewire mount request doesn't include the original query string,
+        // attempt to parse it from the HTTP referer header (browser sends it on sub-requests).
+        if (empty($urlParam)) {
+            $referer = request()->headers->get('referer') ?? ($_SERVER['HTTP_REFERER'] ?? null);
+            if ($referer) {
+                $qs = parse_url($referer, PHP_URL_QUERY) ?: '';
+                parse_str($qs, $parsed);
+                $urlParam = $parsed['booking_calendars'] ?? null;
+            }
+        }
+
+        $this->selectedTechnician = $urlParam ?? $this->data['calendar_id'] ?? $this->pageFilters['booking_calendars'] ?? BookingCalendarModel::first()?->id ?? 'all';
+        logger()->info('SingleCalendars mount resolved selectedTechnician', ['urlParam' => $urlParam, 'referer' => request()->headers->get('referer') ?? null, 'data_calendar_id' => $this->data['calendar_id'] ?? null, 'pageFilters' => $this->pageFilters['booking_calendars'] ?? null, 'resolved' => $this->selectedTechnician]);
+        $this->startDate = $this->data['startDate'] ?? $this->pageFilters['startDate'] ?? now()->startOfWeek()->toDateString();
+        $this->endDate = $this->data['endDate'] ?? $this->pageFilters['endDate'] ?? now()->endOfWeek()->toDateString();
+        $this->eventClickEnabled = true;
+        //    $this->dateClickEnabled = true;
+        $this->eventDragEnabled = true;
+        $this->eventResizeEnabled = true;
+        $this->dateSelectEnabled = true;
+
+        // Force refresh records with the selected technician
+        $this->refreshRecords();
+    }
+
+    public function getCalendarClass(): string
+    {
+        return 'singlecalendar-0';
+    }
+
+    protected function getEloquentQuery(): Builder
+    {
+        return $this->getModel()::query();
+    }
+
+    protected function getDateClickContextMenuActions(): array
+    {
+        $user = Auth::user();
+
+        if (! $user || ! $this->isAdmin($user)) {
+            return [];
+        }
+
+        return [
+            $this->adminAction(),
+        ];
+    }
+
+    protected function isAdmin(\Illuminate\Contracts\Auth\Authenticatable $user): bool
+    {
+        // If it's an Admin model, always return true
+        if ($user instanceof \App\Models\Admin) {
+            return true;
+        }
+
+        // For User model, check the role attribute
+        $userRole = $user->role;
+
+        // Handle enum instances
+        if ($userRole instanceof UnitEnum) {
+            $roleValue = $userRole->value;
+        } else {
+            $roleValue = (string) $userRole;
+        }
+
+        return in_array($roleValue, ['admin', 'super', 'super_admin'], true);
     }
 
     protected function getCalendarItemsRepeater(): Repeater
@@ -1738,118 +1919,12 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         return 'BK-'.now()->format('Ymd').'-'.Str::upper(Str::random(6));
     }
 
-    public function getEvents(FetchInfo $info): Collection|array|Builder
-    {
-        $start = $info->start->toMutable()->startOfDay();
-        $end = $info->end->toMutable()->endOfDay();
-
-        if ($this->startDate) {
-            $filterStart = Carbon::parse($this->startDate)->startOfDay();
-            if ($filterStart->gt($start)) {
-                $start = $filterStart;
-            }
-        }
-
-        if ($this->endDate) {
-            $filterEnd = Carbon::parse($this->endDate)->endOfDay();
-            if ($filterEnd->lt($end)) {
-                $end = $filterEnd;
-            }
-        }
-
-        $filters = $this->pageFilters;
-        $selectedCalendarId = $this->getSelectedCalendarId();
-        $showAllDayEvents = $filters['show_all_day_events'] ?? true;
-
-        $serviceUserId = $this->getSelectedServiceUserId();
-
-        $blockingPeriods = BookingServicePeriod::query()
-            ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
-            ->where('period_type', '=', 'unavailable')
-            ->get();
-
-        $blockingEvents = $blockingPeriods->map(fn (BookingServicePeriod $blockingPeriod) => $blockingPeriod->toCalendarEvent())->toArray();
-
-        $bookings = Booking::query()
-            ->with(['client', 'service', 'serviceUser', 'bookingUser', 'location'])
-            ->when($selectedCalendarId, fn ($query) => $query->where('booking_calendar_id', $selectedCalendarId))
-            ->where(function ($query) use ($start, $end) {
-                $query->whereBetween('service_date', [$start->toDateString(), $end->toDateString()])
-                    ->when(
-                        Schema::hasColumn('booking_bookings', 'starts_at'),
-                        fn ($q) => $q->orWhereBetween('starts_at', [$start, $end]),
-                    );
-            })
-            ->where('is_active', true)
-            ->get();
-
-        // Transform bookings to calendar events
-        $bookingEvents = $bookings->map(fn (Booking $booking) => $booking->toCalendarEvent())->toArray();
-
-        // Also include DailyLocation entries as all-day events on calendar
-        $locationEvents = [];
-        if ($showAllDayEvents) {
-            $dailyLocations = DailyLocation::query()
-                ->when($serviceUserId, fn ($query) => $query->where('service_user_id', $serviceUserId))
-                ->whereBetween('date', [$start, $end])
-                ->with(['serviceUser'])
-                ->get();
-
-            $locationEvents = $dailyLocations->map(function (DailyLocation $loc) {
-                $title = $loc->location ?: ($loc->serviceUser?->name ?? 'Location');
-                return [
-                    'id' => $loc->id,
-                    'title' => $title,
-                    'eventsType' => 'location',
-                    'type' => 'location', 'start' => $loc->date?->toDateString(), 'number' => 0, 'allDay' => true, 'backgroundColor' => '#ffffff', 'borderColor' => '#e5e7eb', 'textColor' => '#111827',
-                    'extendedProps' => [
-                        'is_location' => true,
-                        'type' => 'location',
-                        'daily_location_id' => $loc->id,
-                        'service_user_id' => $loc->service_user_id,
-                        'location' => $loc->location,
-                    ],
-                ];
-            })->toArray();
-        }
-
-        return collect(array_merge($bookingEvents, $locationEvents, $blockingEvents));
-    }
-
-    public function fetchEvents(array $info): array
-    {
-        // FullCalendar may send `start`/`end` without `startStr`/`endStr`; ensure both for FetchInfo VO.
-        $info['startStr'] ??= $info['start'] ?? null;
-        $info['endStr'] ??= $info['end'] ?? null;
-
-        if (! ($info['startStr'] && $info['endStr'])) {
-            return [];
-        }
-
-        return $this->getEventsJs($info);
-    }
-
-    public function getDateSelectContextMenuActions(): array
-    {
-        return [
-            $this->adminAction(),
-        ];
-    }
-
-    public function refreshCalendar()
-    {
-        $this->selectedTechnician = $this->pageFilters['booking_calendars'] ?? $this->selectedTechnician;
-        $this->startDate = $this->pageFilters['startDate'] ?? $this->startDate;
-        $this->endDate = $this->pageFilters['endDate'] ?? $this->endDate;
-        $this->refreshRecords();
-    }
-
     protected function getSelectedServiceUserId(): ?int
     {
         $selectedCalendarId = $this->getSelectedCalendarId();
 
         if ($selectedCalendarId) {
-            $calendar = \App\Models\BookingCalendar::find($selectedCalendarId);
+            $calendar = BookingCalendarModel::find($selectedCalendarId);
 
             return $calendar?->owner_id;
         }
@@ -1868,72 +1943,52 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         return (int) $id;
     }
 
+    protected function getServiceUserOptions(): array
+    {
+        $tenantId = filament()->getTenant()?->id
+            ?? auth()->user()?->current_team_id;
+
+        if (! $tenantId) {
+            return User::withoutGlobalScopes()
+                ->where('role', 'service')
+                ->pluck('name', 'id')
+                ->toArray();
+        }
+
+        return User::withoutGlobalScopes()
+            ->where('role', 'service')
+            ->when($tenantId, function (Builder $query) use ($tenantId) {
+                $query->where(function (Builder $query) use ($tenantId) {
+                    $query->where('current_team_id', $tenantId)
+                        ->orWhereExists(function ($sub) use ($tenantId) {
+                            $sub->selectRaw(1)
+                                ->from('membership')
+                                ->whereColumn('membership.user_id', 'users.id')
+                                ->where('membership.team_id', $tenantId);
+                        })
+                        ->orWhereExists(function ($sub) use ($tenantId) {
+                            $sub->selectRaw(1)
+                                ->from('teams')
+                                ->whereColumn('teams.user_id', 'users.id')
+                                ->where('teams.id', $tenantId);
+                        });
+                });
+            })
+            ->pluck('name', 'id')
+            ->toArray();
+    }
+
     protected function getDefaultCalendarId(): ?int
     {
         $serviceUserId = $this->getSelectedServiceUserId();
-        if (!$serviceUserId) {
+        if (! $serviceUserId) {
             return null;
         }
         logger()->info('GOOGLE CALENDAR', ['service_user_id' => $serviceUserId]);
         // Find a calendar owned by the selected service user
-        $calendar = \App\Models\BookingCalendar::where('owner_id', $serviceUserId)->first();
+        $calendar = BookingCalendarModel::where('owner_id', $serviceUserId)->first();
+
         return $calendar ? $calendar->id : null;
-    }
-
-    public function onEventResizeLegacy(array $event, array $oldEvent, array $relatedEvents, array $startDelta, array $endDelta): bool
-    {
-        if ($this->getModel()) {
-            $this->record = $this->resolveRecord($event['id']);
-        }
-
-        // Handle the resize by updating the booking
-        if ($this->record instanceof Booking) {
-            $endDeltaMs = $endDelta['milliseconds'] ?? 0;
-            $newEnd = Carbon::parse($oldEvent['end'])->addMilliseconds($endDeltaMs);
-
-            $this->record->forceFill([
-                'ends_at' => $newEnd,
-            ])->save();
-
-            $this->refreshRecords();
-            return true;
-        }
-
-        return false;
-    }
-
-    public function mount(): void
-    {
-        // Check URL parameter first, then widget data, then page filters, then default
-        $urlParam = request()->query('booking_calendars');
-        // If the Livewire mount request doesn't include the original query string,
-        // attempt to parse it from the HTTP referer header (browser sends it on sub-requests).
-        if (empty($urlParam)) {
-            $referer = request()->headers->get('referer') ?? ($_SERVER['HTTP_REFERER'] ?? null);
-            if ($referer) {
-                $qs = parse_url($referer, PHP_URL_QUERY) ?: '';
-                parse_str($qs, $parsed);
-                $urlParam = $parsed['booking_calendars'] ?? null;
-            }
-        }
-
-        $this->selectedTechnician = $urlParam ?? $this->data['calendar_id'] ?? $this->pageFilters['booking_calendars'] ?? BookingCalendarModel::first()?->id ?? 'all';
-        logger()->info('SingleCalendars mount resolved selectedTechnician', ['urlParam' => $urlParam, 'referer' => request()->headers->get('referer') ?? null, 'data_calendar_id' => $this->data['calendar_id'] ?? null, 'pageFilters' => $this->pageFilters['booking_calendars'] ?? null, 'resolved' => $this->selectedTechnician]);
-        $this->startDate = $this->data['startDate'] ?? $this->pageFilters['startDate'] ?? now()->startOfWeek()->toDateString();
-        $this->endDate = $this->data['endDate'] ?? $this->pageFilters['endDate'] ?? now()->endOfWeek()->toDateString();
-        $this->eventClickEnabled = true;
-    //    $this->dateClickEnabled = true;
-        $this->eventDragEnabled = true;
-        $this->eventResizeEnabled = true;
-        $this->dateSelectEnabled = true;
-
-        // Force refresh records with the selected technician
-        $this->refreshRecords();
-    }
-
-    public function getCalendarClass(): string
-    {
-        return 'singlecalendar-0';
     }
 
     protected function getResources(): array
@@ -1945,7 +2000,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
         for ($i = 1; $i <= 10; $i++) { // Assuming up to 10 possible filters
             $key = "booking_calendars_{$i}";
             if (isset($filters[$key]) && $filters[$key]) {
-                $calendar = \App\Models\BookingCalendar::find($filters[$key]);
+                $calendar = BookingCalendarModel::find($filters[$key]);
                 if ($calendar) {
                     $resources[] = [
                         'id' => $calendar->id,
@@ -1957,7 +2012,7 @@ InteractsWithEvents::onEventClickLegacy insteadof InteractsWithCalendar;
 
         // If no filters selected, use default or all available
         if (empty($resources)) {
-            $defaultCalendars = \App\Models\BookingCalendar::limit(5)->get(); // Or some logic to get defaults
+            $defaultCalendars = BookingCalendarModel::limit(5)->get(); // Or some logic to get defaults
             foreach ($defaultCalendars as $calendar) {
                 $resources[] = [
                     'id' => $calendar->id,

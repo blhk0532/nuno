@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CalendarDataController;
 use App\Http\Controllers\CalendarEventController;
 use App\Http\Controllers\CalendarResourceController;
 use App\Http\Controllers\QueueController;
+use App\Http\Controllers\RingaDataOutcomeController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserEmailResetNotification;
@@ -15,14 +16,18 @@ use App\Http\Controllers\UserPasswordController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserTwoFactorAuthenticationController;
 use Illuminate\Support\Facades\Route;
-use Laravel\Fortify\Features;
-use Livewire\Volt\Volt;
-use Livewire\Livewire;
 use Inertia\Inertia;
-use App\Http\Controllers\RingaDataOutcomeController;
+use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
+use Livewire\Livewire;
 
-// Livewire routes are configured in AppServiceProvider::boot()
-// No need to register them here
+// Livewire routes - MUST be registered for Livewire to work
+Livewire::setScriptRoute(function ($handle) {
+    return Route::get('/livewire/livewire.min.js', $handle)->name('livewire.script');
+});
+
+Livewire::setUpdateRoute(function ($handle) {
+    return Route::post('/livewire/update', $handle)->name('livewire.update');
+});
 
 // Route::get('/', fn () => Inertia::render('welcome'))->name('home');
 
@@ -145,6 +150,12 @@ Route::middleware('auth')->group(function (): void {
         // the admin dashboard to keep navigation stable.
         return redirect()->route('dashboard');
     })->name('filament.admin.pages.chat-dashboard');
+
+    Route::get('{tenant}/min-profile', function () {
+        // Fallback for the admin panel chat dashboard nav item. Redirect to
+        // the admin dashboard to keep navigation stable.
+        return redirect()->route(EditProfilePage::getUrl());
+    });
 
     // Record ringa-data outcomes (non-Livewire fallback)
     Route::post('{tenant}/ringa-data/{id}/outcome', [RingaDataOutcomeController::class, 'store'])

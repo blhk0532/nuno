@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Data\Resources\RatsitPersons\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
@@ -8,7 +10,7 @@ use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
-class RatsitPersonForm
+final class RatsitPersonForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -66,7 +68,8 @@ class RatsitPersonForm
                             ->schema([
                                 DateTimePicker::make('scraped_at')
                                     ->label('Scraped At')
-                                    ->disabled(),
+                                    ->disabled()
+                                    ->native(true),
                             ]),
                     ]),
             ]);

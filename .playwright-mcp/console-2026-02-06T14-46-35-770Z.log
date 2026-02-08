@@ -1,0 +1,10 @@
+[   27340ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5173/resources/js/actions/App/Http/Controllers/SessionController.ts?t=1770389223491:0
+[   27341ms] [ERROR] [vite] Failed to reload /resources/js/pages/session/create.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:8000/login:113
+[   32949ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5173/resources/js/routes/index.ts?t=1770389228741:0
+[   32949ms] [ERROR] [vite] Failed to reload /resources/js/layouts/auth/auth-simple-layout.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:8000/login:113
+[   32954ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5173/resources/js/routes/password/index.ts?t=1770389228744:0
+[   32955ms] [ERROR] [vite] Failed to reload /resources/js/pages/session/create.tsx. This could be due to syntax errors or importing non-existent modules. (see errors above) @ http://localhost:8000/login:113
+[   34741ms] [ERROR] Failed to send logs: TypeError: Failed to fetch
+    at flushLogs (http://localhost:8000/login:91:9) @ http://localhost:8000/login:99
+[   34755ms] [ERROR] Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:5173/resources/js/routes/password/index.ts?t=1770389228744:0
+[   34966ms] Failed to fetch dynamically imported module: http://127.0.0.1:5173/resources/js/pages/session/create.tsx?t=1770389228744

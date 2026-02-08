@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Widgets;
 
 use App\Models\CalendarSettings;
@@ -71,13 +73,13 @@ final class CalendarWidget extends FullCalendarWidget
 
             DateTimePicker::make('start')
                 ->required()
-                ->native(false)
+                ->native(true)
                 ->seconds(false)
                 ->label('Start Date & Time'),
 
             DateTimePicker::make('end')
                 ->required()
-                ->native(false)
+                ->native(true)
                 ->seconds(false)
                 ->label('End Date & Time')
                 ->rule('after:start'),

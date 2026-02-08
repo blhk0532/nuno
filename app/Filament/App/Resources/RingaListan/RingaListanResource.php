@@ -32,11 +32,11 @@ final class RingaListanResource extends Resource
 
     protected static string|BackedEnum|null $activeNavigationIcon = Remix::RiTimerFlashFill;
 
-    protected static ?string $navigationLabel = 'Återkom';
+    protected static ?string $navigationLabel = 'Återkomst';
 
-    protected static UnitEnum|string|null $navigationGroup = ' ';
+    protected static UnitEnum|string|null $navigationGroup = '';
 
-    protected static ?string $slug = 'ringa/listan';
+    protected static ?string $slug = 'ringa/igen';
 
     protected static ?int $navigationSort = 5;
 

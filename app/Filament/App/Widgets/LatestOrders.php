@@ -54,6 +54,15 @@ final class LatestOrders extends BaseWidget
                     ->date()
                     ->sortable(),
             ])
+            ->emptyStateHeading('(¬_¬")')
+            ->emptyStateDescription('Inga Bokningar')
+            ->emptyStateActions([
+                Action::make('RingaListan')
+                    ->label('Ringlista')
+                    ->url(route('dashboard'))
+                    ->icon('heroicon-m-phone-arrow-up-right')
+                    ->button(),
+            ])
             ->recordActions([
                 Action::make('open')
                     ->url(fn (Booking $record): string => BookingResource::getUrl('edit', ['record' => $record])),

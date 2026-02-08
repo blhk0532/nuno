@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\App\Resources\CallingLogs\Schemas;
 
 use Filament\Forms\Components\DateTimePicker;
@@ -8,7 +10,7 @@ use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Schema;
 
-class CallingLogForm
+final class CallingLogForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -22,8 +24,10 @@ class CallingLogForm
                 TextInput::make('target_name'),
                 TextInput::make('duration_seconds')
                     ->numeric(),
-                DateTimePicker::make('started_at'),
-                DateTimePicker::make('ended_at'),
+                DateTimePicker::make('started_at')
+                    ->native(true),
+                DateTimePicker::make('ended_at')
+                    ->native(true),
                 TextInput::make('status')
                     ->required()
                     ->default('initiated'),

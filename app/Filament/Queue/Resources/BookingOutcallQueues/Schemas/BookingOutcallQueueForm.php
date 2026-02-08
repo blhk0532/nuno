@@ -1,7 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Filament\Queue\Resources\BookingOutcallQueues\Schemas;
 
+use DashedDEV\FilamentNumpadField\NumpadField;
+use Fahiem\FilamentPinpoint\Pinpoint;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Textarea;
@@ -9,13 +13,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Schema;
 use Ysfkaya\FilamentPhoneInput\Forms\PhoneInput;
-use Ysfkaya\FilamentPhoneInput\Tables\PhoneColumn;
-use Ysfkaya\FilamentPhoneInput\Infolists\PhoneEntry;
 use Ysfkaya\FilamentPhoneInput\PhoneInputNumberType;
-use DashedDEV\FilamentNumpadField\NumpadField;
-use Fahiem\FilamentPinpoint\Pinpoint;
 
-class BookingOutcallQueueForm
+final class BookingOutcallQueueForm
 {
     public static function configure(Schema $schema): Schema
     {
@@ -32,18 +32,16 @@ class BookingOutcallQueueForm
                     ->numeric(),
                 TextInput::make('sex'),
                 DatePicker::make('dob'),
-PhoneInput::make('phone')
-    ->displayNumberFormat(PhoneInputNumberType::E164)
-    ->defaultCountry('SE')
-    ->initialCountry('se')
-    ->onlyCountries(['se','no', 'dk', 'fi','th', 'ph']),
+                PhoneInput::make('phone')
+                    ->displayNumberFormat(PhoneInputNumberType::E164)
+                    ->defaultCountry('SE')
+                    ->initialCountry('se')
+                    ->onlyCountries(['se', 'no', 'dk', 'fi', 'th', 'ph']),
 
-
-
-    NumpadField::make('price')
-    ->label('Telefon')
-    ->minCents(0)
-    ->maxCents(100000),
+                NumpadField::make('price')
+                    ->label('Telefon')
+                    ->minCents(0)
+                    ->maxCents(100000),
 
                 TextInput::make('status'),
                 TextInput::make('type'),
@@ -60,23 +58,25 @@ PhoneInput::make('phone')
                     ->numeric(),
                 TextInput::make('booking_user_id')
                     ->numeric(),
-                DateTimePicker::make('start_time'),
-                DateTimePicker::make('end_time'),
+                DateTimePicker::make('start_time')
+                    ->native(true),
+                DateTimePicker::make('end_time')
+                    ->native(true),
                 Toggle::make('is_active')
                     ->required(),
-                                            Pinpoint::make('location')
-                ->height(300)
-                ->label('Location')
-                ->latField('lat')
-                ->lngField('lng'),
+                Pinpoint::make('location')
+                    ->height(300)
+                    ->label('Location')
+                    ->latField('lat')
+                    ->lngField('lng'),
 
-            TextInput::make('lat')
-                ->label('Latitude')
-                ->readOnly(),
+                TextInput::make('lat')
+                    ->label('Latitude')
+                    ->readOnly(),
 
-            TextInput::make('lng')
-                ->label('Longitude')
-                ->readOnly(),
+                TextInput::make('lng')
+                    ->label('Longitude')
+                    ->readOnly(),
             ]);
     }
 }

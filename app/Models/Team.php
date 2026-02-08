@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Models;
 
 use App\Observers\TeamObserver;
 use App\Policies\TeamPolicy;
+use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\UsePolicy;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Filament\Models\Contracts\HasAvatar;
 
 /**
  * @property int $id
@@ -22,11 +25,11 @@ use Filament\Models\Contracts\HasAvatar;
  * @property bool $personal_team
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Models\User|null $owner
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\TeamInvitation> $teamInvitations
+ * @property-read User|null $owner
+ * @property-read Collection<int, TeamInvitation> $teamInvitations
  * @property-read int|null $team_invitations_count
- * @property-read \App\Models\Membership|null $membership
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
+ * @property-read Membership|null $membership
+ * @property-read Collection<int, User> $users
  * @property-read int|null $users_count
  *
  * @method static \Illuminate\Database\Eloquent\Builder<static>|Team newModelQuery()
@@ -46,7 +49,7 @@ use Filament\Models\Contracts\HasAvatar;
  */
 #[ObservedBy(TeamObserver::class)]
 #[UsePolicy(TeamPolicy::class)]
-class Team extends Model implements HasAvatar
+final class Team extends Model implements HasAvatar
 {
     protected $fillable = [
         'user_id',
@@ -56,17 +59,6 @@ class Team extends Model implements HasAvatar
         'ulid',
         'avatar',
     ];
-
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::creating(function ($model) {
-            if (empty($model->ulid)) {
-                $model->ulid = (string) \Illuminate\Support\Str::ulid();
-            }
-        });
-    }
 
     public function owner(): BelongsTo
     {
@@ -104,16 +96,10 @@ class Team extends Model implements HasAvatar
 
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, Membership::class)
+        return $this->belongsToMany(User::class, 'membership')
+            ->using(Membership::class)
             ->withTimestamps()
             ->as('membership');
-    }
-
-    protected function casts(): array
-    {
-        return [
-            'personal_team' => 'boolean',
-        ];
     }
 
     public function getFilamentAvatarUrl(): ?string
@@ -123,5 +109,23 @@ class Team extends Model implements HasAvatar
         }
 
         return null;
+    }
+
+    protected static function boot(): void
+    {
+        parent::boot();
+
+        self::creating(function ($model) {
+            if (empty($model->ulid)) {
+                $model->ulid = (string) \Illuminate\Support\Str::ulid();
+            }
+        });
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'personal_team' => 'boolean',
+        ];
     }
 }

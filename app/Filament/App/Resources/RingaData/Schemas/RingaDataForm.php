@@ -123,7 +123,7 @@ final class RingaDataForm
                     ->collapsed(true)
                     ->columnSpan(1),
 
-                Section::make('Household & extras')
+                Section::make('Household')
                     ->schema([
                         Grid::make(3)
                             ->schema([
@@ -141,23 +141,23 @@ final class RingaDataForm
                     ->collapsed(true)
                     ->columnSpan(1),
 
-                Section::make('More details')
+                Section::make('Administrative')
                     ->schema([
                         Grid::make(3)
                             ->schema([
-                                TextInput::make('fornamn')->label('First name')->columnSpan(1),
-                                TextInput::make('efternamn')->label('Last name')->columnSpan(1),
-                                TextInput::make('telfonnummer')->label('Alt. phone')->columnSpan(1),
-                                TextInput::make('kon')->label('Gender')->columnSpan(1),
-                                TextInput::make('civilstand')->label('Civil status')->columnSpan(1),
-                                TextInput::make('stjarntacken')->label('Notes (public)')->columnSpan(1),
-                                TextInput::make('forsamling')->label('Parish')->columnSpan(1),
-                                TextInput::make('kommun_ratsit')->label('Kommun (Ratsit)')->columnSpan(1),
+                                TextInput::make('status')->columnSpan(1),
+                                TextInput::make('attempts')->numeric()->columnSpan(1),
+                                TextInput::make('booking_id')->numeric()->columnSpan(1),
+                                TextInput::make('calendar_id')->numeric()->columnSpan(1),
+                                DateTimePicker::make('booked_at')->columnSpan(1)->native(true),
+                                DateTimePicker::make('started_at')->required()->columnSpan(1)->native(true),
+                                DateTimePicker::make('expires_at')->required()->columnSpan(1)->native(true),
                             ])
                             ->columns(3),
                     ])
-                    ->collapsible()
+                    ->compact()
                     ->collapsed(true)
+                    ->collapsible(true)
                     ->columnSpan(1),
 
                 Section::make('Location & external')
@@ -172,25 +172,6 @@ final class RingaDataForm
                             ])
                             ->columns(3),
                     ])
-                    ->collapsed(true)
-                    ->collapsible(true)
-                    ->columnSpan(1),
-
-                Section::make('Administrative')
-                    ->schema([
-                        Grid::make(3)
-                            ->schema([
-                                TextInput::make('status')->columnSpan(1),
-                                TextInput::make('attempts')->numeric()->columnSpan(1),
-                                TextInput::make('booking_id')->numeric()->columnSpan(1),
-                                TextInput::make('calendar_id')->numeric()->columnSpan(1),
-                                DateTimePicker::make('booked_at')->columnSpan(1),
-                                DateTimePicker::make('started_at')->required()->columnSpan(1),
-                                DateTimePicker::make('expires_at')->required()->columnSpan(1),
-                            ])
-                            ->columns(3),
-                    ])
-                    ->compact()
                     ->collapsed(true)
                     ->collapsible(true)
                     ->columnSpan(1),
@@ -210,7 +191,7 @@ final class RingaDataForm
                     ->collapsed(true)
                     ->columnSpan(1),
 
-                Section::make('Internal / integration')
+                Section::make('Internal')
                     ->schema([
                         TextInput::make('user_id')->columnSpan(1),
                         TextInput::make('service_user_id')->columnSpan(1),
@@ -220,6 +201,25 @@ final class RingaDataForm
                     ->collapsed(true)
                     ->columns(2)
                     ->columnSpan(1),
+                Section::make('More details')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextInput::make('fornamn')->label('First name')->columnSpan(1),
+                                TextInput::make('efternamn')->label('Last name')->columnSpan(1),
+                                TextInput::make('telfonnummer')->label('Alt. phone')->columnSpan(1),
+                                TextInput::make('kon')->label('Gender')->columnSpan(1),
+                                TextInput::make('civilstand')->label('Civil status')->columnSpan(1),
+                                TextInput::make('stjarntacken')->label('Notes (public)')->columnSpan(1),
+                                TextInput::make('forsamling')->label('Parish')->columnSpan(1),
+                                TextInput::make('kommun_ratsit')->label('Kommun (Ratsit)')->columnSpan(1),
+                            ])
+                            ->columns(3),
+                    ])
+                    ->collapsible()
+                    ->collapsed(true)
+                    ->columnSpan(1),
+
             ]);
     }
 }

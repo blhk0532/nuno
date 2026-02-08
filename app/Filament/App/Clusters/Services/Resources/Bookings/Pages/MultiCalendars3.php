@@ -44,7 +44,7 @@ final class MultiCalendars3 extends BaseDashboard
 
     public static function shouldRegisterNavigation(): bool
     {
-        return true;
+        return false;
     }
 
     // public static function getNavigationBadge(): ?string

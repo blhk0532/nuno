@@ -32,13 +32,17 @@ final class AppServiceProvider extends ServiceProvider
             return \Illuminate\Support\Facades\Route::post('/livewire/update', $handle)
                 ->name('livewire.update')
                 ->middleware('web')
-                ->withoutMiddleware(\Illuminate\Csrf\VerifyCsrfToken::class);
+                ->withoutMiddleware([
+                    \Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class,
+                    \App\Http\Middleware\FilamentPanelAccess::class,
+                ]);
         });
 
         Livewire::setScriptRoute(function ($handle) {
             return \Illuminate\Support\Facades\Route::get('/livewire/livewire.min.js', $handle)
                 ->name('livewire.script')
-                ->middleware('web');
+                ->middleware('web')
+                ->withoutMiddleware(\App\Http\Middleware\FilamentPanelAccess::class);
         });
 
         Livewire::component('app.filament.app.widgets.team-members-widget', TeamMembersWidget::class);

@@ -86,6 +86,8 @@ final class RingaDataCalendar extends FullCalendarWidget implements HasCalendar
 
     public Model|string|null $model = null;
 
+    public Model|int|string|null $record;
+
     public ?string $startDate = null;
 
     public ?string $endDate = null;
@@ -1833,6 +1835,8 @@ final class RingaDataCalendar extends FullCalendarWidget implements HasCalendar
 
     public function mount(): void
     {
+        $this->record = null;
+
         // Set initial selectedTechnician based on the current record's calendar_id
         $initialTechnician = $this->record?->calendar_id ?? $this->pageFilters['booking_calendars'] ?? 'all';
         $this->selectedTechnician = $this->normalizeTechnicianSelection($initialTechnician);

@@ -416,7 +416,7 @@
                 style="height: {{ $height }}px; width: 100%;"
                 class="bg-gray-100 dark:bg-gray-800"
             >
-                <div x-show="!isMapLoaded" style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                <div x-show="!(isMapLoaded ?? false)" style="display: flex; align-items: center; justify-content: center; height: 100%;">
                     <div style="display: flex; align-items: center; gap: 8px;" class="text-gray-500 dark:text-gray-400">
                         <svg style="animation: spin 1s linear infinite; width: 20px; height: 20px;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle style="opacity: 0.25;" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -431,7 +431,7 @@
             <button
                 type="button"
                 x-on:click="getCurrentLocation()"
-                x-show="isMapLoaded"
+                x-show="(isMapLoaded ?? false)"
                 style="position: absolute; bottom: 75px; right: 10px; border-radius: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); padding: 10px; border: none; cursor: pointer;"
                 class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                 title="{{ __('filament-pinpoint::pinpoint.use_my_location') }}"

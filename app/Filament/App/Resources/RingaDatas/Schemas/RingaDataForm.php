@@ -108,15 +108,18 @@ final class RingaDataForm
                     ->numeric(),
                 TextInput::make('calendar_id')
                     ->numeric(),
-                DateTimePicker::make('booked_at'),
+                DateTimePicker::make('booked_at')
+                    ->native(true),
                 Textarea::make('user_id')
                     ->columnSpanFull(),
                 Textarea::make('service_user_id')
                     ->columnSpanFull(),
                 DateTimePicker::make('started_at')
-                    ->required(),
+                    ->required()
+                    ->native(true),
                 DateTimePicker::make('expires_at')
-                    ->required(),
+                    ->required()
+                    ->native(true),
             ]);
     }
 }

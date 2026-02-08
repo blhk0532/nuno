@@ -11,6 +11,7 @@ use App\Filament\App\Clusters\Services\Resources\Bookings\Widgets\MultiCalendar3
 use App\Filament\App\Resources\Bookings\Widgets\BookingCalendar;
 use App\Filament\App\Widgets\TeamMembersWidget;
 use App\Models\BookingCalendar as BookingCalendarModel;
+use Arshaviras\WeatherWidget\Widgets\WeatherWidget;
 use BackedEnum;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
@@ -39,11 +40,11 @@ final class AppDashboard extends BasePage
 
     protected static ?string $title = '';
 
-    protected static ?string $navigationLabel = 'Dashboard';
+    protected static ?string $navigationLabel = 'Team';
 
     //  protected string $view = 'filament.app.dashboard';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = -1;
 
     protected static ?int $sort = 1;
 
@@ -68,7 +69,7 @@ final class AppDashboard extends BasePage
     public static function getNavigationBadge(): ?string
     {
         return now()->timezone('Europe/Stockholm')->format('H:i').' 🇸🇪';
-
+        // return (string) (auth()->user()?->name ?? '');
     }
 
     public static function getNavigationBadgeColor(): ?string
@@ -78,9 +79,9 @@ final class AppDashboard extends BasePage
 
     public static function getNavigationLabel(): string
     {
-        return 'Dashboard';
 
-        return (string) (filament()->getTenant()?->name ?? 'Dashboard');
+        return 'Dashboard';
+        //    return (string) (auth()->user()?->name ?? '');
     }
 
     //  public static function getNavigationBadge(): ?string
@@ -163,10 +164,10 @@ final class AppDashboard extends BasePage
     {
 
         return [
-
-            MultiCalendar2::class,
-            MultiCalendar3::class,
-            \App\Filament\App\Widgets\LatestOrders::class,
+            WeatherWidget::class,
+            //    MultiCalendar2::class,
+            //    MultiCalendar3::class,
+            //    \App\Filament\App\Widgets\LatestOrders::class,
         ];
     }
 
